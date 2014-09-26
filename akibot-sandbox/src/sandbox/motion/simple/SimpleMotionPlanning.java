@@ -61,13 +61,29 @@ public class SimpleMotionPlanning {
 		int x=0;
 		int y=0;
 		int g = 0;
-
+	
+		int open[][] = new int[][]{{g,x,y}};
 		
-		int open[][] = new int[1][3];
 		System.out.println("INITIAL OPEN:");
 		utils.printArray(open);
 		
+		
+		boolean found=false;
+		boolean resign=false;
 
+		// LOOP:
+		
+		if (open.length==0) {
+			resign = true;
+			//break;
+		} else {
+			Arrays.sort(open);
+			//reverse
+			//pop
+		}
+		
+		
+		
 		
 	}
 	
