@@ -5,12 +5,11 @@ import java.util.Arrays;
 public class SimpleMotionPlanning {
 
 	public static void main(String[] args) {
-
 		SimpleMotionPlanning simpleMotionPlanning = new SimpleMotionPlanning();
 		simpleMotionPlanning.start();
-
 	}
 
+		
 	public void start() {
 		Utils utils = new Utils();
 
@@ -21,6 +20,8 @@ public class SimpleMotionPlanning {
 				{ 0, 0, 1, 1, 1, 0 }, 
 				{ 0, 0, 0, 0, 1, 0 } 
 		};
+		
+	
 		System.out.println("GRID:");
 		utils.printArray(grid);
 
@@ -34,7 +35,7 @@ public class SimpleMotionPlanning {
 		utils.printArray(goal);
 
 		int delta[][] = new int[][] { { -1, 0 }, { 0, -1 }, { 1, 0 }, { 0, 1 } };
-		char delta_name[] = new char[] { '^', '<', 'v', '>' };
+		
 
 		int cost = 1;
 
@@ -47,8 +48,8 @@ public class SimpleMotionPlanning {
 		int action[][] = new int[grid.length][grid[0].length];
 		utils.updateValue(action, -1);
 
-		System.out.println("CLOSED:");
-		utils.printArray(closed);
+		//System.out.println("CLOSED:");
+		//utils.printArray(closed);
 
 		int x = 0;
 		int y = 0;
@@ -58,8 +59,8 @@ public class SimpleMotionPlanning {
 		expand[x][y] = 0;
 		int count = 0;
 
-		System.out.println("INITIAL OPEN:");
-		utils.printArray(open);
+		//System.out.println("INITIAL OPEN:");
+		//utils.printArray(open);
 
 		boolean found = false;
 		boolean resign = false;
@@ -74,8 +75,8 @@ public class SimpleMotionPlanning {
 				int[] next = open[open.length - 1];
 				open = Arrays.copyOf(open, open.length - 1);
 
-				System.out.println("take list item");
-				utils.printArray(next);
+				//System.out.println("take list item");
+				//utils.printArray(next);
 				x = next[1];
 				y = next[2];
 				g = next[0];
@@ -100,17 +101,18 @@ public class SimpleMotionPlanning {
 						}
 					}
 
-					System.out.println("new open list:");
-					utils.printArray(open);
+					//System.out.println("new open list:");
+					//utils.printArray(open);
 				}
 			}
 		}
 
 		System.out.println("Found=" + found);
-		System.out.println("EXPAND:");
-		utils.printArray(expand);
 
 		if (found) {
+			System.out.println("EXPAND:");
+			utils.printArray(expand);
+
 			int policy[][] = new int[grid.length][grid[0].length];
 			utils.updateValue(policy, -1);
 			x = goal[0];
@@ -124,24 +126,11 @@ public class SimpleMotionPlanning {
 				y = y2;
 			}
 
-			System.out.println("ACTION:");
-			utils.printArray(action);
-
 			System.out.println("POLICY:");
 			utils.printArray(policy);
 
 		}
 
-		/*
-		 * System.out.println("TEST initial:"); int[][] test = new int[][] {
-		 * {1,1,1}, {2,2,2} }; utils.printArray(test);
-		 * 
-		 * System.out.println("TEST append:"); test = utils.append(test, new
-		 * int[]{3,3,3}); utils.printArray(test);
-		 * 
-		 * System.out.println("TEST delete last:"); test = Arrays.copyOf(test,
-		 * test.length-1); utils.printArray(test);
-		 */
 	}
 
 }
