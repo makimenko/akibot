@@ -87,17 +87,11 @@ public class AStarMotionPlanning {
 				break;
 			} else {
 				Arrays.sort(open, new DescendingComparator());
-				
-				step ++;
-				
-				System.out.println("OPEN ("+step+"):");
-				utils.printArray(open);
-				
 				int[] next = open[open.length - 1];
 				open = Arrays.copyOf(open, open.length - 1);
 
-				System.out.println("take list item");
-				utils.printArray(next);
+				//System.out.println("take list item");
+				//utils.printArray(next);
 				x = next[3];
 				y = next[4];
 				g = next[1];
