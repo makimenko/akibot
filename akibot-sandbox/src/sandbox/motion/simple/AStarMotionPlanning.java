@@ -2,10 +2,10 @@ package sandbox.motion.simple;
 
 import java.util.Arrays;
 
-public class SimpleMotionPlanning {
+public class AStarMotionPlanning {
 
 	public static void main(String[] args) {
-		SimpleMotionPlanning simpleMotionPlanning = new SimpleMotionPlanning();
+		AStarMotionPlanning simpleMotionPlanning = new AStarMotionPlanning();
 		simpleMotionPlanning.start();
 	}
 
@@ -14,17 +14,29 @@ public class SimpleMotionPlanning {
 		Utils utils = new Utils();
 
 		int grid[][] = new int[][] { 
-				{ 0, 0, 1, 0, 0, 0 }, 
-				{ 0, 0, 1, 0, 0, 0 }, 
-				{ 0, 0, 0, 0, 1, 0 }, 
-				{ 0, 0, 1, 1, 1, 0 }, 
+				{ 0, 1, 0, 0, 0, 0 }, 
+				{ 0, 1, 0, 0, 0, 0 }, 
+				{ 0, 1, 0, 0, 0, 0 }, 
+				{ 0, 1, 0, 0, 0, 0 }, 
 				{ 0, 0, 0, 0, 1, 0 } 
+		};
+		
+		
+		int heuristic[][] = new int[][] { 
+				{ 9, 8, 7, 6, 5, 4 }, 
+				{ 8, 7, 6, 5, 4, 3 }, 
+				{ 7, 6, 5, 4, 3, 2 }, 
+				{ 6, 5, 4, 3, 2, 1 }, 
+				{ 5, 4, 3, 2, 1, 0 } 
 		};
 		
 	
 		System.out.println("GRID:");
 		utils.printArray(grid);
 
+		System.out.println("HEURISTIC:");
+		utils.printArray(heuristic);
+		
 		int init[] = new int[] { 0, 0 };
 		int goal[] = new int[] { grid.length - 1, grid[0].length - 1 };
 
@@ -39,6 +51,7 @@ public class SimpleMotionPlanning {
 
 		int cost = 1;
 
+		
 		int closed[][] = new int[grid.length][grid[0].length];
 		closed[init[0]][init[1]] = 1;
 
@@ -54,8 +67,10 @@ public class SimpleMotionPlanning {
 		int x = 0;
 		int y = 0;
 		int g = 0;
+		int h = heuristic[x][y];
+		int f = g+h;
 
-		int open[][] = new int[][] { { g, x, y } };
+		int open[][] = new int[][] { { f, g, h, x, y } };
 		expand[x][y] = 0;
 		int count = 0;
 
@@ -64,22 +79,28 @@ public class SimpleMotionPlanning {
 
 		boolean found = false;
 		boolean resign = false;
-
+		int step= 0;
+		
 		while (!found && !resign) {
-
 			if (open.length == 0) {
 				resign = true;
 				break;
 			} else {
-				Arrays.sort(open, new AscendingComparator());
+				Arrays.sort(open, new DescendingComparator());
+				
+				step ++;
+				
+				System.out.println("OPEN ("+step+"):");
+				utils.printArray(open);
+				
 				int[] next = open[open.length - 1];
 				open = Arrays.copyOf(open, open.length - 1);
 
-				//System.out.println("take list item");
-				//utils.printArray(next);
-				x = next[1];
-				y = next[2];
-				g = next[0];
+				System.out.println("take list item");
+				utils.printArray(next);
+				x = next[3];
+				y = next[4];
+				g = next[1];
 				expand[x][y] = count;
 				count++;
 
@@ -94,7 +115,9 @@ public class SimpleMotionPlanning {
 						if (x2 >= 0 && x2 < grid.length && y2 >= 0 && y2 < grid[0].length) {
 							if (closed[x2][y2] == 0 && grid[x2][y2] == 0) {
 								int g2 = g + cost;
-								open = utils.append(open, new int[] { g2, x2, y2 });
+								int h2 = heuristic[x2][y2];
+								int f2 = g2 + h2;
+								open = utils.append(open, new int[] { f2, g2, h2, x2, y2 });
 								closed[x2][y2] = 1;
 								action[x2][y2] = i;
 							}
