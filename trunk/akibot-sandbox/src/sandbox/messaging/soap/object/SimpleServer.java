@@ -1,4 +1,4 @@
-package sandbox.messaging.soap.simple;
+package sandbox.messaging.soap.object;
 
 import java.io.*;
 import java.net.*;
@@ -26,7 +26,8 @@ public class SimpleServer {
 				if (object instanceof MyObject) {
 					MyObject myObject = (MyObject) object;
 					System.out.println("SERVER: Received MyObject: " + myObject.getName());
-				} else {
+				} 
+				else {
 					System.out.println("SERVER: Unknown Object!");
 					break;
 				}

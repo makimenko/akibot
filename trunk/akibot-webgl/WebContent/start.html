@@ -103,6 +103,20 @@ a {
 
 		}
 
+		function testSocket() {
+			var socket = new WebSocket("ws://localhost:2002");
+
+			socket.onopen = function() {
+				  alert("Connected");
+				  
+				  socket.send("HELLO 1!");
+				  socket.send("HELLO 2!");
+
+				  
+				};
+
+		}
+		
 		function init() {
 			camera = new THREE.PerspectiveCamera(60, window.innerWidth
 					/ window.innerHeight, 1, 1000);
@@ -162,6 +176,8 @@ a {
 
 		}
 
+		
+		
 		function onWindowResize() {
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();
@@ -179,6 +195,9 @@ a {
 			renderer.render(scene, camera);
 			stats.update();
 		}
+		
+		
+		testSocket();
 	</script>
 
 </body>
