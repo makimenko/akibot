@@ -1,4 +1,4 @@
-package sandbox.messaging.soap.simple;
+package sandbox.messaging.soap.object;
 
 import java.io.Serializable;
 
