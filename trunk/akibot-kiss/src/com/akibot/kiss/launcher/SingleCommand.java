@@ -21,16 +21,17 @@ public class SingleCommand {
 		OutputStream outputStream = socket.getOutputStream();
 		ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
-		while(true) {
+		
+		for (int i=0; i<=10; i++) {
 			CommandMessage commandMessage = new CommandMessage();
 			commandMessage.setCommand(Command.GET_DISTANCE);
 			objectOutputStream.writeObject(commandMessage);
-			Thread.sleep(10000);
+			Thread.sleep(5000);
 		}
 		
-		//objectOutputStream.close();
-		//outputStream.close();
-		//socket.close();
+		objectOutputStream.close();
+		outputStream.close();
+		socket.close();
 		
 	}
 	
