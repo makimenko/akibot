@@ -1,12 +1,21 @@
 package com.akibot.kiss.server;
 
 import java.io.IOException;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+
 
 public class TestLogger {
-	static Logger log = Logger.getLogger(TestLogger.class.getName());
+	
+	static final Logger logger = LogManager.getLogger(TestLogger.class.getName());
+	
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		log.info("Hello!");
+		logger.trace("Entering application.");
+		logger.info("Entering application.");
+		logger.debug("Entering application.");
+		
 	}
 }
