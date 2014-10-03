@@ -9,12 +9,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Connection {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private Socket socket;
 
 	Connection(Socket socket, LinkedBlockingQueue<Object> messages) throws IOException {
-		this.socket = socket;
-		in = new ObjectInputStream(socket.getInputStream());
 		out = new ObjectOutputStream(socket.getOutputStream());
+		in = new ObjectInputStream(socket.getInputStream());
+		
 
 		MessageReader read = new MessageReader(in, messages);
 		read.setDaemon(true);
