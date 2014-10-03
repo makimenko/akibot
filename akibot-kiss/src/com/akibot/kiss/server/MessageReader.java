@@ -8,7 +8,6 @@ public class MessageReader extends Thread {
 	private LinkedBlockingQueue<Object> messages;
 	private ObjectInputStream in;
 	
-	
 	public MessageReader(ObjectInputStream in, LinkedBlockingQueue<Object> messages) {
 		this.messages = messages;
 		this.in = in;
