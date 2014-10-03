@@ -1,63 +1,68 @@
 package com.akibot.kiss.server;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class Server implements Runnable {
+public class Server {
+	private ArrayList<Connection> clientList;
+	private LinkedBlockingQueue<Object> messages;
+	private ServerSocket serverSocket;
 
-	protected int serverPort;
-	protected ServerSocket serverSocket = null;
-	protected boolean isStopped = false;
-	protected Thread runningThread = null;
-	protected ExecutorService threadPool = Executors.newFixedThreadPool(10); // Executors.defaultThreadFactory();
+	public Server(int port) throws IOException {
+		clientList = new ArrayList<Connection>();
+		messages = new LinkedBlockingQueue<Object>();
+		serverSocket = new ServerSocket(port);
 
-	public Server(int port) {
-		this.serverPort = port;
-	}
-
-	public void run() {
-		synchronized (this) {
-			this.runningThread = Thread.currentThread();
-		}
-		openServerSocket();
-		while (!isStopped()) {
-			Socket clientSocket = null;
-			try {
-				clientSocket = this.serverSocket.accept();
-			} catch (IOException e) {
-				if (isStopped()) {
-					System.out.println("Server Stopped.");
-					return;
+		Thread accept = new Thread() {
+			public void run() {
+				while (true) {
+					try {
+						Socket s = serverSocket.accept();
+						clientList.add(new Connection(s, messages));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-				throw new RuntimeException("Error accepting client connection", e);
 			}
-			this.threadPool.execute(new ServerWorker(clientSocket, "Thread Pooled Server"));
-		}
-		this.threadPool.shutdown();
-		System.out.println("Server Stopped.");
+		};
+
+		accept.setDaemon(true);
+		accept.start();
+
+		Thread messageHandling = new Thread() {
+			public void run() {
+				while (true) {
+					try {
+						Object message = messages.take();
+
+						if (((String) message).equalsIgnoreCase("X")) {
+							System.out.println("Broadcasting: " + message);
+							sendToAll("HEY!!! broadcasting X!");
+						}
+						// Do some handling here...
+						System.out.println("Message Received: " + message);
+					} catch (InterruptedException e) {
+					}
+				}
+			}
+		};
+
+		messageHandling.setDaemon(true);
+		messageHandling.start();
 	}
 
-	private synchronized boolean isStopped() {
-		return this.isStopped;
+	public void sendToOne(int index, Object message) throws IndexOutOfBoundsException {
+		clientList.get(index).write(message);
 	}
 
-	public synchronized void stop() {
-		this.isStopped = true;
-		try {
-			this.serverSocket.close();
-		} catch (IOException e) {
-			throw new RuntimeException("Error closing server", e);
-		}
+	public void sendToAll(Object message) {
+		for (Connection client : clientList)
+			client.write(message);
 	}
 
-	private void openServerSocket() {
-		try {
-			this.serverSocket = new ServerSocket(this.serverPort);
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot open port " + serverPort, e);
-		}
-	}
 }
