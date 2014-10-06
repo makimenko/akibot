@@ -1,7 +1,6 @@
 package com.akibot.kiss.message;
 
-
-public class DistanceStatusMessage implements Message{
+public class DistanceMeterStatusMessage implements StatusMessage {
 
 	private double meters;
 

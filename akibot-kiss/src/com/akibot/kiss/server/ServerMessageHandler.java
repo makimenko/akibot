@@ -1,14 +1,11 @@
 package com.akibot.kiss.server;
 
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.akibot.kiss.message.DistanceMeterCommandMessage;
+import com.akibot.kiss.message.DistanceMeterStatusMessage;
 
-import com.akibot.kiss.component.Component;
-import com.akibot.kiss.message.Command;
-import com.akibot.kiss.message.CommandMessage;
-import com.akibot.kiss.message.DistanceStatusMessage;
 
 public class ServerMessageHandler extends Thread {
 	static final Logger log = LogManager.getLogger(ServerMessageHandler.class.getName());
@@ -29,14 +26,13 @@ public class ServerMessageHandler extends Thread {
 				if (message instanceof String) {
 					log.debug("Message Received: " + message);
 					if (((String) message).equalsIgnoreCase("X")) {
-						CommandMessage commandMessage = new CommandMessage();
-						commandMessage.setCommand(Command.GET_DISTANCE);
-						server.sendToAll(commandMessage);
+						DistanceMeterCommandMessage distanceMeterCommandMessage = new DistanceMeterCommandMessage();
+						server.sendToAll(distanceMeterCommandMessage);
 					}
 					
-				} else 	if (message instanceof DistanceStatusMessage) {
-					DistanceStatusMessage distanceStatusMessage = (DistanceStatusMessage)message;
-					log.debug("Distance Received: " + distanceStatusMessage.getMeters()+" meters");
+				} else 	if (message instanceof DistanceMeterStatusMessage) {
+					DistanceMeterStatusMessage distanceMeterStatusMessage = (DistanceMeterStatusMessage)message;
+					log.debug("Distance Received: " + distanceMeterStatusMessage.getMeters()+" meters");
 				}	else {
 					log.warn("Unknown message received");
 				}
