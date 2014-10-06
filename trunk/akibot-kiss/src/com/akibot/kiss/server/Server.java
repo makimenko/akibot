@@ -9,9 +9,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import com.akibot.kiss.message.Command;
-import com.akibot.kiss.message.CommandMessage;
-import com.akibot.kiss.message.DistanceStatusMessage;
 
 public class Server {
 	static final Logger log = LogManager.getLogger(Server.class.getName());
@@ -43,35 +40,9 @@ public class Server {
 		accept.setDaemon(true);
 		accept.start();
 
-		Thread messageHandling = new Thread() {
-			public void run() {
-				while (true) {
-					try {
-						Object message = messages.take();
-						log.debug("New message taken");
-						
-						if (message instanceof String) {
-							log.debug("Message Received: " + message);
-							if (((String) message).equalsIgnoreCase("X")) {
-								CommandMessage commandMessage = new CommandMessage();
-								commandMessage.setCommand(Command.GET_DISTANCE);
-								sendToAll(commandMessage);
-							}
-							
-						} else 	if (message instanceof DistanceStatusMessage) {
-							DistanceStatusMessage distanceStatusMessage = (DistanceStatusMessage)message;
-							log.debug("Distance Received: " + distanceStatusMessage.getMeters()+" meters");
-						}	else {
-							log.warn("Unknown message received");
-						}
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-		};
-
-		messageHandling.setDaemon(true);
-		messageHandling.start();
+		ServerMessageHandler serverMessageHandler = new ServerMessageHandler(this, messages);
+		serverMessageHandler.setDaemon(true);
+		serverMessageHandler.start();
 	}
 
 	public void sendToOne(int index, Object message) throws IndexOutOfBoundsException {
