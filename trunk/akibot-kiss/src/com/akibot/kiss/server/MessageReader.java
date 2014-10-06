@@ -17,7 +17,6 @@ public class MessageReader extends Thread {
 		while (true) {
 			try {
 				Object obj = in.readObject();
-				System.out.println("Client.readObject");
 				messages.put(obj);
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -13,7 +13,6 @@ public class Connection {
 	Connection(Socket socket, LinkedBlockingQueue<Object> messages) throws IOException {
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
-		
 
 		MessageReader read = new MessageReader(in, messages);
 		read.setDaemon(true);
