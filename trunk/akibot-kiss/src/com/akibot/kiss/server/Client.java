@@ -26,9 +26,8 @@ public class Client {
 				while (true) {
 					try {
 						Object message = messages.take();
-						log.debug("Message taken from queue");
-						// Do some handling here...
 						log.debug("Message Received: " + message);
+						// Do some handling here...
 					} catch (InterruptedException e) {
 						log.warn(e.getMessage());
 					}

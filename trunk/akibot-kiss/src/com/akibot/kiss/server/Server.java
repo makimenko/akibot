@@ -27,7 +27,7 @@ public class Server {
 				while (true) {
 					try {
 						Socket s = serverSocket.accept();
-						log.debug("New connection accepted.");
+						log.debug("New connection accepted");
 						clientList.add(new Connection(s, messages));
 					} catch (IOException e) {
 						e.printStackTrace();
