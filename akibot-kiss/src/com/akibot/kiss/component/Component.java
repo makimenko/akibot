@@ -1,10 +1,10 @@
 package com.akibot.kiss.component;
 
 import com.akibot.kiss.message.CommandMessage;
+import com.akibot.kiss.server.Client;
 
 public interface Component {
 
-	public void setComponentController(ComponentController componentController);
-	public void executeCommand(CommandMessage command) throws Exception;
+	public void executeCommand(Client client, CommandMessage command) throws Exception;
 	
 }
