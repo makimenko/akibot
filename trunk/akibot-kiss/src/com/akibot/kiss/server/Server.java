@@ -9,6 +9,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import com.akibot.kiss.message.Command;
+import com.akibot.kiss.message.CommandMessage;
+import com.akibot.kiss.message.DistanceStatusMessage;
+
 public class Server {
 	static final Logger log = LogManager.getLogger(Server.class.getName());
 	private ArrayList<Connection> clientList;
@@ -46,12 +50,20 @@ public class Server {
 						Object message = messages.take();
 						log.debug("New message taken");
 						
-						if (((String) message).equalsIgnoreCase("X")) {
-							log.debug("Broadcasting: "+message);
-							sendToAll("HEY!!! broadcasting X!");
+						if (message instanceof String) {
+							log.debug("Message Received: " + message);
+							if (((String) message).equalsIgnoreCase("X")) {
+								CommandMessage commandMessage = new CommandMessage();
+								commandMessage.setCommand(Command.GET_DISTANCE);
+								sendToAll(commandMessage);
+							}
+							
+						} else 	if (message instanceof DistanceStatusMessage) {
+							DistanceStatusMessage distanceStatusMessage = (DistanceStatusMessage)message;
+							log.debug("Distance Received: " + distanceStatusMessage.getMeters()+" meters");
+						}	else {
+							log.warn("Unknown message received");
 						}
-						// Do some handling here...
-						log.debug("Message Received: " + message);
 					} catch (InterruptedException e) {
 					}
 				}
