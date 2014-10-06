@@ -19,6 +19,7 @@ public class ClientMessageHandler extends Thread {
 		this.messages = messages;
 		this.component = component;
 	}
+	
 	public void run() {
 		while (true) {
 			try {
