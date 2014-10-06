@@ -1,10 +1,12 @@
 package com.akibot.kiss.server;
 
 import java.util.concurrent.LinkedBlockingQueue;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.akibot.kiss.message.DistanceMeterCommandMessage;
-import com.akibot.kiss.message.DistanceMeterStatusMessage;
+
+import com.akibot.kiss.message.command.DistanceMeterCommandMessage;
+import com.akibot.kiss.message.status.DistanceMeterStatusMessage;
 
 
 public class ServerMessageHandler extends Thread {

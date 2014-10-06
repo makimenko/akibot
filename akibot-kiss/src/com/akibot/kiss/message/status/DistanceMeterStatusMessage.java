@@ -1,4 +1,6 @@
-package com.akibot.kiss.message;
+package com.akibot.kiss.message.status;
+
+import com.akibot.kiss.message.StatusMessage;
 
 public class DistanceMeterStatusMessage implements StatusMessage {
 
