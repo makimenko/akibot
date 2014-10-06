@@ -10,12 +10,12 @@ public class TestClient {
 		int i = 0;
 
 		while (true) {
-			// server.sendToOne(1, "test");
 			client.send("hello from client");
 
 			i++;
 			if (i == 10) {
-				client.send("X");
+				i=0;
+				client.send("X");				
 			}
 			Thread.sleep(1000);
 		}
