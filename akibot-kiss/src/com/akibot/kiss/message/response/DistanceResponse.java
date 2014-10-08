@@ -1,8 +1,8 @@
-package com.akibot.kiss.message.status;
+package com.akibot.kiss.message.response;
 
-import com.akibot.kiss.message.StatusMessage;
+import com.akibot.kiss.message.Response;
 
-public class DistanceMeterStatusMessage implements StatusMessage {
+public class DistanceResponse implements Response {
 
 	private double meters;
 

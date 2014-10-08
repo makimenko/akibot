@@ -1,6 +1,8 @@
 package com.akibot.kiss.server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,6 +12,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
+import com.akibot.kiss.message.Message;
+import com.akibot.kiss.types.SimpleProtocolPhaseType;
 
 import sun.misc.Cleaner;
 
@@ -30,12 +35,27 @@ public class Server {
 			public void run() {
 				while (true) {
 					try {
-						Socket s = serverSocket.accept();
+						Socket socket = serverSocket.accept();
 						log.debug("New connection accepted");
-						ClientDescription clientDescription = new ClientDescription("X", "Y");
-						clientList.putIfAbsent(clientDescription, new Connection(s, messages));
-					} catch (IOException e) {
-						e.printStackTrace();
+						
+						ServerAuthorizationProtocol protocol = new ServerAuthorizationProtocol(socket);
+						
+						protocol.authorize();
+						
+						
+						log.debug("Protocol phase = "+protocol.getPhase());
+						
+						if (protocol.getPhase()==SimpleProtocolPhaseType.SUCCEDED) {
+							ClientDescription clientDescription = protocol.getClientDescription();
+							Connection newConnection = new Connection(socket, messages);
+							clientList.putIfAbsent(clientDescription, newConnection);
+						} else {
+							socket.close();
+						}
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 			}
