@@ -13,14 +13,13 @@ public class DistanceMeter implements Component {
 
 	@Override
 	public void executeRequest(Client client, Request request) throws Exception {
-		
+
 		if (request instanceof DistanceRequest) {
 			Random randomGenerator = new Random();
 			distanceStatus = new DistanceResponse();
-			distanceStatus.setMeters(randomGenerator.nextDouble()*4);
+			distanceStatus.setMeters(randomGenerator.nextDouble() * 4);
 			client.send(distanceStatus);
 		}
 	}
-
 
 }
