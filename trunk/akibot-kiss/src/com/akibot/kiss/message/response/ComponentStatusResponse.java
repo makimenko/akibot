@@ -1,9 +1,9 @@
-package com.akibot.kiss.message.status;
+package com.akibot.kiss.message.response;
 
-import com.akibot.kiss.message.StatusMessage;
+import com.akibot.kiss.message.Response;
 import com.akibot.kiss.types.ComponentStatusType;
 
-public class ComponentStatusMessage implements StatusMessage {
+public class ComponentStatusResponse implements Response {
 	private ComponentStatusType componentStatusType;
 
 	public ComponentStatusType getComponentStatusType() {

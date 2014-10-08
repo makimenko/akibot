@@ -5,8 +5,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.kiss.message.command.DistanceMeterCommandMessage;
-import com.akibot.kiss.message.status.DistanceMeterStatusMessage;
+import com.akibot.kiss.message.request.DistanceRequest;
+import com.akibot.kiss.message.response.DistanceResponse;
 
 
 public class ServerMessageHandler extends Thread {
@@ -28,13 +28,13 @@ public class ServerMessageHandler extends Thread {
 				if (message instanceof String) {
 					log.debug("Message Received: " + message);
 					if (((String) message).equalsIgnoreCase("X")) {
-						DistanceMeterCommandMessage distanceMeterCommandMessage = new DistanceMeterCommandMessage();
-						server.sendToAll(distanceMeterCommandMessage);
+						DistanceRequest distanceRequest = new DistanceRequest();
+						server.sendToAll(distanceRequest);
 					}
 					
-				} else 	if (message instanceof DistanceMeterStatusMessage) {
-					DistanceMeterStatusMessage distanceMeterStatusMessage = (DistanceMeterStatusMessage)message;
-					log.debug("Distance Received: " + distanceMeterStatusMessage.getMeters()+" meters");
+				} else 	if (message instanceof DistanceResponse) {
+					DistanceResponse distanceResponse = (DistanceResponse)message;
+					log.debug("Distance Received: " + distanceResponse.getMeters()+" meters");
 				}	else {
 					log.warn("Unknown message received");
 				}

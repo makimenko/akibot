@@ -28,5 +28,5 @@ public class ClientDescription {
 	}
 	public void setConnectTime(long connectTime) {
 		this.connectTime = connectTime;
-	}	
+	}
 }
