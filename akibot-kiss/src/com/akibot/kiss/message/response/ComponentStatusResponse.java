@@ -14,5 +14,4 @@ public class ComponentStatusResponse implements Response {
 		this.componentStatusType = componentStatusType;
 	}
 
-		
 }

@@ -13,6 +13,5 @@ public class DistanceResponse implements Response {
 	public void setMeters(double meters) {
 		this.meters = meters;
 	}
-	
-	
+
 }

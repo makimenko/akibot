@@ -1,22 +1,15 @@
 package com.akibot.kiss.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import com.akibot.kiss.message.Message;
 import com.akibot.kiss.types.SimpleProtocolPhaseType;
-
-import sun.misc.Cleaner;
 
 public class Server {
 	static final Logger log = LogManager.getLogger(Server.class.getName());
@@ -37,22 +30,21 @@ public class Server {
 					try {
 						Socket socket = serverSocket.accept();
 						log.debug("New connection accepted");
-						
+
 						ServerAuthorizationProtocol protocol = new ServerAuthorizationProtocol(socket);
-						
+
 						protocol.authorize();
-						
-						
-						log.debug("Protocol phase = "+protocol.getPhase());
-						
-						if (protocol.getPhase()==SimpleProtocolPhaseType.SUCCEDED) {
+
+						log.debug("Protocol phase = " + protocol.getPhase());
+
+						if (protocol.getPhase() == SimpleProtocolPhaseType.SUCCEDED) {
 							ClientDescription clientDescription = protocol.getClientDescription();
 							Connection newConnection = new Connection(socket, messages);
 							clientList.putIfAbsent(clientDescription, newConnection);
 						} else {
 							socket.close();
 						}
-						
+
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

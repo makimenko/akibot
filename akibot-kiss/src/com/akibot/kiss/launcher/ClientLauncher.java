@@ -1,10 +1,7 @@
 package com.akibot.kiss.launcher;
 
-import java.io.IOException;
-
 import com.akibot.kiss.component.DistanceMeter;
 import com.akibot.kiss.server.Client;
-import com.akibot.kiss.server.Server;
 
 public class ClientLauncher {
 
@@ -13,7 +10,7 @@ public class ClientLauncher {
 		// Start Client THREAD:
 		DistanceMeter distanceMeter = new DistanceMeter();
 		Client client = new Client("localhost", 2002, distanceMeter);
-		
+
 		// LOOP forever:
 		int i = 0;
 		while (true) {
@@ -25,6 +22,6 @@ public class ClientLauncher {
 			}
 			Thread.sleep(1000);
 		}
-		
+
 	}
 }

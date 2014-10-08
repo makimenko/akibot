@@ -16,10 +16,9 @@ public class SimpleController implements Component {
 		if (request instanceof DistanceRequest) {
 			Random randomGenerator = new Random();
 			distanceStatus = new DistanceResponse();
-			distanceStatus.setMeters(randomGenerator.nextDouble()*4);
+			distanceStatus.setMeters(randomGenerator.nextDouble() * 4);
 			client.send(distanceStatus);
 		}
 	}
-
 
 }

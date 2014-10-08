@@ -1,6 +1,5 @@
 package com.akibot.kiss.server;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -14,13 +13,13 @@ public class ClientAuthorization {
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private Component component;
-	
-	public ClientAuthorization(Socket socket, Component component)  throws Exception {
+
+	public ClientAuthorization(Socket socket, Component component) throws Exception {
 		this.component = component;
 		this.out = new ObjectOutputStream(socket.getOutputStream());
 		this.in = new ObjectInputStream(socket.getInputStream());
 	}
-	
+
 	public void authorize() throws Exception {
 		Object obj;
 		while (true) {
@@ -37,8 +36,5 @@ public class ClientAuthorization {
 			}
 		}
 	}
-	
 
-
-	
 }

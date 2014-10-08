@@ -6,5 +6,5 @@ import com.akibot.kiss.server.Client;
 public interface Component {
 
 	public void executeRequest(Client client, Request request) throws Exception;
-	
+
 }
