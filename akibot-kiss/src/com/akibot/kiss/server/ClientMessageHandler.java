@@ -25,7 +25,7 @@ public class ClientMessageHandler extends Thread {
 			try {
 				Object message = messages.take();
 				log.debug("Message Received: " + message);
-				// Do some handling here...
+
 				if (message instanceof Request) {
 					Request request = (Request) message;
 					component.executeRequest(client, request);
