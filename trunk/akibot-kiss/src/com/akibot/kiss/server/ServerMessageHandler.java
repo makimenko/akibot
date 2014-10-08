@@ -22,7 +22,6 @@ public class ServerMessageHandler extends Thread {
 		while (true) {
 			try {
 				Object message = messages.take();
-				log.debug("New message taken");
 
 				if (message instanceof String) {
 					log.debug("Message Received: " + message);
