@@ -40,7 +40,7 @@ public class Server {
 					try {
 						Object message = messages.take();
 
-						if (((String)message).equalsIgnoreCase("X")) {
+						if (((String) message).equalsIgnoreCase("X")) {
 							System.out.println("Broadcasting: " + message);
 							sendToAll("HEY!!! broadcasting X!");
 						}

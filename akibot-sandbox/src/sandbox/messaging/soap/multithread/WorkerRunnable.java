@@ -1,8 +1,8 @@
 package sandbox.messaging.soap.multithread;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 import java.net.Socket;
 
 /**

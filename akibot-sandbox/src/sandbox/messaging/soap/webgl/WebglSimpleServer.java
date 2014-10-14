@@ -1,7 +1,10 @@
 package sandbox.messaging.soap.webgl;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class WebglSimpleServer {
 
@@ -16,15 +19,14 @@ public class WebglSimpleServer {
 			System.out.println("SERVER: Accepted");
 
 			InputStream inputStream = socket.getInputStream();
-			
-			BufferedReader in =new BufferedReader(new InputStreamReader(inputStream));
-			
-			
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
 			String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("SERVER RECEIVED: "+inputLine);
-            }
-            
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println("SERVER RECEIVED: " + inputLine);
+			}
+
 			inputStream.close();
 			socket.close();
 			serverSocket.close();

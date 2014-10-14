@@ -11,8 +11,7 @@ public class GpioRemote {
 		System.out.println("<--Pi4J--> GPIO Control Example ... started.");
 		final GpioController gpio = GpioFactory.getInstance();
 		System.out.println("<--Pi4J--> GPIO Factory initiated.");
-		final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(
-				RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
+		final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
 		System.out.println("--> GPIO state should be: ON");
 		Thread.sleep(5000);
 		pin.low();
