@@ -1,7 +1,9 @@
 package sandbox.messaging.soap.object;
 
-import java.io.*;
-import java.net.*;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class SimpleServer {
 
@@ -18,20 +20,18 @@ public class SimpleServer {
 			InputStream inputStream = socket.getInputStream();
 			ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 			Object object;
-			
-			while (  (object = objectInputStream.readObject()) != null) {
+
+			while ((object = objectInputStream.readObject()) != null) {
 				System.out.println("SERVER: loop start");
-				
 
 				if (object instanceof MyObject) {
 					MyObject myObject = (MyObject) object;
 					System.out.println("SERVER: Received MyObject: " + myObject.getName());
-				} 
-				else {
+				} else {
 					System.out.println("SERVER: Unknown Object!");
 					break;
 				}
-				
+
 				System.out.println("SERVER: loop end");
 			}
 

@@ -1,7 +1,6 @@
 package sandbox.messaging.soap.recommended;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -66,7 +65,6 @@ public class Client {
 					}
 				}
 			};
-			
 
 			read.setDaemon(true);
 			read.start();

@@ -9,34 +9,20 @@ public class AStarMotionPlanning {
 		simpleMotionPlanning.start();
 	}
 
-		
 	public void start() {
 		Utils utils = new Utils();
 
-		int grid[][] = new int[][] { 
-				{ 0, 1, 0, 0, 0, 0 }, 
-				{ 0, 1, 0, 0, 0, 0 }, 
-				{ 0, 1, 0, 0, 0, 0 }, 
-				{ 0, 1, 0, 0, 0, 0 }, 
-				{ 0, 0, 0, 0, 1, 0 } 
-		};
-		
-		
-		int heuristic[][] = new int[][] { 
-				{ 9, 8, 7, 6, 5, 4 }, 
-				{ 8, 7, 6, 5, 4, 3 }, 
-				{ 7, 6, 5, 4, 3, 2 }, 
-				{ 6, 5, 4, 3, 2, 1 }, 
-				{ 5, 4, 3, 2, 1, 0 } 
-		};
-		
-	
+		int grid[][] = new int[][] { { 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0 }, { 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1, 0 } };
+
+		int heuristic[][] = new int[][] { { 9, 8, 7, 6, 5, 4 }, { 8, 7, 6, 5, 4, 3 }, { 7, 6, 5, 4, 3, 2 }, { 6, 5, 4, 3, 2, 1 },
+				{ 5, 4, 3, 2, 1, 0 } };
+
 		System.out.println("GRID:");
 		utils.printArray(grid);
 
 		System.out.println("HEURISTIC:");
 		utils.printArray(heuristic);
-		
+
 		int init[] = new int[] { 0, 0 };
 		int goal[] = new int[] { grid.length - 1, grid[0].length - 1 };
 
@@ -47,11 +33,9 @@ public class AStarMotionPlanning {
 		utils.printArray(goal);
 
 		int delta[][] = new int[][] { { -1, 0 }, { 0, -1 }, { 1, 0 }, { 0, 1 } };
-		
 
 		int cost = 1;
 
-		
 		int closed[][] = new int[grid.length][grid[0].length];
 		closed[init[0]][init[1]] = 1;
 
@@ -61,26 +45,26 @@ public class AStarMotionPlanning {
 		int action[][] = new int[grid.length][grid[0].length];
 		utils.updateValue(action, -1);
 
-		//System.out.println("CLOSED:");
-		//utils.printArray(closed);
+		// System.out.println("CLOSED:");
+		// utils.printArray(closed);
 
 		int x = 0;
 		int y = 0;
 		int g = 0;
 		int h = heuristic[x][y];
-		int f = g+h;
+		int f = g + h;
 
 		int open[][] = new int[][] { { f, g, h, x, y } };
 		expand[x][y] = 0;
 		int count = 0;
 
-		//System.out.println("INITIAL OPEN:");
-		//utils.printArray(open);
+		// System.out.println("INITIAL OPEN:");
+		// utils.printArray(open);
 
 		boolean found = false;
 		boolean resign = false;
-		int step= 0;
-		
+		int step = 0;
+
 		while (!found && !resign) {
 			if (open.length == 0) {
 				resign = true;
@@ -90,8 +74,8 @@ public class AStarMotionPlanning {
 				int[] next = open[open.length - 1];
 				open = Arrays.copyOf(open, open.length - 1);
 
-				//System.out.println("take list item");
-				//utils.printArray(next);
+				// System.out.println("take list item");
+				// utils.printArray(next);
 				x = next[3];
 				y = next[4];
 				g = next[1];
@@ -118,8 +102,8 @@ public class AStarMotionPlanning {
 						}
 					}
 
-					//System.out.println("new open list:");
-					//utils.printArray(open);
+					// System.out.println("new open list:");
+					// utils.printArray(open);
 				}
 			}
 		}
