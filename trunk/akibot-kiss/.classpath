@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-api-2.0.2.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-core-2.0.2.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/pi4j/pi4j-core.jar"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/remotevm/remotevmlauncher-client-1.0-20140103.103630-5.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/remotevm/remotevmlauncher-client-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
