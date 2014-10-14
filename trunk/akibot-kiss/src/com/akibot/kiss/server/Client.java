@@ -22,7 +22,7 @@ public class Client {
 
 		ClientAuthorization clientAuthorization = new ClientAuthorization(socket, component);
 		clientAuthorization.authorize();
-		
+
 		server = new Connection(socket, messages);
 		log.info("Connected to server");
 
