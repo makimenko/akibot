@@ -1,25 +1,17 @@
 package com.akibot.kiss.message.response;
 
 import com.akibot.kiss.message.Response;
+import com.akibot.kiss.server.ClientDescription;
 
 public class AuthorizationResponse implements Response {
-	private String name;
-	private String componentClassName;
+	private ClientDescription clientDescription;
 
-	public String getName() {
-		return name;
+	public ClientDescription getClientDescription() {
+		return clientDescription;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getComponentClassName() {
-		return componentClassName;
-	}
-
-	public void setComponentClassName(String componentClassName) {
-		this.componentClassName = componentClassName;
+	public void setClientDescription(ClientDescription clientDescription) {
+		this.clientDescription = clientDescription;
 	}
 
 }

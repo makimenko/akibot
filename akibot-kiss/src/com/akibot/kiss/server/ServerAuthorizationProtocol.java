@@ -45,7 +45,8 @@ public class ServerAuthorizationProtocol {
 		} else if (phase == SimpleProtocolPhaseType.INFO_REQUESTED && object instanceof AuthorizationResponse) {
 			AuthorizationResponse authorizationResponse = (AuthorizationResponse) object;
 			// TODO: add validation
-			clientDescription = new ClientDescription(authorizationResponse.getName(), authorizationResponse.getComponentClassName());
+
+			clientDescription = authorizationResponse.getClientDescription();
 			phase = SimpleProtocolPhaseType.SUCCEDED;
 			return new ConnectionAcceptedResponse();
 		} else {

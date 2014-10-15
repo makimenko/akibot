@@ -1,14 +1,17 @@
 package com.akibot.kiss.server;
 
-public class ClientDescription {
-	private String name;
-	private String componentClassName;
-	private long connectTime;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-	public ClientDescription(String name, String componentClassName) {
+import com.akibot.kiss.message.Message;
+
+public class ClientDescription implements Serializable {
+	private String name;
+	private ArrayList<Message> topicList;
+
+	public ClientDescription(String name) {
 		this.name = name;
-		this.componentClassName = componentClassName;
-		this.connectTime = System.currentTimeMillis();
+		this.topicList = new ArrayList<Message>();
 	}
 
 	public String getName() {
@@ -19,19 +22,11 @@ public class ClientDescription {
 		this.name = name;
 	}
 
-	public String getComponentClassName() {
-		return componentClassName;
+	public ArrayList<Message> getTopicList() {
+		return topicList;
 	}
 
-	public void setComponentClassName(String componentClassName) {
-		this.componentClassName = componentClassName;
-	}
-
-	public long getConnectTime() {
-		return connectTime;
-	}
-
-	public void setConnectTime(long connectTime) {
-		this.connectTime = connectTime;
+	public void setTopicList(ArrayList<Message> topicList) {
+		this.topicList = topicList;
 	}
 }
