@@ -28,7 +28,7 @@ public class ServerMessageHandler extends Thread {
 					server.broadcast(message);
 				} else if (message instanceof Response) {
 					log.debug("Response: " + message);
-
+					server.broadcast(message);
 					// DistanceResponse distanceResponse = (DistanceResponse)
 					// message;
 					// log.debug("Distance Received: " +

@@ -1,6 +1,6 @@
 package com.akibot.kiss.component;
 
-import com.akibot.kiss.message.Request;
+import com.akibot.kiss.message.Message;
 import com.akibot.kiss.server.Client;
 
 public class DefaultComponent implements Component {
@@ -17,7 +17,7 @@ public class DefaultComponent implements Component {
 	}
 
 	@Override
-	public void executeRequest(Request request) throws Exception {
+	public void processMessage(Message message) throws Exception {
 
 	}
 
