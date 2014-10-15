@@ -28,7 +28,7 @@ public class ClientMessageHandler extends Thread {
 
 				if (message instanceof Request) {
 					Request request = (Request) message;
-					component.executeRequest(client, request);
+					component.executeRequest(request);
 				}
 			} catch (InterruptedException e) {
 				log.warn(e.getMessage());

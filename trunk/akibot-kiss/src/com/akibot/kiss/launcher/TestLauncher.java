@@ -3,7 +3,7 @@ package com.akibot.kiss.launcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.kiss.component.DistanceMeter;
+import com.akibot.kiss.component.distance.DistanceMeterComponent;
 import com.akibot.kiss.server.Client;
 import com.akibot.kiss.server.Server;
 
@@ -16,8 +16,8 @@ public class TestLauncher {
 		Server server = new Server(port);
 
 		// Start Client THREAD:
-		DistanceMeter distanceMeter = new DistanceMeter();
-		Client client = new Client("localhost", port, distanceMeter);
+		DistanceMeterComponent distanceMeterComponent = new DistanceMeterComponent();
+		Client client = new Client("localhost", port, distanceMeterComponent);
 
 		// LOOP forever:
 		int i = 0;
