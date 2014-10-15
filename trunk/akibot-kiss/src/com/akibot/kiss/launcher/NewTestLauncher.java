@@ -5,7 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.kiss.component.awtcontroller.AwtControllerComponent;
 import com.akibot.kiss.component.distance.DistanceMeterComponent;
+import com.akibot.kiss.message.request.DistanceRequest;
+import com.akibot.kiss.message.response.DistanceResponse;
 import com.akibot.kiss.server.Client;
+import com.akibot.kiss.server.ClientDescription;
 import com.akibot.kiss.server.Server;
 
 public class NewTestLauncher {
@@ -19,10 +22,16 @@ public class NewTestLauncher {
 
 		// Start Client THREAD:
 		DistanceMeterComponent distanceMeterComponent = new DistanceMeterComponent();
-		Client distanceClient = new Client(host, port, distanceMeterComponent);
+		ClientDescription distanceMeterDescription = new ClientDescription("Distance Meter");
+		distanceMeterDescription.getTopicList().add(new DistanceRequest());
+		Client distanceClient = new Client(host, port, distanceMeterComponent, distanceMeterDescription);
+		distanceClient.start();
 
 		AwtControllerComponent awtControllerComponent = new AwtControllerComponent();
-		Client awtControllerClient = new Client(host, port, awtControllerComponent);
+		ClientDescription awtControllerDescription = new ClientDescription("Awt Controller");
+		awtControllerDescription.getTopicList().add(new DistanceResponse());
+		Client awtControllerClient = new Client(host, port, awtControllerComponent, awtControllerDescription);
+		awtControllerClient.start();
 
 		// LOOP forever:
 		while (true) {

@@ -9,16 +9,16 @@ import com.akibot.kiss.message.response.DistanceResponse;
 
 public class DistanceMeterComponent extends DefaultComponent {
 
-	private DistanceResponse distanceStatus;
+	private DistanceResponse distanceResponse;
 
 	@Override
 	public void executeRequest(Request request) throws Exception {
 
 		if (request instanceof DistanceRequest) {
 			Random randomGenerator = new Random();
-			distanceStatus = new DistanceResponse();
-			distanceStatus.setMeters(randomGenerator.nextDouble() * 4);
-			this.getClient().send(distanceStatus);
+			distanceResponse = new DistanceResponse();
+			distanceResponse.setMeters(randomGenerator.nextDouble() * 4);
+			this.getClient().send(distanceResponse);
 		}
 	}
 

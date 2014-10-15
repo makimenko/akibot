@@ -24,7 +24,7 @@ public class ClientMessageHandler extends Thread {
 		while (true) {
 			try {
 				Object message = messages.take();
-				log.debug("Message Received: " + message);
+				log.debug(client.getClientDescription().getName() + " - Received: " + message);
 
 				if (message instanceof Request) {
 					Request request = (Request) message;

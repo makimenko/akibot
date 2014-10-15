@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.kiss.message.Request;
 import com.akibot.kiss.message.Response;
-import com.akibot.kiss.message.request.DistanceRequest;
 
 public class ServerMessageHandler extends Thread {
 	static final Logger log = LogManager.getLogger(ServerMessageHandler.class.getName());
@@ -24,16 +23,9 @@ public class ServerMessageHandler extends Thread {
 			try {
 				Object message = messages.take();
 
-				if (message instanceof String) {
-					log.debug("Message Received: " + message);
-					if (((String) message).equalsIgnoreCase("X")) {
-						DistanceRequest distanceRequest = new DistanceRequest();
-						server.sendToAll(distanceRequest);
-					}
-
-				} else if (message instanceof Request) {
+				if (message instanceof Request) {
 					log.debug("Request: " + message);
-					server.sendToAll(message);
+					server.broadcast(message);
 				} else if (message instanceof Response) {
 					log.debug("Response: " + message);
 
