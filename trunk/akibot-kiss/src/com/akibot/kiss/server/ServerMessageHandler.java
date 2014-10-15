@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import com.akibot.kiss.message.Request;
 import com.akibot.kiss.message.Response;
 import com.akibot.kiss.message.request.DistanceRequest;
-import com.akibot.kiss.message.response.DistanceResponse;
 
 public class ServerMessageHandler extends Thread {
 	static final Logger log = LogManager.getLogger(ServerMessageHandler.class.getName());
@@ -37,9 +36,11 @@ public class ServerMessageHandler extends Thread {
 					server.sendToAll(message);
 				} else if (message instanceof Response) {
 					log.debug("Response: " + message);
-					
-					//DistanceResponse distanceResponse = (DistanceResponse) message;
-					//log.debug("Distance Received: " + distanceResponse.getMeters() + " meters");
+
+					// DistanceResponse distanceResponse = (DistanceResponse)
+					// message;
+					// log.debug("Distance Received: " +
+					// distanceResponse.getMeters() + " meters");
 				} else {
 					log.warn("Unknown message received");
 				}

@@ -6,7 +6,7 @@ public class AwtControllerComponent extends DefaultComponent {
 
 	public AwtControllerComponent() {
 	}
-	
+
 	public void start() {
 		AwtControllerAppl appl = new AwtControllerAppl(this.getClient());
 		appl.start();
