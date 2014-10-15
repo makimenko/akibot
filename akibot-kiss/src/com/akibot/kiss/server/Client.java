@@ -26,6 +26,8 @@ public class Client {
 		server = new Connection(socket, messages);
 		log.info("Connected to server");
 
+		component.setClient(this);
+		component.start();
 		ClientMessageHandler clientMessageHandler = new ClientMessageHandler(this, messages, component);
 		clientMessageHandler.setDaemon(true);
 		clientMessageHandler.start();
