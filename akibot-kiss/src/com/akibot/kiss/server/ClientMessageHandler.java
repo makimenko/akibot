@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.kiss.component.Component;
-import com.akibot.kiss.message.Request;
+import com.akibot.kiss.message.Message;
 
 public class ClientMessageHandler extends Thread {
 	static final Logger log = LogManager.getLogger(ClientMessageHandler.class.getName());
@@ -26,9 +26,8 @@ public class ClientMessageHandler extends Thread {
 				Object message = messages.take();
 				log.debug(client.getClientDescription().getName() + " - Received: " + message);
 
-				if (message instanceof Request) {
-					Request request = (Request) message;
-					component.executeRequest(request);
+				if (message instanceof Message) {
+					component.processMessage((Message) message);
 				}
 			} catch (InterruptedException e) {
 				log.warn(e.getMessage());

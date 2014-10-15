@@ -23,6 +23,14 @@ public class AwtControllerAppl {
 		prepareGUI();
 	}
 
+	public TextArea getTextArea() {
+		return textArea;
+	}
+
+	public void setTextArea(TextArea textArea) {
+		this.textArea = textArea;
+	}
+
 	private void prepareGUI() {
 		mainFrame = new Frame("AwtController");
 		mainFrame.setSize(600, 400);

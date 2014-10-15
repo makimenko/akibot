@@ -1,6 +1,6 @@
 package com.akibot.kiss.component;
 
-import com.akibot.kiss.message.Request;
+import com.akibot.kiss.message.Message;
 import com.akibot.kiss.server.Client;
 
 public interface Component {
@@ -9,7 +9,7 @@ public interface Component {
 
 	public Client getClient();
 
-	public void executeRequest(Request request) throws Exception;
+	public void processMessage(Message message) throws Exception;
 
 	public void start();
 
