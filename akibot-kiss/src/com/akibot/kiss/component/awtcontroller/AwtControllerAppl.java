@@ -33,7 +33,7 @@ public class AwtControllerAppl {
 			}
 		});
 
-		textArea = new TextArea(30,100);
+		textArea = new TextArea(30, 100);
 
 		GridLayout cursorLayout = new GridLayout(0, 3);
 		Panel cursorPanel = new Panel();

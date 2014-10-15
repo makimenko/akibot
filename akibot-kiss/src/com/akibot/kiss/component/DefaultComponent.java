@@ -20,10 +20,10 @@ public class DefaultComponent implements Component {
 	public void executeRequest(Request request) throws Exception {
 
 	}
-	
+
 	@Override
 	public void start() {
-		
+
 	}
 
 }

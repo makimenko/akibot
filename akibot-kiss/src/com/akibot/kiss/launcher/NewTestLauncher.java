@@ -22,8 +22,8 @@ public class NewTestLauncher {
 		Client distanceClient = new Client(host, port, distanceMeterComponent);
 
 		AwtControllerComponent awtControllerComponent = new AwtControllerComponent();
-		Client awtControllerClient = new Client(host, port, awtControllerComponent); 
-		
+		Client awtControllerClient = new Client(host, port, awtControllerComponent);
+
 		// LOOP forever:
 		while (true) {
 			Thread.sleep(1000);

@@ -12,5 +12,5 @@ public interface Component {
 	public void executeRequest(Request request) throws Exception;
 
 	public void start();
-	
+
 }
