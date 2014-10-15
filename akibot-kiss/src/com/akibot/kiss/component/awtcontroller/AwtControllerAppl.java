@@ -33,16 +33,16 @@ public class AwtControllerAppl {
 			}
 		});
 
-		textArea = new TextArea(20, 100);
+		textArea = new TextArea(30,100);
 
 		GridLayout cursorLayout = new GridLayout(0, 3);
 		Panel cursorPanel = new Panel();
 		cursorPanel.setLayout(cursorLayout);
 
-		Button buttonUp = new Button("");
-		buttonUp.addMouseListener(new AwtControllerMouseListener(client, null, new DistanceRequest(), textArea));
+		Button buttonUp = new Button("Up");
+		buttonUp.addMouseListener(new AwtControllerMouseListener(client, new DistanceRequest(), null, textArea));
 
-		Button buttonLeft = new Button("");
+		Button buttonLeft = new Button("Left");
 		// buttonLeft.addMouseListener(new AwtControllerMouseListener("LEFT",
 		// textArea));
 

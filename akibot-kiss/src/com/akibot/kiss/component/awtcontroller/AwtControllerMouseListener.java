@@ -35,7 +35,7 @@ public class AwtControllerMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (messagePressed != null) {
-			textArea.append(messagePressed + " Start\n");
+			textArea.append(messagePressed+"\n");
 			client.send(messagePressed);
 		}
 	}
@@ -43,7 +43,7 @@ public class AwtControllerMouseListener implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (messageReleased != null) {
-			textArea.append(messageReleased + " End\n");
+			textArea.append(messageReleased+"\n");
 			client.send(messageReleased);
 		}
 	}
