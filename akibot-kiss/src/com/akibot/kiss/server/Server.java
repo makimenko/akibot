@@ -30,6 +30,7 @@ public class Server {
 		log.info("Server started");
 
 		Thread accept = new Thread() {
+			@Override
 			public void run() {
 				while (true) {
 					try {

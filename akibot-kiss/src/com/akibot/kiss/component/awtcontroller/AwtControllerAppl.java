@@ -36,6 +36,7 @@ public class AwtControllerAppl {
 		mainFrame.setSize(600, 400);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent windowEvent) {
 				System.exit(0);
 			}

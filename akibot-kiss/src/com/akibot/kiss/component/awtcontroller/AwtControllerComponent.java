@@ -20,6 +20,7 @@ public class AwtControllerComponent extends DefaultComponent {
 		super.processMessage(message);
 	}
 
+	@Override
 	public void start() {
 		this.appl = new AwtControllerAppl(this.getClient());
 		appl.start();

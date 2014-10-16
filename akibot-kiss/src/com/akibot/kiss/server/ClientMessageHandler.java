@@ -20,6 +20,7 @@ public class ClientMessageHandler extends Thread {
 		this.component = component;
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			try {
