@@ -21,4 +21,9 @@ public class DistanceMeterComponent extends DefaultComponent {
 		}
 	}
 
+	@Override
+	public void start() {
+
+	}
+
 }

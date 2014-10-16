@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.kiss.component.Component;
+import com.akibot.kiss.message.Message;
 
 public class Client {
 	static final Logger log = LogManager.getLogger(Client.class.getName());
@@ -39,8 +40,9 @@ public class Client {
 		clientMessageHandler.start();
 	}
 
-	public void send(Object obj) {
-		server.write(obj);
+	public void send(Message msg) {
+		msg.setFrom(clientDescription.getName());
+		server.write(msg);
 	}
 
 	public ClientDescription getClientDescription() {

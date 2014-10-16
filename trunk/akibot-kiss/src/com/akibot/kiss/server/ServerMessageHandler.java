@@ -5,6 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.kiss.message.Message;
 import com.akibot.kiss.message.Request;
 import com.akibot.kiss.message.Response;
 
@@ -22,18 +23,13 @@ public class ServerMessageHandler extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				Object message = messages.take();
-
+				Message message = (Message) messages.take();
 				if (message instanceof Request) {
-					log.debug("Request: " + message);
+					log.debug("Request: " + message + (message.getTo() == null ? "" : " (to: " + message.getTo() + ")"));
 					server.broadcast(message);
 				} else if (message instanceof Response) {
-					log.debug("Response: " + message);
+					log.debug("Response: " + message + (message.getTo() == null ? "" : " (to: " + message.getTo() + ")"));
 					server.broadcast(message);
-					// DistanceResponse distanceResponse = (DistanceResponse)
-					// message;
-					// log.debug("Distance Received: " +
-					// distanceResponse.getMeters() + " meters");
 				} else {
 					log.warn("Unknown message received");
 				}

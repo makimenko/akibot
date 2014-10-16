@@ -21,12 +21,18 @@ public class NewTestLauncher {
 		Server server = new Server(port);
 		server.start();
 
-		// Start Client THREAD:
-		DistanceMeterComponent distanceMeterComponent = new DistanceMeterComponent();
-		ClientDescription distanceMeterDescription = new ClientDescription("Distance Meter");
-		distanceMeterDescription.getTopicList().add(new DistanceRequest());
-		Client distanceClient = new Client(host, port, distanceMeterComponent, distanceMeterDescription);
-		distanceClient.start();
+		// Start Client THREADs:
+		DistanceMeterComponent distanceRightComponent = new DistanceMeterComponent();
+		ClientDescription distanceRightDescription = new ClientDescription("akibot.distance.right");
+		distanceRightDescription.getTopicList().add(new DistanceRequest());
+		Client distanceRightClient = new Client(host, port, distanceRightComponent, distanceRightDescription);
+		distanceRightClient.start();
+
+		DistanceMeterComponent distanceLeftComponent = new DistanceMeterComponent();
+		ClientDescription distanceLeftDescription = new ClientDescription("akibot.distance.left");
+		distanceLeftDescription.getTopicList().add(new DistanceRequest());
+		Client distanceLeftClient = new Client(host, port, distanceLeftComponent, distanceLeftDescription);
+		distanceLeftClient.start();
 
 		AwtControllerComponent awtControllerComponent = new AwtControllerComponent();
 		ClientDescription awtControllerDescription = new ClientDescription("Awt Controller");

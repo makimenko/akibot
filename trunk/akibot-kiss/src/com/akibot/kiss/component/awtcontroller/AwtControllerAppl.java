@@ -10,6 +10,7 @@ import java.awt.TextArea;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import com.akibot.kiss.message.Message;
 import com.akibot.kiss.message.request.DistanceRequest;
 import com.akibot.kiss.server.Client;
 
@@ -49,7 +50,9 @@ public class AwtControllerAppl {
 		cursorPanel.setLayout(cursorLayout);
 
 		Button buttonUp = new Button("Up");
-		buttonUp.addMouseListener(new AwtControllerMouseListener(client, new DistanceRequest(), null, textArea));
+		Message messagePressed = new DistanceRequest();
+		messagePressed.setTo("akibot.distance.*");
+		buttonUp.addMouseListener(new AwtControllerMouseListener(client, messagePressed, null, textArea));
 
 		Button buttonLeft = new Button("Left");
 		// buttonLeft.addMouseListener(new AwtControllerMouseListener("LEFT",
