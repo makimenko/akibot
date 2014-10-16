@@ -16,12 +16,17 @@ public class Server {
 	private ConcurrentHashMap<ClientDescription, Connection> clientList;
 	private LinkedBlockingQueue<Object> messages;
 	private ServerSocket serverSocket;
+	private int port;
 
-	public Server(int port) throws IOException {
+	public Server(int port) {
 		log.info("Server starting...");
-		clientList = new ConcurrentHashMap<ClientDescription, Connection>();
-		messages = new LinkedBlockingQueue<Object>();
-		serverSocket = new ServerSocket(port);
+		this.clientList = new ConcurrentHashMap<ClientDescription, Connection>();
+		this.messages = new LinkedBlockingQueue<Object>();
+		this.port = port;
+	}
+
+	public void start() throws IOException {
+		this.serverSocket = new ServerSocket(port);
 		log.info("Server started");
 
 		Thread accept = new Thread() {
