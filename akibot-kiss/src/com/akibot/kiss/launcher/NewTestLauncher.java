@@ -19,6 +19,7 @@ public class NewTestLauncher {
 		String host = "localhost";
 		int port = 2000;
 		Server server = new Server(port);
+		server.start();
 
 		// Start Client THREAD:
 		DistanceMeterComponent distanceMeterComponent = new DistanceMeterComponent();
