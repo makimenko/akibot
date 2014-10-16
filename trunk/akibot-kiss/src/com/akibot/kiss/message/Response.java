@@ -1,5 +1,5 @@
 package com.akibot.kiss.message;
 
-public interface Response extends Message {
+public class Response extends Message {
 
 }
