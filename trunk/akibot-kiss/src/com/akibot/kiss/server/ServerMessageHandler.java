@@ -18,6 +18,7 @@ public class ServerMessageHandler extends Thread {
 		this.messages = messages;
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			try {

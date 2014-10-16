@@ -35,7 +35,7 @@ public class ClientDescription implements Serializable {
 		ArrayList<Message> topicList = this.getTopicList();
 		Iterator<Message> i = topicList.iterator();
 		while (i.hasNext()) {
-			Message topicMessage = (Message) i.next();
+			Message topicMessage = i.next();
 			if (topicMessage.getClass().isAssignableFrom(obj.getClass())) {
 				return true;
 			}
