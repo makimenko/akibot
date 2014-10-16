@@ -26,7 +26,7 @@ public class Client {
 	}
 
 	public void start() throws Exception {
-		ClientAuthorization clientAuthorization = new ClientAuthorization(socket, component, this);
+		ClientAuthorization clientAuthorization = new ClientAuthorization(socket, this);
 		clientAuthorization.authorize();
 
 		server = new Connection(socket, messages);

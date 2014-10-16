@@ -4,6 +4,11 @@ import com.akibot.kiss.message.Response;
 import com.akibot.kiss.types.ComponentStatusType;
 
 public class ComponentStatusResponse extends Response {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ComponentStatusType componentStatusType;
 
 	public ComponentStatusType getComponentStatusType() {

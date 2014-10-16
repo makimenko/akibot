@@ -4,6 +4,11 @@ import com.akibot.kiss.message.Response;
 import com.akibot.kiss.server.ClientDescription;
 
 public class AuthorizationResponse extends Response {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ClientDescription clientDescription;
 
 	public ClientDescription getClientDescription() {
