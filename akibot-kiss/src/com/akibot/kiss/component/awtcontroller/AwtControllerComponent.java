@@ -15,7 +15,7 @@ public class AwtControllerComponent extends DefaultComponent {
 	public void processMessage(Message message) throws Exception {
 		if (message instanceof DistanceResponse) {
 			DistanceResponse distanceResponse = (DistanceResponse) message;
-			appl.getTextArea().append("Distance is: " + distanceResponse.getMeters() + " meters\n");
+			appl.getTextArea().append(distanceResponse.getFrom() + ": Distance is: " + distanceResponse.getMeters() + " meters\n");
 		}
 		super.processMessage(message);
 	}

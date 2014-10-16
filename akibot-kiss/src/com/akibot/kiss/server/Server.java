@@ -9,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.kiss.message.Message;
 import com.akibot.kiss.types.SimpleProtocolPhaseType;
 
 public class Server {
@@ -58,7 +59,6 @@ public class Server {
 				}
 			}
 		};
-
 		accept.setDaemon(true);
 		accept.start();
 
@@ -67,15 +67,15 @@ public class Server {
 		serverMessageHandler.start();
 	}
 
-	public void sendToOne(int index, Object message) throws IndexOutOfBoundsException {
-		clientList.get(index).write(message);
-	}
-
-	public void broadcast(Object message) {
+	public void broadcast(Message message) {
 		for (ConcurrentHashMap.Entry<ClientDescription, Connection> entry : clientList.entrySet()) {
 			ClientDescription clientDescription = entry.getKey();
 			Connection connection = entry.getValue();
-			if (clientDescription.isInterestedInMessage(message)) {
+			String to = message.getTo();
+			boolean isIterested = clientDescription.isInterestedInMessage(message);
+			if (to == null && isIterested) {
+				connection.write(message);
+			} else if (to != null && clientDescription.getName().matches(to) && isIterested) {
 				connection.write(message);
 			}
 		}
