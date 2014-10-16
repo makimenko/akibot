@@ -3,7 +3,7 @@ package com.akibot.kiss.message.response;
 import com.akibot.kiss.message.Response;
 import com.akibot.kiss.types.ComponentStatusType;
 
-public class ComponentStatusResponse implements Response {
+public class ComponentStatusResponse extends Response {
 	private ComponentStatusType componentStatusType;
 
 	public ComponentStatusType getComponentStatusType() {

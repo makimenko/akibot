@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.kiss.component.awtcontroller.AwtControllerComponent;
 import com.akibot.kiss.component.distance.DistanceMeterComponent;
+import com.akibot.kiss.message.Response;
 import com.akibot.kiss.message.request.DistanceRequest;
-import com.akibot.kiss.message.response.DistanceResponse;
 import com.akibot.kiss.server.Client;
 import com.akibot.kiss.server.ClientDescription;
 import com.akibot.kiss.server.Server;
@@ -29,7 +29,7 @@ public class NewTestLauncher {
 
 		AwtControllerComponent awtControllerComponent = new AwtControllerComponent();
 		ClientDescription awtControllerDescription = new ClientDescription("Awt Controller");
-		awtControllerDescription.getTopicList().add(new DistanceResponse());
+		awtControllerDescription.getTopicList().add(new Response());
 		Client awtControllerClient = new Client(host, port, awtControllerComponent, awtControllerDescription);
 		awtControllerClient.start();
 

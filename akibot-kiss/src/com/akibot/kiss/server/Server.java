@@ -77,17 +77,11 @@ public class Server {
 			Iterator<Message> i = topicList.iterator();
 			while (i.hasNext()) {
 				Message topicMessage = (Message) i.next();
-				if (message.getClass().getName().equals(topicMessage.getClass().getName())) {
+				if (topicMessage.getClass().isAssignableFrom(message.getClass())) {
 					entry.getValue().write(message);
-
 				}
-
 			}
 
-			// if
-			// (clientDescription.getName().equalsIgnoreCase("Distance Meter"))
-			// {
-			// }
 		}
 	}
 

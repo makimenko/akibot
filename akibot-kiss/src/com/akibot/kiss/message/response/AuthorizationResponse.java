@@ -3,7 +3,7 @@ package com.akibot.kiss.message.response;
 import com.akibot.kiss.message.Response;
 import com.akibot.kiss.server.ClientDescription;
 
-public class AuthorizationResponse implements Response {
+public class AuthorizationResponse extends Response {
 	private ClientDescription clientDescription;
 
 	public ClientDescription getClientDescription() {
