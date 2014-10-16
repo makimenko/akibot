@@ -2,6 +2,7 @@ package com.akibot.kiss.server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.akibot.kiss.message.Message;
 
@@ -29,4 +30,17 @@ public class ClientDescription implements Serializable {
 	public void setTopicList(ArrayList<Message> topicList) {
 		this.topicList = topicList;
 	}
+
+	public boolean isInterestedInMessage(Object obj) {
+		ArrayList<Message> topicList = this.getTopicList();
+		Iterator<Message> i = topicList.iterator();
+		while (i.hasNext()) {
+			Message topicMessage = (Message) i.next();
+			if (topicMessage.getClass().isAssignableFrom(obj.getClass())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

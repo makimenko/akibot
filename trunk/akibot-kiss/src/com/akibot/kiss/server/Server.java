@@ -3,15 +3,12 @@ package com.akibot.kiss.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.kiss.message.Message;
 import com.akibot.kiss.types.SimpleProtocolPhaseType;
 
 public class Server {
@@ -71,17 +68,10 @@ public class Server {
 	public void broadcast(Object message) {
 		for (ConcurrentHashMap.Entry<ClientDescription, Connection> entry : clientList.entrySet()) {
 			ClientDescription clientDescription = entry.getKey();
-
-			ArrayList<Message> topicList = clientDescription.getTopicList();
-
-			Iterator<Message> i = topicList.iterator();
-			while (i.hasNext()) {
-				Message topicMessage = (Message) i.next();
-				if (topicMessage.getClass().isAssignableFrom(message.getClass())) {
-					entry.getValue().write(message);
-				}
+			Connection connection = entry.getValue();
+			if (clientDescription.isInterestedInMessage(message)) {
+				connection.write(message);
 			}
-
 		}
 	}
 
