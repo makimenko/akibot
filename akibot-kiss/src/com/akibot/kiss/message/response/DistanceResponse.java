@@ -19,4 +19,8 @@ public class DistanceResponse extends Response {
 		this.meters = meters;
 	}
 
+	@Override
+	public String toString() {
+		return "Distance is " + meters + " meters";
+	}
 }
