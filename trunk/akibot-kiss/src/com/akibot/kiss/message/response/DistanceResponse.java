@@ -4,6 +4,11 @@ import com.akibot.kiss.message.Response;
 
 public class DistanceResponse extends Response {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private double meters;
 
 	public double getMeters() {
