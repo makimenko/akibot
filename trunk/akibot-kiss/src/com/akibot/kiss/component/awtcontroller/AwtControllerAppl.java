@@ -36,7 +36,7 @@ public class AwtControllerAppl {
 
 	private void prepareGUI() {
 		mainFrame = new Frame("AwtController");
-		mainFrame.setSize(600, 400);
+		mainFrame.setSize(900, 500);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -58,6 +58,8 @@ public class AwtControllerAppl {
 		Message messageBackward = new StickMotionRequest(DirectionType.BACKWARD);
 		Message messageLeft = new StickMotionRequest(DirectionType.LEFT);
 		Message messageRight = new StickMotionRequest(DirectionType.RIGHT);
+		Message messageDistanceRequest = new DistanceRequest();
+		messageDistanceRequest.setTo("akibot.distance.*");
 
 		messageStop.setTo(tankTrackName);
 		messageForward.setTo(tankTrackName);
@@ -69,16 +71,28 @@ public class AwtControllerAppl {
 		Button buttonLeft = new Button("Left");
 		Button buttonDown = new Button("Backward");
 		Button buttonRight = new Button("Right");
+		Button buttonDistance = new Button("Distance");
+
+		AwtControllerKeyListener keyListener = new AwtControllerKeyListener(client);
+		keyListener.getKeyMapping().put(0, messageStop);
+		keyListener.getKeyMapping().put(37, messageLeft);
+		keyListener.getKeyMapping().put(38, messageForward);
+		keyListener.getKeyMapping().put(39, messageRight);
+		keyListener.getKeyMapping().put(40, messageBackward);
+
+		buttonForward.addKeyListener(keyListener);
+		buttonDown.addKeyListener(keyListener);
+		buttonLeft.addKeyListener(keyListener);
+		buttonRight.addKeyListener(keyListener);
+		buttonDistance.addKeyListener(keyListener);
+		textArea.addKeyListener(keyListener);
+		mainFrame.addKeyListener(keyListener);
 
 		buttonForward.addMouseListener(new AwtControllerMouseListener(client, messageForward, messageStop, textArea));
 		buttonLeft.addMouseListener(new AwtControllerMouseListener(client, messageLeft, messageStop, textArea));
 		buttonDown.addMouseListener(new AwtControllerMouseListener(client, messageBackward, messageStop, textArea));
 		buttonRight.addMouseListener(new AwtControllerMouseListener(client, messageRight, messageStop, textArea));
-
-		Button buttonDistance = new Button("Distance");
-		Message messagePressed = new DistanceRequest();
-		messagePressed.setTo("akibot.distance.*");
-		buttonDistance.addMouseListener(new AwtControllerMouseListener(client, messagePressed, null, textArea));
+		buttonDistance.addMouseListener(new AwtControllerMouseListener(client, messageDistanceRequest, null, textArea));
 
 		cursorPanel.add(new Label());
 		cursorPanel.add(buttonForward);
