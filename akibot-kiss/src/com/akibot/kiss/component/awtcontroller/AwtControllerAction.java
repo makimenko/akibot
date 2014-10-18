@@ -2,10 +2,15 @@ package com.akibot.kiss.component.awtcontroller;
 
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.akibot.kiss.message.Message;
 import com.akibot.kiss.server.Client;
 
 public class AwtControllerAction {
+	static final Logger log = LogManager.getLogger(AwtControllerAction.class.getName());
+
 	private HashMap<Integer, Message> keyMapping;
 	private Client client;
 	private Integer currentKey;
@@ -27,7 +32,7 @@ public class AwtControllerAction {
 	private void send(Integer code) {
 		Message msg = keyMapping.get(code);
 		client.send(msg);
-		System.out.println("SEND: " + msg);
+		log.debug("SEND: " + msg);
 	}
 
 	public void stop() {

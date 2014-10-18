@@ -24,8 +24,9 @@ public class ClientMessageHandler extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				Object message = messages.take();
-				log.debug(client.getClientDescription().getName() + " - Received: " + message);
+				Message message = (Message) messages.take();
+				log.debug(client.getClientDescription().getName() + " - Received: " + message
+						+ (message.getFrom() == null ? "" : " (from " + message.getFrom() + ")"));
 
 				if (message instanceof Message) {
 					component.processMessage((Message) message);
