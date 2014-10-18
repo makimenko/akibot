@@ -37,7 +37,9 @@ public class AwtControllerAction {
 
 	public void stop() {
 		if (currentKey != null) {
-			send(0);
+			if (keyMapping.containsKey(0)) {
+				send(0);
+			}
 			currentKey = null;
 		}
 	}
