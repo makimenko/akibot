@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.TextArea;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -45,7 +46,7 @@ public class AwtControllerAppl {
 			}
 		});
 
-		textArea = new TextArea(30, 100);
+		textArea = new TextArea(30, 120);
 
 		GridLayout cursorLayout = new GridLayout(0, 3);
 		Panel cursorPanel = new Panel();
@@ -73,12 +74,15 @@ public class AwtControllerAppl {
 		Button buttonRight = new Button("Right");
 		Button buttonDistance = new Button("Distance");
 
-		AwtControllerKeyListener keyListener = new AwtControllerKeyListener(client);
-		keyListener.getKeyMapping().put(0, messageStop);
-		keyListener.getKeyMapping().put(37, messageLeft);
-		keyListener.getKeyMapping().put(38, messageForward);
-		keyListener.getKeyMapping().put(39, messageRight);
-		keyListener.getKeyMapping().put(40, messageBackward);
+		AwtControllerAction action = new AwtControllerAction(client);
+		action.getKeyMapping().put(0, messageStop);
+		action.getKeyMapping().put(KeyEvent.VK_LEFT, messageLeft);
+		action.getKeyMapping().put(KeyEvent.VK_UP, messageForward);
+		action.getKeyMapping().put(KeyEvent.VK_RIGHT, messageRight);
+		action.getKeyMapping().put(KeyEvent.VK_DOWN, messageBackward);
+		action.getKeyMapping().put(KeyEvent.VK_SPACE, messageDistanceRequest);
+
+		AwtControllerKeyListener keyListener = new AwtControllerKeyListener(action);
 
 		buttonForward.addKeyListener(keyListener);
 		buttonDown.addKeyListener(keyListener);
@@ -88,11 +92,11 @@ public class AwtControllerAppl {
 		textArea.addKeyListener(keyListener);
 		mainFrame.addKeyListener(keyListener);
 
-		buttonForward.addMouseListener(new AwtControllerMouseListener(client, messageForward, messageStop, textArea));
-		buttonLeft.addMouseListener(new AwtControllerMouseListener(client, messageLeft, messageStop, textArea));
-		buttonDown.addMouseListener(new AwtControllerMouseListener(client, messageBackward, messageStop, textArea));
-		buttonRight.addMouseListener(new AwtControllerMouseListener(client, messageRight, messageStop, textArea));
-		buttonDistance.addMouseListener(new AwtControllerMouseListener(client, messageDistanceRequest, null, textArea));
+		buttonForward.addMouseListener(new AwtControllerMouseListener(action, KeyEvent.VK_UP));
+		buttonLeft.addMouseListener(new AwtControllerMouseListener(action, KeyEvent.VK_LEFT));
+		buttonDown.addMouseListener(new AwtControllerMouseListener(action, KeyEvent.VK_DOWN));
+		buttonRight.addMouseListener(new AwtControllerMouseListener(action, KeyEvent.VK_RIGHT));
+		buttonDistance.addMouseListener(new AwtControllerMouseListener(action, KeyEvent.VK_SPACE));
 
 		cursorPanel.add(new Label());
 		cursorPanel.add(buttonForward);
