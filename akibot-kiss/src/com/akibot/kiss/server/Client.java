@@ -24,7 +24,7 @@ public class Client {
 	private Response syncResponse;
 
 	public Client(String IPAddress, int port, Component component, ClientDescription clientDescription) throws Exception {
-		log.info("Connecting to server...");
+		log.info(clientDescription.getName() + " - Connecting to server (" + IPAddress + ":" + port + ")...");
 		this.setClientDescription(clientDescription);
 		this.socket = new Socket(IPAddress, port);
 		this.messages = new LinkedBlockingQueue<Object>();
@@ -61,7 +61,7 @@ public class Client {
 		clientAuthorization.authorize();
 
 		server = new Connection(socket, messages, this);
-		log.info("Connected to server");
+		log.info(clientDescription.getName() + " - Connected to server.");
 
 		component.setClient(this);
 		component.run();
@@ -78,7 +78,7 @@ public class Client {
 		newRequest.setFrom(clientDescription.getName());
 		newRequest.setSyncId(syncId);
 
-		log.trace("Sync messasge sent: " + newRequest.getSyncId() + ": " + newRequest);
+		log.trace("Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
 		server.write(newRequest);
 
 		synchronized (this.syncId) {

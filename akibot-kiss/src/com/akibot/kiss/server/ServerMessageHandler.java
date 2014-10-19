@@ -22,7 +22,7 @@ public class ServerMessageHandler extends Thread {
 		while (true) {
 			try {
 				Message message = (Message) messages.take();
-				log.debug("Message: " + message + " (from: " + message.getFrom() + ", to: " + message.getTo() + ", syncId=" + message.getSyncId()
+				log.trace("Message: " + message + " (from: " + message.getFrom() + ", to: " + message.getTo() + ", syncId=" + message.getSyncId()
 						+ ")");
 				server.broadcast(message);
 			} catch (InterruptedException e) {

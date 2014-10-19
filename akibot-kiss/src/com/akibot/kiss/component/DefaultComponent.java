@@ -18,7 +18,6 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 
 	}
 

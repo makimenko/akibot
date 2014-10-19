@@ -28,7 +28,7 @@ public class MessageReader extends Thread {
 				Object obj = in.readObject();
 				if (obj instanceof Response && client != null && client.getSyncId() != null
 						&& ((Response) obj).getSyncId().equals(client.getSyncId())) {
-					log.debug("Sync Message Received: " + obj + " (" + ((Response) obj).getSyncId() + ")");
+					log.trace("Sync Message Received: " + obj + " (" + ((Response) obj).getSyncId() + ")");
 					client.setSyncResponse((Response) obj);
 					synchronized (client.getSyncId()) {
 						client.getSyncId().notify();
