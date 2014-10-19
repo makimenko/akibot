@@ -10,9 +10,9 @@ import com.akibot.kiss.message.Message;
 
 public class ClientMessageHandler extends Thread {
 	static final Logger log = LogManager.getLogger(ClientMessageHandler.class.getName());
+	private Client client;
 	private Component component;
 	private LinkedBlockingQueue<Object> messages;
-	private Client client;
 
 	public ClientMessageHandler(Client client, LinkedBlockingQueue<Object> messages, Component component) {
 		this.client = client;

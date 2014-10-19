@@ -9,8 +9,8 @@ import com.akibot.kiss.message.Message;
 
 public class ServerMessageHandler extends Thread {
 	static final Logger log = LogManager.getLogger(ServerMessageHandler.class.getName());
-	private Server server;
 	LinkedBlockingQueue<Object> messages;
+	private Server server;
 
 	public ServerMessageHandler(Server server, LinkedBlockingQueue<Object> messages) {
 		this.server = server;
@@ -22,10 +22,8 @@ public class ServerMessageHandler extends Thread {
 		while (true) {
 			try {
 				Message message = (Message) messages.take();
-				log.debug("Message: "
-						+ message
-						+ (message.getTo() == null ? "" : " (from: " + message.getFrom() + ", to: " + message.getTo() + ", syncId="
-								+ message.getSyncId() + ")"));
+				log.debug("Message: " + message + " (from: " + message.getFrom() + ", to: " + message.getTo() + ", syncId=" + message.getSyncId()
+						+ ")");
 				server.broadcast(message);
 			} catch (InterruptedException e) {
 				// TODO:

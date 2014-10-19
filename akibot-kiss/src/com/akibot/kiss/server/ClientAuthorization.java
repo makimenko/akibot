@@ -9,9 +9,9 @@ import com.akibot.kiss.message.response.AuthorizationResponse;
 import com.akibot.kiss.message.response.ConnectionAcceptedResponse;
 
 public class ClientAuthorization {
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
 	private Client client;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
 
 	public ClientAuthorization(Socket socket, Client client) throws Exception {
 		this.out = new ObjectOutputStream(socket.getOutputStream());

@@ -4,8 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class AwtControllerMouseListener implements MouseListener {
-	private Integer codePressed;
 	private AwtControllerAction action;
+	private Integer codePressed;
 
 	public AwtControllerMouseListener(AwtControllerAction action, Integer codePressed) {
 		this.action = action;

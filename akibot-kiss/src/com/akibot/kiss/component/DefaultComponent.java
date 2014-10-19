@@ -7,11 +7,6 @@ public class DefaultComponent implements Component {
 	private Client client;
 
 	@Override
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	@Override
 	public Client getClient() {
 		return this.client;
 	}
@@ -19,6 +14,11 @@ public class DefaultComponent implements Component {
 	@Override
 	public void processMessage(Message message) throws Exception {
 
+	}
+
+	@Override
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	@Override

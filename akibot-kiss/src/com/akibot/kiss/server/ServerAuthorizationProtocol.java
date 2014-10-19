@@ -12,10 +12,10 @@ import com.akibot.kiss.message.response.ConnectionAcceptedResponse;
 import com.akibot.kiss.types.SimpleProtocolPhaseType;
 
 public class ServerAuthorizationProtocol {
-	private SimpleProtocolPhaseType phase;
 	private ClientDescription clientDescription;
-	private ObjectOutputStream out;
 	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private SimpleProtocolPhaseType phase;
 
 	public ServerAuthorizationProtocol(Socket socket) throws IOException {
 		phase = SimpleProtocolPhaseType.START;
@@ -37,6 +37,14 @@ public class ServerAuthorizationProtocol {
 
 	}
 
+	public ClientDescription getClientDescription() {
+		return clientDescription;
+	}
+
+	public SimpleProtocolPhaseType getPhase() {
+		return phase;
+	}
+
 	public Message processInput(Object object) throws Exception {
 
 		if (phase == SimpleProtocolPhaseType.START) {
@@ -54,14 +62,6 @@ public class ServerAuthorizationProtocol {
 			return null;
 		}
 
-	}
-
-	public SimpleProtocolPhaseType getPhase() {
-		return phase;
-	}
-
-	public ClientDescription getClientDescription() {
-		return clientDescription;
 	}
 
 }

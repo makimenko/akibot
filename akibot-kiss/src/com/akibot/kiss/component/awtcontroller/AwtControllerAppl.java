@@ -21,9 +21,9 @@ import com.akibot.kiss.server.Client;
 import com.akibot.kiss.types.DirectionType;
 
 public class AwtControllerAppl {
+	private Client client;
 	private Frame mainFrame;
 	private TextArea textArea;
-	private Client client;
 
 	public AwtControllerAppl(Client client) {
 		this.client = client;
@@ -34,14 +34,10 @@ public class AwtControllerAppl {
 		return textArea;
 	}
 
-	public void setTextArea(TextArea textArea) {
-		this.textArea = textArea;
-	}
-
 	private void prepareGUI() {
 		mainFrame = new Frame("AwtController");
 		mainFrame.setSize(900, 500);
-		mainFrame.setLocationRelativeTo(null);
+
 		mainFrame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent windowEvent) {
@@ -49,7 +45,7 @@ public class AwtControllerAppl {
 			}
 		});
 
-		textArea = new TextArea(30, 120);
+		textArea = new TextArea(50, 120);
 
 		GridLayout cursorLayout = new GridLayout(0, 3);
 		Panel cursorPanel = new Panel();
@@ -142,8 +138,12 @@ public class AwtControllerAppl {
 
 		mainFrame.add(mainPanel);
 		mainFrame.pack();
-
+		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
+	}
+
+	public void setTextArea(TextArea textArea) {
+		this.textArea = textArea;
 	}
 
 	public void start() {
