@@ -2,7 +2,7 @@ package com.akibot.kiss.message;
 
 import java.io.Serializable;
 
-public class Message implements Serializable {
+public class Message implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	private String from;
 	private String to;
@@ -30,6 +30,11 @@ public class Message implements Serializable {
 
 	public void setTo(String to) {
 		this.to = to;
+	}
+
+	@Override
+	public Message clone() throws CloneNotSupportedException {
+		return (Message) super.clone();
 	}
 
 }
