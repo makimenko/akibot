@@ -11,9 +11,9 @@ import com.akibot.kiss.server.Client;
 public class AwtControllerAction {
 	static final Logger log = LogManager.getLogger(AwtControllerAction.class.getName());
 
-	private HashMap<Integer, Message> keyMapping;
 	private Client client;
 	private Integer currentKey;
+	private HashMap<Integer, Message> keyMapping;
 
 	public AwtControllerAction(Client client) {
 		this.client = client;
@@ -21,12 +21,15 @@ public class AwtControllerAction {
 		this.keyMapping = new HashMap<Integer, Message>();
 	}
 
-	public HashMap<Integer, Message> getKeyMapping() {
-		return keyMapping;
+	public void action(Integer code) {
+		if (currentKey == null && keyMapping.containsKey(code)) {
+			send(code);
+			currentKey = code;
+		}
 	}
 
-	public void setKeyMapping(HashMap<Integer, Message> keyMapping) {
-		this.keyMapping = keyMapping;
+	public HashMap<Integer, Message> getKeyMapping() {
+		return keyMapping;
 	}
 
 	private void send(Integer code) {
@@ -35,19 +38,16 @@ public class AwtControllerAction {
 		log.debug("SEND: " + msg);
 	}
 
+	public void setKeyMapping(HashMap<Integer, Message> keyMapping) {
+		this.keyMapping = keyMapping;
+	}
+
 	public void stop() {
 		if (currentKey != null) {
 			if (keyMapping.containsKey(0)) {
 				send(0);
 			}
 			currentKey = null;
-		}
-	}
-
-	public void action(Integer code) {
-		if (currentKey == null && keyMapping.containsKey(code)) {
-			send(code);
-			currentKey = code;
 		}
 	}
 

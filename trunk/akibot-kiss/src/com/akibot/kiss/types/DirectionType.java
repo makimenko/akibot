@@ -1,5 +1,5 @@
 package com.akibot.kiss.types;
 
 public enum DirectionType {
-	STOP, FORWARD, BACKWARD, LEFT, RIGHT;
+	BACKWARD, FORWARD, LEFT, RIGHT, STOP;
 }

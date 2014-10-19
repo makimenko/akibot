@@ -11,9 +11,9 @@ import com.akibot.kiss.message.Response;
 
 public class MessageReader extends Thread {
 	static final Logger log = LogManager.getLogger(MessageReader.class.getName());
-	private LinkedBlockingQueue<Object> messages;
-	private ObjectInputStream in;
 	private Client client;
+	private ObjectInputStream in;
+	private LinkedBlockingQueue<Object> messages;
 
 	public MessageReader(ObjectInputStream in, LinkedBlockingQueue<Object> messages, Client client) {
 		this.messages = messages;

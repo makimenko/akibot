@@ -5,11 +5,11 @@ import com.akibot.kiss.server.Client;
 
 public interface Component {
 
-	public void setClient(Client client);
-
 	public Client getClient();
 
 	public void processMessage(Message message) throws Exception;
+
+	public void setClient(Client client);
 
 	public void start();
 

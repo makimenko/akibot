@@ -24,16 +24,8 @@ public class ClientDescription implements Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public ArrayList<Message> getTopicList() {
 		return topicList;
-	}
-
-	public void setTopicList(ArrayList<Message> topicList) {
-		this.topicList = topicList;
 	}
 
 	public boolean isInterestedInMessage(Object obj) {
@@ -46,6 +38,14 @@ public class ClientDescription implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setTopicList(ArrayList<Message> topicList) {
+		this.topicList = topicList;
 	}
 
 }
