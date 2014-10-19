@@ -28,24 +28,25 @@ public class NewTestLauncher {
 		ClientDescription distanceRightDescription = new ClientDescription("akibot.distance.right");
 		distanceRightDescription.getTopicList().add(new DistanceRequest());
 		Client distanceRightClient = new Client(host, port, distanceRightComponent, distanceRightDescription);
-		distanceRightClient.start();
 
 		DistanceMeterComponent distanceLeftComponent = new DistanceMeterComponent();
 		ClientDescription distanceLeftDescription = new ClientDescription("akibot.distance.left");
 		distanceLeftDescription.getTopicList().add(new DistanceRequest());
 		Client distanceLeftClient = new Client(host, port, distanceLeftComponent, distanceLeftDescription);
-		distanceLeftClient.start();
 
 		TankTrackComponent tankTrackComponent = new TankTrackComponent();
 		ClientDescription tankTrackDescription = new ClientDescription("akibot.tanktrack");
 		tankTrackDescription.getTopicList().add(new StickMotionRequest());
 		Client tankClient = new Client(host, port, tankTrackComponent, tankTrackDescription);
-		tankClient.start();
 
 		AwtControllerComponent awtControllerComponent = new AwtControllerComponent();
 		ClientDescription awtControllerDescription = new ClientDescription("Awt Controller");
 		awtControllerDescription.getTopicList().add(new Response());
 		Client awtControllerClient = new Client(host, port, awtControllerComponent, awtControllerDescription);
+
+		distanceRightClient.start();
+		distanceLeftClient.start();
+		tankClient.start();
 		awtControllerClient.start();
 
 		// LOOP forever:

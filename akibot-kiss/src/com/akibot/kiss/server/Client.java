@@ -1,6 +1,7 @@
 package com.akibot.kiss.server;
 
 import java.net.Socket;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.kiss.component.Component;
 import com.akibot.kiss.message.Message;
+import com.akibot.kiss.message.Request;
+import com.akibot.kiss.message.Response;
 
 public class Client {
 	static final Logger log = LogManager.getLogger(Client.class.getName());
@@ -17,6 +20,8 @@ public class Client {
 	private LinkedBlockingQueue<Object> messages;
 	private Socket socket;
 	private ClientDescription clientDescription;
+	private String syncId;
+	private Response syncResponse;
 
 	public Client(String IPAddress, int port, Component component, ClientDescription clientDescription) throws Exception {
 		log.info("Connecting to server...");
@@ -30,7 +35,7 @@ public class Client {
 		ClientAuthorization clientAuthorization = new ClientAuthorization(socket, this);
 		clientAuthorization.authorize();
 
-		server = new Connection(socket, messages);
+		server = new Connection(socket, messages, this);
 		log.info("Connected to server");
 
 		component.setClient(this);
@@ -52,4 +57,30 @@ public class Client {
 	public void setClientDescription(ClientDescription clientDescription) {
 		this.clientDescription = clientDescription;
 	}
+
+	public Response syncRequest(Request request, int timeout) throws InterruptedException {
+		request.setFrom(clientDescription.getName());
+		syncResponse = null;
+		syncId = UUID.randomUUID().toString();
+		request.setSyncId(syncId);
+		server.write(request);
+		synchronized (this.syncId) {
+			this.syncId.wait(timeout);
+		}
+		syncId = null;
+		return syncResponse;
+	}
+
+	public Response getSyncResponse() {
+		return syncResponse;
+	}
+
+	public void setSyncResponse(Response syncResponse) {
+		this.syncResponse = syncResponse;
+	}
+
+	public String getSyncId() {
+		return syncId;
+	}
+
 }

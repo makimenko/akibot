@@ -7,11 +7,14 @@ import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.TextArea;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import com.akibot.kiss.message.Message;
+import com.akibot.kiss.message.Response;
 import com.akibot.kiss.message.request.DistanceRequest;
 import com.akibot.kiss.message.request.StickMotionRequest;
 import com.akibot.kiss.server.Client;
@@ -74,6 +77,30 @@ public class AwtControllerAppl {
 		Button buttonRight = new Button("Right");
 		Button buttonDistance = new Button("Distance");
 
+		Button buttonSync = new Button("Sync Request");
+		buttonSync.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Response response = null;
+				try {
+					long startTime = System.currentTimeMillis();
+
+					for (int i = 0; i <= 100; i++) {
+						DistanceRequest distanceRequest = new DistanceRequest();
+						distanceRequest.setTo("akibot.distance.left");
+						response = client.syncRequest(distanceRequest, 1000);
+						textArea.append("SYNC RESPONSE: " + response + "\n");
+					}
+
+					textArea.append("Total ms: " + (System.currentTimeMillis() - startTime) + "\n");
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+
 		AwtControllerAction directionAction = new AwtControllerAction(client);
 		directionAction.getKeyMapping().put(0, messageStop);
 		directionAction.getKeyMapping().put(KeyEvent.VK_LEFT, messageLeft);
@@ -106,6 +133,7 @@ public class AwtControllerAppl {
 		cursorPanel.add(new Label());
 
 		cursorPanel.add(buttonDistance);
+		cursorPanel.add(buttonSync);
 
 		Panel mainPanel = new Panel();
 
