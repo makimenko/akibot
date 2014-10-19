@@ -46,7 +46,7 @@ public class Server {
 
 						if (protocol.getPhase() == SimpleProtocolPhaseType.SUCCEDED) {
 							ClientDescription clientDescription = protocol.getClientDescription();
-							Connection newConnection = new Connection(socket, messages);
+							Connection newConnection = new Connection(socket, messages, null);
 							clientList.putIfAbsent(clientDescription, newConnection);
 						} else {
 							socket.close();

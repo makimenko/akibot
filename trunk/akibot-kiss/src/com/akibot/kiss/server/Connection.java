@@ -10,11 +10,11 @@ public class Connection {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 
-	Connection(Socket socket, LinkedBlockingQueue<Object> messages) throws IOException {
+	Connection(Socket socket, LinkedBlockingQueue<Object> messages, Client client) throws IOException {
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 
-		MessageReader read = new MessageReader(in, messages);
+		MessageReader read = new MessageReader(in, messages, client);
 		read.setDaemon(true);
 		read.start();
 	}
