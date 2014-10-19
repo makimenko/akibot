@@ -27,9 +27,8 @@ public class ClientMessageHandler extends Thread {
 				Message message = (Message) messages.take();
 				log.debug(client.getClientDescription().getName() + " - Received: " + message
 						+ (message.getFrom() == null ? "" : " (from " + message.getFrom() + ")"));
-
 				if (message instanceof Message) {
-					component.processMessage((Message) message);
+					component.processMessage(message);
 				}
 			} catch (InterruptedException e) {
 				log.warn(e.getMessage());

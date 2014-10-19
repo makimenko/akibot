@@ -20,7 +20,7 @@ public class Server {
 	private ServerSocket serverSocket;
 
 	public Server(int port) {
-		log.info("Server starting...");
+		log.info("Server starting (" + port + ")...");
 		this.clientList = new ConcurrentHashMap<ClientDescription, Connection>();
 		this.messages = new LinkedBlockingQueue<Object>();
 		this.port = port;
@@ -53,7 +53,6 @@ public class Server {
 						log.debug("New connection accepted");
 
 						ServerAuthorizationProtocol protocol = new ServerAuthorizationProtocol(socket);
-
 						protocol.authorize();
 
 						log.debug("Protocol phase = " + protocol.getPhase());
