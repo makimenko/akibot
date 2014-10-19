@@ -58,16 +58,26 @@ public class Client {
 		this.clientDescription = clientDescription;
 	}
 
-	public Response syncRequest(Request request, int timeout) throws InterruptedException {
-		request.setFrom(clientDescription.getName());
+	public Response syncRequest(Request request, int timeout) throws InterruptedException, CloneNotSupportedException {
+		Request newRequest = (Request) request.clone();
 		syncResponse = null;
+
 		syncId = UUID.randomUUID().toString();
-		request.setSyncId(syncId);
-		server.write(request);
+		newRequest.setFrom(clientDescription.getName());
+		newRequest.setSyncId(syncId);
+
+		log.debug("Sync messasge sent: " + newRequest.getSyncId() + ": " + newRequest);
+		server.write(newRequest);
+
 		synchronized (this.syncId) {
 			this.syncId.wait(timeout);
 		}
-		syncId = null;
+
+		if (syncResponse == null) {
+			throw new InterruptedException("Timeout occured while waiting sync response");
+		} else {
+			log.debug("Sync messasge received: " + syncResponse.getSyncId() + ": " + syncResponse);
+		}
 		return syncResponse;
 	}
 

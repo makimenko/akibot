@@ -19,6 +19,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 			distanceResponse = new DistanceResponse();
 			distanceResponse.setMeters(randomGenerator.nextDouble() * 4);
 			if (request.getSyncId() != null) {
+
 				distanceResponse.setSyncId(request.getSyncId());
 			}
 

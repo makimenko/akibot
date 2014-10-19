@@ -84,16 +84,16 @@ public class AwtControllerAppl {
 				Response response = null;
 				try {
 					long startTime = System.currentTimeMillis();
+					DistanceRequest distanceRequest = new DistanceRequest();
+					distanceRequest.setTo("akibot.distance.left");
 
-					for (int i = 0; i <= 100; i++) {
-						DistanceRequest distanceRequest = new DistanceRequest();
-						distanceRequest.setTo("akibot.distance.left");
+					for (int i = 1; i <= 10; i++) {
 						response = client.syncRequest(distanceRequest, 1000);
 						textArea.append("SYNC RESPONSE: " + response + "\n");
 					}
 
 					textArea.append("Total ms: " + (System.currentTimeMillis() - startTime) + "\n");
-				} catch (InterruptedException e1) {
+				} catch (InterruptedException | CloneNotSupportedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
