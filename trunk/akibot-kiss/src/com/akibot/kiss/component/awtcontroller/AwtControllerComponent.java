@@ -21,7 +21,7 @@ public class AwtControllerComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() {
+	public void run() {
 		this.appl = new AwtControllerAppl(this.getClient());
 		appl.start();
 	}

@@ -64,7 +64,7 @@ public class Client {
 		log.info("Connected to server");
 
 		component.setClient(this);
-		component.start();
+		component.run();
 		ClientMessageHandler clientMessageHandler = new ClientMessageHandler(this, messages, component);
 		clientMessageHandler.setDaemon(true);
 		clientMessageHandler.start();

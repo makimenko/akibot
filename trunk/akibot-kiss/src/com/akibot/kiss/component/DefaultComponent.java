@@ -17,13 +17,14 @@ public class DefaultComponent implements Component {
 	}
 
 	@Override
-	public void setClient(Client client) {
-		this.client = client;
+	public void run() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void start() {
-
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 }
