@@ -89,9 +89,11 @@ public class AwtControllerAppl {
 					}
 
 					textArea.append("Total ms: " + (System.currentTimeMillis() - startTime) + "\n");
-				} catch (InterruptedException | CloneNotSupportedException e1) {
+				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				} catch (CloneNotSupportedException e2) {
+					e2.printStackTrace();
 				}
 
 			}
