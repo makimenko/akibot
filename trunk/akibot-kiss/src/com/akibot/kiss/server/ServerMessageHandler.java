@@ -19,7 +19,7 @@ public class ServerMessageHandler extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!this.isInterrupted()) {
 			try {
 				Message message = (Message) messages.take();
 				log.trace("Message: " + message + " (from: " + message.getFrom() + ", to: " + message.getTo() + ", syncId=" + message.getSyncId()

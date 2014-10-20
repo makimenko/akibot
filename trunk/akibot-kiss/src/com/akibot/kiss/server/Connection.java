@@ -8,15 +8,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Connection {
 	private ObjectInputStream in;
+	private MessageReader messageReader;
 	private ObjectOutputStream out;
 
 	Connection(Socket socket, LinkedBlockingQueue<Object> messages, Client client) throws IOException {
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 
-		MessageReader read = new MessageReader(in, messages, client);
-		read.setDaemon(true);
-		read.start();
+		messageReader = new MessageReader(in, messages, client);
+		messageReader.setDaemon(true);
+		messageReader.start();
+	}
+
+	public void stop() {
+		messageReader.interrupt();
 	}
 
 	public void write(Object obj) {

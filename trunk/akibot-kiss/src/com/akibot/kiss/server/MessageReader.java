@@ -23,7 +23,7 @@ public class MessageReader extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!this.isInterrupted()) {
 			try {
 				Object obj = in.readObject();
 				if (obj instanceof Response && client != null && client.getSyncId() != null
