@@ -26,4 +26,9 @@ public class DefaultComponent implements Component {
 		this.client = client;
 	}
 
+	@Override
+	public void stop() {
+
+	}
+
 }

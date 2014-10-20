@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine.message.Message;
+import com.akibot.engine.message.Request;
 import com.akibot.engine.types.SimpleAuthorizationProtocolPhaseType;
 
 public class Server {
@@ -91,7 +92,6 @@ public class Server {
 		accept.interrupt();
 		serverMessageHandler.interrupt();
 		for (ConcurrentHashMap.Entry<ClientDescription, Connection> entry : clientList.entrySet()) {
-			ClientDescription clientDescription = entry.getKey();
 			Connection connection = entry.getValue();
 			connection.stop();
 		}
