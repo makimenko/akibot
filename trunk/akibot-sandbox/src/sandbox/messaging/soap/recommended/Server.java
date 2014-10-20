@@ -59,10 +59,8 @@ public class Server {
 	private class ConnectionToClient {
 		ObjectInputStream in;
 		ObjectOutputStream out;
-		Socket socket;
 
 		ConnectionToClient(Socket socket) throws IOException {
-			this.socket = socket;
 			in = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
 

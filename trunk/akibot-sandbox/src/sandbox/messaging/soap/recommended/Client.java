@@ -36,10 +36,8 @@ public class Client {
 	private class ConnectionToServer {
 		ObjectInputStream in;
 		ObjectOutputStream out;
-		Socket socket;
 
 		ConnectionToServer(Socket socket) throws IOException {
-			this.socket = socket;
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 
