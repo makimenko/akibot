@@ -22,7 +22,7 @@ public class ClientMessageHandler extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!this.isInterrupted()) {
 			try {
 				Message message = (Message) messages.take();
 				log.debug(client.getClientDescription().getName() + " - Received: " + message

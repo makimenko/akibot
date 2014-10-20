@@ -3,6 +3,7 @@ package com.akibot.kiss.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -14,9 +15,11 @@ import com.akibot.kiss.types.SimpleProtocolPhaseType;
 
 public class Server {
 	static final Logger log = LogManager.getLogger(Server.class.getName());
+	private Thread accept;
 	private ConcurrentHashMap<ClientDescription, Connection> clientList;
 	private LinkedBlockingQueue<Object> messages;
 	private int port;
+	private ServerMessageHandler serverMessageHandler;
 	private ServerSocket serverSocket;
 
 	public Server(int port) {
@@ -44,10 +47,10 @@ public class Server {
 		this.serverSocket = new ServerSocket(port);
 		log.info("Server started");
 
-		Thread accept = new Thread() {
+		accept = new Thread() {
 			@Override
 			public void run() {
-				while (true) {
+				while (!this.isInterrupted()) {
 					try {
 						Socket socket = serverSocket.accept();
 						log.debug("New connection accepted");
@@ -64,10 +67,14 @@ public class Server {
 						} else {
 							socket.close();
 						}
-
-					} catch (Exception e1) {
+					} catch (SocketException e1) {
+						log.debug("Connection closed. Finishing accept thread");
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
@@ -75,9 +82,27 @@ public class Server {
 		accept.setDaemon(true);
 		accept.start();
 
-		ServerMessageHandler serverMessageHandler = new ServerMessageHandler(this, messages);
+		serverMessageHandler = new ServerMessageHandler(this, messages);
 		serverMessageHandler.setDaemon(true);
 		serverMessageHandler.start();
+	}
+
+	public void stop() {
+		accept.interrupt();
+		serverMessageHandler.interrupt();
+		for (ConcurrentHashMap.Entry<ClientDescription, Connection> entry : clientList.entrySet()) {
+			ClientDescription clientDescription = entry.getKey();
+			Connection connection = entry.getValue();
+			connection.stop();
+		}
+		if (serverSocket != null) {
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				// log error just in case
+			}
+		}
+		log.info("Server stopped.");
 	}
 
 }
