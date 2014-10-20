@@ -10,9 +10,9 @@ public interface Component extends Runnable {
 	public void processMessage(Message message) throws Exception;
 
 	public void setClient(Client client);
-	
+
 	public void run();
-	
+
 	public void stop();
 
 }

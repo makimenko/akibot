@@ -1,5 +1,6 @@
 package com.akibot.engine.server;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -8,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine.component.Component;
+import com.akibot.engine.exception.AuthorizationFailedException;
+import com.akibot.engine.exception.FailedToSendMessageException;
 import com.akibot.engine.message.Message;
 import com.akibot.engine.message.Request;
 import com.akibot.engine.message.Response;
@@ -22,6 +25,7 @@ public class Client {
 	private Socket socket;
 	private String syncId;
 	private Response syncResponse;
+	private ClientMessageHandler clientMessageHandler;
 
 	public Client(String IPAddress, int port, Component component, ClientDescription clientDescription) throws Exception {
 		log.info(clientDescription.getName() + " - Connecting to server (" + IPAddress + ":" + port + ")...");
@@ -43,9 +47,15 @@ public class Client {
 		return syncResponse;
 	}
 
-	public void send(Message msg) {
-		msg.setFrom(clientDescription.getName());
-		server.write(msg);
+	public void send(Message message) throws FailedToSendMessageException {
+		try {
+			Message newMessage = message.clone();
+			newMessage.setFrom(clientDescription.getName());
+			server.write(newMessage);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FailedToSendMessageException();
+		}
 	}
 
 	public void setClientDescription(ClientDescription clientDescription) {
@@ -56,7 +66,7 @@ public class Client {
 		this.syncResponse = syncResponse;
 	}
 
-	public void start() throws Exception {
+	public void start() throws AuthorizationFailedException, IOException {
 		ClientAuthorization clientAuthorization = new ClientAuthorization(socket, this);
 		clientAuthorization.authorize();
 
@@ -65,32 +75,52 @@ public class Client {
 
 		component.setClient(this);
 		component.run();
-		ClientMessageHandler clientMessageHandler = new ClientMessageHandler(this, messages, component);
+		clientMessageHandler = new ClientMessageHandler(this, messages, component);
 		clientMessageHandler.setDaemon(true);
 		clientMessageHandler.start();
 	}
 
-	public Response syncRequest(Request request, int timeout) throws InterruptedException, CloneNotSupportedException {
-		Request newRequest = (Request) request.clone();
-		syncResponse = null;
+	public Response syncRequest(Request request, int timeout) throws FailedToSendMessageException {
+		Request newRequest;
+		try {
+			newRequest = (Request) request.clone();
 
-		syncId = UUID.randomUUID().toString();
-		newRequest.setFrom(clientDescription.getName());
-		newRequest.setSyncId(syncId);
+			syncResponse = null;
 
-		log.trace("Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
-		server.write(newRequest);
+			syncId = UUID.randomUUID().toString();
+			newRequest.setFrom(clientDescription.getName());
+			newRequest.setSyncId(syncId);
 
-		synchronized (this.syncId) {
-			this.syncId.wait(timeout);
+			log.trace("Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
+			server.write(newRequest);
+
+			synchronized (this.syncId) {
+				this.syncId.wait(timeout);
+			}
+
+			if (syncResponse == null) {
+				throw new Exception("Timeout occured while waiting sync response");
+			} else {
+				log.trace("Sync messasge received: " + syncResponse.getSyncId() + ": " + syncResponse);
+			}
+			return syncResponse;
+
+		} catch (Exception e) {
+			throw new FailedToSendMessageException();
 		}
+	}
 
-		if (syncResponse == null) {
-			throw new InterruptedException("Timeout occured while waiting sync response");
-		} else {
-			log.trace("Sync messasge received: " + syncResponse.getSyncId() + ": " + syncResponse);
+	public void stop() {
+		clientMessageHandler.interrupt();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return syncResponse;
+		if (component != null) {
+			component.stop();
+		}
+		messages.clear();
 	}
 
 }

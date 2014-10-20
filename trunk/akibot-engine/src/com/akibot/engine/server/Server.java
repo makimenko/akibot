@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine.message.Message;
-import com.akibot.engine.message.Request;
 import com.akibot.engine.types.SimpleAuthorizationProtocolPhaseType;
 
 public class Server {
@@ -30,7 +29,7 @@ public class Server {
 		this.port = port;
 	}
 
-	public void broadcast(Message message) {
+	public void broadcast(Message message) throws IOException {
 		for (ConcurrentHashMap.Entry<ClientDescription, Connection> entry : clientList.entrySet()) {
 			ClientDescription clientDescription = entry.getKey();
 			Connection connection = entry.getValue();
@@ -99,7 +98,7 @@ public class Server {
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
-				// log error just in case
+				e.printStackTrace();
 			}
 		}
 		log.info("Server stopped.");

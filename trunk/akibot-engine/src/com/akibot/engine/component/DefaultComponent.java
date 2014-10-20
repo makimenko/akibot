@@ -28,7 +28,6 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void stop() {
-
 	}
 
 }

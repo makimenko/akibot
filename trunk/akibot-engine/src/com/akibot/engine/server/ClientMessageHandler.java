@@ -31,8 +31,7 @@ public class ClientMessageHandler extends Thread {
 					component.processMessage(message);
 				}
 			} catch (InterruptedException e) {
-				log.warn(e.getMessage());
-				e.printStackTrace();
+				// nothing
 			} catch (Exception e) {
 				log.error(e.getMessage());
 				e.printStackTrace();

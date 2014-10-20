@@ -37,14 +37,10 @@ public class MessageReader extends Thread {
 					messages.put(obj);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
 				break;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				break;
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				break;
 			}

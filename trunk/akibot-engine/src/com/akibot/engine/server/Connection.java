@@ -24,11 +24,7 @@ public class Connection {
 		messageReader.interrupt();
 	}
 
-	public void write(Object obj) {
-		try {
-			out.writeObject(obj);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void write(Object obj) throws IOException {
+		out.writeObject(obj);
 	}
 }

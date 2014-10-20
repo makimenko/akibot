@@ -1,5 +1,6 @@
 package com.akibot.engine.server;
 
+import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,10 @@ public class ServerMessageHandler extends Thread {
 						+ ")");
 				server.broadcast(message);
 			} catch (InterruptedException e) {
-				// TODO:
+				break;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
