@@ -1,4 +1,4 @@
-package com.akibot.kiss.component.tests;
+package com.akibot.kiss.tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
