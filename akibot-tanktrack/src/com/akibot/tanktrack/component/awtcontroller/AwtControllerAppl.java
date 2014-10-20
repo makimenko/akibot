@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import com.akibot.engine.exception.FailedToSendMessageException;
 import com.akibot.engine.message.Message;
 import com.akibot.engine.message.Response;
 import com.akibot.engine.server.Client;
@@ -89,11 +90,9 @@ public class AwtControllerAppl {
 					}
 
 					textArea.append("Total ms: " + (System.currentTimeMillis() - startTime) + "\n");
-				} catch (InterruptedException e1) {
+				} catch (FailedToSendMessageException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (CloneNotSupportedException e2) {
-					e2.printStackTrace();
 				}
 
 			}

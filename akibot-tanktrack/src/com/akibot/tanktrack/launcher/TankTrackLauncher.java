@@ -13,8 +13,8 @@ import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
 
-public class NewTestLauncher {
-	static final Logger log = LogManager.getLogger(NewTestLauncher.class.getName());
+public class TankTrackLauncher {
+	static final Logger log = LogManager.getLogger(TankTrackLauncher.class.getName());
 
 	public static void main(String[] args) throws Exception {
 		// Start Server THREAD:
