@@ -14,7 +14,7 @@ import com.akibot.kiss.tests.messages.TestComponent;
 import com.akibot.kiss.tests.messages.TestRequest;
 import com.akibot.kiss.tests.messages.TestResponse;
 
-public class TestBasic {
+public class TestSyncMessage {
 
 	@Test
 	public void test() throws IOException {
