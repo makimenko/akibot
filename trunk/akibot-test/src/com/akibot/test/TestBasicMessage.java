@@ -3,12 +3,11 @@ package com.akibot.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.akibot.engine.exception.FailedToSendMessageException;
 import com.akibot.engine.server.Client;
 import com.akibot.engine.server.ClientDescription;
 import com.akibot.engine.server.Server;
@@ -51,40 +50,41 @@ public class TestBasicMessage {
 
 	@After
 	public void tearDown() {
+		componentAClient.stop();
+		componentBClient.stop();
 		server.stop();
 	}
 
 	@Test
-	public void testAsyncMessage() throws IOException, InterruptedException {
+	public void testAsyncMessage() throws InterruptedException, FailedToSendMessageException {
 		TestRequest request = new TestRequest();
 		TestResponse response;
 
 		request.setX(7);
 		componentBClient.send(request);
-		Thread.sleep(50); // wait for some time
+		Thread.sleep(10); // wait for some time
 		response = componentA.getLastResponse();
-		assertEquals("Check async reseponse value", (Integer) 8, response.getResult());
+		assertEquals("Check async reseponse value 1", (Integer) 8, response.getResult());
 
-		// request.setX(4);
-		// response = (TestResponse) componentBClient.syncRequest(request,
-		// 1000);
-		// assertEquals("Check reseponse value", (Integer) 5, (Integer)
-		// response.getResult());
-
+		request.setX(4);
+		componentBClient.send(request);
+		Thread.sleep(10); // wait for some time
+		response = componentA.getLastResponse();
+		assertEquals("Check async response value 2", (Integer) 5, (Integer) response.getResult());
 	}
 
 	@Test
-	public void testSyncMessage() throws IOException, InterruptedException, CloneNotSupportedException {
+	public void testSyncMessage() throws InterruptedException, FailedToSendMessageException {
 		TestRequest request = new TestRequest();
 		TestResponse response;
 
 		request.setX(9);
-		response = (TestResponse) componentBClient.syncRequest(request, 1000);
-		assertEquals("Check reseponse value", (Integer) 10, response.getResult());
+		response = (TestResponse) componentBClient.syncRequest(request, 500);
+		assertEquals("Check sync response value 1", (Integer) 10, response.getResult());
 
-		request.setX(4);
-		response = (TestResponse) componentBClient.syncRequest(request, 1000);
-		assertEquals("Check reseponse value", (Integer) 5, response.getResult());
+		request.setX(-1);
+		response = (TestResponse) componentBClient.syncRequest(request, 500);
+		assertEquals("Check sync response value 2", (Integer) 0, response.getResult());
 	}
 
 }

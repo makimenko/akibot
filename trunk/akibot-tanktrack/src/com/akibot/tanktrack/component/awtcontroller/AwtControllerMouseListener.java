@@ -3,6 +3,8 @@ package com.akibot.tanktrack.component.awtcontroller;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import com.akibot.engine.exception.FailedToSendMessageException;
+
 public class AwtControllerMouseListener implements MouseListener {
 	private AwtControllerAction action;
 	private Integer codePressed;
@@ -26,12 +28,21 @@ public class AwtControllerMouseListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		action.action(codePressed);
+		try {
+			action.action(codePressed);
+		} catch (FailedToSendMessageException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		action.stop();
+		try {
+			action.stop();
+		} catch (FailedToSendMessageException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }
