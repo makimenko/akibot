@@ -1,6 +1,5 @@
 package com.akibot.tanktrack.component.tanktrack;
 
-
 public class StickMotionRequest extends MotionRequest {
 	private static final long serialVersionUID = 1L;
 	private DirectionType directionType;
