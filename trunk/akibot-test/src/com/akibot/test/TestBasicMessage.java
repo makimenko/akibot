@@ -71,6 +71,7 @@ public class TestBasicMessage {
 		Thread.sleep(10); // wait for some time
 		response = componentA.getLastResponse();
 		assertEquals("Check async response value 2", (Integer) 5, (Integer) response.getResult());
+		
 	}
 
 	@Test
