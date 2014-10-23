@@ -12,6 +12,9 @@ import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
+import com.akibot.tanktrack.component.toggle.ToggleComponent;
+import com.akibot.tanktrack.component.toggle.ToggleRequest;
+import com.akibot.tanktrack.component.toggle.ToggleType;
 
 public class TankTrackLauncher {
 	static final Logger log = LogManager.getLogger(TankTrackLauncher.class.getName());
@@ -44,10 +47,20 @@ public class TankTrackLauncher {
 		awtControllerDescription.getTopicList().add(new Response());
 		Client awtControllerClient = new Client(host, port, awtControllerComponent, awtControllerDescription);
 
+		ToggleComponent toggleComponent = new ToggleComponent();
+		ClientDescription toggleDescription = new ClientDescription("My Toggle");
+		toggleDescription.getTopicList().add(new ToggleRequest());
+		Client toogleClient = new Client(host, port, toggleComponent, toggleDescription);
+
 		distanceRightClient.start();
 		distanceLeftClient.start();
 		tankClient.start();
 		awtControllerClient.start();
+		toogleClient.start();
+
+		ToggleRequest r = new ToggleRequest();
+		r.setType(ToggleType.ON);
+		tankClient.send(r);
 
 		// LOOP forever:
 		while (true) {
