@@ -109,6 +109,7 @@ public class MultiAxisGyro_HMC5883L implements MultiAxisGyro {
 		this.mode = mode;
 	}
 
+	@Override
 	public Gyroscope init(Gyroscope triggeringAxis, int triggeringMode) throws IOException {
 		enable();
 

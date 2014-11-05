@@ -16,8 +16,8 @@ import com.akibot.tanktrack.component.toggle.ToggleComponent;
 import com.akibot.tanktrack.component.toggle.ToggleRequest;
 import com.akibot.tanktrack.component.toggle.ToggleType;
 
-public class TankTrackLauncher {
-	static final Logger log = LogManager.getLogger(TankTrackLauncher.class.getName());
+public class TestLauncher {
+	static final Logger log = LogManager.getLogger(TestLauncher.class.getName());
 
 	public static void main(String[] args) throws Exception {
 		// Start Server THREAD:
