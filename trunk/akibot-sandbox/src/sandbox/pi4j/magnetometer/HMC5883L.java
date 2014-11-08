@@ -169,7 +169,8 @@ public class HMC5883L implements MultiAxisGyro {
 
 		int x = ((data[0] & 0xff) << 8) + (data[1] & 0xff);
 		int y = ((data[2] & 0xff) << 8) + (data[3] & 0xff);
-		int z = ((data[3] & 0xff) << 8) + (data[5] & 0xff);
+		// FIXED: int z = ((data[3] & 0xff) << 8) + (data[5] & 0xff);
+		int z = ((data[4] & 0xff) << 8) + (data[5] & 0xff);
 
 		aX.setRawValue(x);
 		aY.setRawValue(y);
@@ -245,16 +246,17 @@ public class HMC5883L implements MultiAxisGyro {
 	}
 
 	public static void main(String[] args) throws Exception {
+		System.exit(0); // TEMP
 		I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
 		HMC5883L hmc5883l = new HMC5883L(bus);
 
 		hmc5883l.init(hmc5883l.X, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
-		// hmc5883l.init(hmc5883l.Y, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
+		hmc5883l.init(hmc5883l.Y, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
 		// hmc5883l.init(hmc5883l.Z, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
 
 		// hmc5883l.setGain(GAIN_1_3_Ga);
 		// hmc5883l.setMeasurementMode(NORMAL_MEASUREMENT_MODE);
-		// hmc5883l.recalibrateOffset();
+		hmc5883l.recalibrateOffset();
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 220000) {
@@ -264,11 +266,10 @@ public class HMC5883L implements MultiAxisGyro {
 			int z = hmc5883l.Z.getRawValue();
 
 			double RAD_TO_DEG = 57.295779513082320876798154814105f;
-
 			double bearing = Math.atan2((double) y, (double) x) * RAD_TO_DEG;
 
 			System.out.format("%10d, %10d, %10d / %10.3f %n", x, y, z, bearing);
-			Thread.sleep(500);
+			Thread.sleep(250);
 		}
 		System.out.println();
 	}
