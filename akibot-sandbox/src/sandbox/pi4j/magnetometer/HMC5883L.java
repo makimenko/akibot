@@ -246,39 +246,29 @@ public class HMC5883L implements MultiAxisGyro {
 
 	public static void main(String[] args) throws Exception {
 		I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
-
 		HMC5883L hmc5883l = new HMC5883L(bus);
 
-		hmc5883l.init(hmc5883l.Z, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
+		hmc5883l.init(hmc5883l.X, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
+		// hmc5883l.init(hmc5883l.Y, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
+		// hmc5883l.init(hmc5883l.Z, Gyroscope.GET_RAW_VALUE_TRIGGER_READ);
 
-		hmc5883l.readGyro();
+		// hmc5883l.setGain(GAIN_1_3_Ga);
+		// hmc5883l.setMeasurementMode(NORMAL_MEASUREMENT_MODE);
+		// hmc5883l.recalibrateOffset();
+
 		long now = System.currentTimeMillis();
+		while (System.currentTimeMillis() - now < 220000) {
 
-		int measurement = 0;
+			int x = hmc5883l.X.getRawValue();
+			int y = hmc5883l.Y.getRawValue();
+			int z = hmc5883l.Z.getRawValue();
 
-		while (System.currentTimeMillis() - now < 20000) {
+			double RAD_TO_DEG = 57.295779513082320876798154814105f;
 
-			String sm = toString(measurement, 3);
+			double bearing = Math.atan2((double) y, (double) x) * RAD_TO_DEG;
 
-			String sx = toString(hmc5883l.X.getRawValue(), 7);
-			String sy = toString(hmc5883l.Y.getRawValue(), 7);
-			String sz = toString(hmc5883l.Z.getRawValue(), 7);
-
-			double scale = 1.3;
-			double x_out = scale * hmc5883l.X.getRawValue();
-			double y_out = scale * hmc5883l.Y.getRawValue();
-			double z_out = scale * hmc5883l.Z.getRawValue();
-			double bearing = Math.atan2(y_out, x_out) * 57.2957795 + 180;
-
-			String txt = "" + bearing;
-
-			System.out.format("%10.3f, %10.3f, %10.3f / %10.3f %n", x_out, y_out, z_out, bearing);
-
-			// System.out.println(sm + sx + sy + sz + " / " + txt);
-
-			Thread.sleep(250);
-
-			measurement++;
+			System.out.format("%10d, %10d, %10d / %10.3f %n", x, y, z, bearing);
+			Thread.sleep(500);
 		}
 		System.out.println();
 	}
