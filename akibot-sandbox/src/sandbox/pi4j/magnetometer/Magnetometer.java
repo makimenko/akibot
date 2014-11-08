@@ -18,18 +18,22 @@ public class Magnetometer {
 		hmc5883l.write("0b00100000".getBytes(), 1, "0b01110000".length());
 		hmc5883l.write("0b00000000".getBytes(), 2, "0b01110000".length());
 
-		long now = System.currentTimeMillis();
-		while (System.currentTimeMillis() - now < 60000) {
-			double x = read(3, hmc5883l);
-			double y = read(7, hmc5883l);
-			double z = read(5, hmc5883l);
+		double offsetX = 337;
+		double offsetY = -106;
+		double offsetZ = 486;
+
+		while (true) {
+			double x = read(3, hmc5883l) - offsetX;
+			double y = read(7, hmc5883l) - offsetY;
+			double z = read(5, hmc5883l) - offsetZ;
 
 			double RAD_TO_DEG = 57.295779513082320876798154814105f;
-			double bearing = Math.atan2(y, x) * RAD_TO_DEG + 180;
-
+			Double bearing = Math.atan2(y, x) * RAD_TO_DEG + 180;
+			// yz zy xy yx
 			System.out.format("%10.3f, %10.3f, %10.3f / %10.3f %n", x, y, z, bearing);
-			Thread.sleep(200);
+			Thread.sleep(250);
 		}
+
 	}
 
 	private static double read(int add, I2CDevice i2c) throws IOException {
