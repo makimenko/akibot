@@ -12,28 +12,22 @@ public class Magnetometer {
 		I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
 		I2CDevice hmc5883l = bus.getDevice(0x1e);
 
+		hmc5883l.write(2, (byte) 0); // enable
+
 		hmc5883l.write("0b01110000".getBytes(), 0, "0b01110000".length());
 		hmc5883l.write("0b00100000".getBytes(), 1, "0b01110000".length());
 		hmc5883l.write("0b00000000".getBytes(), 2, "0b01110000".length());
 
-		double scale = 1.3;
-
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 60000) {
-			double x_out = read(3, hmc5883l) * scale;
-			double y_out = read(7, hmc5883l) * scale;
-			double z_out = read(5, hmc5883l) * scale;
-			double bearing;
-			bearing = Math.atan2(y_out, x_out);
-			bearing *= 57.2957795;
-			bearing += 180.0;
+			double x = read(3, hmc5883l);
+			double y = read(7, hmc5883l);
+			double z = read(5, hmc5883l);
 
-			// bearing += 180.0;
-			// if (bearing>360) {
-			// bearing = bearing - 360.0;
-			// }
+			double RAD_TO_DEG = 57.295779513082320876798154814105f;
+			double bearing = Math.atan2(y, x) * RAD_TO_DEG + 180;
 
-			System.out.format("%10.3f, %10.3f, %10.3f / %10.3f %n", x_out, y_out, z_out, bearing);
+			System.out.format("%10.3f, %10.3f, %10.3f / %10.3f %n", x, y, z, bearing);
 			Thread.sleep(200);
 		}
 	}
