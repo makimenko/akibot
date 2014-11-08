@@ -4,5 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/pi4j/pi4j-core.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/remotevm/remotevmlauncher-client-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/pi4j/pi4j-device.jar" sourcepath="/akibot-commons/lib/pi4j/pi4j-device-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/akibot-commons/lib/pi4j/pi4j-device-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
