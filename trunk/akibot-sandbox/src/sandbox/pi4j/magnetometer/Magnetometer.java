@@ -13,7 +13,6 @@ public class Magnetometer {
 		I2CDevice hmc5883l = bus.getDevice(0x1e);
 
 		hmc5883l.write(2, (byte) 0); // enable
-
 		hmc5883l.write("0b01110000".getBytes(), 0, "0b01110000".length());
 		hmc5883l.write("0b00100000".getBytes(), 1, "0b01110000".length());
 		hmc5883l.write("0b00000000".getBytes(), 2, "0b01110000".length());
@@ -28,9 +27,16 @@ public class Magnetometer {
 			double z = read(5, hmc5883l) - offsetZ;
 
 			double RAD_TO_DEG = 57.295779513082320876798154814105f;
-			Double bearing = Math.atan2(y, x) * RAD_TO_DEG + 180;
-			// yz zy xy yx
-			System.out.format("%10.3f, %10.3f, %10.3f / %10.3f %n", x, y, z, bearing);
+			double bearing = Math.atan2(y, x) * RAD_TO_DEG + 180;
+			
+			double northOffset = 180;
+			double tankNorth = bearing + northOffset;
+			
+			if (tankNorth > 360) {
+				tankNorth = tankNorth - 360.0;
+			}
+
+			System.out.format("%10.3f, %10.3f, %10.3f / %10.3f / %10.3f %n", x, y, z, bearing, tankNorth);
 			Thread.sleep(250);
 		}
 
