@@ -11,7 +11,6 @@ public class GyroscopeComponent extends DefaultComponent {
 
 	@Override
 	public void processMessage(Message message) throws Exception {
-		// TODO Auto-generated method stub
 		super.processMessage(message);
 	}
 }
