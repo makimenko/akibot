@@ -66,7 +66,7 @@ public class AwtControllerAppl {
 
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
 		messageOrientationRequest.setNorthDegrreesXY(90);
-		messageOrientationRequest.setPrecissionDegrees(10);
+		messageOrientationRequest.setPrecissionDegrees(1);
 		messageOrientationRequest.setTimeoutMillis(10000);
 
 		messageDistanceRequest.setTo("akibot.distance.*");

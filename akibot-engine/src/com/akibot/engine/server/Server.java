@@ -31,14 +31,25 @@ public class Server {
 
 	public void broadcast(Message message) throws IOException {
 		for (ConcurrentHashMap.Entry<ClientDescription, Connection> entry : clientList.entrySet()) {
+
 			ClientDescription clientDescription = entry.getKey();
 			Connection connection = entry.getValue();
 			String to = message.getTo();
 			boolean isIterested = clientDescription.isInterestedInMessage(message);
 			if (to == null && isIterested) {
-				connection.write(message);
+				try {
+					connection.write(message);
+				} catch (SocketException e) {
+					log.error("Disconnecting Client [" + clientDescription.getName() + "] due to SocketException: " + e.getMessage());
+					clientList.remove(entry.getKey());
+				}
 			} else if (to != null && clientDescription.getName().matches(to) && isIterested) {
-				connection.write(message);
+				try {
+					connection.write(message);
+				} catch (SocketException e) {
+					log.error("Disconnecting Client [" + clientDescription.getName() + "] due to SocketException: " + e.getMessage());
+					clientList.remove(entry.getKey());
+				}
 			}
 		}
 	}
