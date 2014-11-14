@@ -1,6 +1,8 @@
 package com.akibot.engine.component;
 
 import com.akibot.engine.message.Message;
+import com.akibot.engine.message.Request;
+import com.akibot.engine.message.Response;
 import com.akibot.engine.server.Client;
 
 public class DefaultComponent implements Component {

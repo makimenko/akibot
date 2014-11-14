@@ -37,4 +37,9 @@ public class Message implements Serializable, Cloneable {
 		this.to = to;
 	}
 
+	public void copySyncId(Message requestMessage) {
+		if (requestMessage != null && requestMessage.getSyncId() != null) {
+			this.syncId = requestMessage.getSyncId();
+		}
+	}
 }

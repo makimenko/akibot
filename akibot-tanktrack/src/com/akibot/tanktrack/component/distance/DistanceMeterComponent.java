@@ -16,11 +16,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 			Random randomGenerator = new Random();
 			distanceResponse = new DistanceResponse();
 			distanceResponse.setMeters(randomGenerator.nextDouble() * 4);
-			if (request.getSyncId() != null) {
-
-				distanceResponse.setSyncId(request.getSyncId());
-			}
-
+			distanceResponse.copySyncId(message);
 			this.getClient().send(distanceResponse);
 		}
 	}
