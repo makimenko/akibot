@@ -40,4 +40,9 @@ public class GyroscopeResponse extends Response {
 		this.z = z;
 	}
 
+	@Override
+	public String toString() {
+		return this.getClass().getName() + ": " + this.getNorthDegrreesXY();
+	}
+
 }
