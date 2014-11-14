@@ -24,12 +24,15 @@ public class OrientationComponent extends DefaultComponent {
 	public void processMessage(Message message) throws Exception {
 		if (message instanceof OrientationRequest) {
 			OrientationRequest orientationRequest = (OrientationRequest) message;
-			if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getPrecissionDegrees() > 0
-					&& orientationRequest.getTimeoutMillis() > 0) {
+			if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360
+					&& orientationRequest.getPrecissionDegrees() > 0 && orientationRequest.getPrecissionDegrees() < 360
+					&& orientationRequest.getTimeoutMillis() > 0 && orientationRequest.getTimeoutMillis() <= 60000) {
+
 				log.debug("OrientationRequest: " + orientationRequest);
 				long startTimeMills = System.currentTimeMillis();
 				int syncRequestTimeout = 2000; // 2 second timeout
 				long stepMillis = 100; // TODO: Configuratble
+				long totalDegrees = 360;
 
 				GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 				gyroscopeValueRequest.setTo(gyroscopeName);
@@ -41,6 +44,7 @@ public class OrientationComponent extends DefaultComponent {
 				rightRequest.setTo(tankTrackName);
 
 				GyroscopeResponse gyroscopeResponse = new GyroscopeResponse();
+				int lastDirection = 0;
 
 				while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
 					gyroscopeResponse = (GyroscopeResponse) getClient().syncRequest(gyroscopeValueRequest, syncRequestTimeout);
@@ -57,11 +61,17 @@ public class OrientationComponent extends DefaultComponent {
 						double aXY = gyroscopeResponse.getNorthDegrreesXY();
 						double eXY = orientationRequest.getNorthDegrreesXY();
 
-						if (aXY < eXY) {
+						double positive = (aXY < eXY ? eXY - aXY : eXY - aXY + totalDegrees);
+						double negative = (aXY < eXY ? eXY - aXY - totalDegrees : eXY - aXY);
+
+						if (positive <= Math.abs(negative) && lastDirection != -1) {
+							lastDirection = -1;
 							getClient().send(leftRequest);
-						} else {
+						} else if (positive > Math.abs(negative) && lastDirection != +1) {
+							lastDirection = +1;
 							getClient().send(rightRequest);
 						}
+
 						Thread.sleep(stepMillis);
 					}
 				}
@@ -88,6 +98,7 @@ public class OrientationComponent extends DefaultComponent {
 		double maxXY = eXY + ePrecission;
 
 		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin
+
 	}
 
 }
