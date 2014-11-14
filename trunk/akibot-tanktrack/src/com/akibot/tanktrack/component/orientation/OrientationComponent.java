@@ -55,6 +55,7 @@ public class OrientationComponent extends DefaultComponent {
 						OrientationResponse successOrientationResponse = new OrientationResponse();
 						successOrientationResponse.setSuccess(true);
 						successOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
+						successOrientationResponse.copySyncId(message);
 						getClient().send(successOrientationResponse);
 						return;
 					} else {
@@ -80,6 +81,7 @@ public class OrientationComponent extends DefaultComponent {
 				OrientationResponse failedOrientationResponse = new OrientationResponse();
 				failedOrientationResponse.setSuccess(false);
 				failedOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
+				failedOrientationResponse.copySyncId(message);
 				getClient().send(failedOrientationResponse);
 
 			} else {

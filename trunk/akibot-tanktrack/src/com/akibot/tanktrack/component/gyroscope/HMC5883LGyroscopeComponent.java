@@ -56,6 +56,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 
 		} else if (message instanceof GyroscopeValueRequest) {
 			GyroscopeResponse response = new GyroscopeResponse();
+			response.copySyncId(message);
 			GyroscopeValueRequest request = (GyroscopeValueRequest) message;
 			if (request.getSyncId() != null) {
 				response.setSyncId(request.getSyncId());
