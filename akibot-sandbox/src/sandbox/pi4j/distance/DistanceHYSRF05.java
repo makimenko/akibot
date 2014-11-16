@@ -15,7 +15,6 @@ import com.pi4j.io.gpio.RaspiPin;
 
 public class DistanceHYSRF05 {
 
-	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		System.out.println("Starting...");
 		final GpioController gpio = GpioFactory.getInstance();
@@ -24,25 +23,24 @@ public class DistanceHYSRF05 {
 		GpioPinDigitalOutput triggerPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, "HYSRF05_Trigger", PinState.LOW);
 		GpioPinDigitalInput echoPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_24, PinPullResistance.PULL_DOWN);
 
-		//Pin gpio23_trigger = RaspiPin.GPIO_23;
-		//Pin gpio24_echo = RaspiPin.GPIO_24;
+		// Pin gpio23_trigger = RaspiPin.GPIO_23;
+		// Pin gpio24_echo = RaspiPin.GPIO_24;
 		DistanceCalculation distanceCalculation = new DistanceCalculation(triggerPin, echoPin);
-		//DistanceMonitor distanceMonitor = new DistanceMonitor(gpio24_echo, gpio23_trigger); 
-		
+		// DistanceMonitor distanceMonitor = new DistanceMonitor(gpio24_echo,
+		// gpio23_trigger);
+
 		long start = System.currentTimeMillis();
-		while(System.currentTimeMillis()-start <= 60000) {
+		while (System.currentTimeMillis() - start <= 60000) {
 			double distance;
 			distance = distanceCalculation.getDistance();
-				
-				System.out.println("DISTANCE: "+distance);
-			
-			Thread.sleep(500);
+
+			System.out.println("DISTANCE: " + distance);
+
+			Thread.sleep(100);
 		}
-		
+
 		gpio.shutdown();
 		System.out.println("END");
 	}
-	
-	
 
 }

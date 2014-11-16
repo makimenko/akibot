@@ -13,24 +13,27 @@ public class DistanceCalculation {
 	private final static float SOUND_SPEED = 340.29f; // speed of sound in m/s
 
 	private class DistanceListener implements GpioPinListenerDigital {
+		private long startTime;
 		private long stopTime;
 
 		@Override
 		public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 			if (event.getState().isHigh()) {
-				setStopTime(System.nanoTime());
+				startTime = System.nanoTime();
+			} else if (event.getState().isLow()) {
+				stopTime = System.nanoTime();
 				synchronized (echoPin) {
 					echoPin.notify();
 				}
 			}
 		}
 
-		public long getStopTime() {
-			return stopTime;
-		}
-
-		public void setStopTime(long stopTime) {
-			this.stopTime = stopTime;
+		public long getDiff() throws Exception {
+			if (stopTime > startTime) {
+				return stopTime - startTime;
+			} else {
+				throw new Exception("Timeout!");
+			}
 		}
 	}
 
@@ -42,21 +45,22 @@ public class DistanceCalculation {
 	}
 
 	public double getDistance() {
-		triggerPin.high();
-		triggerPin.low();
-		long startTime = System.nanoTime();
+		// triggerPin.high();
+		triggerPin.pulse(1);
+		// triggerPin.low();
+
 		try {
 			synchronized (echoPin) {
-				echoPin.wait(100);
+				echoPin.wait(50);
 			}
+
+			long microSeconds = (long) Math.ceil((distanceListener.getDiff()) / 1000.0);
+			float cm = microSeconds * SOUND_SPEED / (2 * 10000);
+			return cm;
 		} catch (Exception e) {
 			return -1;
 		}
-		long microSeconds = (long) Math.ceil((distanceListener.getStopTime() - startTime) / 1000.0);
 
-		float cm = microSeconds * SOUND_SPEED / (2 * 10000);
-
-		return microSeconds;
 	}
 
 }
