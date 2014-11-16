@@ -15,9 +15,7 @@ public class TestComponent extends DefaultComponent {
 		if (message instanceof TestRequest) {
 			TestRequest request = (TestRequest) message;
 			TestResponse response = new TestResponse();
-			if (request.getSyncId() != null) {
-				response.setSyncId(request.getSyncId());
-			}
+			response.copySyncId(message);
 			response.setResult(request.getX() + 1);
 			lastResponse = response;
 			getClient().send(response);

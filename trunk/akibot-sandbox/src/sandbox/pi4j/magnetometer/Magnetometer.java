@@ -28,10 +28,10 @@ public class Magnetometer {
 
 			double RAD_TO_DEG = 57.295779513082320876798154814105f;
 			double bearing = Math.atan2(y, x) * RAD_TO_DEG + 180;
-			
+
 			double northOffset = 180;
 			double tankNorth = bearing + northOffset;
-			
+
 			if (tankNorth > 360) {
 				tankNorth = tankNorth - 360.0;
 			}
