@@ -20,8 +20,8 @@ public class DistanceHYSRF05 {
 		final GpioController gpio = GpioFactory.getInstance();
 		System.out.println("Instance initialized.");
 
-		GpioPinDigitalOutput triggerPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23, "HYSRF05_Trigger", PinState.LOW);
-		GpioPinDigitalInput echoPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_24, PinPullResistance.PULL_DOWN);
+		GpioPinDigitalOutput triggerPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_25, "HYSRF05_Trigger", PinState.LOW);
+		GpioPinDigitalInput echoPin = gpio.provisionDigitalInputPin(RaspiPin.GPIO_27, PinPullResistance.PULL_DOWN);
 
 		// Pin gpio23_trigger = RaspiPin.GPIO_23;
 		// Pin gpio24_echo = RaspiPin.GPIO_24;
@@ -30,13 +30,13 @@ public class DistanceHYSRF05 {
 		// gpio23_trigger);
 
 		long start = System.currentTimeMillis();
-		while (System.currentTimeMillis() - start <= 60000) {
+		while (System.currentTimeMillis() - start <= 120000) {
 			double distance;
 			distance = distanceCalculation.getDistance();
 
-			System.out.println("DISTANCE: " + distance);
+			System.out.format("DISTANCE: %10.3f\n", distance);
 
-			Thread.sleep(100);
+			Thread.sleep(200);
 		}
 
 		gpio.shutdown();

@@ -45,13 +45,12 @@ public class DistanceCalculation {
 	}
 
 	public double getDistance() {
-		// triggerPin.high();
+
 		triggerPin.pulse(1);
-		// triggerPin.low();
 
 		try {
 			synchronized (echoPin) {
-				echoPin.wait(50);
+				echoPin.wait(70);
 			}
 
 			long microSeconds = (long) Math.ceil((distanceListener.getDiff()) / 1000.0);
