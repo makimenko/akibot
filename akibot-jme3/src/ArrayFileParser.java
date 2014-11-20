@@ -20,6 +20,7 @@ public class ArrayFileParser {
 			Vector3f plot = new Vector3f(Float.parseFloat(currentLine[0]), Float.parseFloat(currentLine[1]), Float.parseFloat(currentLine[2]));
 			array.add(plot);
 		}
+		in.close();
 		return array;
 	}
 

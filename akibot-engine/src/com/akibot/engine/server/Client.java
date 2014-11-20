@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine.component.Component;
-import com.akibot.engine.exception.AuthorizationFailedException;
 import com.akibot.engine.exception.FailedToSendMessageException;
 import com.akibot.engine.message.Message;
 import com.akibot.engine.message.Request;
