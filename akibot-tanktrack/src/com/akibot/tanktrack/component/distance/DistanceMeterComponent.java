@@ -12,7 +12,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 	@Override
 	public void processMessage(Message message) throws Exception {
 		if (message instanceof DistanceRequest) {
-			DistanceRequest request = (DistanceRequest) message;
+			// DistanceRequest request = (DistanceRequest) message;
 			Random randomGenerator = new Random();
 			distanceResponse = new DistanceResponse();
 			distanceResponse.setMeters(randomGenerator.nextDouble() * 4);

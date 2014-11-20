@@ -1,7 +1,5 @@
 package sandbox.speech.synthesis;
 
-import java.util.Set;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
@@ -18,8 +16,6 @@ public class TestSpeech {
 	public static void main(String[] args) throws Exception {
 
 		MaryInterface marytts = new LocalMaryInterface();
-		Set<String> voices = marytts.getAvailableVoices();
-		marytts.setVoice(voices.iterator().next());
 		System.out.println("Generating...");
 
 		LineListener lineListener = new LineListener() {
