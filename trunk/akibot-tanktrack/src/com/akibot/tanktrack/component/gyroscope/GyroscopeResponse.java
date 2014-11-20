@@ -3,6 +3,7 @@ package com.akibot.tanktrack.component.gyroscope;
 import com.akibot.engine.message.Response;
 
 public class GyroscopeResponse extends Response {
+	private static final long serialVersionUID = 1L;
 	private double northDegrreesXY;
 	private double x;
 	private double y;

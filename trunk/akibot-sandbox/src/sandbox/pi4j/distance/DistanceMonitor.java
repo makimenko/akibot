@@ -116,7 +116,7 @@ public class DistanceMonitor {
 	 * Exception thrown when timeout occurs
 	 */
 	public static class TimeoutException extends Exception {
-
+		private static final long serialVersionUID = 1L;
 		private final String reason;
 
 		public TimeoutException(String reason) {

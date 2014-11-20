@@ -13,10 +13,14 @@ public class SandboxTankTrack {
 		final GpioController gpio = GpioFactory.getInstance();
 		System.out.println("Instance initialized.");
 
-		final GpioPinDigitalOutput rightBackward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "rightIA", PinState.LOW);
+		// final GpioPinDigitalOutput rightBackward =
+		// gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "rightIA",
+		// PinState.LOW);
 		final GpioPinDigitalOutput rightForward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "rightIB", PinState.LOW);
 
-		final GpioPinDigitalOutput leftBackward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "leftIA", PinState.LOW);
+		// final GpioPinDigitalOutput leftBackward =
+		// gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "leftIA",
+		// PinState.LOW);
 		final GpioPinDigitalOutput leftForward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "leftIB", PinState.LOW);
 
 		leftForward.high();
