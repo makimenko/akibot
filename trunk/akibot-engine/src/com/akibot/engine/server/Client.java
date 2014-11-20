@@ -66,7 +66,7 @@ public class Client {
 		this.syncResponse = syncResponse;
 	}
 
-	public void start() throws AuthorizationFailedException, IOException {
+	public void start() throws Exception {
 		ClientAuthorization clientAuthorization = new ClientAuthorization(socket, this);
 		clientAuthorization.authorize();
 
@@ -74,7 +74,8 @@ public class Client {
 		log.info(clientDescription.getName() + " - Connected to server.");
 
 		component.setClient(this);
-		component.run();
+		component.start();
+
 		clientMessageHandler = new ClientMessageHandler(this, messages, component);
 		clientMessageHandler.setDaemon(true);
 		clientMessageHandler.start();

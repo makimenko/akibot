@@ -11,12 +11,12 @@ public class OrientationResponse extends Response {
 		return northDegrreesXY;
 	}
 
-	public void setNorthDegrreesXY(double northDegrreesXY) {
-		this.northDegrreesXY = northDegrreesXY;
-	}
-
 	public boolean isSuccess() {
 		return success;
+	}
+
+	public void setNorthDegrreesXY(double northDegrreesXY) {
+		this.northDegrreesXY = northDegrreesXY;
 	}
 
 	public void setSuccess(boolean success) {

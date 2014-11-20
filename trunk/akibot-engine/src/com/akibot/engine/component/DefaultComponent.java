@@ -19,8 +19,8 @@ public class DefaultComponent implements Component {
 	}
 
 	@Override
-	public void run() {
-
+	public void start() throws Exception {
+		this.run();
 	}
 
 	@Override
@@ -30,6 +30,11 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void stop() {
+	}
+
+	@Override
+	public void run() {
+
 	}
 
 }

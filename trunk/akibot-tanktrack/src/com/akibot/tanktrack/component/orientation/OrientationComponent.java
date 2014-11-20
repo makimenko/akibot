@@ -12,12 +12,24 @@ import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
 public class OrientationComponent extends DefaultComponent {
 	static final Logger log = LogManager.getLogger(OrientationComponent.class.getName());
-	private String tankTrackName;
 	private String gyroscopeName;
+	private String tankTrackName;
 
 	public OrientationComponent(String tankTrackName, String gyroscopeName) {
 		this.tankTrackName = tankTrackName;
 		this.gyroscopeName = gyroscopeName;
+	}
+
+	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
+		double aXY = gyroscopeResponse.getNorthDegrreesXY();
+		double eXY = orientationRequest.getNorthDegrreesXY();
+		double ePrecission = orientationRequest.getPrecissionDegrees();
+
+		double minXY = eXY - ePrecission;
+		double maxXY = eXY + ePrecission;
+
+		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin
+
 	}
 
 	@Override
@@ -89,18 +101,6 @@ public class OrientationComponent extends DefaultComponent {
 			}
 
 		}
-	}
-
-	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
-		double aXY = gyroscopeResponse.getNorthDegrreesXY();
-		double eXY = orientationRequest.getNorthDegrreesXY();
-		double ePrecission = orientationRequest.getPrecissionDegrees();
-
-		double minXY = eXY - ePrecission;
-		double maxXY = eXY + ePrecission;
-
-		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin
-
 	}
 
 }

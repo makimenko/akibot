@@ -11,7 +11,7 @@ public interface Component extends Runnable {
 
 	public void setClient(Client client);
 
-	public void run();
+	public void start() throws Exception;
 
 	public void stop();
 
