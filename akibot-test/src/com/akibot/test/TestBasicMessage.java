@@ -88,4 +88,19 @@ public class TestBasicMessage {
 		assertEquals("Check sync response value 2", (Integer) 0, response.getResult());
 	}
 
+	@Test
+	public void testPerformanceSyncMessage() throws InterruptedException, FailedToSendMessageException, Exception {
+		TestRequest request = new TestRequest();
+		TestResponse response;
+		long startTime = System.currentTimeMillis();
+		for (int i = 0; i <= 1000; i++) {
+			request.setX(i);
+			response = (TestResponse) componentBClient.syncRequest(request, 500);
+			if (response.getResult() != i + 1) {
+				throw new Exception("Invalid result");
+			}
+		}
+		assertEquals("Chech performance (1k per second)", true, (System.currentTimeMillis() - startTime < 1000));
+	}
+	
 }
