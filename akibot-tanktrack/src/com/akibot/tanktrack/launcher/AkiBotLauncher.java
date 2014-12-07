@@ -22,7 +22,7 @@ public class AkiBotLauncher {
 		String akibotHost = "localhost";
 		int akibotPort = 2000;
 
-		String maryttsHost = "192.168.0.100";
+		String maryttsHost = "192.168.0.102";
 		int maryttsPort = 59125;
 		String maryttsVoice = "cmu-slt-hsmm";
 
