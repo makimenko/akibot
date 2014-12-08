@@ -49,7 +49,7 @@ public class DistanceCalculation {
 
 		try {
 			synchronized (echoPin) {
-				echoPin.wait(70);
+				echoPin.wait(100);
 			}
 
 			long microSeconds = (long) Math.ceil((distanceListener.getDiff()) / 1000.0);
