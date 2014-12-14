@@ -8,23 +8,42 @@
 #include <wiringPi.h>  
 #include "DistanceMeter.h"
 
-
 int waitforpin(int pin, int level, int timeout) {
     struct timeval now, start;
-    int done;
+    bool done;
     long micros;
     gettimeofday(&start, NULL);
     micros = 0;
-    done = 0;
+    done = false;
     while (!done) {
         gettimeofday(&now, NULL);
-        if (now.tv_sec > start.tv_sec) micros = 1000000L;
+        if (now.tv_sec > start.tv_sec) 
+            micros = 1000000L;
         else micros = 0;
+        
         micros = micros + (now.tv_usec - start.tv_usec);
-        if (micros > timeout) done = 1;
-        if (digitalRead(pin) == level) done = 1;
+        if (micros > timeout) done = true;
+        if (digitalRead(pin) == level) done = true;
     }
     return micros;
+}
+
+int pulseIn(int pin, int level) {
+    timeval t1, t2;
+    double microseconds;
+    
+    while (digitalRead(pin) != level) {
+    }
+    gettimeofday(&t1, NULL);
+    
+    while (digitalRead(pin) == level) {
+    }
+    gettimeofday(&t2, NULL);
+    
+    microseconds = (t2.tv_sec - t1.tv_sec) * 1000000.0;
+    microseconds += (t2.tv_usec - t1.tv_usec) ;
+    
+    return microseconds;
 }
 
 DistanceMeter::DistanceMeter(int trigger, int echo) {
@@ -40,9 +59,11 @@ DistanceMeter::DistanceMeter(int trigger, int echo) {
     } else {
         pinMode(triggerPin, OUTPUT);
         pinMode(echoPin, INPUT);
+        
+        digitalWrite(triggerPin, LOW);
+        printf("echoPin=%d\n", digitalRead(echoPin));
         initialized = true;
     }
-
 }
 
 float DistanceMeter::getDistance() {
@@ -50,33 +71,18 @@ float DistanceMeter::getDistance() {
         printf("DistanceMeter is not initialized");
         return -1;
     }
-    int pulsewidth;
-
+    
     digitalWrite(triggerPin, LOW);
     usleep(2);
     digitalWrite(triggerPin, HIGH);
-    usleep(10);
+    usleep(70);
     digitalWrite(triggerPin, LOW);
 
-    waitforpin(echoPin, HIGH, 5000); /* 5 ms timeout */
-
-    if (digitalRead(echoPin) == HIGH) {
-        pulsewidth = waitforpin(echoPin, LOW, 60000L); /* 60 ms timeout */
-        if (digitalRead(echoPin) == LOW) {
-            /* valid reading code */
-            
-            //float soundSpeed = 340.29;
-             
-            // 
-            return pulsewidth;
-        } else {
-            return -1;
-        }
-    } else {
-        /* sensor not firing code */
-        return -1;
-    }
-
+    double pulseMicroseconds = pulseIn(echoPin, HIGH);
+    double soundSpeed = 340.29f;
+    double mm = pulseMicroseconds * soundSpeed / (2 * 1000);
+    
+    return mm;
 }
 
 DistanceMeter::~DistanceMeter() {
