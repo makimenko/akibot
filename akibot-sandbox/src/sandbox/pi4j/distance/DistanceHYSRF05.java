@@ -33,7 +33,7 @@ public class DistanceHYSRF05 {
 
 			System.out.format("DISTANCE: %10.3f\n", distance);
 
-			Thread.sleep(200);
+			Thread.sleep(100);
 		}
 
 		gpio.shutdown();

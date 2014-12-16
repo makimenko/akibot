@@ -15,7 +15,7 @@ public class AwtControllerLauncher {
 
 	public static void main(String[] args) throws Exception {
 
-		String host = "192.168.0.103";
+		String host = "raspberrypi";
 		int port = 2000;
 
 		AwtControllerComponent awtControllerComponent = new AwtControllerComponent();
