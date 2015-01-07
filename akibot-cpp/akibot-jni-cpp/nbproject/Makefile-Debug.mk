@@ -39,7 +39,7 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=-shared -m32
+CFLAGS=-shared
 
 # CC Compiler Flags
 CCFLAGS=
@@ -65,7 +65,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}: ${
 ${OBJECTDIR}/DistanceSR05.o: DistanceSR05.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -I/C/Program\ Files/Java/jdk1.8.0_25/include -I/C/Program\ Files/Java/jdk1.8.0_25/include/win32 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceSR05.o DistanceSR05.c
+	$(COMPILE.c) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceSR05.o DistanceSR05.c
 
 # Subprojects
 .build-subprojects:
