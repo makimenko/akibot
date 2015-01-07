@@ -1,2 +1,2 @@
-javah -o DistanceSR05.h -classpath build/classes akibot.jni.java.DistanceSR05
+javah -o AkibotJniLibrary.h -classpath build/classes akibot.jni.java.AkibotJniLibrary
 pause
