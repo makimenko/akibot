@@ -5,6 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>AkibotJniLibrary.h</itemPath>
+      <itemPath>DistanceMeter.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -13,7 +14,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>AkibotJniLibrary.c</itemPath>
+      <itemPath>AkibotJniLibrary.cpp</itemPath>
+      <itemPath>DistanceMeter.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -42,15 +44,26 @@
             <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include</pElem>
             <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux</pElem>
           </incDir>
-          <commandLine>-shared</commandLine>
+          <commandLine>-shared -lwiringPi</commandLine>
         </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include</pElem>
+            <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux</pElem>
+          </incDir>
+          <commandLine>-shared -lwiringPi</commandLine>
+        </ccTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}</output>
         </linkerTool>
       </compileType>
-      <item path="AkibotJniLibrary.c" ex="false" tool="0" flavor2="0">
+      <item path="AkibotJniLibrary.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AkibotJniLibrary.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DistanceMeter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DistanceMeter.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="2">
@@ -73,9 +86,13 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="AkibotJniLibrary.c" ex="false" tool="0" flavor2="0">
+      <item path="AkibotJniLibrary.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AkibotJniLibrary.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DistanceMeter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DistanceMeter.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

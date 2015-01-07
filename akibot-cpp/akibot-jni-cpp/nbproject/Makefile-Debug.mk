@@ -35,15 +35,16 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/AkibotJniLibrary.o
+	${OBJECTDIR}/AkibotJniLibrary.o \
+	${OBJECTDIR}/DistanceMeter.o
 
 
 # C Compiler Flags
-CFLAGS=-shared
+CFLAGS=-shared -lwiringPi
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-shared -lwiringPi
+CXXFLAGS=-shared -lwiringPi
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -60,12 +61,17 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
 
-${OBJECTDIR}/AkibotJniLibrary.o: AkibotJniLibrary.c 
+${OBJECTDIR}/AkibotJniLibrary.o: AkibotJniLibrary.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotJniLibrary.o AkibotJniLibrary.c
+	$(COMPILE.cc) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotJniLibrary.o AkibotJniLibrary.cpp
+
+${OBJECTDIR}/DistanceMeter.o: DistanceMeter.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceMeter.o DistanceMeter.cpp
 
 # Subprojects
 .build-subprojects:
