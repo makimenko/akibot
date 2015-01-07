@@ -1,13 +1,4 @@
-#include <stdio.h>  
-#include <stdlib.h>  
-#include <unistd.h>  
-#include <signal.h>  
-#include <string.h>  
-#include <errno.h>  
-#include <sys/time.h>  
-#include <wiringPi.h>  
-#include "DistanceMeter.h"
-#include "AkibotUtils.h"
+#include "Akibot.h"
 
 DistanceMeter::DistanceMeter() {
 

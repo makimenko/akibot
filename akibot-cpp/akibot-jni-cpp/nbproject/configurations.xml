@@ -4,6 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Akibot.h</itemPath>
+      <itemPath>AkibotException.h</itemPath>
       <itemPath>AkibotJniLibrary.h</itemPath>
       <itemPath>AkibotUtils.h</itemPath>
       <itemPath>DistanceMeter.h</itemPath>
@@ -59,6 +61,10 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}</output>
         </linkerTool>
       </compileType>
+      <item path="Akibot.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AkibotException.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="AkibotJniLibrary.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AkibotJniLibrary.h" ex="false" tool="3" flavor2="0">
@@ -92,6 +98,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Akibot.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AkibotException.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="AkibotJniLibrary.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AkibotJniLibrary.h" ex="false" tool="3" flavor2="0">
