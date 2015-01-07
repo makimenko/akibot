@@ -37,7 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/AkibotJniLibrary.o \
 	${OBJECTDIR}/AkibotUtils.o \
-	${OBJECTDIR}/DistanceMeter.o
+	${OBJECTDIR}/DistanceMeterSRF05.o
 
 
 # C Compiler Flags
@@ -74,10 +74,10 @@ ${OBJECTDIR}/AkibotUtils.o: AkibotUtils.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotUtils.o AkibotUtils.cpp
 
-${OBJECTDIR}/DistanceMeter.o: DistanceMeter.cpp 
+${OBJECTDIR}/DistanceMeterSRF05.o: DistanceMeterSRF05.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceMeter.o DistanceMeter.cpp
+	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceMeterSRF05.o DistanceMeterSRF05.cpp
 
 # Subprojects
 .build-subprojects:
