@@ -18,7 +18,7 @@ JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance
     return distanceMeter.getDistance();
 }
 
-JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance__II
+JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_pulseIn
 (JNIEnv *env, jobject obj, jint pin, jint level) {
     return AkibotUtils::pulseIn(pin, level);
 }
