@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/AkibotJniLibrary.o \
+	${OBJECTDIR}/AkibotUtils.o \
 	${OBJECTDIR}/DistanceMeter.o
 
 
@@ -67,6 +68,11 @@ ${OBJECTDIR}/AkibotJniLibrary.o: AkibotJniLibrary.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotJniLibrary.o AkibotJniLibrary.cpp
+
+${OBJECTDIR}/AkibotUtils.o: AkibotUtils.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotUtils.o AkibotUtils.cpp
 
 ${OBJECTDIR}/DistanceMeter.o: DistanceMeter.cpp 
 	${MKDIR} -p ${OBJECTDIR}
