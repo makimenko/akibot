@@ -1,12 +1,4 @@
-#include <stdio.h>  
-#include <stdlib.h>  
-#include <unistd.h>  
-#include <signal.h>  
-#include <string.h>  
-#include <errno.h>  
-#include <sys/time.h>  
-#include <wiringPi.h>  
-#include "AkibotUtils.h"
+#include "Akibot.h"
 
 /**
  * Wait for PIN level (HIGH/LOW) and then measure duration of level
