@@ -26,10 +26,10 @@ JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance
 /*
  * Class:     akibot_jni_java_AkibotJniLibrary
  * Method:    pulseIn
- * Signature: (II)I
+ * Signature: (III)I
  */
 JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_pulseIn
-  (JNIEnv *, jobject, jint, jint);
+  (JNIEnv *, jobject, jint, jint, jint);
 
 #ifdef __cplusplus
 }
