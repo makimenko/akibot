@@ -12,15 +12,15 @@ extern "C" {
  * Method:    getDistance
  * Signature: (III)I
  */
-JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance__III
+JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance
   (JNIEnv *, jobject, jint, jint, jint);
 
 /*
  * Class:     akibot_jni_java_AkibotJniLibrary
- * Method:    getDistance
+ * Method:    pulseIn
  * Signature: (II)I
  */
-JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance__II
+JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_pulseIn
   (JNIEnv *, jobject, jint, jint);
 
 #ifdef __cplusplus
