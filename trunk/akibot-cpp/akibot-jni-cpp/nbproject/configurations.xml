@@ -8,7 +8,7 @@
       <itemPath>AkibotException.h</itemPath>
       <itemPath>AkibotJniLibrary.h</itemPath>
       <itemPath>AkibotUtils.h</itemPath>
-      <itemPath>DistanceMeter.h</itemPath>
+      <itemPath>DistanceMeterSRF05.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -19,7 +19,7 @@
                    projectFiles="true">
       <itemPath>AkibotJniLibrary.cpp</itemPath>
       <itemPath>AkibotUtils.cpp</itemPath>
-      <itemPath>DistanceMeter.cpp</itemPath>
+      <itemPath>DistanceMeterSRF05.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -73,9 +73,9 @@
       </item>
       <item path="AkibotUtils.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="DistanceMeter.cpp" ex="false" tool="1" flavor2="0">
+      <item path="DistanceMeterSRF05.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="DistanceMeter.h" ex="false" tool="3" flavor2="0">
+      <item path="DistanceMeterSRF05.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="2">
@@ -110,9 +110,9 @@
       </item>
       <item path="AkibotUtils.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="DistanceMeter.cpp" ex="false" tool="1" flavor2="0">
+      <item path="DistanceMeterSRF05.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="DistanceMeter.h" ex="false" tool="3" flavor2="0">
+      <item path="DistanceMeterSRF05.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

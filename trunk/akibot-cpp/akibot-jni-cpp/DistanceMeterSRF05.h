@@ -5,21 +5,21 @@
  * Created on 13 декабря 2014 г., 19:29
  */
 
-#ifndef DISTANCEMETER_H
-#define	DISTANCEMETER_H
+#ifndef DISTANCEMETERSRF05_H
+#define	DISTANCEMETERSRF05_H
 
-class DistanceMeter {
+class DistanceMeterSRF05 {
     int triggerPin, echoPin;
     bool initialized;
 
 public:
-    DistanceMeter();
-    virtual ~DistanceMeter();
+    DistanceMeterSRF05();
+    virtual ~DistanceMeterSRF05();
     void initialize(int, int);
     float getDistance();
     bool isInitializedFor(int, int);
 private:
 };
 
-#endif	/* DISTANCEMETER_H */
+#endif	/* DISTANCEMETERSRF05_H */
 

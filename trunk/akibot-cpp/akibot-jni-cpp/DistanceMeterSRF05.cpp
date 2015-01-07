@@ -1,10 +1,10 @@
 #include "Akibot.h"
 
-DistanceMeter::DistanceMeter() {
+DistanceMeterSRF05::DistanceMeterSRF05() {
 
 }
 
-void DistanceMeter::initialize(int trigger, int echo) {
+void DistanceMeterSRF05::initialize(int trigger, int echo) {
     initialized = false;
     triggerPin = trigger;
     echoPin = echo;
@@ -17,7 +17,7 @@ void DistanceMeter::initialize(int trigger, int echo) {
     initialized = true;
 }
 
-float DistanceMeter::getDistance() {
+float DistanceMeterSRF05::getDistance() {
     if (!initialized) {
         printf("DistanceMeter is not initialized");
         return -1;
@@ -36,11 +36,11 @@ float DistanceMeter::getDistance() {
     return mm;
 }
 
-bool DistanceMeter::isInitializedFor(int checkTriggerPin, int checkEchoPin) {
+bool DistanceMeterSRF05::isInitializedFor(int checkTriggerPin, int checkEchoPin) {
     return initialized && triggerPin == checkTriggerPin && echoPin == checkEchoPin;
 }
 
-DistanceMeter::~DistanceMeter() {
+DistanceMeterSRF05::~DistanceMeterSRF05() {
     initialized = false;
 }
 

@@ -14,6 +14,6 @@
 
 // Akibot custom libraries:
 #include "AkibotJniLibrary.h"
-#include "DistanceMeter.h"
+#include "DistanceMeterSRF05.h"
 #include "AkibotUtils.h"
 #include "AkibotException.h"

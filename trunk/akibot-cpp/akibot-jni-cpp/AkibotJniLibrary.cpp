@@ -1,6 +1,6 @@
 #include "Akibot.h"
 
-DistanceMeter distanceMeter;
+DistanceMeterSRF05 distanceMeter;
 bool wiringPiInitialized = false;
 
 
