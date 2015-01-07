@@ -39,10 +39,10 @@
         <cTool>
           <commandlineTool>gcc</commandlineTool>
           <incDir>
-            <pElem>C:/Program Files/Java/jdk1.8.0_25/include</pElem>
-            <pElem>C:/Program Files/Java/jdk1.8.0_25/include/win32</pElem>
+            <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include</pElem>
+            <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux</pElem>
           </incDir>
-          <commandLine>-shared -m32</commandLine>
+          <commandLine>-shared</commandLine>
         </cTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}</output>
