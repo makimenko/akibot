@@ -9,27 +9,21 @@
 #include "DistanceMeter.h"
 #include "AkibotUtils.h"
 
+DistanceMeter::DistanceMeter() {
 
+}
 
-DistanceMeter::DistanceMeter(int trigger, int echo) {
+void DistanceMeter::initialize(int trigger, int echo) {
     initialized = false;
     triggerPin = trigger;
     echoPin = echo;
 
     //TODO: Initialize once!
-    //printf("Init DistanceMeter: trigger=%d, echo=%d\n", triggerPin, echoPin);
-
-    if (wiringPiSetup() == -1) {
-        fprintf(stderr, "Can't initialize wiringPi: %s\n", strerror(errno));
-        initialized = false;
-    } else {
-        pinMode(triggerPin, OUTPUT);
-        pinMode(echoPin, INPUT);
-
-        digitalWrite(triggerPin, LOW);
-       // printf("echoPin=%d\n", digitalRead(echoPin));
-        initialized = true;
-    }
+    printf("Init DistanceMeter: trigger=%d, echo=%d\n", triggerPin, echoPin);
+    pinMode(triggerPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+    digitalWrite(triggerPin, LOW);
+    initialized = true;
 }
 
 float DistanceMeter::getDistance() {
@@ -49,6 +43,10 @@ float DistanceMeter::getDistance() {
     double mm = pulseMicroseconds * soundSpeed / (2 * 1000);
 
     return mm;
+}
+
+bool DistanceMeter::isInitializedFor(int checkTriggerPin, int checkEchoPin) {
+    return initialized && triggerPin == checkTriggerPin && echoPin == checkEchoPin;
 }
 
 DistanceMeter::~DistanceMeter() {

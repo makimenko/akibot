@@ -8,6 +8,13 @@
 #include <wiringPi.h>  
 #include "AkibotUtils.h"
 
+/**
+ * Wait for PIN level (HIGH/LOW) and then measure duration of level
+ * 
+ * @param pin GPIO pin number
+ * @param level 1=High, 0=Low
+ * @return duration in microseconds
+ */
 int AkibotUtils::pulseIn(int pin, int level) {
     timeval t1, t2;
     double microseconds;

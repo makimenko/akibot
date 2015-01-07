@@ -11,11 +11,13 @@
 class DistanceMeter {
     int triggerPin, echoPin;
     bool initialized;
-   
+
 public:
-    DistanceMeter(int, int);
+    DistanceMeter();
     virtual ~DistanceMeter();
+    void initialize(int, int);
     float getDistance();
+    bool isInitializedFor(int, int);
 private:
 };
 
