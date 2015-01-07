@@ -12,19 +12,19 @@ void checkWiringPiInitialized() {
 }
 
 JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance
-(JNIEnv *env, jobject obj, jint triggerPin, jint echoPin, jint timeout) {
+(JNIEnv *env, jobject obj, jint triggerPin, jint echoPin, jint timeoutMicroseconds) {
     checkWiringPiInitialized();
-    if (!distanceMeter.isInitializedFor(triggerPin, echoPin)) {
-        distanceMeter.initialize(triggerPin, echoPin);
+    if (!distanceMeter.isInitializedFor(triggerPin, echoPin, timeoutMicroseconds)) {
+        distanceMeter.initialize(triggerPin, echoPin, timeoutMicroseconds);
     }
 
     return distanceMeter.getDistance();
 }
 
 JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_pulseIn
-(JNIEnv *env, jobject obj, jint pin, jint level) {
+(JNIEnv *env, jobject obj, jint pin, jint level, jint timeoutMicroseconds) {
     checkWiringPiInitialized();
-    return AkibotUtils::pulseIn(pin, level);
+    return AkibotUtils::pulseIn(pin, level, timeoutMicroseconds);
 }
 
 JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_initialize

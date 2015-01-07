@@ -10,7 +10,8 @@
 
 class AkibotUtils {
 public:
-    static int pulseIn(int pin, int level);
+    static int pulseIn(int, int, int);
+    static int durationMicroseconds(timeval, timeval);
 private:
 };
 
