@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     akibot_jni_java_AkibotJniLibrary
+ * Method:    initialize
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_initialize
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     akibot_jni_java_AkibotJniLibrary
  * Method:    getDistance
  * Signature: (III)I
  */
