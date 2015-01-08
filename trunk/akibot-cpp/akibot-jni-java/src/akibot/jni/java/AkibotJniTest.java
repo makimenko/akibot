@@ -9,11 +9,7 @@ package akibot.jni.java;
  *
  * @author dm
  */
-public class MyTest {
-
-    static {
-        System.load("/root/.netbeans/remote/raspberrypi/dm-pc-Windows-x86_64/D/_ROOT/02_Work/00_Hobby/AkiBot/google/trunk/akibot-cpp/akibot-jni-cpp/dist/Debug/GNU-Linux-x86/libakibot-jni-cpp.so");
-    }
+public class AkibotJniTest {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("STARTING....");
