@@ -58,7 +58,7 @@
           <commandLine>-shared -lwiringPi</commandLine>
         </ccTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}</output>
+          <output>/home/pi/share/netbeans/akibot-jni-cpp.${CND_DLIB_EXT}</output>
         </linkerTool>
       </compileType>
       <item path="Akibot.h" ex="false" tool="3" flavor2="0">
