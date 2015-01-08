@@ -102,5 +102,5 @@ public class TestBasicMessage {
 		}
 		assertEquals("Chech performance (1k per second)", true, (System.currentTimeMillis() - startTime < 1000));
 	}
-	
+
 }

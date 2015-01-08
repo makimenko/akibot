@@ -1,7 +1,6 @@
 import graphics.mesh.MyGridMesh;
 import graphics.storage.MaterialStorage;
 
-import java.awt.Color;
 import java.util.List;
 
 import com.jme3.app.SimpleApplication;
@@ -39,19 +38,15 @@ public class Start extends SimpleApplication {
 			node.scale(0.01f);
 			rootNode.attachChild(node);
 
-
 			Node centerNode = new Node();
 			node.attachChild(centerNode);
 			Sphere sphereMesh = new Sphere(32, 32, 10);
 			centerNode.move(337, -106, 486);
 			putShape(centerNode, sphereMesh, ColorRGBA.Blue);
-			
-			
+
 			attachCoordinateAxes(centerNode, new Vector3f());
 			addPlots(node, "calibration120.txt", ColorRGBA.White);
 			addPlots(node, "table60.txt", ColorRGBA.Red);
-
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();

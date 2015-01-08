@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="/akibot-commons/lib/marytts/marytts-lang-en-5.1.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/marytts/marytts-runtime-5.1-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/marytts/voice-cmu-slt-hsmm-5.1.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/akibot/akibot-jni-java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

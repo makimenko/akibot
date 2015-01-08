@@ -1,14 +1,10 @@
 package akibot.tanktrack.monitor.frame;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.TextArea;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JScrollBar;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import java.awt.TextArea;
-import javax.swing.JPanel;
-import java.awt.Scrollbar;
 
 public class LogMonitor extends JInternalFrame {
 
@@ -37,7 +33,7 @@ public class LogMonitor extends JInternalFrame {
 		setMaximizable(true);
 		setClosable(true);
 		setBounds(100, 100, 608, 404);
-		
+
 		TextArea textArea = new TextArea();
 		getContentPane().add(textArea, BorderLayout.CENTER);
 
