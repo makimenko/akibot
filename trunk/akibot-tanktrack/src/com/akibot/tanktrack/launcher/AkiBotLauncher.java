@@ -6,11 +6,11 @@ import org.apache.logging.log4j.Logger;
 import com.akibot.engine.server.Client;
 import com.akibot.engine.server.ClientDescription;
 import com.akibot.engine.server.Server;
+import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
+import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeComponent;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
-import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
-import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
@@ -39,19 +39,28 @@ public class AkiBotLauncher {
 		Client gyroscopeClient = new Client(akibotHost, akibotPort, gyroscopeComponent, gyroscopeClientDescription);
 
 		// SpeechSynthesis:
-		
+
 		// String maryttsHost = "192.168.0.102";
 		// int maryttsPort = 59125;
 		// String maryttsVoice = "cmu-slt-hsmm";
-		// SpeechSynthesisComponent speechSynthesisComponent = new SpeechSynthesisComponent(maryttsHost, maryttsPort, maryttsVoice);
-		// ClientDescription speechSynthesisDescription = new ClientDescription("akibot.speech.synthesis");
-		// speechSynthesisDescription.getTopicList().add(new SpeechSynthesisRequest());
-		// Client speechSynthesisClient = new Client(akibotHost, akibotPort, speechSynthesisComponent, speechSynthesisDescription);
-		
+		// SpeechSynthesisComponent speechSynthesisComponent = new
+		// SpeechSynthesisComponent(maryttsHost, maryttsPort, maryttsVoice);
+		// ClientDescription speechSynthesisDescription = new
+		// ClientDescription("akibot.speech.synthesis");
+		// speechSynthesisDescription.getTopicList().add(new
+		// SpeechSynthesisRequest());
+		// Client speechSynthesisClient = new Client(akibotHost, akibotPort,
+		// speechSynthesisComponent, speechSynthesisDescription);
+
+		DistanceMeterComponent distanceMeterComponent = new DistanceMeterComponent(25, 27, 50000);
+		ClientDescription distanceMeterClientDescription = new ClientDescription("akibot.distance");
+		distanceMeterClientDescription.getTopicList().add(new DistanceRequest());
+		Client distanceMeteriClient = new Client(akibotHost, akibotPort, distanceMeterComponent, distanceMeterClientDescription);
 
 		tankClient.start();
 		gyroscopeClient.start();
 		// speechSynthesisClient.start();
+		distanceMeteriClient.start();
 
 		// LOOP forever:
 		while (true) {
