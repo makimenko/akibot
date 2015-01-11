@@ -28,7 +28,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 		if (message instanceof DistanceRequest) {
 			DistanceRequest request = (DistanceRequest) message;
 			DistanceResponse response = new DistanceResponse();
-			response.setMeters(lib.getDistance(triggerPin, echoPin, timeoutMicroseconds));
+			response.setMm(lib.getDistance(triggerPin, echoPin, timeoutMicroseconds));
 			response.copySyncId(message);
 			this.getClient().send(response);
 		}
