@@ -9,18 +9,18 @@ public class DistanceResponse extends Response {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private double meters;
-
-	public double getMeters() {
-		return meters;
+	private double mm;
+	
+	public double getMm() {
+		return mm;
 	}
 
-	public void setMeters(double meters) {
-		this.meters = meters;
+	public void setMm(double mm) {
+		this.mm = mm;
 	}
 
 	@Override
 	public String toString() {
-		return "Distance is " + meters + " meters";
+		return "Distance is " + mm + " mm";
 	}
 }
