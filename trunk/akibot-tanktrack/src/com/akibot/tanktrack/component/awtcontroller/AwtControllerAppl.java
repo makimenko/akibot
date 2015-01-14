@@ -19,6 +19,7 @@ import com.akibot.engine.message.Response;
 import com.akibot.engine.server.Client;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
@@ -64,6 +65,7 @@ public class AwtControllerAppl {
 		Message messageRight = new StickMotionRequest(DirectionType.RIGHT);
 		Message messageDistanceRequest = new DistanceRequest();
 		Message messageGyroscopeValueRequest = new GyroscopeValueRequest();
+		Message messageGyroscopeCalibrationRequest = new GyroscopeCalibrationRequest(60000, 100, true, false);
 
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
 		messageOrientationRequest.setNorthDegrreesXY(90);
@@ -79,6 +81,7 @@ public class AwtControllerAppl {
 		messageBackward.setTo(tankTrackName);
 		messageLeft.setTo(tankTrackName);
 		messageRight.setTo(tankTrackName);
+		// messageGyroscopeCalibrationRequest.setTo("akibot.gyroscope");
 
 		Button buttonForward = new Button("Forward");
 		Button buttonLeft = new Button("Left");
@@ -88,6 +91,7 @@ public class AwtControllerAppl {
 		Button buttonGyroscope = new Button("Gyroscope");
 		Button buttonOrientation = new Button("Orientation");
 		Button buttonSpeechSynthesis = new Button("Speech Synthesis");
+		Button buttonGyroscopeCalibrationRequest = new Button("Gyroscope Calibration");
 
 		Button buttonSync = new Button("Sync Request");
 		buttonSync.addActionListener(new ActionListener() {
@@ -123,6 +127,7 @@ public class AwtControllerAppl {
 		directionAction.getKeyMapping().put(KeyEvent.VK_2, messageDistanceRequest);
 		directionAction.getKeyMapping().put(KeyEvent.VK_3, messageOrientationRequest);
 		directionAction.getKeyMapping().put(KeyEvent.VK_4, messageSpeechSynthesis);
+		directionAction.getKeyMapping().put(KeyEvent.VK_5, messageGyroscopeCalibrationRequest);
 
 		AwtControllerKeyListener directionKeyListener = new AwtControllerKeyListener(directionAction);
 		buttonForward.addKeyListener(directionKeyListener);
@@ -133,6 +138,7 @@ public class AwtControllerAppl {
 		buttonDistance.addKeyListener(directionKeyListener);
 		buttonOrientation.addKeyListener(directionKeyListener);
 		buttonSpeechSynthesis.addKeyListener(directionKeyListener);
+		buttonGyroscopeCalibrationRequest.addKeyListener(directionKeyListener);
 
 		buttonForward.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_UP));
 		buttonLeft.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_LEFT));
@@ -142,6 +148,7 @@ public class AwtControllerAppl {
 		buttonDistance.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_2));
 		buttonOrientation.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_3));
 		buttonSpeechSynthesis.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_4));
+		buttonGyroscopeCalibrationRequest.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_5));
 
 		cursorPanel.add(new Label());
 		cursorPanel.add(buttonForward);
@@ -158,6 +165,8 @@ public class AwtControllerAppl {
 		cursorPanel.add(buttonGyroscope);
 		cursorPanel.add(buttonOrientation);
 		cursorPanel.add(buttonSpeechSynthesis);
+		cursorPanel.add(buttonGyroscopeCalibrationRequest);
+		;
 
 		Panel mainPanel = new Panel();
 

@@ -7,6 +7,9 @@ import com.akibot.engine.message.Response;
 import com.akibot.engine.server.Client;
 import com.akibot.engine.server.ClientDescription;
 import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 
@@ -29,12 +32,20 @@ public class AwtControllerLauncher {
 		orientationDescription.getTopicList().add(new Response());
 		Client orientationClient = new Client(host, port, orientationComponent, orientationDescription);
 
+		GyroscopeCalibrationComponent gyroscopeCalibrationComponent = new GyroscopeCalibrationComponent();
+		ClientDescription gyroscopeCalibrationDescription = new ClientDescription("akibot.gyroscope.calibration");
+		gyroscopeCalibrationDescription.getTopicList().add(new GyroscopeCalibrationRequest());
+		gyroscopeCalibrationDescription.getTopicList().add(new GyroscopeResponse());
+		Client gyroscopeCalibrationClient = new Client(host, port, gyroscopeCalibrationComponent, gyroscopeCalibrationDescription);
+
 		awtControllerClient.start();
 		orientationClient.start();
+		gyroscopeCalibrationClient.start();
 
 		// LOOP forever:
+
 		while (true) {
-			Thread.sleep(1000);
+			Thread.sleep(10000);
 		}
 
 	}

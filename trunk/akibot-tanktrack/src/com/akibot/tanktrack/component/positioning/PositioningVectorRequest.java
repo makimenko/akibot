@@ -1,5 +1,7 @@
 package com.akibot.tanktrack.component.positioning;
 
+import com.akibot.tanktrack.world.Vector3d;
+
 public class PositioningVectorRequest extends PositioningRequest {
 	private static final long serialVersionUID = 1L;
 	private Vector3d vector3d;

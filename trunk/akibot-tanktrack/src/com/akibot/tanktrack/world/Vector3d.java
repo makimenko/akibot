@@ -1,4 +1,4 @@
-package com.akibot.tanktrack.component.positioning;
+package com.akibot.tanktrack.world;
 
 import java.io.Serializable;
 
@@ -7,6 +7,18 @@ public class Vector3d implements Serializable {
 	private double x;
 	private double y;
 	private double z;
+
+	public Vector3d(double x, double y, double z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+
+	public Vector3d() {
+		x = 0;
+		y = 0;
+		z = 0;
+	}
 
 	public double getX() {
 		return x;

@@ -33,7 +33,10 @@ public class AkiBotLauncher {
 		Client tankClient = new Client(akibotHost, akibotPort, tankTrackComponent, tankTrackDescription);
 
 		// Gyroscope:
-		GyroscopeComponent gyroscopeComponent = new HMC5883LGyroscopeComponent(337, -106, 486, 180);
+		// old: 337, -106, 486, 180
+		// 2015.01.14: GyroscopeCalibrationResponse: new offset = (380.0, 114.5,
+		// 397.5) (from akibot.gyroscope.calibration)
+		GyroscopeComponent gyroscopeComponent = new HMC5883LGyroscopeComponent(380.0, 114.5, 397.5, 180);
 		ClientDescription gyroscopeClientDescription = new ClientDescription("akibot.gyroscope");
 		gyroscopeClientDescription.getTopicList().add(new GyroscopeRequest());
 		Client gyroscopeClient = new Client(akibotHost, akibotPort, gyroscopeComponent, gyroscopeClientDescription);
@@ -64,7 +67,7 @@ public class AkiBotLauncher {
 
 		// LOOP forever:
 		while (true) {
-			Thread.sleep(1000);
+			Thread.sleep(10000);
 		}
 
 	}

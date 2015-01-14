@@ -10,7 +10,7 @@ public class DistanceResponse extends Response {
 	private static final long serialVersionUID = 1L;
 
 	private double mm;
-	
+
 	public double getMm() {
 		return mm;
 	}

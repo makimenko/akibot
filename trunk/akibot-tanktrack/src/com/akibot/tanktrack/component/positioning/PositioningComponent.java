@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine.component.DefaultComponent;
 import com.akibot.engine.message.Message;
+import com.akibot.tanktrack.world.Vector3d;
 
 public class PositioningComponent extends DefaultComponent {
 	static final Logger log = LogManager.getLogger(PositioningComponent.class.getName());
