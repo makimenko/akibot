@@ -7,9 +7,12 @@ import com.akibot.engine.message.Response;
 import com.akibot.engine.server.Client;
 import com.akibot.engine.server.ClientDescription;
 import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
+import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
+import com.akibot.tanktrack.component.obstacle.ObstacleComponent;
+import com.akibot.tanktrack.component.obstacle.ObstacleRequest;
 import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 
@@ -38,9 +41,17 @@ public class AwtControllerLauncher {
 		gyroscopeCalibrationDescription.getTopicList().add(new GyroscopeResponse());
 		Client gyroscopeCalibrationClient = new Client(host, port, gyroscopeCalibrationComponent, gyroscopeCalibrationDescription);
 
+		ObstacleComponent obstacleComponent = new ObstacleComponent();
+		ClientDescription obstacleDescription = new ClientDescription("akibot.obstacle");
+		obstacleDescription.getTopicList().add(new ObstacleRequest());
+		obstacleDescription.getTopicList().add(new GyroscopeResponse());
+		obstacleDescription.getTopicList().add(new DistanceResponse());
+		Client obstacleClient = new Client(host, port, obstacleComponent, obstacleDescription);
+
 		awtControllerClient.start();
 		orientationClient.start();
 		gyroscopeCalibrationClient.start();
+		obstacleClient.start();
 
 		// LOOP forever:
 
