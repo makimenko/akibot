@@ -33,9 +33,8 @@ public class AkiBotLauncher {
 		Client tankClient = new Client(akibotHost, akibotPort, tankTrackComponent, tankTrackDescription);
 
 		// Gyroscope:
-		// old: 337, -106, 486, 180
-		// 2015.01.14: GyroscopeCalibrationResponse: new offset = (380.0, 114.5,
-		// 397.5) (from akibot.gyroscope.calibration)
+		// old: 337.0, -106.0, 486.0
+		// 2015.01.14: 380.0, 114.5, 397.5
 		GyroscopeComponent gyroscopeComponent = new HMC5883LGyroscopeComponent(380.0, 114.5, 397.5, 180);
 		ClientDescription gyroscopeClientDescription = new ClientDescription("akibot.gyroscope");
 		gyroscopeClientDescription.getTopicList().add(new GyroscopeRequest());

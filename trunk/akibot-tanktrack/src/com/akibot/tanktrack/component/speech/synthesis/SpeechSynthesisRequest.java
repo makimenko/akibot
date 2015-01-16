@@ -21,6 +21,7 @@ public class SpeechSynthesisRequest extends Request {
 		this.speechText = speechText;
 	}
 
+	@Override
 	public String toString() {
 		return "SpeechSynthesisRequest: " + speechText;
 	}
