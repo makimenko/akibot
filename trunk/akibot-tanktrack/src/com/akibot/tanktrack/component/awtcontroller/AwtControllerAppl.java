@@ -67,7 +67,7 @@ public class AwtControllerAppl {
 		Message messageDistanceRequest = new DistanceRequest();
 		Message messageGyroscopeValueRequest = new GyroscopeValueRequest();
 		Message messageGyroscopeCalibrationRequest = new GyroscopeCalibrationRequest(60000, 100, true, false);
-		Message messageObstableRequest = new ObstacleRequest();
+		Message messageObstacleRequest = new ObstacleRequest();
 
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
 		messageOrientationRequest.setNorthDegrreesXY(90);
@@ -94,7 +94,7 @@ public class AwtControllerAppl {
 		Button buttonOrientation = new Button("Orientation");
 		Button buttonSpeechSynthesis = new Button("Speech Synthesis");
 		Button buttonGyroscopeCalibrationRequest = new Button("Gyroscope Calibration");
-		Button buttonObstableRequest = new Button("Obstable");
+		Button buttonObstacleRequest = new Button("Obstacle");
 
 		Button buttonSync = new Button("Sync Request");
 		buttonSync.addActionListener(new ActionListener() {
@@ -131,7 +131,7 @@ public class AwtControllerAppl {
 		directionAction.getKeyMapping().put(KeyEvent.VK_3, messageOrientationRequest);
 		directionAction.getKeyMapping().put(KeyEvent.VK_4, messageSpeechSynthesis);
 		directionAction.getKeyMapping().put(KeyEvent.VK_5, messageGyroscopeCalibrationRequest);
-		directionAction.getKeyMapping().put(KeyEvent.VK_6, messageObstableRequest);
+		directionAction.getKeyMapping().put(KeyEvent.VK_6, messageObstacleRequest);
 
 		AwtControllerKeyListener directionKeyListener = new AwtControllerKeyListener(directionAction);
 		buttonForward.addKeyListener(directionKeyListener);
@@ -143,7 +143,7 @@ public class AwtControllerAppl {
 		buttonOrientation.addKeyListener(directionKeyListener);
 		buttonSpeechSynthesis.addKeyListener(directionKeyListener);
 		buttonGyroscopeCalibrationRequest.addKeyListener(directionKeyListener);
-		buttonObstableRequest.addKeyListener(directionKeyListener);
+		buttonObstacleRequest.addKeyListener(directionKeyListener);
 
 		buttonForward.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_UP));
 		buttonLeft.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_LEFT));
@@ -154,7 +154,7 @@ public class AwtControllerAppl {
 		buttonOrientation.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_3));
 		buttonSpeechSynthesis.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_4));
 		buttonGyroscopeCalibrationRequest.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_5));
-		buttonObstableRequest.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_6));
+		buttonObstacleRequest.addMouseListener(new AwtControllerMouseListener(directionAction, KeyEvent.VK_6));
 
 		cursorPanel.add(new Label());
 		cursorPanel.add(buttonForward);
@@ -172,7 +172,7 @@ public class AwtControllerAppl {
 		cursorPanel.add(buttonOrientation);
 		cursorPanel.add(buttonSpeechSynthesis);
 		cursorPanel.add(buttonGyroscopeCalibrationRequest);
-		cursorPanel.add(buttonObstableRequest);
+		cursorPanel.add(buttonObstacleRequest);
 
 		Panel mainPanel = new Panel();
 
