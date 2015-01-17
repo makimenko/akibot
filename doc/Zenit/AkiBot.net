@@ -1,0 +1,10 @@
+ZENITPCB V1.0 NETLIST
+*Parts*
+1;CONNECTOR 40 (2 ROWS);;;0.000;
+2;CONN 2;;;0.000;
+*Nets*
+Signal:NET$00001;class:DEFAULT;maxcurr:0.000;
+1.2 2.1 
+Signal:NET$00002;class:DEFAULT;maxcurr:0.000;
+1.39 2.2 
+*end*
