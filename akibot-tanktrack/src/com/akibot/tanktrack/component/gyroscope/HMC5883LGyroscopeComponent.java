@@ -55,12 +55,11 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 					+ offsetDegrees);
 
 		} else if (message instanceof GyroscopeValueRequest) {
+			long startTime = System.currentTimeMillis();
 			GyroscopeResponse response = new GyroscopeResponse();
 			response.copySyncId(message);
+
 			GyroscopeValueRequest request = (GyroscopeValueRequest) message;
-			if (request.getSyncId() != null) {
-				response.setSyncId(request.getSyncId());
-			}
 
 			// Reading magnetometer data:
 			double x = read(3, hmc5883l) - offsetX;
@@ -80,6 +79,8 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 			response.setY(y);
 			response.setZ(z);
 			response.setNorthDegrreesXY(northDegreesXY);
+
+			log.trace("Duration: " + (System.currentTimeMillis() - startTime));
 			this.getClient().send(response);
 		}
 

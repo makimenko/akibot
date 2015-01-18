@@ -8,9 +8,13 @@ import com.akibot.engine.server.ClientDescription;
 import com.akibot.engine.server.Server;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
+import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeComponent;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
+import com.akibot.tanktrack.component.obstacle.ObstacleComponent;
+import com.akibot.tanktrack.component.obstacle.ObstacleRequest;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
@@ -59,11 +63,20 @@ public class AkiBotLauncher {
 		distanceMeterClientDescription.getTopicList().add(new DistanceRequest());
 		Client distanceMeteriClient = new Client(akibotHost, akibotPort, distanceMeterComponent, distanceMeterClientDescription);
 
+		ObstacleComponent obstacleComponent = new ObstacleComponent();
+		ClientDescription obstacleDescription = new ClientDescription("akibot.obstacle");
+		obstacleDescription.getTopicList().add(new ObstacleRequest());
+		obstacleDescription.getTopicList().add(new GyroscopeResponse());
+		obstacleDescription.getTopicList().add(new DistanceResponse());
+		Client obstacleClient = new Client(akibotHost, akibotPort, obstacleComponent, obstacleDescription);
+		
 		tankClient.start();
 		gyroscopeClient.start();
 		// speechSynthesisClient.start();
 		distanceMeteriClient.start();
+		obstacleClient.start();
 
+		
 		// LOOP forever:
 		while (true) {
 			Thread.sleep(10000);

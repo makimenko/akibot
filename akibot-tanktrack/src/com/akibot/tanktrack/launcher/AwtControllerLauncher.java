@@ -41,17 +41,11 @@ public class AwtControllerLauncher {
 		gyroscopeCalibrationDescription.getTopicList().add(new GyroscopeResponse());
 		Client gyroscopeCalibrationClient = new Client(host, port, gyroscopeCalibrationComponent, gyroscopeCalibrationDescription);
 
-		ObstacleComponent obstacleComponent = new ObstacleComponent();
-		ClientDescription obstacleDescription = new ClientDescription("akibot.obstacle");
-		obstacleDescription.getTopicList().add(new ObstacleRequest());
-		obstacleDescription.getTopicList().add(new GyroscopeResponse());
-		obstacleDescription.getTopicList().add(new DistanceResponse());
-		Client obstacleClient = new Client(host, port, obstacleComponent, obstacleDescription);
+
 
 		awtControllerClient.start();
 		orientationClient.start();
 		gyroscopeCalibrationClient.start();
-		obstacleClient.start();
 
 		// LOOP forever:
 
