@@ -31,12 +31,11 @@ public class SimpleClient {
 				
 				MyObject response = (MyObject)objectInputStream.readObject();
 				String responseName = response.getName();
-				
 			}
 			long duration = System.currentTimeMillis() - startTime;
 			
 			System.out.println("Performance Stats: count="+count+", duration="+duration+", avg="+(duration/count));
-			// Performance Stats: count=94464, duration=10012, avg=0
+			// Performance Stats: count=40, duration=10190, avg=254
 
 			objectOutputStream.close();
 			outputStream.close();

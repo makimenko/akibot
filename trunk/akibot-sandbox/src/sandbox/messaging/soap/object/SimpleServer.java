@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.xml.ws.Response;
+
 public class SimpleServer {
 
 	public static void main(String args[]) {
@@ -36,12 +38,12 @@ public class SimpleServer {
 					//System.out.println("SERVER: Received MyObject: " + myObject.getName());
 					MyObject response = new MyObject();
 					response.setName("RESP: "+myObject.getName());
-					objectOutputStream.writeObject(response);					
+					objectOutputStream.writeObject(response);		
 				} else {
 					System.out.println("SERVER: Unknown Object!");
 					break;
 				}
-
+				
 				//System.out.println("SERVER: loop end");
 			}
 
