@@ -1,4 +1,4 @@
-package sandbox.messaging.fixedsize;
+package sandbox.messaging.datagram.fixedsize;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

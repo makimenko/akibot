@@ -9,9 +9,7 @@ public class ObjectServer {
 		byte[] buf = new byte[1000];
 		Utils utils = new Utils();
 		DatagramPacket requestDatagramPacket = new DatagramPacket(buf, buf.length);
-		DatagramSocket socket;
-
-		socket = new DatagramSocket(PORT);
+		DatagramSocket socket = new DatagramSocket(PORT);
 		System.out.println("Server started");
 		while (true) {
 			socket.receive(requestDatagramPacket);
