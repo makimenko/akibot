@@ -23,18 +23,18 @@ public class SimpleClient {
 			long timeout = 10000;
 			long startTime = System.currentTimeMillis();
 			int count = 0;
-			while (System.currentTimeMillis()-startTime < timeout) {
-				count ++;
+			while (System.currentTimeMillis() - startTime < timeout) {
+				count++;
 				MyObject myObject = new MyObject();
 				myObject.setName("Nick");
 				objectOutputStream.writeObject(myObject);
-				
-				MyObject response = (MyObject)objectInputStream.readObject();
+
+				MyObject response = (MyObject) objectInputStream.readObject();
 				String responseName = response.getName();
 			}
 			long duration = System.currentTimeMillis() - startTime;
-			
-			System.out.println("Performance Stats: count="+count+", duration="+duration+", avg="+(duration/count));
+
+			System.out.println("Performance Stats: count=" + count + ", duration=" + duration + ", avg=" + (duration / count));
 			// Performance Stats: count=40, duration=10190, avg=254
 
 			objectOutputStream.close();
