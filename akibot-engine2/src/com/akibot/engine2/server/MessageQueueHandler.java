@@ -8,9 +8,9 @@ import com.akibot.engine2.message.Message;
 public class MessageQueueHandler extends Thread {
 
 	private BlockingQueue<Message> messageQueue;
-	private AkibotComponent akibotNode;
+	private AkibotNode akibotNode;
 
-	public MessageQueueHandler(AkibotComponent akibotNode, BlockingQueue<Message> messageQueue) {
+	public MessageQueueHandler(AkibotNode akibotNode, BlockingQueue<Message> messageQueue) {
 		this.akibotNode = akibotNode;
 		this.messageQueue = messageQueue;
 		this.setDaemon(true);
