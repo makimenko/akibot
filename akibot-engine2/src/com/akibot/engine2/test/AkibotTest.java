@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.akibot.engine2.server.AkibotNode;
+import com.akibot.engine2.server.AkibotComponent;
 
 public class AkibotTest {
 	@Before
