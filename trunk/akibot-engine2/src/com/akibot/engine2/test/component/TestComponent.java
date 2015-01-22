@@ -6,9 +6,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import com.akibot.engine2.message.Message;
-import com.akibot.engine2.server.AkibotComponent;
+import com.akibot.engine2.server.AkibotNode;
 
-public class TestComponent extends AkibotComponent {
+public class TestComponent extends AkibotNode {
 
 	public TestComponent(Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
 		super(port, parentSocketAddress);

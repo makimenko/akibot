@@ -13,14 +13,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.akibot.engine2.message.Message;
 
-public class AkibotComponent extends Thread {
+public class AkibotNode extends Thread {
 	private DatagramSocket socket;
 	private DatagramSocket parentSocket;
 	private BlockingQueue<Message> messageQueue;
 	private IncommingMessageHandler incommingMessageHandler;
 	private MessageQueueHandler messageQueueHandler;
 
-	public AkibotComponent(Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+	public AkibotNode(Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
 		this.setDaemon(true);
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
 		this.parentSocket = new DatagramSocket();
