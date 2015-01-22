@@ -12,7 +12,7 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void start() {
-		
+
 	}
 
 	@Override
@@ -23,7 +23,8 @@ public class DefaultComponent implements Component {
 			sendMessage(response);
 		} else if (message instanceof ClientDescriptionResponse) {
 			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
-			clientDescriptionList = response.mergeNewInto(clientDescriptionList);
+			ClientDescriptionUtils utils = new ClientDescriptionUtils();
+			clientDescriptionList = utils.merge(response.getClientDescriptionList(), clientDescriptionList);
 		}
 
 	}

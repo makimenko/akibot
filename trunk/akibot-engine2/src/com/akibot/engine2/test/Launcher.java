@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.akibot.engine2.component.ClientDescription;
 import com.akibot.engine2.component.ClientDescriptionResponse;
+import com.akibot.engine2.component.ClientDescriptionUtils;
 import com.akibot.engine2.component.DefaultServerComponent;
 import com.akibot.engine2.server.AkibotNode;
 import com.akibot.engine2.test.component.TestComponent;
@@ -33,9 +34,27 @@ public class Launcher {
 		AkibotNode clientNodeB = new AkibotNode(new TestComponent(), inetSocketAddress);
 		clientNodeB.start();
 		System.out.println("started.");
-		
 
-		
+		ClientDescriptionResponse a = new ClientDescriptionResponse();
+		List aList = new ArrayList<ClientDescription>();
+		aList.add(new ClientDescription("aList1", new InetSocketAddress(10)));
+		aList.add(new ClientDescription("aList2", new InetSocketAddress(11)));
+		a.setClientDescriptionList(aList);
+
+		ClientDescriptionResponse b = new ClientDescriptionResponse();
+		List bList = new ArrayList<ClientDescription>();
+		bList.add(new ClientDescription("bList1", new InetSocketAddress(12)));
+		bList.add(new ClientDescription("bList1", new InetSocketAddress(13)));
+		b.setClientDescriptionList(bList);
+
+		ClientDescriptionUtils utils = new ClientDescriptionUtils();
+
+		aList = utils.merge(aList, bList);
+
+		System.out.println("============a:");
+		System.out.println(a);
+		System.out.println("============b:");
+		System.out.println(b);
 
 	}
 }

@@ -32,7 +32,7 @@ public class MessageQueueHandler extends Thread {
 				} else {
 					akibotNode.getComponent().onMessageReceived(message);
 				}
-				
+
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
