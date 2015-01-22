@@ -5,33 +5,42 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.akibot.engine2.component.ClientDescription;
 import com.akibot.engine2.component.Component;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 
 public class AkibotNode extends Thread {
 	private DatagramSocket socket;
-	private DatagramSocket parentSocket;
 	private BlockingQueue<Message> messageQueue;
 	private IncommingMessageHandler incommingMessageHandler;
 	private MessageQueueHandler messageQueueHandler;
 	private Component component;
+	private InetSocketAddress myInetSocketAddress;
+	private InetSocketAddress parentSocketAddress;
+
+	public InetSocketAddress getMyInetSocketAddress() {
+		return myInetSocketAddress;
+	}
+
+	public InetSocketAddress getParentSocketAddress() {
+		return parentSocketAddress;
+	}
 
 	public AkibotNode(Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
 		this.setDaemon(true);
 		this.component = component;
 		this.component.setAkibotNode(this);
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
-		this.parentSocket = new DatagramSocket();
-		if (parentSocketAddress != null) {
-			this.parentSocket.connect(parentSocketAddress);
-		}
+		this.myInetSocketAddress = new InetSocketAddress(socket.getInetAddress(), socket.getLocalPort());
+		this.parentSocketAddress = parentSocketAddress;
 		this.messageQueue = new LinkedBlockingQueue<Message>();
 		this.incommingMessageHandler = new IncommingMessageHandler(socket, messageQueue);
 		this.messageQueueHandler = new MessageQueueHandler(this, messageQueue);
@@ -60,20 +69,19 @@ public class AkibotNode extends Thread {
 		return baos.toByteArray();
 	}
 
-	public void send(DatagramSocket socket, Message message) throws FailedToSendMessageException {
+	public void send(InetSocketAddress inetSocketAddress, Message message) throws FailedToSendMessageException {
 		try {
 			byte[] buf;
 			buf = messageToByte(message);
-			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length);
+			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, inetSocketAddress);
 			socket.send(datagramPacket);
 		} catch (IOException e) {
 			throw new FailedToSendMessageException();
 		}
 	}
 
-	public void send(Message message) throws FailedToSendMessageException {
-		// TODO: Identify recipients
-		send(socket, message);
+	public void send(ClientDescription clientDescription, Message message) throws FailedToSendMessageException {
+		send(clientDescription.getAddress(), message);
 	}
 
 	public Component getComponent() {
