@@ -11,7 +11,7 @@ public class ObjectClient {
 		String host = "raspberrypi";
 		Utils utils = new Utils();
 
-		DatagramSocket socket = new DatagramSocket();
+		DatagramSocket socket = new DatagramSocket(4001);
 		byte[] buf = new byte[1000];
 		DatagramPacket inDatagramPacket = new DatagramPacket(buf, buf.length);
 
