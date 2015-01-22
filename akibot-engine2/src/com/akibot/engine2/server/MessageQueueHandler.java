@@ -3,12 +3,14 @@ package com.akibot.engine2.server;
 import java.net.DatagramPacket;
 import java.util.concurrent.BlockingQueue;
 
+import com.akibot.engine2.component.Component;
 import com.akibot.engine2.message.Message;
 
 public class MessageQueueHandler extends Thread {
 
 	private BlockingQueue<Message> messageQueue;
 	private AkibotNode akibotNode;
+	private Component component;
 
 	public MessageQueueHandler(AkibotNode akibotNode, BlockingQueue<Message> messageQueue) {
 		this.akibotNode = akibotNode;
@@ -23,8 +25,7 @@ public class MessageQueueHandler extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				Message message = messageQueue.take();
-				akibotNode.onMessageReceived(message);
-
+				akibotNode.getComponent().onMessageReceived(message);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
