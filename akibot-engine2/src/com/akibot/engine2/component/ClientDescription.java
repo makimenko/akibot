@@ -1,4 +1,4 @@
-package com.akibot.engine2.server;
+package com.akibot.engine2.component;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;

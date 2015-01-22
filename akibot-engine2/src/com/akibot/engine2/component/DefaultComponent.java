@@ -5,7 +5,6 @@ import java.util.List;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.server.AkibotNode;
-import com.akibot.engine2.server.ClientDescription;
 
 public class DefaultComponent implements Component {
 	private AkibotNode akibotNode;
