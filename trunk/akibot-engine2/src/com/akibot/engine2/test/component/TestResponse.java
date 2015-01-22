@@ -1,6 +1,5 @@
 package com.akibot.engine2.test.component;
 
-import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
 
 public class TestResponse extends Response {

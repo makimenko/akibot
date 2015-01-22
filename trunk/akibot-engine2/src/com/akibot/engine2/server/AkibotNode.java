@@ -11,6 +11,8 @@ import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.akibot.engine2.component.Component;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 
 public class AkibotNode extends Thread {
@@ -19,9 +21,12 @@ public class AkibotNode extends Thread {
 	private BlockingQueue<Message> messageQueue;
 	private IncommingMessageHandler incommingMessageHandler;
 	private MessageQueueHandler messageQueueHandler;
+	private Component component;
 
-	public AkibotNode(Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+	public AkibotNode(Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
 		this.setDaemon(true);
+		this.component = component;
+		this.component.setAkibotNode(this);
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
 		this.parentSocket = new DatagramSocket();
 		if (parentSocketAddress != null) {
@@ -33,8 +38,17 @@ public class AkibotNode extends Thread {
 
 	}
 
+	public AkibotNode(Component component, int port) throws SocketException, UnknownHostException {
+		this(component, port, null);
+	}
+
+	public AkibotNode(Component component, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+		this(component, null, parentSocketAddress);
+	}
+
 	public void start() {
 		super.start();
+		component.start();
 		incommingMessageHandler.start();
 		messageQueueHandler.start();
 	}
@@ -47,19 +61,24 @@ public class AkibotNode extends Thread {
 		return baos.toByteArray();
 	}
 
-	protected void send(DatagramSocket socket, Message message) throws IOException {
-		byte[] buf = messageToByte(message);
-		DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length);
-		socket.send(datagramPacket);
+	public void send(DatagramSocket socket, Message message) throws FailedToSendMessageException {
+		try {
+			byte[] buf;
+			buf = messageToByte(message);
+			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length);
+			socket.send(datagramPacket);
+		} catch (IOException e) {
+			throw new FailedToSendMessageException();
+		}
 	}
 
-	protected void send(Message message) throws IOException {
+	public void send(Message message) throws FailedToSendMessageException {
 		// TODO: Identify recipients
 		send(socket, message);
 	}
 
-	protected void onMessageReceived(Message message) {
-		// Do some action
+	public Component getComponent() {
+		return component;
 	}
 
 }
