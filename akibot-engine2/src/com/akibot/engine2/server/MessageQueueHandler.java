@@ -5,6 +5,8 @@ import java.util.concurrent.BlockingQueue;
 
 import com.akibot.engine2.component.Component;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.SystemRequest;
+import com.akibot.engine2.message.SystemResponse;
 
 public class MessageQueueHandler extends Thread {
 
@@ -25,8 +27,16 @@ public class MessageQueueHandler extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				Message message = messageQueue.take();
-				akibotNode.getComponent().onMessageReceived(message);
+				if (message instanceof SystemRequest || message instanceof SystemResponse) {
+					akibotNode.getComponent().onSystemMessageReceived(message);
+				} else {
+					akibotNode.getComponent().onMessageReceived(message);
+				}
+				
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

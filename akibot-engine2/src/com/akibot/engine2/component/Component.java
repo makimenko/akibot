@@ -8,7 +8,9 @@ public interface Component {
 
 	public void start();
 
-	public void onMessageReceived(Message message);
+	public void onSystemMessageReceived(Message message) throws Exception;
+	
+	public void onMessageReceived(Message message) throws Exception;
 
 	public void sendMessage(Message message) throws FailedToSendMessageException;
 
