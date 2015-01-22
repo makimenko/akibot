@@ -35,7 +35,6 @@ public class AkibotNode extends Thread {
 		this.messageQueue = new LinkedBlockingQueue<Message>();
 		this.incommingMessageHandler = new IncommingMessageHandler(socket, messageQueue);
 		this.messageQueueHandler = new MessageQueueHandler(this, messageQueue);
-
 	}
 
 	public AkibotNode(Component component, int port) throws SocketException, UnknownHostException {
