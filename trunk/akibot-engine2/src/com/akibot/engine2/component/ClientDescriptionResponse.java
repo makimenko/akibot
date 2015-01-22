@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.message.SystemResponse;
-import com.akibot.engine2.server.ClientDescription;
 
 public class ClientDescriptionResponse extends SystemResponse {
 

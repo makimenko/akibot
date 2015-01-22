@@ -6,10 +6,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.akibot.engine2.component.ClientDescription;
 import com.akibot.engine2.component.ClientDescriptionResponse;
 import com.akibot.engine2.component.DefaultServerComponent;
 import com.akibot.engine2.server.AkibotNode;
-import com.akibot.engine2.server.ClientDescription;
 import com.akibot.engine2.test.component.TestComponent;
 
 public class Launcher {
