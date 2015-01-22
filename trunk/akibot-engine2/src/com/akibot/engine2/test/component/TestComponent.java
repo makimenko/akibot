@@ -5,6 +5,10 @@ import com.akibot.engine2.message.Message;
 
 public class TestComponent extends DefaultComponent {
 
+	public TestComponent(String name) {
+		super(name);
+	}
+
 	@Override
 	public void onMessageReceived(Message message) {
 		if (message instanceof TestRequest) {
