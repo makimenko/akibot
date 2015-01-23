@@ -22,20 +22,14 @@ public class Launcher {
 		int serverPort = 2001;
 		InetSocketAddress inetSocketAddress = new InetSocketAddress(serverHost, serverPort);
 
-		System.out.print("Strating Server...");
 		AkibotNode serverNode = new AkibotNode(new DefaultComponent("akibot.server"), serverPort);
 		serverNode.start();
-		System.out.println("started.");
 
-		System.out.print("Starting Client A...");
 		AkibotNode clientNodeA = new AkibotNode(new TestComponent("akibot.clientA"), inetSocketAddress);
 		clientNodeA.start();
-		System.out.println("started.");
 
-		System.out.print("Starting Client B...");
 		AkibotNode clientNodeB = new AkibotNode(new TestComponent("akibot.clientB"), inetSocketAddress);
 		clientNodeB.start();
-		System.out.println("started.");
 
 		TestRequest testRequest = new TestRequest();
 		testRequest.setX(1);

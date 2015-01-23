@@ -31,10 +31,14 @@ public class ClientDescriptionUtils {
 	public static List<ClientDescription> merge(ClientDescription clientDescription, List<ClientDescription> mergeTo) {
 		if (clientDescription == null) {
 			return mergeTo;
-		} else if (mergeTo == null || mergeTo.size() == 0 || existsClient(mergeTo, clientDescription)) {
+		} else if (mergeTo == null) {
+			mergeTo = new ArrayList<ClientDescription>();
+			mergeTo.add(clientDescription);
+			return mergeTo;
+		} else if (mergeTo.size() == 0 || !existsClient(mergeTo, clientDescription)) {
+			mergeTo.add(clientDescription);
 			return mergeTo;
 		} else {
-			mergeTo.add(clientDescription);
 			return mergeTo;
 		}
 	}

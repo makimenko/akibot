@@ -1,15 +1,19 @@
 package com.akibot.engine2.component;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.server.AkibotNode;
 
 public class DefaultComponent implements Component {
+	private static final Logger log = LogManager.getLogger(AkibotNode.class.getName());
+
 	private AkibotNode akibotNode;
 	private ClientDescription myClientDescription;
 	private List<ClientDescription> clientDescriptionList;
@@ -17,14 +21,17 @@ public class DefaultComponent implements Component {
 
 	public DefaultComponent(String name) {
 		this.name = name;
+		clientDescriptionList = new ArrayList<ClientDescription>();
+		log.debug(name + ": component initialized.");
 	}
 
 	@Override
 	public void start() {
-
+		refreshClientDescriptionList();
 	}
 
 	public void refreshClientDescriptionList() {
+		log.trace(name + ": refreshClientDescriptionList");
 		try {
 			ClientDescriptionRequest clientDescriptionrequest = new ClientDescriptionRequest();
 			clientDescriptionrequest.setClientDescription(myClientDescription);
@@ -37,6 +44,7 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void onSystemMessageReceived(Message message) throws Exception {
+		log.trace(name + ": onSystemMessageReceived: " + message);
 		if (message instanceof ClientDescriptionRequest) {
 			ClientDescriptionRequest request = (ClientDescriptionRequest) message;
 			clientDescriptionList = ClientDescriptionUtils.merge(request.getClientDescription(), clientDescriptionList);
@@ -46,6 +54,7 @@ public class DefaultComponent implements Component {
 		} else if (message instanceof ClientDescriptionResponse) {
 			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
 			clientDescriptionList = ClientDescriptionUtils.merge(response.getClientDescriptionList(), clientDescriptionList);
+			broadcastMessage(response);
 		}
 	}
 
@@ -56,12 +65,17 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void broadcastMessage(Message message) throws FailedToSendMessageException {
-		Iterator i = clientDescriptionList.iterator();
-		while (i.hasNext()) {
-			ClientDescription client = (ClientDescription) i.next();
-			if (ClientDescriptionUtils.isSystemMessage(message) || ClientDescriptionUtils.isInterestedInMessage(client, message)) {
-				akibotNode.send(client, message);
+		if (clientDescriptionList != null && clientDescriptionList.size() > 0) {
+			log.trace(name + ": broadcastMessage: " + message);
+			Iterator<ClientDescription> i = clientDescriptionList.iterator();
+			while (i.hasNext()) {
+				ClientDescription client = (ClientDescription) i.next();
+				if (ClientDescriptionUtils.isSystemMessage(message) || ClientDescriptionUtils.isInterestedInMessage(client, message)) {
+					akibotNode.send(client, message);
+				}
 			}
+		} else {
+			log.trace(name + ": broadcastMessage: Skip broadcasting. No Clients!");
 		}
 	}
 
@@ -74,6 +88,8 @@ public class DefaultComponent implements Component {
 			ClientDescription parentClientDescription = new ClientDescription(null, akibotNode.getParentSocketAddress());
 			clientDescriptionList.add(parentClientDescription);
 		}
+		
+		log.debug(this+": "+myClientDescription);
 	}
 
 	@Override
@@ -81,4 +97,13 @@ public class DefaultComponent implements Component {
 		sendMessage(clientDescription, message);
 	}
 
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
