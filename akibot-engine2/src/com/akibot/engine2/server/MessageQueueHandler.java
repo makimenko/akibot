@@ -1,9 +1,7 @@
 package com.akibot.engine2.server;
 
-import java.net.DatagramPacket;
 import java.util.concurrent.BlockingQueue;
 
-import com.akibot.engine2.component.Component;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
@@ -12,7 +10,6 @@ public class MessageQueueHandler extends Thread {
 
 	private BlockingQueue<Message> messageQueue;
 	private AkibotNode akibotNode;
-	private Component component;
 
 	public MessageQueueHandler(AkibotNode akibotNode, BlockingQueue<Message> messageQueue) {
 		this.akibotNode = akibotNode;
@@ -21,8 +18,6 @@ public class MessageQueueHandler extends Thread {
 	}
 
 	public void run() {
-		byte[] buf = new byte[1000];
-		DatagramPacket inDatagramPacket = new DatagramPacket(buf, buf.length);
 
 		while (!this.isInterrupted()) {
 			try {

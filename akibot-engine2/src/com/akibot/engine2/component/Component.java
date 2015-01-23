@@ -18,4 +18,7 @@ public interface Component {
 
 	public void setAkibotNode(AkibotNode akibotNode);
 
+	public String getName();
+	
+	
 }

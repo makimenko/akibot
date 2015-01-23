@@ -4,6 +4,10 @@ import com.akibot.engine2.message.SystemRequest;
 
 public class ClientDescriptionRequest extends SystemRequest {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ClientDescription clientDescription;
 
 	public ClientDescription getClientDescription() {

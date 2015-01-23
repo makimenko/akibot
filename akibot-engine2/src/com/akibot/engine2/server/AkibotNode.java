@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.component.ClientDescription;
 import com.akibot.engine2.component.Component;
@@ -18,6 +20,8 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 
 public class AkibotNode extends Thread {
+	private static final Logger log = LogManager.getLogger(AkibotNode.class.getName());
+
 	private DatagramSocket socket;
 	private BlockingQueue<Message> messageQueue;
 	private IncommingMessageHandler incommingMessageHandler;
@@ -35,15 +39,17 @@ public class AkibotNode extends Thread {
 	}
 
 	public AkibotNode(Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+		log.debug("Initializing...");
 		this.setDaemon(true);
 		this.component = component;
-		this.component.setAkibotNode(this);
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
 		this.myInetSocketAddress = new InetSocketAddress(socket.getInetAddress(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
 		this.messageQueue = new LinkedBlockingQueue<Message>();
 		this.incommingMessageHandler = new IncommingMessageHandler(socket, messageQueue);
 		this.messageQueueHandler = new MessageQueueHandler(this, messageQueue);
+		this.component.setAkibotNode(this);
+		log.debug(component + ": initialized.");
 	}
 
 	public AkibotNode(Component component, int port) throws SocketException, UnknownHostException {
@@ -55,10 +61,12 @@ public class AkibotNode extends Thread {
 	}
 
 	public void start() {
+		log.debug(component + ": Starting...");
 		super.start();
 		component.start();
 		incommingMessageHandler.start();
 		messageQueueHandler.start();
+		log.debug(component + ": started.");
 	}
 
 	private byte[] messageToByte(Message message) throws IOException {
@@ -70,12 +78,15 @@ public class AkibotNode extends Thread {
 	}
 
 	public void send(InetSocketAddress inetSocketAddress, Message message) throws FailedToSendMessageException {
+		log.trace(component + ": send: to=(" + inetSocketAddress.getHostString() + ":" + inetSocketAddress.getPort() + "): " + message);
 		try {
+			message.setFrom(component.toString());
 			byte[] buf;
 			buf = messageToByte(message);
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, inetSocketAddress);
 			socket.send(datagramPacket);
 		} catch (IOException e) {
+			log.error(e.getMessage());
 			throw new FailedToSendMessageException();
 		}
 	}
