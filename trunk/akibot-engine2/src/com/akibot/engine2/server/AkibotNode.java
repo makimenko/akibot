@@ -42,7 +42,8 @@ public class AkibotNode extends Thread {
 		this.setDaemon(true);
 		this.component = component;
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
-		this.myInetSocketAddress =  new InetSocketAddress(socket.getLocalAddress().getLocalHost(), socket.getLocalPort());
+		// this.socket.setTrafficClass(0x04);
+		this.myInetSocketAddress = new InetSocketAddress(socket.getLocalAddress().getLocalHost(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
 		this.messageQueue = new LinkedBlockingQueue<Message>();
 		this.incommingMessageHandler = new IncommingMessageHandler(socket, messageQueue);

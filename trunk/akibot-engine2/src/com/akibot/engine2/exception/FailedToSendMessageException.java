@@ -1,8 +1,5 @@
 package com.akibot.engine2.exception;
 
-import java.io.IOException;
-
-
 public class FailedToSendMessageException extends Exception {
 	/**
 	 * 

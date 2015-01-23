@@ -1,6 +1,5 @@
 package com.akibot.engine2.component;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.akibot.engine2.message.SystemResponse;

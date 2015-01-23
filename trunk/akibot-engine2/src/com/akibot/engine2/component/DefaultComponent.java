@@ -44,7 +44,7 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void onSystemMessageReceived(Message message) throws Exception {
-		log.trace(name + ": onSystemMessageReceived: " + message);
+		log.trace(name + ": onSystemMessageReceived (from=" + message.getFrom() + "): " + message);
 		if (message instanceof ClientDescriptionRequest) {
 			ClientDescriptionRequest request = (ClientDescriptionRequest) message;
 			clientDescriptionList = ClientDescriptionUtils.merge(request.getClientDescription(), clientDescriptionList);
@@ -88,8 +88,8 @@ public class DefaultComponent implements Component {
 			ClientDescription parentClientDescription = new ClientDescription(null, akibotNode.getParentSocketAddress());
 			clientDescriptionList.add(parentClientDescription);
 		}
-		
-		log.debug(this+": "+myClientDescription);
+
+		log.debug(this + ": " + myClientDescription);
 	}
 
 	@Override
