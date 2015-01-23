@@ -21,7 +21,6 @@ import com.akibot.engine2.message.Message;
 
 public class AkibotNode extends Thread {
 	private static final Logger log = LogManager.getLogger(AkibotNode.class.getName());
-
 	private DatagramSocket socket;
 	private BlockingQueue<Message> messageQueue;
 	private IncommingMessageHandler incommingMessageHandler;
@@ -43,7 +42,7 @@ public class AkibotNode extends Thread {
 		this.setDaemon(true);
 		this.component = component;
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
-		this.myInetSocketAddress = new InetSocketAddress(socket.getInetAddress(), socket.getLocalPort());
+		this.myInetSocketAddress =  new InetSocketAddress(socket.getLocalAddress().getLocalHost(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
 		this.messageQueue = new LinkedBlockingQueue<Message>();
 		this.incommingMessageHandler = new IncommingMessageHandler(socket, messageQueue);
