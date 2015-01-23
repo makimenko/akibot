@@ -33,9 +33,9 @@ public class DefaultComponent implements Component {
 	public void refreshClientDescriptionList() {
 		log.trace(name + ": refreshClientDescriptionList");
 		try {
-			ClientDescriptionRequest clientDescriptionrequest = new ClientDescriptionRequest();
-			clientDescriptionrequest.setClientDescription(myClientDescription);
-			broadcastMessage(clientDescriptionrequest);
+			ClientDescriptionRequest clientDescriptionRequest = new ClientDescriptionRequest();
+			clientDescriptionRequest.setClientDescription(myClientDescription);
+			broadcastMessage(clientDescriptionRequest);
 		} catch (FailedToSendMessageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public class DefaultComponent implements Component {
 		} else if (message instanceof ClientDescriptionResponse) {
 			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
 			clientDescriptionList = ClientDescriptionUtils.merge(response.getClientDescriptionList(), clientDescriptionList);
-			broadcastMessage(response);
+			// broadcastMessage(response);
 		}
 	}
 
@@ -106,4 +106,25 @@ public class DefaultComponent implements Component {
 	public String toString() {
 		return name;
 	}
+
+	public ClientDescription getMyClientDescription() {
+		return myClientDescription;
+	}
+
+	public void setMyClientDescription(ClientDescription myClientDescription) {
+		this.myClientDescription = myClientDescription;
+	}
+
+	public AkibotNode getAkibotNode() {
+		return akibotNode;
+	}
+
+	public List<ClientDescription> getClientDescriptionList() {
+		return clientDescriptionList;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

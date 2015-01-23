@@ -1,6 +1,7 @@
 package com.akibot.engine2.test.component;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 
 public class TestComponent extends DefaultComponent {
@@ -10,11 +11,12 @@ public class TestComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void onMessageReceived(Message message) {
+	public void onMessageReceived(Message message) throws FailedToSendMessageException {
 		if (message instanceof TestRequest) {
 			TestRequest request = (TestRequest) message;
 			TestResponse response = new TestResponse();
 			response.setResult(request.getX() + 1);
+			broadcastMessage(response);
 		}
 	}
 
