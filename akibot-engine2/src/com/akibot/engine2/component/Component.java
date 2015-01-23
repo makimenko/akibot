@@ -13,12 +13,11 @@ public interface Component {
 	public void onMessageReceived(Message message) throws Exception;
 
 	public void sendMessage(ClientDescription clientDescription, Message message) throws FailedToSendMessageException;
-	
+
 	public void broadcastMessage(Message message) throws FailedToSendMessageException;
 
 	public void setAkibotNode(AkibotNode akibotNode);
 
 	public String getName();
-	
-	
+
 }
