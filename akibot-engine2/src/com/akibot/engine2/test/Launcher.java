@@ -12,7 +12,13 @@ import com.akibot.engine2.test.component.TestRequest;
 
 public class Launcher {
 
-	public static void main(String[] args) throws SocketException, UnknownHostException, FailedToSendMessageException {
+	public static void main(String[] args) throws SocketException, UnknownHostException, FailedToSendMessageException, InterruptedException {
+
+		Launcher launcher = new Launcher();
+		launcher.start();
+	}
+
+	public void start() throws SocketException, UnknownHostException, FailedToSendMessageException, InterruptedException {
 		String serverHost = "dm-PC";
 		int serverPort = 2001;
 		InetSocketAddress inetSocketAddress = new InetSocketAddress(serverHost, serverPort);
@@ -21,13 +27,25 @@ public class Launcher {
 		serverNode.start();
 
 		AkibotNode clientNodeA = new AkibotNode(new TestComponent("akibot.clientA"), inetSocketAddress);
+		// clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new
+		// TestResponse());
 		clientNodeA.start();
 
 		AkibotNode clientNodeB = new AkibotNode(new TestComponent("akibot.clientB"), inetSocketAddress);
+		// clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new
+		// TestRequest());
 		clientNodeB.start();
+
+		Thread.sleep(1000);
+		System.out.println("======================");
 
 		TestRequest testRequest = new TestRequest();
 		testRequest.setX(1);
+		clientNodeA.getComponent().broadcastMessage(testRequest);
+
+		synchronized (this) {
+			this.wait();
+		}
 
 	}
 
