@@ -2,12 +2,12 @@
 <Configuration>
   <Appenders>
     <Console name="STDOUT" target="SYSTEM_OUT">
-      <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"/>
+      <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
     </Console>
   </Appenders>
   <Loggers>
     <Logger name="org.apache.log4j.xml" level="info"/>
-    <Root level="info">
+    <Root level="trace">
       <AppenderRef ref="STDOUT"/>
     </Root>
   </Loggers>
