@@ -69,7 +69,7 @@ public class ClientDescriptionUtils {
 	public static boolean isInterestedInMessage(ClientDescription clientDescription, Message message) {
 		ArrayList<Message> topicList = clientDescription.getTopicList();
 		if (topicList == null || topicList.size() == 0) {
-			return true;
+			return false;
 		} else {
 			Iterator<Message> i = topicList.iterator();
 			while (i.hasNext()) {
