@@ -9,6 +9,7 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.server.AkibotNode;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
+import com.akibot.engine2.test.component.TestResponse;
 
 public class Launcher {
 
@@ -27,13 +28,11 @@ public class Launcher {
 		serverNode.start();
 
 		AkibotNode clientNodeA = new AkibotNode(new TestComponent("akibot.clientA"), inetSocketAddress);
-		// clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new
-		// TestResponse());
+		clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new TestResponse());
 		clientNodeA.start();
 
 		AkibotNode clientNodeB = new AkibotNode(new TestComponent("akibot.clientB"), inetSocketAddress);
-		// clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new
-		// TestRequest());
+		clientNodeB.getComponent().getMyClientDescription().getTopicList().add(new TestRequest());
 		clientNodeB.start();
 
 		Thread.sleep(1000);
@@ -42,6 +41,7 @@ public class Launcher {
 		TestRequest testRequest = new TestRequest();
 		testRequest.setX(1);
 		clientNodeA.getComponent().broadcastMessage(testRequest);
+		System.out.println("size="+clientNodeA.getComponent().getMyClientDescription().getTopicList().size());
 
 		synchronized (this) {
 			this.wait();

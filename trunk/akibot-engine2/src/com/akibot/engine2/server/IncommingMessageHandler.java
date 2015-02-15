@@ -7,10 +7,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.akibot.engine2.message.Message;
 
 public class IncommingMessageHandler extends Thread {
-
+	private static final Logger log = LogManager.getLogger(IncommingMessageHandler.class.getName());
 	private DatagramSocket socket;
 	private BlockingQueue<Message> messageQueue;
 
@@ -31,14 +34,11 @@ public class IncommingMessageHandler extends Thread {
 				messageQueue.put(message);
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(e.getMessage());
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(e.getMessage());
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(e.getMessage());
 			}
 		}
 	}
