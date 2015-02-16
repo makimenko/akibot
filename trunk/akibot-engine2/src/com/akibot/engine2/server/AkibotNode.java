@@ -8,6 +8,8 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -97,6 +99,18 @@ public class AkibotNode extends Thread {
 
 	public Component getComponent() {
 		return component;
+	}
+	
+	public String printClients() {
+		StringBuffer sb = new StringBuffer();
+		List list = component.getClientDescriptionList();
+		Iterator i= list.iterator();
+		while (i.hasNext())	{
+			ClientDescription client = (ClientDescription) i.next();
+			sb.append(client);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 
 }
