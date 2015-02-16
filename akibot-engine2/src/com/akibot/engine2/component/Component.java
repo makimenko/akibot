@@ -1,5 +1,7 @@
 package com.akibot.engine2.component;
 
+import java.util.List;
+
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.server.AkibotNode;
@@ -21,5 +23,7 @@ public interface Component {
 	public String getName();
 
 	public ClientDescription getMyClientDescription();
-
+	
+	public List<ClientDescription> getClientDescriptionList();
+	
 }

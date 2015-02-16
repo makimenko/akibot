@@ -23,16 +23,7 @@ public class ClientDescriptionResponse extends SystemResponse {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-
-		sb.append("ClientDescriptionResponse [" + (clientDescriptionList == null ? 0 : clientDescriptionList.size()) + "]");
-		// sb.append("\n");
-		/*
-		 * Iterator<ClientDescription> i = clientDescriptionList.iterator();
-		 * while (i.hasNext()) { ClientDescription descr = (ClientDescription)
-		 * i.next(); sb.append(descr); sb.append("\n"); }
-		 */
-		return sb.toString();
+		return "ClientDescriptionResponse [" + (clientDescriptionList == null ? 0 : clientDescriptionList.size()) + "]";
 
 	}
 

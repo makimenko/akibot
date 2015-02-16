@@ -60,9 +60,8 @@ public class ClientDescription implements Serializable {
 			sb.append(":");
 			sb.append(address.getPort());
 		}
-
+		sb.append(": ");
 		if (topicList != null || topicList.size() > 0) {
-		} else {
 			Iterator<Message> i = topicList.iterator();
 			while (i.hasNext()) {
 				Message msg = (Message) i.next();
@@ -71,6 +70,8 @@ public class ClientDescription implements Serializable {
 					sb.append(", ");
 				}
 			}
+		} else {
+			sb.append(" (no topics)");
 		}
 		return sb.toString();
 	}
