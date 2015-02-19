@@ -32,7 +32,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
-          <commandLine>-lwiringPi</commandLine>
+          <commandLine>-lwiringPi -lpthread</commandLine>
         </ccTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/akibot-cpp-sandbox</output>

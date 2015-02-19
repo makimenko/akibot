@@ -43,8 +43,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-lwiringPi
-CXXFLAGS=-lwiringPi
+CCFLAGS=-lwiringPi -lpthread
+CXXFLAGS=-lwiringPi -lpthread
 
 # Fortran Compiler Flags
 FFLAGS=
