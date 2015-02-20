@@ -39,19 +39,14 @@ public class Launcher {
 		clientNodeB.start();
 
 		Thread.sleep(1000);
-		System.out.println("====================== serverNode:");
-		System.out.println(serverNode.printClients());
-
-		System.out.println("====================== clientNodeA:");
-		System.out.println(clientNodeA.printClients());
-
-		System.out.println("====================== clientNodeB:");
-		System.out.println(clientNodeB.printClients());
 
 		TestRequest testRequest = new TestRequest();
 		testRequest.setX(1);
-		clientNodeA.getComponent().broadcastMessage(testRequest);
-		// System.out.println("size="+clientNodeA.getComponent().getMyClientDescription());
+		// clientNodeA.getComponent().broadcastMessage(testRequest);
+
+		TestResponse testResponse = (TestResponse) clientNodeA.getComponent().syncRequest(testRequest, 1000);
+
+		System.out.println("result = " + testResponse.getResult());
 
 		synchronized (this) {
 			this.wait();

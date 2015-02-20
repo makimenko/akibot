@@ -10,28 +10,43 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.engine2.component.Component;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Response;
 
 public class IncommingMessageHandler extends Thread {
 	private static final Logger log = LogManager.getLogger(IncommingMessageHandler.class.getName());
 	private DatagramSocket socket;
 	private BlockingQueue<Message> messageQueue;
+	private Component component;
 
-	public IncommingMessageHandler(DatagramSocket socket, BlockingQueue<Message> messageQueue) {
+	public IncommingMessageHandler(Component component, DatagramSocket socket, BlockingQueue<Message> messageQueue) {
+		this.component = component;
 		this.socket = socket;
 		this.messageQueue = messageQueue;
 		this.setDaemon(true);
 	}
 
 	public void run() {
-		byte[] buf = new byte[10000];
+		byte[] buf = new byte[10000]; // TODO: ? is it enough?
 		DatagramPacket inDatagramPacket = new DatagramPacket(buf, buf.length);
 
 		while (!this.isInterrupted()) {
 			try {
 				socket.receive(inDatagramPacket);
 				Message message = byteToMessage(inDatagramPacket.getData());
-				messageQueue.put(message);
+
+				if (message instanceof Response && component.getSyncId() != null && ((Response) message).getSyncId() != null
+						&& ((Response) message).getSyncId().equals(component.getSyncId())) {
+					log.trace(component + ": Sync Message Received: " + message + " (" + ((Response) message).getSyncId() + ")");
+					component.setSyncResponse((Response) message);
+					synchronized (component.getSyncId()) {
+						component.getSyncId().notify();
+					}
+				} else {
+					messageQueue.put(message);
+				}
+
 			} catch (IOException e) {
 				log.catching(e);
 			} catch (ClassNotFoundException e) {

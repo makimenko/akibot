@@ -3,21 +3,39 @@ package com.akibot.engine2.component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Request;
+import com.akibot.engine2.message.Response;
 import com.akibot.engine2.server.AkibotNode;
 
 public class DefaultComponent implements Component {
-	private static final Logger log = LogManager.getLogger(AkibotNode.class.getName());
+	private static final Logger log = LogManager.getLogger(DefaultComponent.class.getName());
 
 	private AkibotNode akibotNode;
 	private ClientDescription myClientDescription;
 	private List<ClientDescription> clientDescriptionList;
 	private String name;
+
+	private String syncId;
+	private Response syncResponse;
+
+	public String getSyncId() {
+		return syncId;
+	}
+
+	public void setSyncResponse(Response syncResponse) {
+		this.syncResponse = syncResponse;
+	}
+
+	public Response getSyncResponse() {
+		return syncResponse;
+	}
 
 	public DefaultComponent(String name) {
 		this.name = name;
@@ -76,6 +94,37 @@ public class DefaultComponent implements Component {
 			}
 		} else {
 			log.trace(name + ": broadcastMessage: Skip broadcasting. No Clients!");
+		}
+	}
+
+	public Response syncRequest(Request request, int timeout) throws FailedToSendMessageException {
+		Request newRequest;
+		try {
+			newRequest = (Request) request.clone();
+
+			syncResponse = null;
+
+			syncId = UUID.randomUUID().toString();
+			newRequest.setFrom(this.getName());
+			newRequest.setSyncId(syncId);
+
+			log.trace("Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
+			broadcastMessage(newRequest);
+
+			synchronized (this.syncId) {
+				this.syncId.wait(timeout);
+			}
+
+			if (syncResponse == null) {
+				throw new Exception("Timeout occured while waiting sync response");
+			} else {
+				log.trace("Sync messasge received: " + syncResponse.getSyncId() + ": " + syncResponse);
+			}
+			return syncResponse;
+
+		} catch (Exception e) {
+			log.catching(e);
+			throw new FailedToSendMessageException();
 		}
 	}
 
