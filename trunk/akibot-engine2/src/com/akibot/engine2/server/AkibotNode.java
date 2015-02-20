@@ -100,12 +100,12 @@ public class AkibotNode extends Thread {
 	public Component getComponent() {
 		return component;
 	}
-	
+
 	public String printClients() {
 		StringBuffer sb = new StringBuffer();
 		List list = component.getClientDescriptionList();
-		Iterator i= list.iterator();
-		while (i.hasNext())	{
+		Iterator i = list.iterator();
+		while (i.hasNext()) {
 			ClientDescription client = (ClientDescription) i.next();
 			sb.append(client);
 			sb.append("\n");

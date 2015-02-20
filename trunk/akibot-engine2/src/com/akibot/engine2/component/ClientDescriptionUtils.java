@@ -5,13 +5,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
+import com.akibot.engine2.server.AkibotNode;
 
 public class ClientDescriptionUtils {
+	private static final Logger log = LogManager.getLogger(ClientDescriptionUtils.class.getName());
 
-	public static List<ClientDescription> merge(List<ClientDescription> mergeFrom, List<ClientDescription> mergeTo) {
+	public static List<ClientDescription> merge(ClientDescription myClientDescription, List<ClientDescription> mergeFrom,
+			List<ClientDescription> mergeTo) {
+		log.trace("Merge clients (" + myClientDescription.getName() + "): " + mergeFrom + " -> " + mergeTo);
 		if (mergeFrom == null || mergeFrom.size() == 0) {
 			return mergeTo;
 		} else if (mergeTo == null || mergeTo.size() == 0) {
@@ -20,7 +27,8 @@ public class ClientDescriptionUtils {
 			Iterator<ClientDescription> i = mergeFrom.iterator();
 			while (i.hasNext()) {
 				ClientDescription descr = (ClientDescription) i.next();
-				if (!existsClient(mergeTo, descr)) {
+				if (!equalName(myClientDescription, descr) && !existsClient(mergeTo, descr)) {
+					log.trace("Add client: " + descr);
 					mergeTo.add(descr);
 				}
 			}
@@ -48,7 +56,7 @@ public class ClientDescriptionUtils {
 		Iterator<ClientDescription> i = list.iterator();
 		while (i.hasNext()) {
 			ClientDescription descr = (ClientDescription) i.next();
-			if (equalClients(descr, clientDescription)) {
+			if (equalAddress(descr, clientDescription)) {
 				exists = true;
 				break;
 			}
@@ -56,13 +64,21 @@ public class ClientDescriptionUtils {
 		return exists;
 	}
 
-	public static boolean equalClients(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
+	public static boolean equalAddress(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
 		if (clientDescriptionA == null || clientDescriptionB == null) {
 			return false;
 		} else {
 			InetSocketAddress a = clientDescriptionA.getAddress();
 			InetSocketAddress b = clientDescriptionB.getAddress();
 			return a.getHostString().equalsIgnoreCase(b.getHostString()) && a.getPort() == b.getPort();
+		}
+	}
+
+	public static boolean equalName(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
+		if (clientDescriptionA == null || clientDescriptionB == null) {
+			return false;
+		} else {
+			return clientDescriptionA.getName().equals(clientDescriptionB.getName());
 		}
 	}
 

@@ -23,7 +23,7 @@ public interface Component {
 	public String getName();
 
 	public ClientDescription getMyClientDescription();
-	
+
 	public List<ClientDescription> getClientDescriptionList();
-	
+
 }

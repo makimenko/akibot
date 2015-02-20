@@ -24,7 +24,7 @@ public class IncommingMessageHandler extends Thread {
 	}
 
 	public void run() {
-		byte[] buf = new byte[1000];
+		byte[] buf = new byte[10000];
 		DatagramPacket inDatagramPacket = new DatagramPacket(buf, buf.length);
 
 		while (!this.isInterrupted()) {
@@ -32,13 +32,12 @@ public class IncommingMessageHandler extends Thread {
 				socket.receive(inDatagramPacket);
 				Message message = byteToMessage(inDatagramPacket.getData());
 				messageQueue.put(message);
-
 			} catch (IOException e) {
-				log.warn(e.getMessage());
+				log.catching(e);
 			} catch (ClassNotFoundException e) {
-				log.warn(e.getMessage());
+				log.catching(e);
 			} catch (InterruptedException e) {
-				log.warn(e.getMessage());
+				log.catching(e);
 			}
 		}
 	}

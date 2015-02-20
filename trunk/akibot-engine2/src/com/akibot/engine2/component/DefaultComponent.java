@@ -19,7 +19,6 @@ public class DefaultComponent implements Component {
 	private List<ClientDescription> clientDescriptionList;
 	private String name;
 
-	
 	public DefaultComponent(String name) {
 		this.name = name;
 		clientDescriptionList = new ArrayList<ClientDescription>();
@@ -32,7 +31,7 @@ public class DefaultComponent implements Component {
 	}
 
 	public void refreshClientDescriptionList() {
-		log.trace(name + ": refreshClientDescriptionList: "+myClientDescription);
+		log.trace(name + ": refreshClientDescriptionList: " + myClientDescription);
 		try {
 			ClientDescriptionRequest clientDescriptionRequest = new ClientDescriptionRequest();
 			clientDescriptionRequest.setClientDescription(myClientDescription);
@@ -54,7 +53,7 @@ public class DefaultComponent implements Component {
 			broadcastMessage(response);
 		} else if (message instanceof ClientDescriptionResponse) {
 			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
-			clientDescriptionList = ClientDescriptionUtils.merge(response.getClientDescriptionList(), clientDescriptionList);
+			clientDescriptionList = ClientDescriptionUtils.merge(myClientDescription, response.getClientDescriptionList(), clientDescriptionList);
 			// broadcastMessage(response);
 		}
 	}
