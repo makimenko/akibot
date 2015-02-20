@@ -48,10 +48,10 @@ public class AkibotNode extends Thread {
 		this.myInetSocketAddress = new InetSocketAddress(socket.getLocalAddress().getLocalHost(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
 		this.messageQueue = new LinkedBlockingQueue<Message>();
-		this.incommingMessageHandler = new IncommingMessageHandler(socket, messageQueue);
+		this.incommingMessageHandler = new IncommingMessageHandler(component, socket, messageQueue);
 		this.messageQueueHandler = new MessageQueueHandler(this, messageQueue);
 		this.component.setAkibotNode(this);
-		log.debug(component + ": initialized.");
+		log.info(component + ": initialized.");
 	}
 
 	public AkibotNode(Component component, int port) throws SocketException, UnknownHostException {

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Request;
+import com.akibot.engine2.message.Response;
 import com.akibot.engine2.server.AkibotNode;
 
 public interface Component {
@@ -16,6 +18,8 @@ public interface Component {
 
 	public void sendMessage(ClientDescription clientDescription, Message message) throws FailedToSendMessageException;
 
+	public Response syncRequest(Request request, int timeout) throws FailedToSendMessageException;
+
 	public void broadcastMessage(Message message) throws FailedToSendMessageException;
 
 	public void setAkibotNode(AkibotNode akibotNode);
@@ -25,5 +29,11 @@ public interface Component {
 	public ClientDescription getMyClientDescription();
 
 	public List<ClientDescription> getClientDescriptionList();
+
+	public String getSyncId();
+
+	public void setSyncResponse(Response syncResponse);
+
+	public Response getSyncResponse();
 
 }
