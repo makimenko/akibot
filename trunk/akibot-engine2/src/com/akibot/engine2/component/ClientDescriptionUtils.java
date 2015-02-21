@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
-import com.akibot.engine2.server.AkibotNode;
 
 public class ClientDescriptionUtils {
 	private static final Logger log = LogManager.getLogger(ClientDescriptionUtils.class.getName());
