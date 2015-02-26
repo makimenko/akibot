@@ -3,7 +3,6 @@ package com.akibot.engine2.network;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.akibot.engine2.message.Message;
 
@@ -62,13 +61,9 @@ public class ClientDescription implements Serializable {
 		}
 		sb.append(": ");
 		if (topicList != null || topicList.size() > 0) {
-			Iterator<Message> i = topicList.iterator();
-			while (i.hasNext()) {
-				Message msg = (Message) i.next();
+			for (Message msg : topicList) {
 				sb.append(msg);
-				if (i.hasNext()) {
-					sb.append(", ");
-				}
+				sb.append(", ");
 			}
 		} else {
 			sb.append(" (no topics)");

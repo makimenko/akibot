@@ -8,8 +8,6 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,10 +100,7 @@ public class AkibotClient extends Thread {
 
 	public String printClients() {
 		StringBuffer sb = new StringBuffer();
-		List list = component.getClientDescriptionList();
-		Iterator i = list.iterator();
-		while (i.hasNext()) {
-			ClientDescription client = (ClientDescription) i.next();
+		for (ClientDescription client : component.getClientDescriptionList()) {
 			sb.append(client);
 			sb.append("\n");
 		}
