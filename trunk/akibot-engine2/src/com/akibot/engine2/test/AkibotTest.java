@@ -18,9 +18,9 @@ import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
 
 public class AkibotTest {
-	AkibotClient serverNode;
 	AkibotClient clientNodeA;
 	AkibotClient clientNodeB;
+	AkibotClient serverNode;
 
 	@Before
 	public void setUp() throws SocketException, UnknownHostException, InterruptedException {
@@ -33,11 +33,11 @@ public class AkibotTest {
 		serverNode.start();
 
 		clientNodeA = new AkibotClient(new TestComponent("akibot.clientA"), serverAddress);
-		clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new TestResponse());
+		clientNodeA.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientNodeA.start();
 
 		clientNodeB = new AkibotClient(new TestComponent("akibot.clientB"), serverAddress);
-		clientNodeB.getComponent().getMyClientDescription().getTopicList().add(new TestRequest());
+		clientNodeB.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientNodeB.start();
 
 		// Thread.sleep(1000);
@@ -55,11 +55,11 @@ public class AkibotTest {
 		TestResponse testResponse;
 
 		testRequest.setX(1);
-		testResponse = (TestResponse) clientNodeA.getComponent().syncRequest(testRequest, 1000);
+		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 2, (Integer) testResponse.getResult());
 
 		testRequest.setX(-1);
-		testResponse = (TestResponse) clientNodeA.getComponent().syncRequest(testRequest, 1000);
+		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
 	}
 

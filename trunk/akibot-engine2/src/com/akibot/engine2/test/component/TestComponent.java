@@ -22,7 +22,7 @@ public class TestComponent extends DefaultComponent {
 			TestResponse response = new TestResponse();
 			response.setResult(request.getX() + 1);
 			response.copySyncId(request);
-			broadcastMessage(response);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 	}
 
