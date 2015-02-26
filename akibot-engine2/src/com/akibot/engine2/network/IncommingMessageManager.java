@@ -10,18 +10,27 @@ import com.akibot.engine2.message.Message;
 
 public class IncommingMessageManager {
 	private static final Logger log = LogManager.getLogger(IncommingMessageManager.class.getName());
-	private BlockingQueue<Message> incomingMessageQueue;
-	private IncommingMessageReceiver incommingMessageReceiver;
 	private IncommingMessageExecutor incommingMessageExecutor;
+	private IncommingMessageReceiver incommingMessageReceiver;
+	private BlockingQueue<Message> queue;
 
 	public IncommingMessageManager(AkibotClient akibotClient) {
-		this.incomingMessageQueue = new LinkedBlockingQueue<Message>();
-		this.incommingMessageReceiver = new IncommingMessageReceiver(akibotClient.getComponent(), akibotClient.getSocket(), incomingMessageQueue);
-		this.incommingMessageExecutor = new IncommingMessageExecutor(akibotClient, incomingMessageQueue);
+		this.queue = new LinkedBlockingQueue<Message>();
+		this.incommingMessageReceiver = new IncommingMessageReceiver(akibotClient);
+		this.incommingMessageExecutor = new IncommingMessageExecutor(akibotClient, queue);
+	}
+
+	public BlockingQueue<Message> getQueue() {
+		return queue;
+	}
+
+	public void setQueue(BlockingQueue<Message> queue) {
+		this.queue = queue;
 	}
 
 	public void start() {
 		incommingMessageReceiver.start();
 		incommingMessageExecutor.start();
 	}
+
 }

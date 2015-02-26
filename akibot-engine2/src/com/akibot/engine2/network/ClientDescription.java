@@ -12,14 +12,18 @@ public class ClientDescription implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String name;
 	private InetSocketAddress address;
+	private String name;
 	private ArrayList<Message> topicList;
 
 	public ClientDescription(String name, InetSocketAddress address) {
 		setName(name);
 		setTopicList(new ArrayList<Message>());
 		setAddress(address);
+	}
+
+	public InetSocketAddress getAddress() {
+		return address;
 	}
 
 	public String getName() {
@@ -30,20 +34,16 @@ public class ClientDescription implements Serializable {
 		return topicList;
 	}
 
+	public void setAddress(InetSocketAddress address) {
+		this.address = address;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public void setTopicList(ArrayList<Message> topicList) {
 		this.topicList = topicList;
-	}
-
-	public InetSocketAddress getAddress() {
-		return address;
-	}
-
-	public void setAddress(InetSocketAddress address) {
-		this.address = address;
 	}
 
 	@Override

@@ -11,8 +11,8 @@ import com.akibot.engine2.message.SystemResponse;
 
 public class IncommingMessageExecutor extends Thread {
 	private static final Logger log = LogManager.getLogger(IncommingMessageExecutor.class.getName());
-	private BlockingQueue<Message> messageQueue;
 	private AkibotClient akibotClient;
+	private BlockingQueue<Message> messageQueue;
 
 	public IncommingMessageExecutor(AkibotClient akibotClient, BlockingQueue<Message> messageQueue) {
 		this.akibotClient = akibotClient;
@@ -26,7 +26,7 @@ public class IncommingMessageExecutor extends Thread {
 			try {
 				Message message = messageQueue.take();
 				if (message instanceof SystemRequest || message instanceof SystemResponse) {
-					akibotClient.getComponent().onSystemMessageReceived(message);
+					akibotClient.onSystemMessageReceived(message);
 				} else {
 					akibotClient.getComponent().onMessageReceived(message);
 				}

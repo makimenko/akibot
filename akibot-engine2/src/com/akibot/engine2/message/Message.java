@@ -13,6 +13,12 @@ public class Message implements Serializable, Cloneable {
 		return (Message) super.clone();
 	}
 
+	public void copySyncId(Message requestMessage) {
+		if (requestMessage != null && requestMessage.getSyncId() != null) {
+			this.syncId = requestMessage.getSyncId();
+		}
+	}
+
 	public String getFrom() {
 		return from;
 	}
@@ -35,11 +41,5 @@ public class Message implements Serializable, Cloneable {
 
 	public void setTo(String to) {
 		this.to = to;
-	}
-
-	public void copySyncId(Message requestMessage) {
-		if (requestMessage != null && requestMessage.getSyncId() != null) {
-			this.syncId = requestMessage.getSyncId();
-		}
 	}
 }

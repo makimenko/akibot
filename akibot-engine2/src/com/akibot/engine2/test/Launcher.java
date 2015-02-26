@@ -28,11 +28,11 @@ public class Launcher {
 		serverNode.start();
 
 		AkibotClient clientNodeA = new AkibotClient(new TestComponent("akibot.clientA"), serverAddress);
-		clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new TestResponse());
+		clientNodeA.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientNodeA.start();
 
 		AkibotClient clientNodeB = new AkibotClient(new TestComponent("akibot.clientB"), serverAddress);
-		clientNodeB.getComponent().getMyClientDescription().getTopicList().add(new TestRequest());
+		clientNodeB.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientNodeB.start();
 
 		Thread.sleep(1000);
@@ -41,11 +41,11 @@ public class Launcher {
 		testRequest.setX(1);
 		// clientNodeA.getComponent().broadcastMessage(testRequest);
 
-		TestResponse testResponse = (TestResponse) clientNodeA.getComponent().syncRequest(testRequest, 1000);
+		TestResponse testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		System.out.println("result = " + testResponse.getResult());
 
 		testRequest.setX(5);
-		testResponse = (TestResponse) clientNodeA.getComponent().syncRequest(testRequest, 1000);
+		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		System.out.println("result = " + testResponse.getResult());
 
 		System.out.println("clients = " + clientNodeB.printClients());
