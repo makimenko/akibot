@@ -46,7 +46,6 @@ public class IncommingMessageReceiver extends Thread {
 				} else {
 					messageQueue.put(message);
 				}
-
 			} catch (IOException e) {
 				log.catching(e);
 			} catch (ClassNotFoundException e) {

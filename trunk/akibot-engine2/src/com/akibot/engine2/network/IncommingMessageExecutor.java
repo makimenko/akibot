@@ -2,12 +2,15 @@ package com.akibot.engine2.network;
 
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
 
 public class IncommingMessageExecutor extends Thread {
-
+	private static final Logger log = LogManager.getLogger(IncommingMessageExecutor.class.getName());
 	private BlockingQueue<Message> messageQueue;
 	private AkibotClient akibotClient;
 
@@ -29,11 +32,9 @@ public class IncommingMessageExecutor extends Thread {
 				}
 
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.catching(e);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.catching(e);
 			}
 		}
 	}
