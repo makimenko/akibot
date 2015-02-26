@@ -12,12 +12,16 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
-import com.akibot.engine2.server.AkibotNode;
+import com.akibot.engine2.network.AkibotClient;
+import com.akibot.engine2.network.ClientDescription;
+import com.akibot.engine2.network.ClientDescriptionRequest;
+import com.akibot.engine2.network.ClientDescriptionResponse;
+import com.akibot.engine2.network.ClientDescriptionUtils;
 
 public class DefaultComponent implements Component {
 	private static final Logger log = LogManager.getLogger(DefaultComponent.class.getName());
 
-	private AkibotNode akibotNode;
+	private AkibotClient akibotClient;
 	private ClientDescription myClientDescription;
 	private List<ClientDescription> clientDescriptionList;
 	private String name;
@@ -89,7 +93,7 @@ public class DefaultComponent implements Component {
 			while (i.hasNext()) {
 				ClientDescription client = (ClientDescription) i.next();
 				if (ClientDescriptionUtils.isSystemMessage(message) || ClientDescriptionUtils.isInterestedInMessage(client, message)) {
-					akibotNode.send(client, message);
+					akibotClient.send(client, message);
 				}
 			}
 		} else {
@@ -129,12 +133,12 @@ public class DefaultComponent implements Component {
 	}
 
 	@Override
-	public void setAkibotNode(AkibotNode akibotNode) {
-		this.akibotNode = akibotNode;
-		this.myClientDescription = new ClientDescription(name, akibotNode.getMyInetSocketAddress());
+	public void setAkibotNode(AkibotClient akibotClient) {
+		this.akibotClient = akibotClient;
+		this.myClientDescription = new ClientDescription(name, akibotClient.getMyInetSocketAddress());
 
-		if (akibotNode.getParentSocketAddress() != null) {
-			ClientDescription parentClientDescription = new ClientDescription(null, akibotNode.getParentSocketAddress());
+		if (akibotClient.getParentSocketAddress() != null) {
+			ClientDescription parentClientDescription = new ClientDescription(null, akibotClient.getParentSocketAddress());
 			clientDescriptionList.add(parentClientDescription);
 		}
 
@@ -164,8 +168,8 @@ public class DefaultComponent implements Component {
 		this.myClientDescription = myClientDescription;
 	}
 
-	public AkibotNode getAkibotNode() {
-		return akibotNode;
+	public AkibotClient getAkibotNode() {
+		return akibotClient;
 	}
 
 	public List<ClientDescription> getClientDescriptionList() {

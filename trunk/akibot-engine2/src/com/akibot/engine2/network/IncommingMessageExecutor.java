@@ -1,4 +1,4 @@
-package com.akibot.engine2.server;
+package com.akibot.engine2.network;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -6,13 +6,13 @@ import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
 
-public class MessageQueueHandler extends Thread {
+public class IncommingMessageExecutor extends Thread {
 
 	private BlockingQueue<Message> messageQueue;
-	private AkibotNode akibotNode;
+	private AkibotClient akibotClient;
 
-	public MessageQueueHandler(AkibotNode akibotNode, BlockingQueue<Message> messageQueue) {
-		this.akibotNode = akibotNode;
+	public IncommingMessageExecutor(AkibotClient akibotClient, BlockingQueue<Message> messageQueue) {
+		this.akibotClient = akibotClient;
 		this.messageQueue = messageQueue;
 		this.setDaemon(true);
 	}
@@ -23,9 +23,9 @@ public class MessageQueueHandler extends Thread {
 			try {
 				Message message = messageQueue.take();
 				if (message instanceof SystemRequest || message instanceof SystemResponse) {
-					akibotNode.getComponent().onSystemMessageReceived(message);
+					akibotClient.getComponent().onSystemMessageReceived(message);
 				} else {
-					akibotNode.getComponent().onMessageReceived(message);
+					akibotClient.getComponent().onMessageReceived(message);
 				}
 
 			} catch (InterruptedException e) {

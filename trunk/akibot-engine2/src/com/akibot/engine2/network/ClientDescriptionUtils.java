@@ -1,4 +1,4 @@
-package com.akibot.engine2.component;
+package com.akibot.engine2.network;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
