@@ -1,7 +1,6 @@
 package com.akibot.engine2.component;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,9 +88,7 @@ public class DefaultComponent implements Component {
 	public void broadcastMessage(Message message) throws FailedToSendMessageException {
 		if (clientDescriptionList != null && clientDescriptionList.size() > 0) {
 			log.trace(name + ": broadcastMessage: " + message);
-			Iterator<ClientDescription> i = clientDescriptionList.iterator();
-			while (i.hasNext()) {
-				ClientDescription client = (ClientDescription) i.next();
+			for (ClientDescription client : clientDescriptionList) {
 				if (ClientDescriptionUtils.isSystemMessage(message) || ClientDescriptionUtils.isInterestedInMessage(client, message)) {
 					akibotClient.send(client, message);
 				}

@@ -85,7 +85,7 @@ public class AkibotClient extends Thread {
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, inetSocketAddress);
 			socket.send(datagramPacket);
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			log.catching(e);
 			throw new FailedToSendMessageException();
 		}
 	}
