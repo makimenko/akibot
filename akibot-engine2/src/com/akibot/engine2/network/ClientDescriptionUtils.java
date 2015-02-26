@@ -2,7 +2,6 @@ package com.akibot.engine2.network;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,9 +22,7 @@ public class ClientDescriptionUtils {
 		} else if (mergeTo == null || mergeTo.size() == 0) {
 			return mergeFrom;
 		} else {
-			Iterator<ClientDescription> i = mergeFrom.iterator();
-			while (i.hasNext()) {
-				ClientDescription descr = (ClientDescription) i.next();
+			for (ClientDescription descr : mergeFrom) {
 				if (!equalName(myClientDescription, descr) && !existsClient(mergeTo, descr)) {
 					log.trace("Add client: " + descr);
 					mergeTo.add(descr);
@@ -52,9 +49,7 @@ public class ClientDescriptionUtils {
 
 	public static boolean existsClient(List<ClientDescription> list, ClientDescription clientDescription) {
 		boolean exists = false;
-		Iterator<ClientDescription> i = list.iterator();
-		while (i.hasNext()) {
-			ClientDescription descr = (ClientDescription) i.next();
+		for (ClientDescription descr : list) {
 			if (equalAddress(descr, clientDescription)) {
 				exists = true;
 				break;
@@ -86,9 +81,7 @@ public class ClientDescriptionUtils {
 		if (topicList == null || topicList.size() == 0) {
 			return false;
 		} else {
-			Iterator<Message> i = topicList.iterator();
-			while (i.hasNext()) {
-				Message topicMessage = i.next();
+			for (Message topicMessage : topicList) {
 				if (topicMessage.getClass().isAssignableFrom(message.getClass())) {
 					return true;
 				}

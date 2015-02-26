@@ -48,6 +48,7 @@ public class Launcher {
 		testResponse = (TestResponse) clientNodeA.getComponent().syncRequest(testRequest, 1000);
 		System.out.println("result = " + testResponse.getResult());
 
+		System.out.println("clients = " + clientNodeB.printClients());
 		synchronized (this) {
 			this.wait();
 		}
