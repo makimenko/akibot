@@ -6,7 +6,8 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
-import com.akibot.engine2.server.AkibotNode;
+import com.akibot.engine2.network.AkibotClient;
+import com.akibot.engine2.network.ClientDescription;
 
 public interface Component {
 
@@ -18,13 +19,15 @@ public interface Component {
 
 	public void sendMessage(ClientDescription clientDescription, Message message) throws FailedToSendMessageException;
 
+	public void setAkibotNode(AkibotClient akibotClient);
+
+	public String getName();
+
+	// ---------------- Not component:
+
 	public Response syncRequest(Request request, int timeout) throws FailedToSendMessageException;
 
 	public void broadcastMessage(Message message) throws FailedToSendMessageException;
-
-	public void setAkibotNode(AkibotNode akibotNode);
-
-	public String getName();
 
 	public ClientDescription getMyClientDescription();
 

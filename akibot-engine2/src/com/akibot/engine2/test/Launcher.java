@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
-import com.akibot.engine2.server.AkibotNode;
+import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
@@ -24,14 +24,14 @@ public class Launcher {
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
-		AkibotNode serverNode = new AkibotNode(new DefaultComponent("akibot.server"), serverPort);
+		AkibotClient serverNode = new AkibotClient(new DefaultComponent("akibot.server"), serverPort);
 		serverNode.start();
 
-		AkibotNode clientNodeA = new AkibotNode(new TestComponent("akibot.clientA"), serverAddress);
+		AkibotClient clientNodeA = new AkibotClient(new TestComponent("akibot.clientA"), serverAddress);
 		clientNodeA.getComponent().getMyClientDescription().getTopicList().add(new TestResponse());
 		clientNodeA.start();
 
-		AkibotNode clientNodeB = new AkibotNode(new TestComponent("akibot.clientB"), serverAddress);
+		AkibotClient clientNodeB = new AkibotClient(new TestComponent("akibot.clientB"), serverAddress);
 		clientNodeB.getComponent().getMyClientDescription().getTopicList().add(new TestRequest());
 		clientNodeB.start();
 

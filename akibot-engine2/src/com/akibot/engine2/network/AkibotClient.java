@@ -1,4 +1,4 @@
-package com.akibot.engine2.server;
+package com.akibot.engine2.network;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,23 +10,19 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine2.component.ClientDescription;
 import com.akibot.engine2.component.Component;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 
-public class AkibotNode extends Thread {
-	private static final Logger log = LogManager.getLogger(AkibotNode.class.getName());
+public class AkibotClient extends Thread {
+	private static final Logger log = LogManager.getLogger(AkibotClient.class.getName());
 	private DatagramSocket socket;
-	private BlockingQueue<Message> messageQueue;
-	private IncommingMessageHandler incommingMessageHandler;
-	private MessageQueueHandler messageQueueHandler;
+
+	private IncommingMessageManager incommingMessageManager;
 	private Component component;
 	private InetSocketAddress myInetSocketAddress;
 	private InetSocketAddress parentSocketAddress;
@@ -35,11 +31,15 @@ public class AkibotNode extends Thread {
 		return myInetSocketAddress;
 	}
 
+	public DatagramSocket getSocket() {
+		return socket;
+	}
+
 	public InetSocketAddress getParentSocketAddress() {
 		return parentSocketAddress;
 	}
 
-	public AkibotNode(Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+	public AkibotClient(Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
 		log.debug("Initializing...");
 		this.setDaemon(true);
 		this.component = component;
@@ -47,27 +47,26 @@ public class AkibotNode extends Thread {
 		// this.socket.setTrafficClass(0x04);
 		this.myInetSocketAddress = new InetSocketAddress(socket.getLocalAddress().getLocalHost(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
-		this.messageQueue = new LinkedBlockingQueue<Message>();
-		this.incommingMessageHandler = new IncommingMessageHandler(component, socket, messageQueue);
-		this.messageQueueHandler = new MessageQueueHandler(this, messageQueue);
+
+		incommingMessageManager = new IncommingMessageManager(this);
+
 		this.component.setAkibotNode(this);
 		log.info(component + ": initialized.");
 	}
 
-	public AkibotNode(Component component, int port) throws SocketException, UnknownHostException {
+	public AkibotClient(Component component, int port) throws SocketException, UnknownHostException {
 		this(component, port, null);
 	}
 
-	public AkibotNode(Component component, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+	public AkibotClient(Component component, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
 		this(component, null, parentSocketAddress);
 	}
 
 	public void start() {
-		log.debug(component + ": Starting...");
+		log.debug(component + ": Starting AkibotClient...");
 		super.start();
 		component.start();
-		incommingMessageHandler.start();
-		messageQueueHandler.start();
+		incommingMessageManager.start();
 		log.debug(component + ": started.");
 	}
 

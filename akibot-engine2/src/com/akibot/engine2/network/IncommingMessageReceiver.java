@@ -1,4 +1,4 @@
-package com.akibot.engine2.server;
+package com.akibot.engine2.network;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,13 +14,13 @@ import com.akibot.engine2.component.Component;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Response;
 
-public class IncommingMessageHandler extends Thread {
-	private static final Logger log = LogManager.getLogger(IncommingMessageHandler.class.getName());
+public class IncommingMessageReceiver extends Thread {
+	private static final Logger log = LogManager.getLogger(IncommingMessageReceiver.class.getName());
 	private DatagramSocket socket;
 	private BlockingQueue<Message> messageQueue;
 	private Component component;
 
-	public IncommingMessageHandler(Component component, DatagramSocket socket, BlockingQueue<Message> messageQueue) {
+	public IncommingMessageReceiver(Component component, DatagramSocket socket, BlockingQueue<Message> messageQueue) {
 		this.component = component;
 		this.socket = socket;
 		this.messageQueue = messageQueue;
