@@ -17,9 +17,9 @@ import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
 
 public class AkibotTest {
-	private static AkibotClient clientNodeA;
-	private static AkibotClient clientNodeB;
-	private static AkibotClient serverNode;
+	private static AkibotClient clientA;
+	private static AkibotClient clientB;
+	private static AkibotClient server;
 
 	@BeforeClass
 	public static void onceExecutedBeforeAll() throws SocketException, UnknownHostException, InterruptedException {
@@ -27,16 +27,16 @@ public class AkibotTest {
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
-		serverNode = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
-		serverNode.start();
+		server = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
+		server.start();
 
-		clientNodeA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
-		clientNodeA.getMyClientDescription().getTopicList().add(new TestResponse());
-		clientNodeA.start();
+		clientA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
+		clientA.getMyClientDescription().getTopicList().add(new TestResponse());
+		clientA.start();
 
-		clientNodeB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
-		clientNodeB.getMyClientDescription().getTopicList().add(new TestRequest());
-		clientNodeB.start();
+		clientB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
+		clientB.getMyClientDescription().getTopicList().add(new TestRequest());
+		clientB.start();
 
 		// Thread.sleep(1000);
 
@@ -47,10 +47,10 @@ public class AkibotTest {
 		TestRequest testRequest = new TestRequest();
 
 		testRequest.setX(1);
-		clientNodeA.getOutgoingMessageManager().broadcastMessage(testRequest);
+		clientA.getOutgoingMessageManager().broadcastMessage(testRequest);
 		Thread.sleep(100);
 
-		TestComponent testComponentA = (TestComponent) clientNodeA.getComponent();
+		TestComponent testComponentA = (TestComponent) clientA.getComponent();
 		assertEquals("Chect response", (Integer) 2, (Integer) testComponentA.getLastTestResponse().getResult());
 
 	}
@@ -61,11 +61,11 @@ public class AkibotTest {
 		TestResponse testResponse;
 
 		testRequest.setX(1);
-		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
+		testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 2, (Integer) testResponse.getResult());
 
 		testRequest.setX(-1);
-		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
+		testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
 	}
 
