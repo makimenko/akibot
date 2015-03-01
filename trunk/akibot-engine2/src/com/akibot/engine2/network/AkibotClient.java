@@ -1,6 +1,7 @@
 package com.akibot.engine2.network;
 
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -41,8 +42,9 @@ public class AkibotClient extends Thread {
 		this.setDaemon(true);
 		this.component = component;
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
+		socket.getLocalAddress();
 		// this.socket.setTrafficClass(0x04);
-		this.myInetSocketAddress = new InetSocketAddress(socket.getLocalAddress().getLocalHost(), socket.getLocalPort());
+		this.myInetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
 		this.incommingMessageManager = new IncommingMessageManager(this);
 		this.outgoingMessageManager = new OutgoingMessageManager(this);
@@ -152,6 +154,7 @@ public class AkibotClient extends Thread {
 		this.synchronizedMessageManager = synchronizedMessageManager;
 	}
 
+	@Override
 	public void start() {
 		log.debug(component + ": Starting AkibotClient...");
 		super.start();
@@ -163,6 +166,7 @@ public class AkibotClient extends Thread {
 		log.debug(component + ": started.");
 	}
 
+	@Override
 	public String toString() {
 		if (component != null) {
 			return component.getName();
