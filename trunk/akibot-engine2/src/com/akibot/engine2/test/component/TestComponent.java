@@ -11,8 +11,8 @@ public class TestComponent extends DefaultComponent {
 	private static final Logger log = LogManager.getLogger(TestComponent.class.getName());
 	private TestResponse lastTestResponse;
 
-	public TestComponent(String name) {
-		super(name);
+	public TestResponse getLastTestResponse() {
+		return lastTestResponse;
 	}
 
 	@Override
@@ -27,10 +27,6 @@ public class TestComponent extends DefaultComponent {
 		} else if (message instanceof TestResponse) {
 			lastTestResponse = (TestResponse) message;
 		}
-	}
-
-	public TestResponse getLastTestResponse() {
-		return lastTestResponse;
 	}
 
 }

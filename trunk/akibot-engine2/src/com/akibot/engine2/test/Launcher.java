@@ -24,14 +24,14 @@ public class Launcher {
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
-		AkibotClient serverNode = new AkibotClient(new DefaultComponent("akibot.server"), serverPort);
+		AkibotClient serverNode = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
 		serverNode.start();
 
-		AkibotClient clientNodeA = new AkibotClient(new TestComponent("akibot.clientA"), serverAddress);
+		AkibotClient clientNodeA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
 		clientNodeA.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientNodeA.start();
 
-		AkibotClient clientNodeB = new AkibotClient(new TestComponent("akibot.clientB"), serverAddress);
+		AkibotClient clientNodeB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
 		clientNodeB.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientNodeB.start();
 

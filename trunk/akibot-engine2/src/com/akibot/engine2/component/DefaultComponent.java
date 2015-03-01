@@ -11,20 +11,8 @@ public class DefaultComponent implements Component {
 
 	private AkibotClient akibotClient;
 
-	private String name;
-
-	public DefaultComponent(String name) {
-		this.name = name;
-		log.debug(name + ": component initialized.");
-	}
-
 	public AkibotClient getAkibotClient() {
 		return akibotClient;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override
@@ -37,18 +25,9 @@ public class DefaultComponent implements Component {
 		this.akibotClient = akibotClient;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	@Override
 	public void start() {
 
-	}
-
-	@Override
-	public String toString() {
-		return name;
 	}
 
 }
