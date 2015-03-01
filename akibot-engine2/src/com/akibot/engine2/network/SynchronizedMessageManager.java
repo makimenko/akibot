@@ -19,7 +19,7 @@ public class SynchronizedMessageManager {
 		Request request = (Request) originalRequest.clone();
 		setSyncId(UUID.randomUUID().toString());
 		request.setSyncId(getSyncId());
-		request.setFrom(akibotClient.getComponent().getName());
+		request.setFrom(akibotClient.getName());
 		return request;
 
 	}

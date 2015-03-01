@@ -18,7 +18,6 @@ import com.akibot.engine2.message.Message;
 public class AkibotClient extends Thread {
 	private static final Logger log = LogManager.getLogger(AkibotClient.class.getName());
 	private List<ClientDescription> clientDescriptionList;
-
 	private Component component;
 	private IncommingMessageManager incommingMessageManager;
 	private ClientDescription myClientDescription;
@@ -29,16 +28,18 @@ public class AkibotClient extends Thread {
 	private DatagramSocket socket;
 	private SynchronizedMessageManager synchronizedMessageManager;
 
-	public AkibotClient(Component component, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
-		this(component, null, parentSocketAddress);
+	public AkibotClient(String name, Component component, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+		this(name, component, null, parentSocketAddress);
 	}
 
-	public AkibotClient(Component component, int port) throws SocketException, UnknownHostException {
-		this(component, port, null);
+	public AkibotClient(String name, Component component, int port) throws SocketException, UnknownHostException {
+		this(name, component, port, null);
 	}
 
-	public AkibotClient(Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+	public AkibotClient(String name, Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException,
+			UnknownHostException {
 		log.debug("Initializing...");
+		this.setName(name);
 		this.setDaemon(true);
 		this.component = component;
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
@@ -52,7 +53,7 @@ public class AkibotClient extends Thread {
 		this.clientDescriptionList = new ArrayList<ClientDescription>();
 		this.component.setAkibotClient(this);
 
-		myClientDescription = new ClientDescription(component.getName(), getMyInetSocketAddress());
+		myClientDescription = new ClientDescription(name, getMyInetSocketAddress());
 
 		if (getParentSocketAddress() != null) {
 			ClientDescription parentClientDescription = new ClientDescription(null, getParentSocketAddress());
@@ -168,11 +169,7 @@ public class AkibotClient extends Thread {
 
 	@Override
 	public String toString() {
-		if (component != null) {
-			return component.getName();
-		} else {
-			return super.toString();
-		}
+		return getName();
 	}
 
 }

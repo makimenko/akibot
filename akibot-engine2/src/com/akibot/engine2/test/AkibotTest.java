@@ -27,18 +27,31 @@ public class AkibotTest {
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
-		serverNode = new AkibotClient(new DefaultComponent("akibot.server"), serverPort);
+		serverNode = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
 		serverNode.start();
 
-		clientNodeA = new AkibotClient(new TestComponent("akibot.clientA"), serverAddress);
+		clientNodeA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
 		clientNodeA.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientNodeA.start();
 
-		clientNodeB = new AkibotClient(new TestComponent("akibot.clientB"), serverAddress);
+		clientNodeB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
 		clientNodeB.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientNodeB.start();
 
 		// Thread.sleep(1000);
+
+	}
+
+	@Test
+	public void testAsyncRequest() throws FailedToSendMessageException, InterruptedException {
+		TestRequest testRequest = new TestRequest();
+
+		testRequest.setX(1);
+		clientNodeA.getOutgoingMessageManager().broadcastMessage(testRequest);
+		Thread.sleep(100);
+
+		TestComponent testComponentA = (TestComponent) clientNodeA.getComponent();
+		assertEquals("Chect response", (Integer) 2, (Integer) testComponentA.getLastTestResponse().getResult());
 
 	}
 
@@ -54,19 +67,6 @@ public class AkibotTest {
 		testRequest.setX(-1);
 		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
-	}
-
-	@Test
-	public void testAsyncRequest() throws FailedToSendMessageException, InterruptedException {
-		TestRequest testRequest = new TestRequest();
-
-		testRequest.setX(1);
-		clientNodeA.getOutgoingMessageManager().broadcastMessage(testRequest);
-		Thread.sleep(100);
-
-		TestComponent testComponentA = (TestComponent) clientNodeA.getComponent();
-		assertEquals("Chect response", (Integer) 2, (Integer) testComponentA.getLastTestResponse().getResult());
-
 	}
 
 }
