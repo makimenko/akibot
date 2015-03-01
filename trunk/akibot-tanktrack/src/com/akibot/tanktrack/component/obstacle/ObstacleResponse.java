@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.component.obstacle;
 
-import com.akibot.engine.message.Response;
+import com.akibot.engine2.message.Response;
 
 public class ObstacleResponse extends Response {
 	private static final long serialVersionUID = 1L;

@@ -9,6 +9,6 @@ public interface Component {
 
 	public void setAkibotClient(AkibotClient akibotClient);
 
-	public void start();
+	public void start() throws Exception;
 
 }

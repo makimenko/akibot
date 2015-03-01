@@ -3,14 +3,14 @@ package com.akibot.tanktrack.component.tanktrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine.component.DefaultComponent;
-import com.akibot.engine.message.Message;
+import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.message.Message;
 
 public class TankTrackComponent extends DefaultComponent {
 	static final Logger log = LogManager.getLogger(TankTrackComponent.class.getName());
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof StickMotionRequest) {
 			StickMotionRequest request = (StickMotionRequest) message;
 
@@ -35,7 +35,7 @@ public class TankTrackComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void run() {
+	public void start() {
 
 	}
 

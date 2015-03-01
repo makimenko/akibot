@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import akibot.jni.java.AkibotJniLibrary;
 
-import com.akibot.engine.component.DefaultComponent;
-import com.akibot.engine.message.Message;
+import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.message.Message;
 
 public class DistanceMeterComponent extends DefaultComponent {
 	static final Logger log = LogManager.getLogger(DistanceMeterComponent.class.getName());
@@ -28,7 +28,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof DistanceRequest) {
 			long startTime = System.currentTimeMillis();
 			DistanceRequest request = (DistanceRequest) message;
@@ -36,12 +36,12 @@ public class DistanceMeterComponent extends DefaultComponent {
 			response.setMm(lib.getDistance(triggerPin, echoPin, timeoutMicroseconds));
 			response.copySyncId(message);
 			log.trace("Duration: " + (System.currentTimeMillis() - startTime));
-			this.getClient().send(response);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 	}
 
 	@Override
-	public void run() {
+	public void start() {
 
 	}
 

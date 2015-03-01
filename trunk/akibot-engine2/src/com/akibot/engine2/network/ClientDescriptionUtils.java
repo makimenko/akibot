@@ -78,7 +78,7 @@ public class ClientDescriptionUtils {
 
 	public static List<ClientDescription> merge(ClientDescription myClientDescription, List<ClientDescription> mergeFrom,
 			List<ClientDescription> mergeTo) {
-		log.trace("Merge clients (" + myClientDescription.getName() + "): " + mergeFrom + " -> " + mergeTo);
+		log.trace(myClientDescription.getName()+": Merge clients (" + myClientDescription.getName() + "): " + mergeFrom + " -> " + mergeTo);
 		if (mergeFrom == null || mergeFrom.size() == 0) {
 			return mergeTo;
 		} else if (mergeTo == null || mergeTo.size() == 0) {
@@ -86,7 +86,7 @@ public class ClientDescriptionUtils {
 		} else {
 			for (ClientDescription descr : mergeFrom) {
 				if (!equalName(myClientDescription, descr) && !existsClient(mergeTo, descr)) {
-					log.trace("Add client: " + descr);
+					log.trace(myClientDescription.getName()+": Add client: " + descr);
 					mergeTo.add(descr);
 				}
 			}
