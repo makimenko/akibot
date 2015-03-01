@@ -6,8 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akibot.engine2.component.DefaultComponent;
@@ -18,13 +17,12 @@ import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
 
 public class AkibotTest {
-	AkibotClient clientNodeA;
-	AkibotClient clientNodeB;
-	AkibotClient serverNode;
+	private static AkibotClient clientNodeA;
+	private static AkibotClient clientNodeB;
+	private static AkibotClient serverNode;
 
-	@Before
-	public void setUp() throws SocketException, UnknownHostException, InterruptedException {
-
+	@BeforeClass
+	public static void onceExecutedBeforeAll() throws SocketException, UnknownHostException, InterruptedException {
 		String serverHost = "localhost";
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
@@ -44,13 +42,8 @@ public class AkibotTest {
 
 	}
 
-	@After
-	public void tearDown() {
-
-	}
-
 	@Test
-	public void test() throws FailedToSendMessageException {
+	public void testSyncRequest() throws FailedToSendMessageException {
 		TestRequest testRequest = new TestRequest();
 		TestResponse testResponse;
 
@@ -61,6 +54,19 @@ public class AkibotTest {
 		testRequest.setX(-1);
 		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
+	}
+
+	@Test
+	public void testAsyncRequest() throws FailedToSendMessageException, InterruptedException {
+		TestRequest testRequest = new TestRequest();
+
+		testRequest.setX(1);
+		clientNodeA.getOutgoingMessageManager().broadcastMessage(testRequest);
+		Thread.sleep(100);
+
+		TestComponent testComponentA = (TestComponent) clientNodeA.getComponent();
+		assertEquals("Chect response", (Integer) 2, (Integer) testComponentA.getLastTestResponse().getResult());
+
 	}
 
 }

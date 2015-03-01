@@ -30,6 +30,7 @@ public class IncommingMessageReceiver extends Thread {
 		return (Message) oos.readObject();
 	}
 
+	@Override
 	public void run() {
 		byte[] buf = new byte[BUFFER_SIZE];
 		DatagramPacket inDatagramPacket = new DatagramPacket(buf, buf.length);

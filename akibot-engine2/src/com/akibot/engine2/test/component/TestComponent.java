@@ -9,6 +9,7 @@ import com.akibot.engine2.message.Message;
 
 public class TestComponent extends DefaultComponent {
 	private static final Logger log = LogManager.getLogger(TestComponent.class.getName());
+	private TestResponse lastTestResponse;
 
 	public TestComponent(String name) {
 		super(name);
@@ -23,7 +24,13 @@ public class TestComponent extends DefaultComponent {
 			response.setResult(request.getX() + 1);
 			response.copySyncId(request);
 			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+		} else if (message instanceof TestResponse) {
+			lastTestResponse = (TestResponse) message;
 		}
+	}
+
+	public TestResponse getLastTestResponse() {
+		return lastTestResponse;
 	}
 
 }
