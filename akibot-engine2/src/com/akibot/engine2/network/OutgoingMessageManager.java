@@ -49,10 +49,10 @@ public class OutgoingMessageManager {
 	}
 
 	public void send(InetSocketAddress inetSocketAddress, Message message) throws FailedToSendMessageException {
-		log.trace(akibotClient.getComponent() + ": send: to=(" + inetSocketAddress.getHostString() + ":" + inetSocketAddress.getPort() + "): "
+		log.trace(akibotClient + ": send: to=(" + inetSocketAddress.getHostString() + ":" + inetSocketAddress.getPort() + "): "
 				+ message);
 		try {
-			message.setFrom(akibotClient.getComponent().toString());
+			message.setFrom(akibotClient.getName());
 			byte[] buf;
 			buf = messageToByte(message);
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, inetSocketAddress);
@@ -69,7 +69,7 @@ public class OutgoingMessageManager {
 			SynchronizedMessageManager sync = akibotClient.getSynchronizedMessageManager();
 			newRequest = sync.enrichRequest(request);
 
-			log.trace("Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
+			log.trace(akibotClient + ": Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
 			broadcastMessage(newRequest);
 
 			synchronized (sync.getSyncId()) {
@@ -79,7 +79,7 @@ public class OutgoingMessageManager {
 			if (sync.getSyncResponse() == null) {
 				throw new Exception("Timeout occured while waiting sync response");
 			} else {
-				log.trace("Sync messasge received: " + sync.getSyncResponse().getSyncId() + ": " + sync.getSyncResponse());
+				log.trace(akibotClient + ": Sync messasge received: " + sync.getSyncResponse().getSyncId() + ": " + sync.getSyncResponse());
 			}
 			return sync.getSyncResponse();
 

@@ -5,10 +5,9 @@ import java.util.UUID;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine.component.DefaultComponent;
-import com.akibot.engine.exception.FailedToSendMessageException;
-import com.akibot.engine.message.Message;
-import com.akibot.engine.message.Request;
+import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
@@ -25,17 +24,15 @@ public class ObstacleComponent extends DefaultComponent {
 	private boolean hasGyroscope = false;
 	private ObstacleResponse response;
 	private String id;
-	
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof ObstacleRequest) {
 			ObstacleRequest request = (ObstacleRequest) message;
 			response = new ObstacleResponse();
 			response.copySyncId(request);
 			id = UUID.randomUUID().toString();
-			
-			
+
 			gyroscopeValueRequest.setTo(request.getGyroscopeName());
 			distanceReqest.setTo(request.getDistanceName());
 			gyroscopeValueRequest.setSyncId(id);
@@ -44,8 +41,8 @@ public class ObstacleComponent extends DefaultComponent {
 			hasDistance = false;
 			hasGyroscope = false;
 
-			this.getClient().send(gyroscopeValueRequest);
-			this.getClient().send(distanceReqest);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(gyroscopeValueRequest);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(distanceReqest);
 
 		} else if (message instanceof GyroscopeResponse) {
 			if (message.getSyncId() != null && message.getSyncId().equalsIgnoreCase(id)) {
@@ -72,11 +69,10 @@ public class ObstacleComponent extends DefaultComponent {
 			double y = Math.cos(radians) * distanceResponse.getMm();
 			response.setX(x);
 			response.setY(y);
-			
-			this.getClient().send(response);
+
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 
 		}
 	}
 
 }
-

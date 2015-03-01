@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.component.orientation;
 
-import com.akibot.engine.message.Response;
+import com.akibot.engine2.message.Response;
 
 public class OrientationResponse extends Response {
 	private static final long serialVersionUID = 1L;

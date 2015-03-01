@@ -3,7 +3,7 @@ package com.akibot.tanktrack.component.awtcontroller;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import com.akibot.engine.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 
 public class AwtControllerMouseListener implements MouseListener {
 	private AwtControllerAction action;

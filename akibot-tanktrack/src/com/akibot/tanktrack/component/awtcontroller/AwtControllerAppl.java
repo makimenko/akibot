@@ -13,10 +13,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import com.akibot.engine.exception.FailedToSendMessageException;
-import com.akibot.engine.message.Message;
-import com.akibot.engine.message.Response;
-import com.akibot.engine.server.Client;
+import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Response;
+import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
@@ -27,12 +27,12 @@ import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
 public class AwtControllerAppl {
-	private Client client;
+	private AkibotClient akibotClient;
 	private Frame mainFrame;
 	private TextArea textArea;
 
-	public AwtControllerAppl(Client client) {
-		this.client = client;
+	public AwtControllerAppl(AkibotClient akibotClient) {
+		this.akibotClient = akibotClient;
 		prepareGUI();
 	}
 
@@ -107,7 +107,7 @@ public class AwtControllerAppl {
 					distanceRequest.setTo("akibot.distance.left");
 
 					for (int i = 1; i <= 10; i++) {
-						response = client.syncRequest(distanceRequest, 1000);
+						response = akibotClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 1000);
 						textArea.append("SYNC RESPONSE: " + response + "\n");
 					}
 
@@ -120,7 +120,7 @@ public class AwtControllerAppl {
 			}
 		});
 
-		AwtControllerAction directionAction = new AwtControllerAction(client);
+		AwtControllerAction directionAction = new AwtControllerAction(akibotClient);
 		directionAction.getKeyMapping().put(0, messageStop);
 		directionAction.getKeyMapping().put(KeyEvent.VK_LEFT, messageLeft);
 		directionAction.getKeyMapping().put(KeyEvent.VK_UP, messageForward);

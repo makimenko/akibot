@@ -3,8 +3,8 @@ package com.akibot.tanktrack.component.gyroscope.calibration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine.component.DefaultComponent;
-import com.akibot.engine.message.Message;
+import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeConfigurationRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
@@ -20,7 +20,7 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 	double maxZ;
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GyroscopeCalibrationRequest) {
 			GyroscopeCalibrationRequest calibrationRequest = (GyroscopeCalibrationRequest) message;
 			GyroscopeCalibrationResponse response = new GyroscopeCalibrationResponse();
@@ -31,7 +31,7 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 				gyroscopeConfigurationRequest.setOffsetX(0);
 				gyroscopeConfigurationRequest.setOffsetY(0);
 				gyroscopeConfigurationRequest.setOffsetZ(0);
-				this.getClient().send(gyroscopeConfigurationRequest);
+				getAkibotClient().getOutgoingMessageManager().broadcastMessage(gyroscopeConfigurationRequest);
 			}
 
 			GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
@@ -40,8 +40,8 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 			resetStats();
 
 			while (System.currentTimeMillis() - startTime < calibrationRequest.getDurationMilliseconds()) {
-				GyroscopeResponse gyroscopeResponse = (GyroscopeResponse) this.getClient().syncRequest(gyroscopeValueRequest,
-						(int) calibrationRequest.getDurationMilliseconds());
+				GyroscopeResponse gyroscopeResponse = (GyroscopeResponse) getAkibotClient().getOutgoingMessageManager().sendSyncRequest(
+						gyroscopeValueRequest, (int) calibrationRequest.getDurationMilliseconds());
 				updateStats(gyroscopeResponse.getX(), gyroscopeResponse.getY(), gyroscopeResponse.getZ());
 				Thread.sleep(calibrationRequest.getSleepMilliseconds());
 			}
@@ -58,10 +58,10 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 				gyroscopeConfigurationRequest.setOffsetX(offsetX);
 				gyroscopeConfigurationRequest.setOffsetY(offsetY);
 				gyroscopeConfigurationRequest.setOffsetZ(offsetZ);
-				this.getClient().send(gyroscopeConfigurationRequest);
+				getAkibotClient().getOutgoingMessageManager().broadcastMessage(gyroscopeConfigurationRequest);
 			}
 
-			this.getClient().send(response);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 	}
 

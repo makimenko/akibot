@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine.message.Message;
+import com.akibot.engine2.message.Message;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
@@ -44,7 +44,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	}
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GyroscopeConfigurationRequest) {
 			GyroscopeConfigurationRequest config = (GyroscopeConfigurationRequest) message;
 			offsetX = config.getOffsetX();
@@ -81,7 +81,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 			response.setNorthDegrreesXY(northDegreesXY);
 
 			log.trace("Duration: " + (System.currentTimeMillis() - startTime));
-			this.getClient().send(response);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 
 	}

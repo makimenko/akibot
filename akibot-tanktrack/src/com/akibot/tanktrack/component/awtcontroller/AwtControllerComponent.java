@@ -1,8 +1,8 @@
 package com.akibot.tanktrack.component.awtcontroller;
 
-import com.akibot.engine.component.DefaultComponent;
-import com.akibot.engine.message.Message;
-import com.akibot.engine.message.Response;
+import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Response;
 
 public class AwtControllerComponent extends DefaultComponent {
 	AwtControllerAppl appl;
@@ -12,16 +12,16 @@ public class AwtControllerComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof Response) {
 			appl.getTextArea().append(message + "\n");
 		}
-		super.processMessage(message);
+		super.onMessageReceived(message);
 	}
 
 	@Override
-	public void run() {
-		this.appl = new AwtControllerAppl(this.getClient());
+	public void start() {
+		this.appl = new AwtControllerAppl(getAkibotClient());
 		appl.start();
 	}
 

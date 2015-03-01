@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.component.distance;
 
-import com.akibot.engine.message.Response;
+import com.akibot.engine2.message.Response;
 
 public class DistanceResponse extends Response {
 

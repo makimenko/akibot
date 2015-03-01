@@ -3,7 +3,7 @@ package com.akibot.tanktrack.component.awtcontroller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import com.akibot.engine.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 
 public class AwtControllerKeyListener implements KeyListener {
 	private AwtControllerAction action;

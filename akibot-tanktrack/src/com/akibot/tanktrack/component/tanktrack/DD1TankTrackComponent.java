@@ -3,7 +3,7 @@ package com.akibot.tanktrack.component.tanktrack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine.message.Message;
+import com.akibot.engine2.message.Message;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -33,7 +33,7 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	}
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof StickMotionRequest) {
 			StickMotionRequest request = (StickMotionRequest) message;
 
@@ -71,7 +71,7 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	}
 
 	@Override
-	public void run() {
+	public void start() {
 		log.debug("Initializing Tanktrack GPIOs");
 		gpio = GpioFactory.getInstance();
 

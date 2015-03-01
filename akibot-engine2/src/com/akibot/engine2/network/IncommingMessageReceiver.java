@@ -15,7 +15,7 @@ import com.akibot.engine2.message.Response;
 public class IncommingMessageReceiver extends Thread {
 	private static final Logger log = LogManager.getLogger(IncommingMessageReceiver.class.getName());
 	private AkibotClient akibotClient;
-	private final int BUFFER_SIZE = 10000; // TODO: ? is it enough?
+	private final int BUFFER_SIZE = 100000; // TODO: ? is it enough?
 	private DatagramSocket socket;
 
 	public IncommingMessageReceiver(AkibotClient akibotClient) {
@@ -38,6 +38,7 @@ public class IncommingMessageReceiver extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				socket.receive(inDatagramPacket);
+				log.trace(akibotClient + ": Received");
 				Message message = byteToMessage(inDatagramPacket.getData());
 
 				SynchronizedMessageManager sync = akibotClient.getSynchronizedMessageManager();
@@ -49,6 +50,7 @@ public class IncommingMessageReceiver extends Thread {
 						sync.getSyncId().notify();
 					}
 				} else {
+					log.trace(akibotClient + ": Message Received: " + message);
 					akibotClient.getIncommingMessageManager().getQueue().put(message);
 				}
 			} catch (IOException e) {

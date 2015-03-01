@@ -3,8 +3,8 @@ package com.akibot.tanktrack.component.orientation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine.component.DefaultComponent;
-import com.akibot.engine.message.Message;
+import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
@@ -33,7 +33,7 @@ public class OrientationComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void processMessage(Message message) throws Exception {
+	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof OrientationRequest) {
 			OrientationRequest orientationRequest = (OrientationRequest) message;
 			if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360
@@ -59,16 +59,17 @@ public class OrientationComponent extends DefaultComponent {
 				int lastDirection = 0;
 
 				while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
-					gyroscopeResponse = (GyroscopeResponse) getClient().syncRequest(gyroscopeValueRequest, syncRequestTimeout);
+					gyroscopeResponse = (GyroscopeResponse) getAkibotClient().getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest,
+							syncRequestTimeout);
 
 					if (isExpected(orientationRequest, gyroscopeResponse)) {
 						log.debug("Orientation Succeeded");
-						getClient().send(stopRequest);
+						getAkibotClient().getOutgoingMessageManager().broadcastMessage(stopRequest);
 						OrientationResponse successOrientationResponse = new OrientationResponse();
 						successOrientationResponse.setSuccess(true);
 						successOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
 						successOrientationResponse.copySyncId(message);
-						getClient().send(successOrientationResponse);
+						getAkibotClient().getOutgoingMessageManager().broadcastMessage(successOrientationResponse);
 						return;
 					} else {
 						double aXY = gyroscopeResponse.getNorthDegrreesXY();
@@ -79,22 +80,22 @@ public class OrientationComponent extends DefaultComponent {
 
 						if (positive <= Math.abs(negative) && lastDirection != -1) {
 							lastDirection = -1;
-							getClient().send(leftRequest);
+							getAkibotClient().getOutgoingMessageManager().broadcastMessage(leftRequest);
 						} else if (positive > Math.abs(negative) && lastDirection != +1) {
 							lastDirection = +1;
-							getClient().send(rightRequest);
+							getAkibotClient().getOutgoingMessageManager().broadcastMessage(rightRequest);
 						}
 
 						Thread.sleep(stepMillis);
 					}
 				}
 				log.debug("Orientation Failed");
-				getClient().send(stopRequest);
+				getAkibotClient().getOutgoingMessageManager().broadcastMessage(stopRequest);
 				OrientationResponse failedOrientationResponse = new OrientationResponse();
 				failedOrientationResponse.setSuccess(false);
 				failedOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
 				failedOrientationResponse.copySyncId(message);
-				getClient().send(failedOrientationResponse);
+				getAkibotClient().getOutgoingMessageManager().broadcastMessage(failedOrientationResponse);
 
 			} else {
 				log.error("Invalid Orientation Request");

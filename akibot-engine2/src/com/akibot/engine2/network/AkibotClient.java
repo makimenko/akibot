@@ -38,9 +38,9 @@ public class AkibotClient extends Thread {
 
 	public AkibotClient(String name, Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException,
 			UnknownHostException {
-		log.debug("Initializing...");
 		this.setName(name);
 		this.setDaemon(true);
+		log.debug(this + ": Initializing...");
 		this.component = component;
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
 		socket.getLocalAddress();
@@ -60,7 +60,7 @@ public class AkibotClient extends Thread {
 			clientDescriptionList.add(parentClientDescription);
 		}
 
-		log.info(component + ": initialized.");
+		log.info(this + ": initialized.");
 	}
 
 	public List<ClientDescription> getClientDescriptionList() {
@@ -157,14 +157,21 @@ public class AkibotClient extends Thread {
 
 	@Override
 	public void start() {
-		log.debug(component + ": Starting AkibotClient...");
+		log.debug(this + ": Starting AkibotClient...");
 		super.start();
-		component.start();
-		incommingMessageManager.start();
-		outgoingMessageManager.start();
-		synchronizedMessageManager.start();
-		refreshClientDescriptionList();
-		log.debug(component + ": started.");
+		try {
+			component.start();
+			incommingMessageManager.start();
+			outgoingMessageManager.start();
+			synchronizedMessageManager.start();
+			refreshClientDescriptionList();
+			log.debug(this + ": started.");
+		} catch (Exception e) {
+			log.catching(e);
+			log.error(this + ": Failed to start");
+		}
+
+		
 	}
 
 	@Override
