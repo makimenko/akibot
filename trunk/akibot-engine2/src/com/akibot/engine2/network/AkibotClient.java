@@ -130,8 +130,7 @@ public class AkibotClient extends Thread {
 			clientDescriptionRequest.setClientDescription(myClientDescription);
 			outgoingMessageManager.broadcastMessage(clientDescriptionRequest);
 		} catch (FailedToSendMessageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.catching(e);
 		}
 	}
 
@@ -171,7 +170,6 @@ public class AkibotClient extends Thread {
 			log.error(this + ": Failed to start");
 		}
 
-		
 	}
 
 	@Override

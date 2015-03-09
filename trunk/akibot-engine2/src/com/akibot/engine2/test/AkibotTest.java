@@ -48,7 +48,7 @@ public class AkibotTest {
 
 		testRequest.setX(1);
 		clientA.getOutgoingMessageManager().broadcastMessage(testRequest);
-		Thread.sleep(100);
+		Thread.sleep(10);
 
 		TestComponent testComponentA = (TestComponent) clientA.getComponent();
 		assertEquals("Chect response", (Integer) 2, (Integer) testComponentA.getLastTestResponse().getResult());
