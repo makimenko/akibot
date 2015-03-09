@@ -49,13 +49,15 @@ public class OutgoingMessageManager {
 	}
 
 	public void send(InetSocketAddress inetSocketAddress, Message message) throws FailedToSendMessageException {
-		log.trace(akibotClient + ": send: to=(" + inetSocketAddress.getHostString() + ":" + inetSocketAddress.getPort() + "): "
-				+ message);
+		log.trace(akibotClient + ": send: to=(" + inetSocketAddress.getHostString() + ":" + inetSocketAddress.getPort() + "): " + message);
 		try {
 			message.setFrom(akibotClient.getName());
 			byte[] buf;
 			buf = messageToByte(message);
-			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, inetSocketAddress);
+			// TODO: Unresolved host. Why? Workaround:
+			InetSocketAddress address = new InetSocketAddress((inetSocketAddress.getHostString().equals("dm-PC") ? "192.168.0.106"
+					: inetSocketAddress.getHostString()), inetSocketAddress.getPort());
+			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, address);
 			akibotClient.getSocket().send(datagramPacket);
 		} catch (IOException e) {
 			log.catching(e);

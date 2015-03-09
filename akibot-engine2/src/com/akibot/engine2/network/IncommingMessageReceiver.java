@@ -61,6 +61,7 @@ public class IncommingMessageReceiver extends Thread {
 				log.catching(e);
 			}
 		}
+		log.debug(akibotClient + ": finishing...");
 	}
 
 }
