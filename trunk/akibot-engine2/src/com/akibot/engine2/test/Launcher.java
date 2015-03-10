@@ -1,11 +1,8 @@
 package com.akibot.engine2.test;
 
 import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import com.akibot.engine2.component.DefaultComponent;
-import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
@@ -13,13 +10,13 @@ import com.akibot.engine2.test.component.TestResponse;
 
 public class Launcher {
 
-	public static void main(String[] args) throws SocketException, UnknownHostException, FailedToSendMessageException, InterruptedException {
+	public static void main(String[] args) throws Exception {
 
 		Launcher launcher = new Launcher();
 		launcher.start();
 	}
 
-	public void start() throws SocketException, UnknownHostException, FailedToSendMessageException, InterruptedException {
+	public void start() throws Exception {
 		String serverHost = "localhost";
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);

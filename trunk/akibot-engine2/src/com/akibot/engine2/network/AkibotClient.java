@@ -1,10 +1,7 @@
 package com.akibot.engine2.network;
 
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,25 +24,26 @@ public class AkibotClient extends Thread {
 	private InetSocketAddress parentSocketAddress;
 	private DatagramSocket socket;
 	private SynchronizedMessageManager synchronizedMessageManager;
+	private NetworkUtils networkUtils;
 
-	public AkibotClient(String name, Component component, InetSocketAddress parentSocketAddress) throws SocketException, UnknownHostException {
+	public AkibotClient(String name, Component component, InetSocketAddress parentSocketAddress) throws Exception {
 		this(name, component, null, parentSocketAddress);
 	}
 
-	public AkibotClient(String name, Component component, int port) throws SocketException, UnknownHostException {
+	public AkibotClient(String name, Component component, int port) throws Exception {
 		this(name, component, port, null);
 	}
 
-	public AkibotClient(String name, Component component, Integer port, InetSocketAddress parentSocketAddress) throws SocketException,
-			UnknownHostException {
+	public AkibotClient(String name, Component component, Integer port, InetSocketAddress parentSocketAddress) throws Exception {
 		this.setName(name);
 		this.setDaemon(true);
 		log.debug(this + ": Initializing...");
 		this.component = component;
+		this.networkUtils = new NetworkUtils();
 		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
-		socket.getLocalAddress();
+
 		// this.socket.setTrafficClass(0x04);
-		this.myInetSocketAddress = new InetSocketAddress(InetAddress.getLocalHost(), socket.getLocalPort());
+		this.myInetSocketAddress = new InetSocketAddress(networkUtils.getLocalIP(), socket.getLocalPort());
 		this.parentSocketAddress = parentSocketAddress;
 		this.incommingMessageManager = new IncommingMessageManager(this);
 		this.outgoingMessageManager = new OutgoingMessageManager(this);

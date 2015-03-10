@@ -3,8 +3,6 @@ package com.akibot.engine2.test;
 import static org.junit.Assert.assertEquals;
 
 import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +20,7 @@ public class AkibotTest {
 	private static AkibotClient server;
 
 	@BeforeClass
-	public static void onceExecutedBeforeAll() throws SocketException, UnknownHostException, InterruptedException {
+	public static void onceExecutedBeforeAll() throws Exception {
 		String serverHost = "localhost";
 		int serverPort = 2001;
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);

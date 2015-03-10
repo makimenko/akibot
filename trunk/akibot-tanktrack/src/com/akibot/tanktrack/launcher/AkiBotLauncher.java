@@ -7,6 +7,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.component.DefaultServerComponent;
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
+import com.akibot.tanktrack.component.distance.DistanceRequest;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
+import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
@@ -26,14 +30,12 @@ public class AkiBotLauncher {
 		// TankTrack:
 		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(), serverAddress);
 		tankTrack.getMyClientDescription().getTopicList().add(new StickMotionRequest());
-		// tankTrack.setDaemon(true);
+
 		// Gyroscope:
 		// old: 337.0, -106.0, 486.0
 		// 2015.01.14: 380.0, 114.5, 397.5
-		// AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new
-		// HMC5883LGyroscopeComponent(380.0, 114.5, 397.5, 180), serverAddress);
-		// gyroscope.getMyClientDescription().getTopicList().add(new
-		// GyroscopeRequest());
+		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(380.0, 114.5, 397.5, 180), serverAddress);
+		gyroscope.getMyClientDescription().getTopicList().add(new GyroscopeRequest());
 
 		// SpeechSynthesis:
 		// String maryttsHost = "192.168.0.102";
@@ -49,10 +51,8 @@ public class AkiBotLauncher {
 		// speechSynthesisComponent, speechSynthesisDescription);
 
 		// Distance Meter
-		// AkibotClient distance = new AkibotClient("akibot.distance", new
-		// DistanceMeterComponent(25, 27, 50000), serverAddress);
-		// distance.getMyClientDescription().getTopicList().add(new
-		// DistanceRequest());
+		AkibotClient distance = new AkibotClient("akibot.distance", new DistanceMeterComponent(25, 27, 50000), serverAddress);
+		distance.getMyClientDescription().getTopicList().add(new DistanceRequest());
 
 		// Obstacle:
 		// AkibotClient obstacle = new AkibotClient("akibot.obstacle", new
@@ -66,9 +66,9 @@ public class AkiBotLauncher {
 
 		// Start all
 		tankTrack.start();
-		// gyroscope.start();
+		gyroscope.start();
 		// speechSynthesisClient.start();
-		// distance.start();
+		distance.start();
 		// obstacle.start();
 
 		// LOOP forever:

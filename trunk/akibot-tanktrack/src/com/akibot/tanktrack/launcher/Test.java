@@ -1,37 +1,26 @@
 package com.akibot.tanktrack.launcher;
 
-import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-
-import com.akibot.engine2.exception.FailedToSendMessageException;
-import com.akibot.engine2.network.AkibotClient;
-import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
-import com.akibot.tanktrack.component.tanktrack.DirectionType;
-import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 public class Test {
-	public static void main(String[] args) throws SocketException, UnknownHostException, FailedToSendMessageException, InterruptedException {
+	public static void main(String[] args) throws Exception {
+		System.out.println("IP = " + getLocalIP());
+	}
 
-		String serverHost = "raspberrypi";
-		int serverPort = 2000;
-
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
-
-		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), serverAddress);
-		awtController.start();
-
-		Thread.sleep(100);
-
-		InetSocketAddress address = new InetSocketAddress("raspberrypi", 36143);
-		StickMotionRequest request = new StickMotionRequest(DirectionType.STOP);
-
-		awtController.getOutgoingMessageManager().send(address, request);
-
-		Thread.sleep(100);
-
-		Thread.sleep(10000);
-		System.exit(0);
-
+	static public String getLocalIP() throws Exception {
+		Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+		while (e.hasMoreElements()) {
+			NetworkInterface n = (NetworkInterface) e.nextElement();
+			Enumeration<InetAddress> ee = n.getInetAddresses();
+			while (ee.hasMoreElements()) {
+				InetAddress i = (InetAddress) ee.nextElement();
+				if (!i.isLoopbackAddress()) {
+					return i.getHostAddress();
+				}
+			}
+		}
+		throw new Exception("Unable to identify IP address");
 	}
 }
