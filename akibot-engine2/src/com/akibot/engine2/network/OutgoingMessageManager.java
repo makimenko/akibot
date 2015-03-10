@@ -54,9 +54,7 @@ public class OutgoingMessageManager {
 			message.setFrom(akibotClient.getName());
 			byte[] buf;
 			buf = messageToByte(message);
-			// TODO: Unresolved host. Why? Workaround:
-			InetSocketAddress address = new InetSocketAddress((inetSocketAddress.getHostString().equals("dm-PC") ? "192.168.0.106"
-					: inetSocketAddress.getHostString()), inetSocketAddress.getPort());
+			InetSocketAddress address = new InetSocketAddress(inetSocketAddress.getHostString(), inetSocketAddress.getPort());
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, address);
 			akibotClient.getSocket().send(datagramPacket);
 		} catch (IOException e) {

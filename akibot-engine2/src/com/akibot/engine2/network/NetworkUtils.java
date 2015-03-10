@@ -1,15 +1,12 @@
-package com.akibot.tanktrack.launcher;
+package com.akibot.engine2.network;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
-public class Test {
-	public static void main(String[] args) throws Exception {
-		System.out.println("IP = " + getLocalIP());
-	}
+public class NetworkUtils {
 
-	static public String getLocalIP() throws Exception {
+	public String getLocalIP() throws Exception {
 		Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
 		while (e.hasMoreElements()) {
 			NetworkInterface n = (NetworkInterface) e.nextElement();
@@ -23,4 +20,5 @@ public class Test {
 		}
 		throw new Exception("Unable to identify IP address");
 	}
+
 }
