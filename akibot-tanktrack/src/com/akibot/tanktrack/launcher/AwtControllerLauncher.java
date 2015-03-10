@@ -8,6 +8,11 @@ import org.apache.logging.log4j.Logger;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
+import com.akibot.tanktrack.component.orientation.OrientationComponent;
+import com.akibot.tanktrack.component.orientation.OrientationRequest;
 
 public class AwtControllerLauncher {
 	static final Logger log = LogManager.getLogger(AwtControllerLauncher.class.getName());
@@ -22,29 +27,20 @@ public class AwtControllerLauncher {
 		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), serverAddress);
 		awtController.getMyClientDescription().getTopicList().add(new Response());
 
-		/*
-		 * AkibotClient orientation = new AkibotClient("akibot.orientation", new
-		 * OrientationComponent("akibot.tanktrack", "akibot.gyroscope"),
-		 * serverAddress);
-		 * orientation.getMyClientDescription().getTopicList().add(new
-		 * OrientationRequest());
-		 * orientation.getMyClientDescription().getTopicList().add(new
-		 * Response());
-		 * 
-		 * AkibotClient gyroscopeCalibration = new
-		 * AkibotClient("akibot.gyroscope.calibration", new
-		 * GyroscopeCalibrationComponent(), serverAddress);
-		 * gyroscopeCalibration.getMyClientDescription().getTopicList().add(new
-		 * GyroscopeCalibrationRequest());
-		 * gyroscopeCalibration.getMyClientDescription().getTopicList().add(new
-		 * GyroscopeResponse());
-		 */
+		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent("akibot.tanktrack", "akibot.gyroscope"),
+				serverAddress);
+		orientation.getMyClientDescription().getTopicList().add(new OrientationRequest());
+		orientation.getMyClientDescription().getTopicList().add(new Response());
+
+		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), serverAddress);
+		gyroscopeCalibration.getMyClientDescription().getTopicList().add(new GyroscopeCalibrationRequest());
+		gyroscopeCalibration.getMyClientDescription().getTopicList().add(new GyroscopeResponse());
+
 		awtController.start();
-		// orientation.start();
-		// gyroscopeCalibration.start();
+		orientation.start();
+		gyroscopeCalibration.start();
 
 		// LOOP forever:
-
 		while (true) {
 			Thread.sleep(10000);
 		}
