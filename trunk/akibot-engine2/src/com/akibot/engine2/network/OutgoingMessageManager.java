@@ -45,16 +45,16 @@ public class OutgoingMessageManager {
 	}
 
 	public void send(ClientDescription clientDescription, Message message) throws FailedToSendMessageException {
-		send(clientDescription.getAddress(), message);
-	}
+		String host = clientDescription.getAddress().getHostString();
+		int port = clientDescription.getAddress().getPort();
+		String to = clientDescription.getName();
 
-	public void send(InetSocketAddress inetSocketAddress, Message message) throws FailedToSendMessageException {
-		log.trace(akibotClient + ": send: to=(" + inetSocketAddress.getHostString() + ":" + inetSocketAddress.getPort() + "): " + message);
+		log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" + port + "): " + message);
 		try {
 			message.setFrom(akibotClient.getName());
 			byte[] buf;
 			buf = messageToByte(message);
-			InetSocketAddress address = new InetSocketAddress(inetSocketAddress.getHostString(), inetSocketAddress.getPort());
+			InetSocketAddress address = new InetSocketAddress(host, port);
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, address);
 			akibotClient.getSocket().send(datagramPacket);
 		} catch (IOException e) {

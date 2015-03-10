@@ -34,7 +34,8 @@ public class AkiBotLauncher {
 		// Gyroscope:
 		// old: 337.0, -106.0, 486.0
 		// 2015.01.14: 380.0, 114.5, 397.5
-		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(380.0, 114.5, 397.5, 180), serverAddress);
+		// 2015.03.10: 58.0, -47.5, 129.5
+		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(58.0, -47.5, 129.5, 180), serverAddress);
 		gyroscope.getMyClientDescription().getTopicList().add(new GyroscopeRequest());
 
 		// SpeechSynthesis:
