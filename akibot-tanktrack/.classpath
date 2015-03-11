@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-api-2.0.2.jar"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-core-2.0.2.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/pi4j/pi4j-core.jar" sourcepath="/akibot-commons/lib/pi4j/pi4j-core-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/akibot-commons/lib/pi4j/pi4j-core-javadoc.jar!/"/>
@@ -36,5 +34,7 @@
 	<classpathentry kind="lib" path="/akibot-commons/lib/marytts/voice-cmu-slt-hsmm-5.1.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/akibot/akibot-jni-java.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/akibot-engine2"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-api-2.2.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-core-2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

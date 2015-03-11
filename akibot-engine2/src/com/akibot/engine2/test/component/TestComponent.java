@@ -8,7 +8,7 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 
 public class TestComponent extends DefaultComponent {
-	private static final Logger log = LogManager.getLogger(TestComponent.class.getName());
+	private static final Logger log = LogManager.getLogger(TestComponent.class);
 	private TestResponse lastTestResponse;
 
 	public TestResponse getLastTestResponse() {

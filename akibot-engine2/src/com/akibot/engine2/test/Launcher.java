@@ -1,15 +1,15 @@
 package com.akibot.engine2.test;
 
-import java.net.InetSocketAddress;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import com.akibot.engine2.component.DefaultComponent;
-import com.akibot.engine2.network.AkibotClient;
-import com.akibot.engine2.test.component.TestComponent;
-import com.akibot.engine2.test.component.TestRequest;
-import com.akibot.engine2.test.component.TestResponse;
+import com.akibot.engine2.logger.AkiLogger;
+import com.akibot.engine2.network.ClientDescriptionRequest;
+
 
 public class Launcher {
-
+	private static final AkiLogger log = AkiLogger.create(Launcher.class.getName());
+	
 	public static void main(String[] args) throws Exception {
 
 		Launcher launcher = new Launcher();
@@ -17,38 +17,12 @@ public class Launcher {
 	}
 
 	public void start() throws Exception {
-		String serverHost = "localhost";
-		int serverPort = 2001;
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
-		AkibotClient serverNode = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
-		serverNode.start();
-
-		AkibotClient clientNodeA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
-		clientNodeA.getMyClientDescription().getTopicList().add(new TestResponse());
-		clientNodeA.start();
-
-		AkibotClient clientNodeB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
-		clientNodeB.getMyClientDescription().getTopicList().add(new TestRequest());
-		clientNodeB.start();
-
-		Thread.sleep(1000);
-
-		TestRequest testRequest = new TestRequest();
-		testRequest.setX(1);
-		// clientNodeA.getComponent().broadcastMessage(testRequest);
-
-		TestResponse testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
-		System.out.println("result = " + testResponse.getResult());
-
-		testRequest.setX(5);
-		testResponse = (TestResponse) clientNodeA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
-		System.out.println("result = " + testResponse.getResult());
-
-		System.out.println("clients = " + clientNodeB.printClients());
-		synchronized (this) {
-			this.wait();
-		}
+		ClientDescriptionRequest request = new ClientDescriptionRequest();
+		request.setFrom("akibot.awtcontroller");
+		request.setTo("akibot.distance");
+		log.msg("akibot.awtcontroller", "IN", request);
+		
 
 	}
 
