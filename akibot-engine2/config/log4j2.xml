@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-  <Appenders>
-    <Console name="STDOUT" target="SYSTEM_OUT">
-      <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"/>
-    </Console>
-  </Appenders>
-  <Loggers>
-    <Logger name="org.apache.log4j.xml" level="info"/>
-    <Root level="trace">
-      <AppenderRef ref="STDOUT"/>
-    </Root>
-  </Loggers>
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n" />
+		</Console>
+		<!-- <JDBC name="databaseAppender" tableName="T_LOG">
+			<ConnectionFactory class="com.akibot.engine2.logger.ConnectionFactory"
+				method="getDatabaseConnection" />
+			<Column name="ID" literal="S_LOG.NEXTVAL" />
+			<Column name="LOG_DATE" isEventTimestamp="true" />
+			<Column name="LOG_LEVEL" pattern="%level" />
+			<Column name="LOGGER" pattern="%logger" />
+			<Column name="MESSAGE" pattern="%message" />
+		</JDBC>  -->
+	</Appenders>
+
+	<Loggers>
+		<Logger name="org.apache.log4j.xml" level="info" />
+		<Root level="STDOUT">
+			<AppenderRef ref="databaseAppender" />
+		</Root>
+	</Loggers>
 </Configuration>
