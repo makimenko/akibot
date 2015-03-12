@@ -72,6 +72,7 @@ public class AkiBotLauncher {
 		distance.start();
 		// obstacle.start();
 
+		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:
 		while (true) {
 			Thread.sleep(10000);

@@ -36,7 +36,7 @@ public class AkibotTest {
 		clientB.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientB.start();
 
-		// Thread.sleep(1000);
+		Thread.sleep(1000);
 
 	}
 
@@ -46,7 +46,7 @@ public class AkibotTest {
 
 		testRequest.setX(1);
 		clientA.getOutgoingMessageManager().broadcastMessage(testRequest);
-		Thread.sleep(10);
+		Thread.sleep(100);
 
 		TestComponent testComponentA = (TestComponent) clientA.getComponent();
 		assertEquals("Chect response", (Integer) 2, (Integer) testComponentA.getLastTestResponse().getResult());
@@ -62,9 +62,9 @@ public class AkibotTest {
 		testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 2, (Integer) testResponse.getResult());
 
-		testRequest.setX(-1);
-		testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
-		assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
+		//testRequest.setX(-1);
+		//testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
+		//assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
 	}
 
 }

@@ -9,11 +9,12 @@ import java.net.DatagramSocket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Response;
 
 public class IncommingMessageReceiver extends Thread {
-	private static final Logger log = LogManager.getLogger(IncommingMessageReceiver.class.getName());
+	private static final AkiLogger log = AkiLogger.create(IncommingMessageReceiver.class);
 	private AkibotClient akibotClient;
 	private final int BUFFER_SIZE = 100000; // TODO: ? is it enough?
 	private DatagramSocket socket;
@@ -38,9 +39,11 @@ public class IncommingMessageReceiver extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				socket.receive(inDatagramPacket);
-				log.trace(akibotClient + ": Received");
+				//log.trace(akibotClient + ": Received");
+				
 				Message message = byteToMessage(inDatagramPacket.getData());
-
+				log.msg(akibotClient.getName(), message);
+				
 				SynchronizedMessageManager sync = akibotClient.getSynchronizedMessageManager();
 				if (message instanceof Response && sync.getSyncId() != null && ((Response) message).getSyncId() != null
 						&& ((Response) message).getSyncId().equals(sync.getSyncId())) {

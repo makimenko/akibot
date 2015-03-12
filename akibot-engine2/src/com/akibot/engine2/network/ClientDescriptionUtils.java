@@ -7,12 +7,13 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
 
 public class ClientDescriptionUtils {
-	private static final Logger log = LogManager.getLogger(ClientDescriptionUtils.class.getName());
+	private static final AkiLogger log = AkiLogger.create(ClientDescriptionUtils.class);
 
 	public static boolean equalAddress(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
 		if (clientDescriptionA == null || clientDescriptionB == null) {

@@ -10,10 +10,12 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.component.Component;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.test.Launcher;
 
 public class AkibotClient extends Thread {
-	private static final Logger log = LogManager.getLogger(AkibotClient.class.getName());
+	private static final AkiLogger log = AkiLogger.create(AkibotClient.class);
 	private List<ClientDescription> clientDescriptionList;
 	private Component component;
 	private IncommingMessageManager incommingMessageManager;

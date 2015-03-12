@@ -3,11 +3,13 @@ package com.akibot.engine2.component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.engine2.test.Launcher;
 
 public class DefaultComponent implements Component {
-	private static final Logger log = LogManager.getLogger(DefaultComponent.class.getName());
+	private static final AkiLogger log = AkiLogger.create(DefaultComponent.class);
 
 	private AkibotClient akibotClient;
 
