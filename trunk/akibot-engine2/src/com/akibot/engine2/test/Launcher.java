@@ -1,13 +1,5 @@
 package com.akibot.engine2.test;
 
-import java.sql.Connection;
-import java.util.Properties;
-
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnection;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.pool.impl.GenericObjectPool;
-
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.ClientDescriptionRequest;
 

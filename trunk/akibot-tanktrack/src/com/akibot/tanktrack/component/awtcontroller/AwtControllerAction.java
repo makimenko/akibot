@@ -1,5 +1,6 @@
 package com.akibot.tanktrack.component.awtcontroller;
 
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -44,12 +45,14 @@ public class AwtControllerAction {
 	}
 
 	public void stop() throws FailedToSendMessageException {
-		if (currentKey != null) {
+		// if (currentKey != null) {
+		if (currentKey != null
+				&& (currentKey == KeyEvent.VK_LEFT || currentKey == KeyEvent.VK_RIGHT || currentKey == KeyEvent.VK_UP || currentKey == KeyEvent.VK_DOWN)) {
 			if (keyMapping.containsKey(0)) {
 				send(0);
 			}
-			currentKey = null;
 		}
+		currentKey = null;
 	}
 
 }
