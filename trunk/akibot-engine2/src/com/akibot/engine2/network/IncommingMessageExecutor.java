@@ -5,12 +5,13 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
 import com.akibot.engine2.message.SystemResponse;
 
 public class IncommingMessageExecutor extends Thread {
-	private static final Logger log = LogManager.getLogger(IncommingMessageExecutor.class.getName());
+	private static final AkiLogger log = AkiLogger.create(IncommingMessageExecutor.class);
 	private AkibotClient akibotClient;
 	private BlockingQueue<Message> messageQueue;
 

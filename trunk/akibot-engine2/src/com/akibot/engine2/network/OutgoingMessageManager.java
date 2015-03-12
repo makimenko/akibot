@@ -10,12 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
 
 public class OutgoingMessageManager {
-	private static final Logger log = LogManager.getLogger(OutgoingMessageManager.class.getName());
+	private static final AkiLogger log = AkiLogger.create(OutgoingMessageManager.class);
 
 	private AkibotClient akibotClient;
 
@@ -49,7 +50,11 @@ public class OutgoingMessageManager {
 		int port = clientDescription.getAddress().getPort();
 		String to = clientDescription.getName();
 
-		log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" + port + "): " + message);
+		message.setFrom(akibotClient.getName());
+		message.setTo(to);
+		log.msg(akibotClient.getName(), message);
+		
+		//log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" + port + "): " + message);
 		try {
 			message.setFrom(akibotClient.getName());
 			byte[] buf;

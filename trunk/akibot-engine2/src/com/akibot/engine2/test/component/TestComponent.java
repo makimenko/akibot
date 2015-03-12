@@ -5,10 +5,12 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.network.OutgoingMessageManager;
 
 public class TestComponent extends DefaultComponent {
-	private static final Logger log = LogManager.getLogger(TestComponent.class);
+	private static final AkiLogger log = AkiLogger.create(TestComponent.class);
 	private TestResponse lastTestResponse;
 
 	public TestResponse getLastTestResponse() {
