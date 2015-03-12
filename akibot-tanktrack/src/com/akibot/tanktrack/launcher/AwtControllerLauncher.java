@@ -40,7 +40,7 @@ public class AwtControllerLauncher {
 		orientation.start();
 		gyroscopeCalibration.start();
 
-		System.out.println("AwtControllerLauncher: Started");		
+		System.out.println("AwtControllerLauncher: Started");
 		// LOOP forever:
 		while (true) {
 			Thread.sleep(10000);

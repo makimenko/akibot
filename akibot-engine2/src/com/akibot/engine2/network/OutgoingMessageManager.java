@@ -6,9 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -53,8 +50,9 @@ public class OutgoingMessageManager {
 		message.setFrom(akibotClient.getName());
 		message.setTo(to);
 		log.msg(akibotClient.getName(), message);
-		
-		//log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" + port + "): " + message);
+
+		// log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" +
+		// port + "): " + message);
 		try {
 			message.setFrom(akibotClient.getName());
 			byte[] buf;

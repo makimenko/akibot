@@ -5,14 +5,10 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.Component;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
-import com.akibot.engine2.test.Launcher;
 
 public class AkibotClient extends Thread {
 	private static final AkiLogger log = AkiLogger.create(AkibotClient.class);

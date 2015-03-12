@@ -6,9 +6,6 @@ import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Response;
@@ -39,11 +36,11 @@ public class IncommingMessageReceiver extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				socket.receive(inDatagramPacket);
-				//log.trace(akibotClient + ": Received");
-				
+				// log.trace(akibotClient + ": Received");
+
 				Message message = byteToMessage(inDatagramPacket.getData());
 				log.msg(akibotClient.getName(), message);
-				
+
 				SynchronizedMessageManager sync = akibotClient.getSynchronizedMessageManager();
 				if (message instanceof Response && sync.getSyncId() != null && ((Response) message).getSyncId() != null
 						&& ((Response) message).getSyncId().equals(sync.getSyncId())) {

@@ -62,9 +62,12 @@ public class AkibotTest {
 		testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
 		assertEquals("Chect response", (Integer) 2, (Integer) testResponse.getResult());
 
-		//testRequest.setX(-1);
-		//testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
-		//assertEquals("Chect response", (Integer) 0, (Integer) testResponse.getResult());
+		// testRequest.setX(-1);
+		// testResponse = (TestResponse)
+		// clientA.getOutgoingMessageManager().sendSyncRequest(testRequest,
+		// 1000);
+		// assertEquals("Chect response", (Integer) 0, (Integer)
+		// testResponse.getResult());
 	}
 
 }

@@ -126,6 +126,7 @@ public class AwtControllerAppl {
 		directionAction.getKeyMapping().put(KeyEvent.VK_UP, messageForward);
 		directionAction.getKeyMapping().put(KeyEvent.VK_RIGHT, messageRight);
 		directionAction.getKeyMapping().put(KeyEvent.VK_DOWN, messageBackward);
+
 		directionAction.getKeyMapping().put(KeyEvent.VK_1, messageGyroscopeValueRequest);
 		directionAction.getKeyMapping().put(KeyEvent.VK_2, messageDistanceRequest);
 		directionAction.getKeyMapping().put(KeyEvent.VK_3, messageOrientationRequest);

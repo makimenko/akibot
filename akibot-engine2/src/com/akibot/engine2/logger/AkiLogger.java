@@ -1,7 +1,5 @@
 package com.akibot.engine2.logger;
 
-import java.util.Properties;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -311,7 +309,7 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 
 	public void msg(final String componentName, final com.akibot.engine2.message.Message message) {
 		String msg = "MSG / " + componentName + " / " + message.getFrom() + " / " + message.getTo() + " / " + message;
-		//System.out.println(msg);
+		// System.out.println(msg);
 		logger.logIfEnabled(FQCN, MSG, null, msg, (Throwable) null);
 	}
 

@@ -3,9 +3,6 @@ package com.akibot.engine2.network;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 

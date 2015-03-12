@@ -14,7 +14,7 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
 public class AkiConnectionFactory {
-	
+
 	private static interface Singleton {
 		final AkiConnectionFactory INSTANCE = new AkiConnectionFactory();
 	}
@@ -22,7 +22,7 @@ public class AkiConnectionFactory {
 	private final DataSource dataSource;
 
 	private AkiConnectionFactory() {
-		
+
 		Properties properties = new Properties();
 		properties.setProperty("user", "akibot");
 		properties.setProperty("password", "akibot");
@@ -36,5 +36,5 @@ public class AkiConnectionFactory {
 	public static Connection getDatabaseConnection() throws SQLException {
 		return Singleton.INSTANCE.dataSource.getConnection();
 	}
-	
+
 }
