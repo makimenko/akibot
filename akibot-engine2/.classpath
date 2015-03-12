@@ -4,10 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="config"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-api-2.2.jar"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-core-2.2.jar"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/commons-dbcp2-2.1.jar"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/commons-pool2-2.3.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/oracle/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/commons-pool-1.6.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-api-2.2.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-core-2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

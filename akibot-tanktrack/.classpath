@@ -34,7 +34,7 @@
 	<classpathentry kind="lib" path="/akibot-commons/lib/marytts/voice-cmu-slt-hsmm-5.1.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/akibot/akibot-jni-java.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/akibot-engine2"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-api-2.2.jar"/>
-	<classpathentry kind="lib" path="/akibot-commons/lib/log4j/log4j-core-2.2.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-api-2.2.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-core-2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
