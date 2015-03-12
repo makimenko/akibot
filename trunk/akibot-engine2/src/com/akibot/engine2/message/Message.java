@@ -42,4 +42,5 @@ public class Message implements Serializable, Cloneable {
 	public void setTo(String to) {
 		this.to = to;
 	}
+
 }

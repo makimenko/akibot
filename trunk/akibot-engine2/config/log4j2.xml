@@ -5,20 +5,20 @@
 			<PatternLayout
 				pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n" />
 		</Console>
-		<!-- <JDBC name="databaseAppender" tableName="T_LOG">
-			<ConnectionFactory class="com.akibot.engine2.logger.ConnectionFactory"
+		<JDBC name="databaseAppender" tableName="T_LOG" bufferSize="10">
+			<ConnectionFactory class="com.akibot.engine2.logger.AkiConnectionFactory"
 				method="getDatabaseConnection" />
 			<Column name="ID" literal="S_LOG.NEXTVAL" />
 			<Column name="LOG_DATE" isEventTimestamp="true" />
 			<Column name="LOG_LEVEL" pattern="%level" />
 			<Column name="LOGGER" pattern="%logger" />
 			<Column name="MESSAGE" pattern="%message" />
-		</JDBC>  -->
+			<Column name="THROWABLE" pattern="%ex{full}" isClob="true" />
+		</JDBC>
 	</Appenders>
-
 	<Loggers>
 		<Logger name="org.apache.log4j.xml" level="info" />
-		<Root level="STDOUT">
+		<Root level="MSG">
 			<AppenderRef ref="databaseAppender" />
 		</Root>
 	</Loggers>
