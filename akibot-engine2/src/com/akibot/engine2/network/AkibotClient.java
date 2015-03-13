@@ -16,7 +16,6 @@ public class AkibotClient extends Thread {
 	private Component component;
 	private IncommingMessageManager incommingMessageManager;
 	private ClientDescription myClientDescription;
-
 	private InetSocketAddress myInetSocketAddress;
 	private OutgoingMessageManager outgoingMessageManager;
 	private InetSocketAddress parentSocketAddress;
