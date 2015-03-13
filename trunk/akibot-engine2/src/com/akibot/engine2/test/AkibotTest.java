@@ -3,6 +3,8 @@ package com.akibot.engine2.test;
 import static org.junit.Assert.assertEquals;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -10,6 +12,8 @@ import org.junit.Test;
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.engine2.network.ClientDescription;
+import com.akibot.engine2.network.ClientDescriptionUtils;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
@@ -68,6 +72,67 @@ public class AkibotTest {
 		// 1000);
 		// assertEquals("Chect response", (Integer) 0, (Integer)
 		// testResponse.getResult());
+	}
+
+	@Test
+	public void testClientSimpleMerge() {
+		ClientDescription me = new ClientDescription("one", new InetSocketAddress("localhost", 1000));
+		ClientDescription client2a = new ClientDescription("two", new InetSocketAddress("localhost", 1001));
+		ClientDescription client2b = new ClientDescription("two", new InetSocketAddress("localhost", 1002));
+		ClientDescription client2c = new ClientDescription("two_new", new InetSocketAddress("localhost", 1002));
+
+		List<ClientDescription> clientDescriptionList = new ArrayList<ClientDescription>();
+		clientDescriptionList.add(me);
+
+		assertEquals("Client 1 added", (Integer) 1, (Integer) clientDescriptionList.size());
+
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(me, client2a, clientDescriptionList);
+		assertEquals("Client 2a added", (Integer) 2, (Integer) clientDescriptionList.size());
+
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(me, client2b, clientDescriptionList);
+		assertEquals("Client 2b replaced 2a", (Integer) 2, (Integer) clientDescriptionList.size());
+
+		assertEquals("Client 2a not exists", false, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2a) > 0);
+		assertEquals("Client 2b exists", true, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2b) > 0);
+
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(me, client2c, clientDescriptionList);
+		assertEquals("Client 2c rename", (Integer) 2, (Integer) clientDescriptionList.size());
+		assertEquals("Client 2c rename", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2a) > 0);
+		assertEquals("Client 2c rename", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2b) > 0);
+		assertEquals("Client 2c rename", true, ClientDescriptionUtils.findByName(clientDescriptionList, client2c) > 0);
+	}
+
+	@Test
+	public void testClientListMerge() {
+		ClientDescription me = new ClientDescription("one", new InetSocketAddress("localhost", 1000));
+		ClientDescription client2a = new ClientDescription("two", new InetSocketAddress("localhost", 1001));
+		ClientDescription client2b = new ClientDescription("two", new InetSocketAddress("localhost", 1002));
+		ClientDescription client2c = new ClientDescription("two_new", new InetSocketAddress("localhost", 1002));
+
+		List<ClientDescription> clientDescriptionList = new ArrayList<ClientDescription>();
+		clientDescriptionList.add(me);
+		clientDescriptionList.add(client2a);
+
+		List<ClientDescription> newList1 = new ArrayList<ClientDescription>();
+		newList1.add(client2a);
+		clientDescriptionList = ClientDescriptionUtils.mergeList(me, newList1, clientDescriptionList);
+		assertEquals("Client 2a received (no changes)", (Integer) 2, (Integer) clientDescriptionList.size());
+
+		List<ClientDescription> newList2 = new ArrayList<ClientDescription>();
+		newList2.add(client2b);
+		clientDescriptionList = ClientDescriptionUtils.mergeList(me, newList2, clientDescriptionList);
+		assertEquals("Client 2b received", (Integer) 2, (Integer) clientDescriptionList.size());
+		assertEquals("Client 2b received", false, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2a) > 0);
+		assertEquals("Client 2b received", true, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2b) > 0);
+
+		List<ClientDescription> newList3 = new ArrayList<ClientDescription>();
+		newList3.add(client2c);
+		clientDescriptionList = ClientDescriptionUtils.mergeList(me, newList3, clientDescriptionList);
+		assertEquals("Client 2c received", (Integer) 2, (Integer) clientDescriptionList.size());
+		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2a) > 0);
+		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2b) > 0);
+		assertEquals("Client 2c received", true, ClientDescriptionUtils.findByName(clientDescriptionList, client2c) > 0);
+
 	}
 
 }
