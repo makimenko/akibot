@@ -36,7 +36,7 @@ public class IncommingMessageReceiver extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				socket.receive(inDatagramPacket);
-				// log.trace(akibotClient + ": Received");
+				log.trace(akibotClient + ": Received");
 
 				Message message = byteToMessage(inDatagramPacket.getData());
 				log.msg(akibotClient.getName(), message);

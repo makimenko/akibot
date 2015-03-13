@@ -99,13 +99,14 @@ public class AkibotClient extends Thread {
 		log.trace(this + ": onSystemMessageReceived (from=" + message.getFrom() + "): " + message);
 		if (message instanceof ClientDescriptionRequest) {
 			ClientDescriptionRequest request = (ClientDescriptionRequest) message;
-			clientDescriptionList = ClientDescriptionUtils.merge(request.getClientDescription(), clientDescriptionList);
+			clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(myClientDescription, request.getClientDescription(),
+					clientDescriptionList);
 			ClientDescriptionResponse response = new ClientDescriptionResponse();
 			response.setClientDescriptionList(clientDescriptionList);
 			outgoingMessageManager.broadcastMessage(response);
 		} else if (message instanceof ClientDescriptionResponse) {
 			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
-			clientDescriptionList = ClientDescriptionUtils.merge(myClientDescription, response.getClientDescriptionList(), clientDescriptionList);
+			clientDescriptionList = ClientDescriptionUtils.mergeList(myClientDescription, response.getClientDescriptionList(), clientDescriptionList);
 			// broadcastMessage(response);
 		}
 	}
