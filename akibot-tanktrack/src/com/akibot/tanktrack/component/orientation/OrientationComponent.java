@@ -36,9 +36,9 @@ public class OrientationComponent extends DefaultComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof OrientationRequest) {
 			OrientationRequest orientationRequest = (OrientationRequest) message;
-			if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360
-					&& orientationRequest.getPrecissionDegrees() > 0 && orientationRequest.getPrecissionDegrees() < 360
-					&& orientationRequest.getTimeoutMillis() > 0 && orientationRequest.getTimeoutMillis() <= 60000) {
+			if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360 && orientationRequest.getPrecissionDegrees() > 0
+					&& orientationRequest.getPrecissionDegrees() < 360 && orientationRequest.getTimeoutMillis() > 0
+					&& orientationRequest.getTimeoutMillis() <= 60000) {
 
 				log.debug("OrientationRequest: " + orientationRequest);
 				long startTimeMills = System.currentTimeMillis();

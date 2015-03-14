@@ -74,8 +74,7 @@ public class AwtControllerAppl {
 		messageOrientationRequest.setPrecissionDegrees(1);
 		messageOrientationRequest.setTimeoutMillis(10000);
 
-		SpeechSynthesisRequest messageSpeechSynthesis = new SpeechSynthesisRequest(
-				"Hello, Michael! Akibot is ready for work. Awaiting your commands.");
+		SpeechSynthesisRequest messageSpeechSynthesis = new SpeechSynthesisRequest("Hello, Michael! Akibot is ready for work. Awaiting your commands.");
 
 		messageDistanceRequest.setTo("akibot.distance.*");
 		messageStop.setTo(tankTrackName);

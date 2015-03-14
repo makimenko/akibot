@@ -104,8 +104,7 @@ public class ClientDescriptionUtils {
 		}
 	}
 
-	public static List<ClientDescription> mergeList(ClientDescription myClientDescription, List<ClientDescription> mergeFrom,
-			List<ClientDescription> mergeTo) {
+	public static List<ClientDescription> mergeList(ClientDescription myClientDescription, List<ClientDescription> mergeFrom, List<ClientDescription> mergeTo) {
 		log.trace(myClientDescription.getName() + ": Merge clients (" + myClientDescription.getName() + "): " + mergeFrom + " -> " + mergeTo);
 		if (mergeFrom == null || mergeFrom.size() == 0) {
 			return mergeTo;
