@@ -12,7 +12,7 @@ package akibot.jni.java;
 public class AkibotJniTest {
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("STARTING....");
+        System.out.println("STARTING...");
         AkibotJniLibrary lib = new AkibotJniLibrary();
         lib.initialize();
         for (int i = 0; i <= 100; i++) {
