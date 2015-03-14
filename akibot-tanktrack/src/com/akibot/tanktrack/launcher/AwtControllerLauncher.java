@@ -18,7 +18,7 @@ public class AwtControllerLauncher {
 	static final Logger log = LogManager.getLogger(AwtControllerLauncher.class.getName());
 
 	public static void main(String[] args) throws Exception {
-
+		// AAA
 		String serverHost = "raspberrypi";
 		int serverPort = 2000;
 
