@@ -1,6 +1,7 @@
 #include "Akibot.h"
 
 DistanceMeterSRF05 distanceMeter;
+Servo servo;
 bool wiringPiInitialized = false;
 
 
@@ -38,4 +39,13 @@ JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_initialize
         fprintf(stdout, "Wiring Pi successfully initialized.\n");
         wiringPiInitialized = true;
     }
+}
+
+JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_servo
+  (JNIEnv *, jobject, jint servoPin, jint initialValue, jint pwmRange, jint divisor, jint value, jint microseconds) {
+    checkWiringPiInitialized();
+    if (!servo.isInitializedFor(servoPin, initialValue, pwmRange, divisor)) {
+        servo.initialize(servoPin, initialValue, pwmRange, divisor);
+    }
+    servo.softPwmWriteAndWait(value, microseconds);
 }

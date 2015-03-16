@@ -41,6 +41,8 @@ public class AkibotJniLibrary {
 
     public native int getDistance(int triggerPin, int echoPin, int timeoutMicroseconds);
 
+    public native void servo(int servoPin, int initialValue, int pwmRange, int divisor, int value, int microseconds);
+    
     public native int pulseIn(int pin, int level, int timeoutMicroseconds);
 
 }

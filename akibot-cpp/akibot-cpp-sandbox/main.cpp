@@ -26,7 +26,10 @@ int main(int argc, char** argv) {
     } else {
         printf("Initialized\n");
     }
-    int servoPin = 24;
+    // 23 - ground (4 - 14! - 24)
+    // 24 - head (14! - 24)
+    
+    int servoPin = 23;
     pinMode(servoPin, OUTPUT);
     digitalWrite(servoPin, LOW);
     pwmSetClock(200);
@@ -38,15 +41,18 @@ int main(int argc, char** argv) {
 
     printf("value: %lf\n", min);
     softPwmWrite(servoPin, min);
-    sleep(1);
+    usleep(500000);
+    //sleep(1);
 
     printf("value: %lf\n", avg);
     softPwmWrite(servoPin, avg);
-    sleep(1);
+    //sleep(1);
+    usleep(500000);
 
     printf("value: %lf\n", max);
     softPwmWrite(servoPin, max);
-    sleep(1);
+    //sleep(1);
+    usleep(500000);
 
     printf("END.\n");
     return 0;

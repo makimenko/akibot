@@ -25,6 +25,14 @@ JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_getDistance
 
 /*
  * Class:     akibot_jni_java_AkibotJniLibrary
+ * Method:    servo
+ * Signature: (IIIIII)V
+ */
+JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_servo
+  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint);
+
+/*
+ * Class:     akibot_jni_java_AkibotJniLibrary
  * Method:    pulseIn
  * Signature: (III)I
  */

@@ -16,9 +16,9 @@ public class AkibotJniTest {
         AkibotJniLibrary lib = new AkibotJniLibrary();
         lib.initialize();
         for (int i = 0; i <= 100; i++) {
-            int cm = lib.getDistance(25, 27, 50000);
+            int cm = lib.getDistance(25, 27, 500000);
             System.out.println("Distance is: " + cm + " cm");
-            Thread.sleep(100);
+            Thread.sleep(500);
         }
         System.out.println("END");
     }
