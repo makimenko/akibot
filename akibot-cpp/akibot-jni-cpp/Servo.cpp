@@ -35,6 +35,7 @@ bool Servo::isInitializedFor(int servoPinIn, int initialValueIn, int pwmRangeIn,
 void Servo::softPwmWriteAndWait(int value, int microseconds) {
     softPwmWrite(servoPin, value);
     usleep(microseconds);
+    softPwmWrite(servoPin, 0);
 }
 
 

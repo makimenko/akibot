@@ -53,6 +53,10 @@ int main(int argc, char** argv) {
     softPwmWrite(servoPin, max);
     //sleep(1);
     usleep(500000);
+    
+    softPwmWrite(servoPin, 0);
+    sleep(100000);
+    
 
     printf("END.\n");
     return 0;
