@@ -17,8 +17,7 @@ public class FixedSizeServer {
 
 			String response = "ECHO: " + request;
 			buf = response.getBytes();
-			DatagramPacket responseDatagramPacket = new DatagramPacket(buf, buf.length, requestDatagramPacket.getAddress(),
-					requestDatagramPacket.getPort());
+			DatagramPacket responseDatagramPacket = new DatagramPacket(buf, buf.length, requestDatagramPacket.getAddress(), requestDatagramPacket.getPort());
 			socket.send(responseDatagramPacket);
 		}
 	}

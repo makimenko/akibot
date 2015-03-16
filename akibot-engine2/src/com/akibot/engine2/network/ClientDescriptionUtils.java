@@ -66,6 +66,14 @@ public class ClientDescriptionUtils {
 		}
 	}
 
+	public static boolean isAddressedToClient(ClientDescription clientDescription, Message message) {
+		if (message.getTo() == null) {
+			return true;
+		} else {
+			return message.getTo().equals(clientDescription.getName());
+		}
+	}
+
 	public static boolean isSystemMessage(Message message) {
 		return (message instanceof SystemRequest || message instanceof SystemResponse);
 	}

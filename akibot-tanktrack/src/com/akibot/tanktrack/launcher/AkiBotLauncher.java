@@ -11,6 +11,8 @@ import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
+import com.akibot.tanktrack.component.servo.ServoComponent;
+import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
@@ -65,12 +67,21 @@ public class AkiBotLauncher {
 		// obstacle.getMyClientDescription().getTopicList().add(new
 		// DistanceResponse());
 
+		// Servo motors
+		AkibotClient servoBase = new AkibotClient("akibot.servo.base", new ServoComponent(23, 0, 200, 200), serverAddress);
+		servoBase.getMyClientDescription().getTopicList().add(new ServoRequest());
+
+		AkibotClient servoHead = new AkibotClient("akibot.servo.head", new ServoComponent(24, 0, 200, 200), serverAddress);
+		servoHead.getMyClientDescription().getTopicList().add(new ServoRequest());
+
 		// Start all
 		tankTrack.start();
 		gyroscope.start();
 		// speechSynthesisClient.start();
 		distance.start();
 		// obstacle.start();
+		servoBase.start();
+		servoHead.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

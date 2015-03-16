@@ -18,10 +18,9 @@ public class ObjectServer {
 			myObject.setName("ECHO: " + myObject.getName());
 
 			buf = utils.objectToByte(myObject);
-			DatagramPacket responseDatagramPacket = new DatagramPacket(buf, buf.length, requestDatagramPacket.getAddress(),
-					requestDatagramPacket.getPort());
+			DatagramPacket responseDatagramPacket = new DatagramPacket(buf, buf.length, requestDatagramPacket.getAddress(), requestDatagramPacket.getPort());
 			socket.send(responseDatagramPacket);
-			
+
 		}
 	}
 }
