@@ -16,7 +16,7 @@ order by 1 desc;
 select *
 from v_log_msg
 where 1=1
-  and direction = 'IN'
+--  and direction = 'IN'
     and id > 3640
 
 
