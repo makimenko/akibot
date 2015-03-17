@@ -40,7 +40,7 @@ public class OrientationComponent extends DefaultComponent {
 					&& orientationRequest.getPrecissionDegrees() < 360 && orientationRequest.getTimeoutMillis() > 0
 					&& orientationRequest.getTimeoutMillis() <= 60000) {
 
-				log.debug("OrientationRequest: " + orientationRequest);
+				log.debug(this.getAkibotClient() + ": OrientationRequest: " + orientationRequest);
 				long startTimeMills = System.currentTimeMillis();
 				int syncRequestTimeout = 2000; // 2 second timeout
 				long stepMillis = 100; // TODO: Configuratble
@@ -63,7 +63,7 @@ public class OrientationComponent extends DefaultComponent {
 							syncRequestTimeout);
 
 					if (isExpected(orientationRequest, gyroscopeResponse)) {
-						log.debug("Orientation Succeeded");
+						log.debug(this.getAkibotClient() + ": Orientation Succeeded");
 						getAkibotClient().getOutgoingMessageManager().broadcastMessage(stopRequest);
 						OrientationResponse successOrientationResponse = new OrientationResponse();
 						successOrientationResponse.setSuccess(true);
@@ -89,7 +89,7 @@ public class OrientationComponent extends DefaultComponent {
 						Thread.sleep(stepMillis);
 					}
 				}
-				log.debug("Orientation Failed");
+				log.debug(this.getAkibotClient() + ": Orientation Failed");
 				getAkibotClient().getOutgoingMessageManager().broadcastMessage(stopRequest);
 				OrientationResponse failedOrientationResponse = new OrientationResponse();
 				failedOrientationResponse.setSuccess(false);
@@ -98,7 +98,7 @@ public class OrientationComponent extends DefaultComponent {
 				getAkibotClient().getOutgoingMessageManager().broadcastMessage(failedOrientationResponse);
 
 			} else {
-				log.error("Invalid Orientation Request");
+				log.error(this.getAkibotClient() + ": Invalid Orientation Request");
 			}
 
 		}

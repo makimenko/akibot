@@ -39,31 +39,31 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 
 			switch (request.getDirectionType()) {
 			case FORWARD:
-				log.debug("FORWARD");
+				log.debug(this.getAkibotClient() + ": FORWARD");
 				defaultState();
 				rightForwardPin.high();
 				leftForwardPin.high();
 				break;
 			case BACKWARD:
-				log.debug("BACKWARD");
+				log.debug(this.getAkibotClient() + ": BACKWARD");
 				defaultState();
 				rightBackwardPin.high();
 				leftBackwardPin.high();
 				break;
 			case LEFT:
-				log.debug("LEFT");
+				log.debug(this.getAkibotClient() + ": LEFT");
 				defaultState();
 				rightForwardPin.high();
 				leftBackwardPin.high();
 				break;
 			case RIGHT:
-				log.debug("RIGHT");
+				log.debug(this.getAkibotClient() + ": RIGHT");
 				defaultState();
 				leftForwardPin.high();
 				rightBackwardPin.high();
 				break;
 			default:
-				log.debug("STOP");
+				log.debug(this.getAkibotClient() + ": STOP");
 				defaultState();
 				break;
 			}
@@ -72,7 +72,7 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 
 	@Override
 	public void start() {
-		log.debug("Initializing Tanktrack GPIOs");
+		log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
 		gpio = GpioFactory.getInstance();
 
 		rightBackwardPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "rightIA", PinState.LOW);
@@ -83,7 +83,7 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 
 		defaultState();
 
-		log.debug("TankTrack GPIOs initialized successfully");
+		log.debug(this.getAkibotClient() + ": TankTrack GPIOs initialized successfully");
 	}
 
 }

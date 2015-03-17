@@ -34,7 +34,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof SpeechSynthesisRequest) {
 			SpeechSynthesisRequest request = (SpeechSynthesisRequest) message;
-			log.debug("Speech request: " + request);
+			log.debug(this.getAkibotClient() + ": Speech request: " + request);
 
 			if (request.getSpeechText() != null && request.getSpeechText().length() > 0) {
 				AudioInputStream audio = marytts.generateAudio(request.getSpeechText());

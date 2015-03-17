@@ -78,8 +78,7 @@ public class ClientDescriptionUtils {
 		return (message instanceof SystemRequest || message instanceof SystemResponse);
 	}
 
-	public static List<ClientDescription> mergeClientDescription(ClientDescription myClientDescription, ClientDescription clientDescription,
-			List<ClientDescription> mergeTo) {
+	public static List<ClientDescription> mergeClientDescription(AkibotClient akibotClient, ClientDescription clientDescription, List<ClientDescription> mergeTo) {
 		if (clientDescription == null) {
 			return mergeTo;
 		} else if (mergeTo == null) {
@@ -95,16 +94,16 @@ public class ClientDescriptionUtils {
 
 			if (addressIndex < 0 && nameIndex < 0) {
 				// new client
-				log.trace(myClientDescription.getName() + ": Add client: " + clientDescription);
+				log.trace(akibotClient + ": Add client: " + clientDescription);
 				mergeTo.add(clientDescription);
 			} else if (addressIndex > 0 && nameIndex < 0) {
 				// Change name
-				log.trace(myClientDescription.getName() + ": Change client name: " + clientDescription);
+				log.trace(akibotClient + ": Change client name: " + clientDescription);
 				mergeTo.remove(addressIndex);
 				mergeTo.add(clientDescription);
 			} else if (addressIndex < 0 && nameIndex > 0) {
 				// Change address
-				log.trace(myClientDescription.getName() + ": Change client address: " + clientDescription);
+				log.trace(akibotClient + ": Change client address: " + clientDescription);
 				mergeTo.remove(nameIndex);
 				mergeTo.add(clientDescription);
 			}
@@ -112,15 +111,15 @@ public class ClientDescriptionUtils {
 		}
 	}
 
-	public static List<ClientDescription> mergeList(ClientDescription myClientDescription, List<ClientDescription> mergeFrom, List<ClientDescription> mergeTo) {
-		log.trace(myClientDescription.getName() + ": Merge clients (" + myClientDescription.getName() + "): " + mergeFrom + " -> " + mergeTo);
+	public static List<ClientDescription> mergeList(AkibotClient akibotClient, List<ClientDescription> mergeFrom, List<ClientDescription> mergeTo) {
+		log.trace(akibotClient + ": Merge clients: " + mergeFrom + " -> " + mergeTo);
 		if (mergeFrom == null || mergeFrom.size() == 0) {
 			return mergeTo;
 		} else if (mergeTo == null || mergeTo.size() == 0) {
 			return mergeFrom;
 		} else {
 			for (ClientDescription descr : mergeFrom) {
-				mergeTo = mergeClientDescription(myClientDescription, descr, mergeTo);
+				mergeTo = mergeClientDescription(akibotClient, descr, mergeTo);
 			}
 			return mergeTo;
 		}

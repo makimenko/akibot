@@ -26,7 +26,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	}
 
 	public HMC5883LGyroscopeComponent(double offsetX, double offsetY, double offsetZ, double offsetDegrees) throws IOException {
-		log.debug("Initializing HMC5883LGyroscopeComponent");
+		log.debug(this.getAkibotClient() + ": Initializing HMC5883LGyroscopeComponent");
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.offsetZ = offsetZ;
@@ -40,7 +40,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 		hmc5883l.write("0b00100000".getBytes(), 1, "0b01110000".length());
 		hmc5883l.write("0b00000000".getBytes(), 2, "0b01110000".length());
 
-		log.debug("HMC5883LGyroscopeComponent initialized");
+		log.debug(this.getAkibotClient() + ": HMC5883LGyroscopeComponent initialized");
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 			GyroscopeResponse response = new GyroscopeResponse();
 			response.copySyncId(message);
 
-			GyroscopeValueRequest request = (GyroscopeValueRequest) message;
+			// GyroscopeValueRequest request = (GyroscopeValueRequest) message;
 
 			// Reading magnetometer data:
 			double x = read(3, hmc5883l) - offsetX;
@@ -80,7 +80,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 			response.setZ(z);
 			response.setNorthDegrreesXY(northDegreesXY);
 
-			log.trace("Duration: " + (System.currentTimeMillis() - startTime));
+			log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 

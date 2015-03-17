@@ -32,7 +32,6 @@ public class ServoComponent extends DefaultComponent {
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof ServoRequest) {
-			long startTime = System.currentTimeMillis();
 			ServoRequest request = (ServoRequest) message;
 			ServoResponse response = new ServoResponse();
 			this.lib.servo(servoPin, initialValue, pwmRange, divisor, request.getValue(), request.getMicroseconds());

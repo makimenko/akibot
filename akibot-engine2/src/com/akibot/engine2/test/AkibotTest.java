@@ -86,16 +86,16 @@ public class AkibotTest {
 
 		assertEquals("Client 1 added", (Integer) 1, (Integer) clientDescriptionList.size());
 
-		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(me, client2a, clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(clientA, client2a, clientDescriptionList);
 		assertEquals("Client 2a added", (Integer) 2, (Integer) clientDescriptionList.size());
 
-		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(me, client2b, clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(clientA, client2b, clientDescriptionList);
 		assertEquals("Client 2b replaced 2a", (Integer) 2, (Integer) clientDescriptionList.size());
 
 		assertEquals("Client 2a not exists", false, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2a) > 0);
 		assertEquals("Client 2b exists", true, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2b) > 0);
 
-		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(me, client2c, clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(clientA, client2c, clientDescriptionList);
 		assertEquals("Client 2c rename", (Integer) 2, (Integer) clientDescriptionList.size());
 		assertEquals("Client 2c rename", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2a) > 0);
 		assertEquals("Client 2c rename", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2b) > 0);
@@ -115,19 +115,19 @@ public class AkibotTest {
 
 		List<ClientDescription> newList1 = new ArrayList<ClientDescription>();
 		newList1.add(client2a);
-		clientDescriptionList = ClientDescriptionUtils.mergeList(me, newList1, clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeList(clientA, newList1, clientDescriptionList);
 		assertEquals("Client 2a received (no changes)", (Integer) 2, (Integer) clientDescriptionList.size());
 
 		List<ClientDescription> newList2 = new ArrayList<ClientDescription>();
 		newList2.add(client2b);
-		clientDescriptionList = ClientDescriptionUtils.mergeList(me, newList2, clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeList(clientA, newList2, clientDescriptionList);
 		assertEquals("Client 2b received", (Integer) 2, (Integer) clientDescriptionList.size());
 		assertEquals("Client 2b received", false, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2a) > 0);
 		assertEquals("Client 2b received", true, ClientDescriptionUtils.findByAddress(clientDescriptionList, client2b) > 0);
 
 		List<ClientDescription> newList3 = new ArrayList<ClientDescription>();
 		newList3.add(client2c);
-		clientDescriptionList = ClientDescriptionUtils.mergeList(me, newList3, clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeList(clientA, newList3, clientDescriptionList);
 		assertEquals("Client 2c received", (Integer) 2, (Integer) clientDescriptionList.size());
 		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2a) > 0);
 		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2b) > 0);

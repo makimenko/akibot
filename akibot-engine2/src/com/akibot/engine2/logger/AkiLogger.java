@@ -9,6 +9,8 @@ import org.apache.logging.log4j.message.MessageFactory;
 import org.apache.logging.log4j.spi.AbstractLogger;
 import org.apache.logging.log4j.spi.ExtendedLoggerWrapper;
 
+import com.akibot.engine2.network.AkibotClient;
+
 /**
  * Extended Logger interface with convenience methods for the MSG custom log
  * level.
@@ -307,8 +309,8 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 		logger.logIfEnabled(FQCN, MSG, null, message, t);
 	}
 
-	public void msg(final String componentName, final com.akibot.engine2.message.Message message) {
-		String msg = "MSG / " + componentName + " / " + message.getFrom() + " / " + message.getTo() + " / " + message;
+	public void msg(final AkibotClient akibotClient, final com.akibot.engine2.message.Message message) {
+		String msg = akibotClient + ": MSG / " + message.getFrom() + " / " + message.getTo() + " / " + message;
 		// System.out.println(msg);
 		logger.logIfEnabled(FQCN, MSG, null, msg, (Throwable) null);
 	}

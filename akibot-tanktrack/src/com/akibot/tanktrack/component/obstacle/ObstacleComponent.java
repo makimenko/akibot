@@ -62,7 +62,7 @@ public class ObstacleComponent extends DefaultComponent {
 	private void prepareResponse() throws FailedToSendMessageException {
 		if (hasDistance && hasGyroscope) {
 
-			log.debug("Calculation Input: " + gyroscopeResponse.getNorthDegrreesXY() + ", " + distanceResponse.getMm());
+			log.debug(this.getAkibotClient() + ": Calculation Input: " + gyroscopeResponse.getNorthDegrreesXY() + ", " + distanceResponse.getMm());
 
 			double radians = Math.toRadians(gyroscopeResponse.getNorthDegrreesXY());
 			double x = Math.sin(radians) * distanceResponse.getMm();

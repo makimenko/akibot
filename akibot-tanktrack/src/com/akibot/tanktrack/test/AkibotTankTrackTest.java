@@ -21,7 +21,7 @@ import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
-public class AkibotTest {
+public class AkibotTankTrackTest {
 	private static AkibotClient testClient;
 
 	@BeforeClass

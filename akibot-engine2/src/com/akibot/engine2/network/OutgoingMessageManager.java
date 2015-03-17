@@ -22,16 +22,22 @@ public class OutgoingMessageManager {
 	}
 
 	public void broadcastMessage(Message message) throws FailedToSendMessageException {
+		int count = 0;
 		if (akibotClient.getClientDescriptionList() != null && akibotClient.getClientDescriptionList().size() > 0) {
 			log.trace(akibotClient + ": broadcastMessage: " + message);
 			for (ClientDescription client : akibotClient.getClientDescriptionList()) {
 				if (ClientDescriptionUtils.isSystemMessage(message)
 						|| (ClientDescriptionUtils.isAddressedToClient(client, message) && ClientDescriptionUtils.isInterestedInMessage(client, message))) {
+					count++;
 					send(client, message);
 				}
 			}
 		} else {
-			log.trace(akibotClient + ": broadcastMessage: Skip broadcasting. No Clients!");
+			log.warn(akibotClient + ": broadcastMessage: Skip broadcasting. No Clients!");
+		}
+		if (count == 0) {
+			log.warn(akibotClient + ": broadcastMessage: Noone interested in: " + message + " (to=" + message.getTo()
+					+ "); akibotClient.clientDescriptionList=(" + akibotClient.getClientDescriptionList() + ")");
 		}
 	}
 
@@ -50,7 +56,7 @@ public class OutgoingMessageManager {
 
 		message.setFrom(akibotClient.getName());
 		message.setTo(to);
-		log.msg(akibotClient.getName(), message);
+		log.msg(akibotClient, message);
 
 		// log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" +
 		// port + "): " + message);

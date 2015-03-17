@@ -3,15 +3,11 @@ package com.akibot.tanktrack.component.awtcontroller;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.network.AkibotClient;
 
 public class AwtControllerAction {
-	static final Logger log = LogManager.getLogger(AwtControllerAction.class.getName());
 
 	private AkibotClient akibotClient;
 	private Integer currentKey;
@@ -37,7 +33,6 @@ public class AwtControllerAction {
 	private void send(Integer code) throws FailedToSendMessageException {
 		Message msg = keyMapping.get(code);
 		akibotClient.getOutgoingMessageManager().broadcastMessage(msg);
-		log.debug("SEND: " + msg);
 	}
 
 	public void setKeyMapping(HashMap<Integer, Message> keyMapping) {

@@ -16,13 +16,13 @@ public class ToggleComponent extends DefaultComponent {
 
 			switch (request.getType()) {
 			case ON:
-				log.debug("ON");
+				log.debug(this.getAkibotClient() + ": ON");
 				break;
 			case OFF:
-				log.debug("OFF");
+				log.debug(this.getAkibotClient() + ": OFF");
 				break;
 			default:
-				log.debug("UNKNOWN COMMAND: " + request.getType());
+				log.debug(this.getAkibotClient() + ": UNKNOWN COMMAND: " + request.getType());
 				break;
 			}
 		}

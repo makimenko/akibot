@@ -39,7 +39,7 @@ public class IncommingMessageReceiver extends Thread {
 				log.trace(akibotClient + ": Received");
 
 				Message message = byteToMessage(inDatagramPacket.getData());
-				log.msg(akibotClient.getName(), message);
+				log.msg(akibotClient, message);
 
 				SynchronizedMessageManager sync = akibotClient.getSynchronizedMessageManager();
 				if (message instanceof Response && sync.getSyncId() != null && ((Response) message).getSyncId() != null

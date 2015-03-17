@@ -15,7 +15,7 @@ public class TestComponent extends DefaultComponent {
 
 	@Override
 	public void onMessageReceived(Message message) throws FailedToSendMessageException {
-		log.trace(this + ": onMessageReceived: " + message);
+		log.trace(this.getAkibotClient() + ": onMessageReceived: " + message);
 		if (message instanceof TestRequest) {
 			TestRequest request = (TestRequest) message;
 			TestResponse response = new TestResponse();

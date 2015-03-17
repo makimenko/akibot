@@ -14,7 +14,7 @@ public class PositioningComponent extends DefaultComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof PositioningVectorRequest) {
 			PositioningVectorRequest request = (PositioningVectorRequest) message;
-			log.debug("Positioning request: " + request);
+			log.debug(this.getAkibotClient() + ": Positioning request: " + request);
 			Vector3d vector3d = request.getVector3d();
 
 			double x = vector3d.getX();

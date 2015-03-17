@@ -16,19 +16,19 @@ public class TankTrackComponent extends DefaultComponent {
 
 			switch (request.getDirectionType()) {
 			case FORWARD:
-				log.debug("FORWARD");
+				log.debug(this.getAkibotClient() + ": FORWARD");
 				break;
 			case BACKWARD:
-				log.debug("BACKWARD");
+				log.debug(this.getAkibotClient() + ": BACKWARD");
 				break;
 			case LEFT:
-				log.debug("LEFT");
+				log.debug(this.getAkibotClient() + ": LEFT");
 				break;
 			case RIGHT:
-				log.debug("RIGHT");
+				log.debug(this.getAkibotClient() + ": RIGHT");
 				break;
 			default:
-				log.debug("STOP");
+				log.debug(this.getAkibotClient() + ": STOP");
 				break;
 			}
 		}
