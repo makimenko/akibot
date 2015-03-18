@@ -78,8 +78,16 @@ public class ClientDescriptionUtils {
 		return (message instanceof SystemRequest || message instanceof SystemResponse);
 	}
 
+	public static boolean isNew(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
+		return clientDescriptionA.getStartupTime() > clientDescriptionB.getStartupTime() || clientDescriptionB.getName() == null;
+	}
+
 	public static List<ClientDescription> mergeClientDescription(AkibotClient akibotClient, ClientDescription clientDescription, List<ClientDescription> mergeTo) {
 		if (clientDescription == null) {
+			return mergeTo;
+		} else if (equalAddress(akibotClient.getMyClientDescription(), clientDescription)
+				&& equalName(akibotClient.getMyClientDescription(), clientDescription)) {
+			// Skip my address
 			return mergeTo;
 		} else if (mergeTo == null) {
 			mergeTo = new ArrayList<ClientDescription>();
@@ -96,12 +104,12 @@ public class ClientDescriptionUtils {
 				// new client
 				log.trace(akibotClient + ": Add client: " + clientDescription);
 				mergeTo.add(clientDescription);
-			} else if (addressIndex > 0 && nameIndex < 0) {
+			} else if (addressIndex > 0 && nameIndex < 0 && isNew(clientDescription, mergeTo.get(addressIndex))) {
 				// Change name
 				log.trace(akibotClient + ": Change client name: " + clientDescription);
 				mergeTo.remove(addressIndex);
 				mergeTo.add(clientDescription);
-			} else if (addressIndex < 0 && nameIndex > 0) {
+			} else if (addressIndex < 0 && nameIndex > 0 && isNew(clientDescription, mergeTo.get(nameIndex))) {
 				// Change address
 				log.trace(akibotClient + ": Change client address: " + clientDescription);
 				mergeTo.remove(nameIndex);

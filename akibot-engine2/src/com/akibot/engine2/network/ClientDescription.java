@@ -15,11 +15,13 @@ public class ClientDescription implements Serializable {
 	private InetSocketAddress address;
 	private String name;
 	private ArrayList<Message> topicList;
+	private long startupTime;
 
 	public ClientDescription(String name, InetSocketAddress address) {
 		setName(name);
 		setTopicList(new ArrayList<Message>());
 		setAddress(address);
+		setStartupTime(System.currentTimeMillis());
 	}
 
 	public InetSocketAddress getAddress() {
@@ -44,6 +46,14 @@ public class ClientDescription implements Serializable {
 
 	public void setTopicList(ArrayList<Message> topicList) {
 		this.topicList = topicList;
+	}
+
+	public long getStartupTime() {
+		return startupTime;
+	}
+
+	public void setStartupTime(long startupTime) {
+		this.startupTime = startupTime;
 	}
 
 	@Override

@@ -9,9 +9,13 @@ import com.akibot.engine2.component.Component;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.monitoring.StatusRequest;
+import com.akibot.engine2.monitoring.StatusResponse;
 
 public class AkibotClient extends Thread {
 	private static final AkiLogger log = AkiLogger.create(AkibotClient.class);
+	private final long startupTime = System.currentTimeMillis();
+
 	private List<ClientDescription> clientDescriptionList;
 	private Component component;
 	private IncommingMessageManager incommingMessageManager;
@@ -105,7 +109,13 @@ public class AkibotClient extends Thread {
 		} else if (message instanceof ClientDescriptionResponse) {
 			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
 			clientDescriptionList = ClientDescriptionUtils.mergeList(this, response.getClientDescriptionList(), clientDescriptionList);
-			// broadcastMessage(response);
+		} else if (message instanceof StatusRequest) {
+			StatusResponse statusResponse = new StatusResponse();
+			statusResponse.setClientDescriptionList(clientDescriptionList);
+			statusResponse.setMyClientDescription(myClientDescription);
+			statusResponse.setCurrentTime(System.currentTimeMillis());
+			statusResponse.setStartupTime(startupTime);
+			outgoingMessageManager.broadcastMessage(statusResponse);
 		}
 	}
 

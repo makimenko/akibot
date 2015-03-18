@@ -58,8 +58,6 @@ public class OutgoingMessageManager {
 		message.setTo(to);
 		log.msg(akibotClient, message);
 
-		// log.trace(akibotClient + ": send: to=(" + to + " - " + host + ":" +
-		// port + "): " + message);
 		try {
 			message.setFrom(akibotClient.getName());
 			byte[] buf;
