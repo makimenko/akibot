@@ -8,6 +8,11 @@ import com.akibot.engine2.message.Message;
 public class TestComponent extends DefaultComponent {
 	private static final AkiLogger log = AkiLogger.create(TestComponent.class);
 	private TestResponse lastTestResponse;
+	private int[] array;
+
+	public TestComponent() {
+
+	}
 
 	public TestResponse getLastTestResponse() {
 		return lastTestResponse;
@@ -24,7 +29,18 @@ public class TestComponent extends DefaultComponent {
 			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		} else if (message instanceof TestResponse) {
 			lastTestResponse = (TestResponse) message;
+			if (array != null) {
+				array[lastTestResponse.getResult() - 1] = 1;
+			}
 		}
+	}
+
+	public int[] getArray() {
+		return array;
+	}
+
+	public void setArray(int[] array) {
+		this.array = array;
 	}
 
 }

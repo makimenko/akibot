@@ -16,7 +16,7 @@
 			<Column name="MESSAGE" pattern="%message" />
 			<Column name="THROWABLE" pattern="%ex{full}" isClob="true" />
 		</JDBC>
-
+ 		
 	</Appenders>
 	<Loggers>
 		<Logger name="org.apache.log4j.xml" level="info" />

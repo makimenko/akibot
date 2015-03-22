@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.akibot.engine2.component.DefaultServerComponent;
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.engine2.test.component.TestComponent;
+import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
@@ -74,6 +76,9 @@ public class AkiBotLauncher {
 		AkibotClient servoHead = new AkibotClient("akibot.servo.head", new ServoComponent(24, 0, 200, 200), serverAddress);
 		servoHead.getMyClientDescription().getTopicList().add(new ServoRequest());
 
+		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), serverAddress);
+		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
+
 		// Start all
 		tankTrack.start();
 		gyroscope.start();
@@ -82,6 +87,7 @@ public class AkiBotLauncher {
 		// obstacle.start();
 		servoBase.start();
 		servoHead.start();
+		testComponent.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

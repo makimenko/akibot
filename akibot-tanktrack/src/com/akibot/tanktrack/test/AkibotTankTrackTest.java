@@ -8,10 +8,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
@@ -23,14 +23,13 @@ import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
 public class AkibotTankTrackTest {
 	private static AkibotClient testClient;
+	private final static String serverHost = "raspberrypi";
+	private final static int serverPort = 2000;
+	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		String serverHost = "raspberrypi";
-		int serverPort = 2000;
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
-
-		testClient = new AkibotClient("akibot.client", new DefaultComponent(), serverAddress);
+		testClient = new AkibotClient("akibot.client", new TestComponent(), serverAddress);
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 
 		testClient.start();
