@@ -46,7 +46,7 @@ public class StressTest {
 	public void asyncReliability() throws FailedToSendMessageException, InterruptedException {
 		TestRequest testRequest = new TestRequest();
 
-		int totalCount = 1;
+		int totalCount = 10;
 		((TestComponent) testClient.getComponent()).setArray(new int[totalCount]);
 		for (int i = 0; i < totalCount; i++) {
 			testRequest.setX(i);
@@ -68,7 +68,7 @@ public class StressTest {
 
 	@Test
 	public void clients() throws Exception {
-		int totalClients = 2;
+		int totalClients = 20;
 
 		List clients = new ArrayList<AkibotClient>();
 
@@ -101,7 +101,7 @@ public class StressTest {
 	@Test
 	public void syncReliability() throws FailedToSendMessageException, InterruptedException {
 		TestRequest testRequest = new TestRequest();
-		int totalCount = 1;
+		int totalCount = 10;
 		for (int i = 0; i < totalCount; i++) {
 			TestResponse testResponse = (TestResponse) testClient.getOutgoingMessageManager().sendSyncRequest(testRequest, 2000);
 		}

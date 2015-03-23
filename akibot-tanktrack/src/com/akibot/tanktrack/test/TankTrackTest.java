@@ -21,7 +21,7 @@ import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
-public class AkibotTankTrackTest {
+public class TankTrackTest {
 	private static AkibotClient testClient;
 	private final static String serverHost = "raspberrypi";
 	private final static int serverPort = 2000;
