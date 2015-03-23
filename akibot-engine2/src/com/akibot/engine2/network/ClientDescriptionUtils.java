@@ -67,7 +67,7 @@ public class ClientDescriptionUtils {
 	}
 
 	public static boolean isAddressedToClient(ClientDescription clientDescription, Message message) {
-		if (message.getTo() == null) {
+		if (message.getTo() == null || message.getTo().length() == 0) {
 			return true;
 		} else {
 			return message.getTo().equals(clientDescription.getName());
@@ -79,7 +79,7 @@ public class ClientDescriptionUtils {
 	}
 
 	public static boolean isNew(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
-		return clientDescriptionA.getStartupTime() > clientDescriptionB.getStartupTime() || clientDescriptionB.getName() == null;
+		return clientDescriptionA.getStartupTime() > clientDescriptionB.getStartupTime() || clientDescriptionB.getName() != null;
 	}
 
 	public static List<ClientDescription> mergeClientDescription(AkibotClient akibotClient, ClientDescription clientDescription, List<ClientDescription> mergeTo) {

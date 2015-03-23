@@ -18,4 +18,7 @@ public class TestRequest extends Request {
 		this.x = x;
 	}
 
+	public String toString() {
+		return super.toString() + " (from=" + getFrom() + ", to=" + getTo() + ", syncId=" + getSyncId() + ")";
+	}
 }

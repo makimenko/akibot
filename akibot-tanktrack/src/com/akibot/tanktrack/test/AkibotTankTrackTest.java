@@ -33,7 +33,7 @@ public class AkibotTankTrackTest {
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 
 		testClient.start();
-		Thread.sleep(1000);
+		Thread.sleep(5000);
 	}
 
 	@AfterClass
@@ -67,19 +67,19 @@ public class AkibotTankTrackTest {
 		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 
-		GyroscopeResponse startPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
+		GyroscopeResponse startPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
 
 		testClient.getOutgoingMessageManager().broadcastMessage(rightRequest);
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
-		GyroscopeResponse middlePosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
+		GyroscopeResponse middlePosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
 		double diff = startPosition.getNorthDegrreesXY() - middlePosition.getNorthDegrreesXY();
 		assertEquals("Check value " + diff, true, diff > 2);
 
 		testClient.getOutgoingMessageManager().broadcastMessage(leftRequest);
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
-		GyroscopeResponse endPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
+		GyroscopeResponse endPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
 		double diff2 = middlePosition.getNorthDegrreesXY() - endPosition.getNorthDegrreesXY();
 		assertEquals("Check value " + diff2, true, diff2 < 2);
 
@@ -88,7 +88,7 @@ public class AkibotTankTrackTest {
 	@Test
 	public void testDistance() throws FailedToSendMessageException, InterruptedException {
 		DistanceRequest distanceRequest = new DistanceRequest();
-		DistanceResponse distanceResponse = (DistanceResponse) testClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 1000);
+		DistanceResponse distanceResponse = (DistanceResponse) testClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 2000);
 
 		double result = distanceResponse.getMm();
 		assertEquals("Check value " + result, true, result > 100);

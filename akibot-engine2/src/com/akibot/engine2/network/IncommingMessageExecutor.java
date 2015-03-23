@@ -31,9 +31,9 @@ public class IncommingMessageExecutor extends Thread {
 				}
 
 			} catch (InterruptedException e) {
-				log.catching(e);
+				log.catching(akibotClient, e);
 			} catch (Exception e) {
-				log.catching(e);
+				log.catching(akibotClient, e);
 			}
 		}
 		log.debug(akibotClient + ": finishing...");

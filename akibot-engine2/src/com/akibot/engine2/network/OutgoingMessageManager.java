@@ -25,7 +25,21 @@ public class OutgoingMessageManager {
 		int count = 0;
 		if (akibotClient.getClientDescriptionList() != null && akibotClient.getClientDescriptionList().size() > 0) {
 			log.trace(akibotClient + ": broadcastMessage: " + message);
+			// boolean advancedDebug = true;
+			// //akibotClient.toString().equals("[akibot.test]") && message
+			// instanceof TestResponse;
+			// if (advancedDebug) {
+			// log.trace(akibotClient + ": !!!: getClientDescriptionList: " +
+			// akibotClient.getClientDescriptionList());
+			// }
 			for (ClientDescription client : akibotClient.getClientDescriptionList()) {
+				// if (advancedDebug) {
+				// log.trace(akibotClient + ": !!!: client: " + client+
+				// ": isSystemMessage="+ClientDescriptionUtils.isSystemMessage(message)+", isAddressedToClient="+ClientDescriptionUtils.isAddressedToClient(client,
+				// message)+", isInterestedInMessage="+
+				// ClientDescriptionUtils.isInterestedInMessage(client,
+				// message)+" / to="+message.getTo());
+				// }
 				if (ClientDescriptionUtils.isSystemMessage(message)
 						|| (ClientDescriptionUtils.isAddressedToClient(client, message) && ClientDescriptionUtils.isInterestedInMessage(client, message))) {
 					count++;
@@ -50,23 +64,31 @@ public class OutgoingMessageManager {
 	}
 
 	public void send(ClientDescription clientDescription, Message message) throws FailedToSendMessageException {
+		Message msg;
+		try {
+			msg = message.clone();
+		} catch (CloneNotSupportedException e1) {
+			log.catching(akibotClient, e1);
+			throw new FailedToSendMessageException();
+		}
+
 		String host = clientDescription.getAddress().getHostString();
 		int port = clientDescription.getAddress().getPort();
 		String to = clientDescription.getName();
 
-		message.setFrom(akibotClient.getName());
-		message.setTo(to);
-		log.msg(akibotClient, message);
+		msg.setFrom(akibotClient.getName());
+		msg.setTo(to);
+		log.msg(akibotClient, msg);
 
 		try {
-			message.setFrom(akibotClient.getName());
+			msg.setFrom(akibotClient.getName());
 			byte[] buf;
-			buf = messageToByte(message);
+			buf = messageToByte(msg);
 			InetSocketAddress address = new InetSocketAddress(host, port);
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, address);
 			akibotClient.getSocket().send(datagramPacket);
 		} catch (IOException e) {
-			log.catching(e);
+			log.catching(akibotClient, e);
 			throw new FailedToSendMessageException();
 		}
 	}
@@ -92,7 +114,7 @@ public class OutgoingMessageManager {
 			return sync.getSyncResponse();
 
 		} catch (Exception e) {
-			log.catching(e);
+			log.catching(akibotClient, e);
 			throw new FailedToSendMessageException();
 		}
 	}

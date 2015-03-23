@@ -315,4 +315,9 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 		logger.logIfEnabled(FQCN, MSG, null, msg, (Throwable) null);
 	}
 
+	public void catching(AkibotClient akibotClient, Throwable t) {
+		logger.error(akibotClient + ": " + t.getMessage());
+		super.catching(t);
+	}
+
 }

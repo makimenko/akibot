@@ -54,11 +54,11 @@ public class IncommingMessageReceiver extends Thread {
 					akibotClient.getIncommingMessageManager().getQueue().put(message);
 				}
 			} catch (IOException e) {
-				log.catching(e);
+				log.catching(akibotClient, e);
 			} catch (ClassNotFoundException e) {
-				log.catching(e);
+				log.catching(akibotClient, e);
 			} catch (InterruptedException e) {
-				log.catching(e);
+				log.catching(akibotClient, e);
 			}
 		}
 		log.debug(akibotClient + ": finishing...");

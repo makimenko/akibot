@@ -9,7 +9,9 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
@@ -20,6 +22,7 @@ import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StressTest {
 	private static AkibotClient testClient;
 	private final static String serverHost = "raspberrypi";
@@ -40,24 +43,16 @@ public class StressTest {
 	}
 
 	@Test
-	public void syncReliability() throws FailedToSendMessageException, InterruptedException {
-		TestRequest testRequest = new TestRequest();
-		for (int i = 0; i < 10; i++) {
-			TestResponse testResponse = (TestResponse) testClient.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
-		}
-	}
-
-	@Test
 	public void asyncReliability() throws FailedToSendMessageException, InterruptedException {
 		TestRequest testRequest = new TestRequest();
 
-		int totalCount = 20;
+		int totalCount = 1;
 		((TestComponent) testClient.getComponent()).setArray(new int[totalCount]);
 		for (int i = 0; i < totalCount; i++) {
 			testRequest.setX(i);
 			testClient.getOutgoingMessageManager().broadcastMessage(testRequest);
 		}
-		Thread.sleep(totalCount * 200);
+		Thread.sleep(totalCount * 500);
 		int[] array = ((TestComponent) testClient.getComponent()).getArray();
 		int ok = 0;
 
@@ -73,7 +68,7 @@ public class StressTest {
 
 	@Test
 	public void clients() throws Exception {
-		int totalClients = 10;
+		int totalClients = 2;
 
 		List clients = new ArrayList<AkibotClient>();
 
@@ -102,4 +97,14 @@ public class StressTest {
 		}
 
 	}
+
+	@Test
+	public void syncReliability() throws FailedToSendMessageException, InterruptedException {
+		TestRequest testRequest = new TestRequest();
+		int totalCount = 1;
+		for (int i = 0; i < totalCount; i++) {
+			TestResponse testResponse = (TestResponse) testClient.getOutgoingMessageManager().sendSyncRequest(testRequest, 2000);
+		}
+	}
+
 }
