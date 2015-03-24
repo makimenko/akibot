@@ -9,10 +9,14 @@ import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
+import com.akibot.tanktrack.component.distance.DistanceResponse;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.servo.ServoRequest;
+import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
@@ -77,6 +81,13 @@ public class AkiBotLauncher {
 		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), serverAddress);
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
 
+		// EchoLocator:
+		AkibotClient echoLocator = new AkibotClient("akibot.echolocator",
+				new EchoLocatorComponent("akibot.distance", "akibot.servo.base", "akibot.servo.head"), serverAddress);
+		echoLocator.getMyClientDescription().getTopicList().add(new EchoLocatorRequest());
+		echoLocator.getMyClientDescription().getTopicList().add(new DistanceResponse());
+		echoLocator.getMyClientDescription().getTopicList().add(new ServoResponse());
+
 		// Start all
 		tankTrack.start();
 		gyroscope.start();
@@ -86,6 +97,7 @@ public class AkiBotLauncher {
 		servoBase.start();
 		servoHead.start();
 		testComponent.start();
+		echoLocator.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

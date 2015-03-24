@@ -33,7 +33,7 @@ public class TestSpeech {
 		};
 
 		marytts.setVoice("cmu-slt-hsmm");
-		AudioInputStream audio = marytts.generateAudio("Hello! My name is akibot! Today is a good and shiny day outside.");
+		AudioInputStream audio = marytts.generateAudio("Hello! My name is Akibot and I'm ready to help you!");
 		System.out.println("..generated.");
 
 		AudioPlayer player = new AudioPlayer(audio, lineListener);

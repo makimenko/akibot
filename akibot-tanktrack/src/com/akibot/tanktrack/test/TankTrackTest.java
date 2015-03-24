@@ -14,6 +14,8 @@ import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.servo.ServoRequest;
@@ -123,6 +125,13 @@ public class TankTrackTest {
 
 		servoHeadRequest.setValue(14);
 		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoHeadRequest, 1000);
+	}
+
+	@Test
+	public void testEchoLocator() throws FailedToSendMessageException, InterruptedException {
+		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
+		EchoLocatorResponse echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 10000);
+
 	}
 
 }
