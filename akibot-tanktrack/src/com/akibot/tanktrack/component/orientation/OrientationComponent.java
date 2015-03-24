@@ -1,17 +1,16 @@
 package com.akibot.tanktrack.component.orientation;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
 public class OrientationComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(OrientationComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(AkibotClient.class);
 	private String gyroscopeName;
 	private String tankTrackName;
 

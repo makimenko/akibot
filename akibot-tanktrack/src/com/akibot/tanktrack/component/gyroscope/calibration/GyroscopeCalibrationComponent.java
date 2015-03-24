@@ -1,16 +1,14 @@
 package com.akibot.tanktrack.component.gyroscope.calibration;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeConfigurationRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 
 public class GyroscopeCalibrationComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(GyroscopeCalibrationComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(GyroscopeCalibrationComponent.class);
 
 	double minX;
 	double minY;

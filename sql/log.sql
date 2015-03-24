@@ -8,8 +8,8 @@ commit;
 select *
 from v_log l 
 where 1=1
-    and l.id > 46409
-    and l.client_name like 'akibot.awtcontroller'
+    and l.id > 93963
+--    and l.client_name like 'akibot.awtcontroller'
 --    and logger = 'com.akibot.engine2.network.ClientDescriptionUtils'
 order by id desc;
 

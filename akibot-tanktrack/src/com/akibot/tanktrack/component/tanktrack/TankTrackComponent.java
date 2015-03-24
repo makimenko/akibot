@@ -1,13 +1,11 @@
 package com.akibot.tanktrack.component.tanktrack;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
 public class TankTrackComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(TankTrackComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(TankTrackComponent.class);
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {

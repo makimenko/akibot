@@ -1,15 +1,13 @@
 package com.akibot.tanktrack.component.distance;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
 public class DistanceMeterComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(DistanceMeterComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(DistanceMeterComponent.class);
 	private AkibotJniLibrary lib;
 	private int triggerPin;
 	private int echoPin;

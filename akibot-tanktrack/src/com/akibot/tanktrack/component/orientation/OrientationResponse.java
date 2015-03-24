@@ -23,6 +23,7 @@ public class OrientationResponse extends Response {
 		this.success = success;
 	}
 
+	@Override
 	public String toString() {
 		return this.getClass().getName() + ": " + isSuccess();
 	}

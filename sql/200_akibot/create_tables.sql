@@ -25,7 +25,7 @@ select
     , l.log_level
     , l.logger
     , to_char(regexp_substr(message, '^\[(.*?)\]', 1, 1, null, 1)) client_name
-    , to_char(message) message
+    , to_char(substr(message,1,4000)) message
     , l.throwable
 from t_log l 
 ;

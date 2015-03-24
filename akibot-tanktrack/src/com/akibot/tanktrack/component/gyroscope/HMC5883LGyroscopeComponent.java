@@ -2,16 +2,14 @@ package com.akibot.tanktrack.component.gyroscope;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
 
 public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
-	static final Logger log = LogManager.getLogger(HMC5883LGyroscopeComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(HMC5883LGyroscopeComponent.class);
 
 	private I2CDevice hmc5883l;
 

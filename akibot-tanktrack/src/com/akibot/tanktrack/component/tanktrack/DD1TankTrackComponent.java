@@ -1,8 +1,6 @@
 package com.akibot.tanktrack.component.tanktrack;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
@@ -11,7 +9,7 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 public class DD1TankTrackComponent extends TankTrackComponent {
-	static final Logger log = LogManager.getLogger(DD1TankTrackComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(DD1TankTrackComponent.class);
 	private GpioController gpio;
 	private GpioPinDigitalOutput leftBackwardPin;
 	private GpioPinDigitalOutput leftForwardPin;

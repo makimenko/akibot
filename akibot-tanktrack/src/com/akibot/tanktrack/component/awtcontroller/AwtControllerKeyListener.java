@@ -3,13 +3,11 @@ package com.akibot.tanktrack.component.awtcontroller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 
 public class AwtControllerKeyListener implements KeyListener {
-	static final Logger log = LogManager.getLogger(AwtControllerKeyListener.class.getName());
+	static final AkiLogger log = AkiLogger.create(AwtControllerKeyListener.class);
 
 	private AwtControllerAction action;
 	private Integer currentKey;

@@ -2,9 +2,7 @@ package com.akibot.tanktrack.launcher;
 
 import java.net.InetSocketAddress;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
@@ -15,7 +13,7 @@ import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 
 public class AwtControllerLauncher {
-	static final Logger log = LogManager.getLogger(AwtControllerLauncher.class.getName());
+	static final AkiLogger log = AkiLogger.create(AwtControllerLauncher.class);
 
 	public static void main(String[] args) throws Exception {
 		// AAA

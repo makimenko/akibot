@@ -1,15 +1,13 @@
 package com.akibot.tanktrack.component.servo;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
 public class ServoComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(ServoComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(ServoComponent.class);
 	private AkibotJniLibrary lib;
 	private int servoPin;
 	private int initialValue;

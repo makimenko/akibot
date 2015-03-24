@@ -1,13 +1,11 @@
 package com.akibot.tanktrack.component.toggle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
 public class ToggleComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(ToggleComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(ToggleComponent.class);
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {

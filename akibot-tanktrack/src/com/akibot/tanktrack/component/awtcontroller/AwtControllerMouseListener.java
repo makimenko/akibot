@@ -3,13 +3,11 @@ package com.akibot.tanktrack.component.awtcontroller;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 
 public class AwtControllerMouseListener implements MouseListener {
-	static final Logger log = LogManager.getLogger(AwtControllerMouseListener.class.getName());
+	static final AkiLogger log = AkiLogger.create(AwtControllerMouseListener.class);
 	private AwtControllerAction action;
 	private Integer codePressed;
 

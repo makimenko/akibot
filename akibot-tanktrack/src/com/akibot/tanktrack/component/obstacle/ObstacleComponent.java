@@ -2,11 +2,9 @@ package com.akibot.tanktrack.component.obstacle;
 
 import java.util.UUID;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
@@ -14,7 +12,7 @@ import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 
 public class ObstacleComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(ObstacleComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(ObstacleComponent.class);
 
 	private GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 	private DistanceRequest distanceReqest = new DistanceRequest();

@@ -10,14 +10,12 @@ import marytts.MaryInterface;
 import marytts.client.RemoteMaryInterface;
 import marytts.util.data.audio.AudioPlayer;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
 public class SpeechSynthesisComponent extends DefaultComponent {
-	static final Logger log = LogManager.getLogger(SpeechSynthesisComponent.class.getName());
+	static final AkiLogger log = AkiLogger.create(SpeechSynthesisComponent.class);
 	private LineListener lineListener;
 	private String marytssVoice;
 	private MaryInterface marytts;
@@ -66,7 +64,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 				}
 			};
 		} catch (IOException e) {
-			log.catching(e);
+			log.catching(getAkibotClient(), e);
 		}
 
 	}
