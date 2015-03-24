@@ -7,14 +7,14 @@
 # Macros
 TOP=`pwd`
 CND_PLATFORM=GNU-Linux-x86
-CND_CONF=Release
+CND_CONF=Library
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}
-OUTPUT_BASENAME=libakibot-jni-cpp.${CND_DLIB_EXT}
+OUTPUT_PATH=/home/pi/share/netbeans/akibot-jni-cpp.${CND_DLIB_EXT}
+OUTPUT_BASENAME=akibot-jni-cpp.${CND_DLIB_EXT}
 PACKAGE_TOP_DIR=libakibot-jni-cpp.so/
 
 # Functions

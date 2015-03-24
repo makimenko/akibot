@@ -2,7 +2,7 @@
 <configurationDescriptor version="96">
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="2">
+    <conf name="Library" type="2">
       <toolsSet>
         <developmentServer>root@raspberrypi:22</developmentServer>
         <platform>2</platform>
@@ -24,6 +24,7 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
+          <runcommandpicklistitem>/home/pi/share/netbeans/akibot-jni-cpp.${CND_DLIB_EXT}</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
         </runcommandpicklist>
         <runcommand>"${OUTPUT_PATH}"</runcommand>
@@ -35,7 +36,7 @@
         </environment>
       </runprofile>
     </conf>
-    <conf name="Release" type="2">
+    <conf name="Test" type="1">
       <toolsSet>
         <developmentServer>root@raspberrypi:22</developmentServer>
         <platform>2</platform>
@@ -57,6 +58,7 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
+          <runcommandpicklistitem>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
         </runcommandpicklist>
         <runcommand>"${OUTPUT_PATH}"</runcommand>

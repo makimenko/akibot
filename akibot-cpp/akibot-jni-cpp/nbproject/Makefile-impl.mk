@@ -27,11 +27,11 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=akibot-jni-cpp
 
 # Active Configuration
-DEFAULTCONF=Debug
+DEFAULTCONF=Library
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=Debug Release 
+ALLCONFS=Library Test 
 
 
 # build

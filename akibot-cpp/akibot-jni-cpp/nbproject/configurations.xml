@@ -22,6 +22,7 @@
       <itemPath>AkibotUtils.cpp</itemPath>
       <itemPath>DistanceMeterSRF05.cpp</itemPath>
       <itemPath>Servo.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -37,7 +38,7 @@
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="2">
+    <conf name="Library" type="2">
       <toolsSet>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -83,8 +84,10 @@
       </item>
       <item path="Servo.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
     </conf>
-    <conf name="Release" type="2">
+    <conf name="Test" type="1">
       <toolsSet>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -96,6 +99,11 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include</pElem>
+            <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux</pElem>
+          </incDir>
+          <commandLine>-lwiringPi</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -103,6 +111,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/akibot-jni-cpp</output>
+        </linkerTool>
       </compileType>
       <item path="Akibot.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -123,6 +134,8 @@
       <item path="Servo.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Servo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>

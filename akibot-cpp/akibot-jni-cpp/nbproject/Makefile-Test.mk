@@ -23,7 +23,7 @@ AS=as
 # Macros
 CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
-CND_CONF=Release
+CND_CONF=Test
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -38,15 +38,16 @@ OBJECTFILES= \
 	${OBJECTDIR}/AkibotJniLibrary.o \
 	${OBJECTDIR}/AkibotUtils.o \
 	${OBJECTDIR}/DistanceMeterSRF05.o \
-	${OBJECTDIR}/Servo.o
+	${OBJECTDIR}/Servo.o \
+	${OBJECTDIR}/main.o
 
 
 # C Compiler Flags
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-lwiringPi
+CXXFLAGS=-lwiringPi
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -59,31 +60,36 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/akibot-jni-cpp
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/akibot-jni-cpp: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/akibot-jni-cpp ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/AkibotJniLibrary.o: AkibotJniLibrary.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotJniLibrary.o AkibotJniLibrary.cpp
+	$(COMPILE.cc) -O2 -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotJniLibrary.o AkibotJniLibrary.cpp
 
 ${OBJECTDIR}/AkibotUtils.o: AkibotUtils.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotUtils.o AkibotUtils.cpp
+	$(COMPILE.cc) -O2 -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AkibotUtils.o AkibotUtils.cpp
 
 ${OBJECTDIR}/DistanceMeterSRF05.o: DistanceMeterSRF05.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceMeterSRF05.o DistanceMeterSRF05.cpp
+	$(COMPILE.cc) -O2 -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DistanceMeterSRF05.o DistanceMeterSRF05.cpp
 
 ${OBJECTDIR}/Servo.o: Servo.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Servo.o Servo.cpp
+	$(COMPILE.cc) -O2 -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Servo.o Servo.cpp
+
+${OBJECTDIR}/main.o: main.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
@@ -91,7 +97,7 @@ ${OBJECTDIR}/Servo.o: Servo.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libakibot-jni-cpp.${CND_DLIB_EXT}
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/akibot-jni-cpp
 
 # Subprojects
 .clean-subprojects:

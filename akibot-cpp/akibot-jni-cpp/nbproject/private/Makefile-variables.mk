@@ -3,5 +3,5 @@
 #
 # NOCDDL
 #
-# Debug configuration
-# Release configuration
+# Library configuration
+# Test configuration

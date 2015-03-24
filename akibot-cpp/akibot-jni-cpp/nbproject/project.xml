@@ -12,12 +12,12 @@
             <sourceRootList/>
             <confList>
                 <confElem>
-                    <name>Debug</name>
+                    <name>Library</name>
                     <type>2</type>
                 </confElem>
                 <confElem>
-                    <name>Release</name>
-                    <type>2</type>
+                    <name>Test</name>
+                    <type>1</type>
                 </confElem>
             </confList>
             <formatting>
