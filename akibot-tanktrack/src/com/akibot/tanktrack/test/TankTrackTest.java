@@ -127,11 +127,5 @@ public class TankTrackTest {
 		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoHeadRequest, 1000);
 	}
 
-	@Test
-	public void testEchoLocator() throws FailedToSendMessageException, InterruptedException {
-		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
-		EchoLocatorResponse echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 10000);
-
-	}
-
+	
 }

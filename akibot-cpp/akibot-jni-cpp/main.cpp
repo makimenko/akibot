@@ -3,15 +3,21 @@
 int main(int argc, char** argv) {
     EchoLocator echoLocator;
 
-    echoLocator.initialize(25, 27, 500000, 50000, 23, 24, 4, 24, 1, 14, 400000, 35000, 1);
-    
-    float** result =  echoLocator.scanDistance();
-    
-    printf("sizeof = %d - %d - %d - %d\n", sizeof *result, sizeof result[1], sizeof result[1][1], sizeof(float) );
-    for (int i = 0 ; i<21 ; i++ )  {
-        printf("Distance %f = %f\n", result[0][i], result[1][i]);
-   }
+    echoLocator.initialize(25, 27, 500000, 50000, 23, 24, 400000, 35000, 1);
 
+
+    float* result;
+    printf("===============\n");
+    result = echoLocator.scanDistance(4, 24, 1, 14, true);
+    for (int i = 0; i < echoLocator.size; i++) {
+        printf("Distance %f\n", result[i]);
+    }
+    printf("===============\n");
+    result = echoLocator.scanDistance(24, 4, 1, 14, true);
+    for (int i = 0; i < echoLocator.size; i++) {
+        printf("Distance %f\n", result[i]);
+    }
+    
     return 0;
 }
 

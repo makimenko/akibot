@@ -6,7 +6,7 @@ EchoLocator::EchoLocator() {
 EchoLocator::~EchoLocator() {
 }
 
-void EchoLocator::initialize(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoBasePin, int _servoHeadPin, int _servoBaseFrom, int _servoBaseTo, int _servoBaseStep, int _servoHeadNormal, int _servoLongTime, int _servoStepTime, int _distanceCount) {
+void EchoLocator::initialize(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoBasePin, int _servoHeadPin, int _servoLongTime, int _servoStepTime, int _distanceCount) {
     initialized = false;
 
     distanceTriggerPin = _distanceTriggerPin;
@@ -15,10 +15,6 @@ void EchoLocator::initialize(int _distanceTriggerPin, int _distanceEchoPin, int 
     sleepBeforeDistance = _sleepBeforeDistance;
     servoBasePin = _servoBasePin;
     servoHeadPin = _servoHeadPin;
-    servoBaseFrom = _servoBaseFrom;
-    servoBaseTo = _servoBaseTo;
-    servoBaseStep = _servoBaseStep;
-    servoHeadNormal = _servoHeadNormal;
     servoLongTime = _servoLongTime;
     servoStepTime = _servoStepTime;
     distanceCount = _distanceCount;
@@ -33,61 +29,60 @@ void EchoLocator::initialize(int _distanceTriggerPin, int _distanceEchoPin, int 
     initialized = true;
 }
 
-void EchoLocator::run() {
-
-    servoBase.softPwmWriteAndWait(servoBaseFrom, servoLongTime);
-    servoHead.softPwmWriteAndWait(servoHeadNormal, servoLongTime);
-
-    for (int i = servoBaseFrom; i <= servoBaseTo; i += servoBaseStep) {
-        servoBase.softPwmWriteAndWait(i, servoStepTime * servoBaseStep);
-        if (sleepBeforeDistance > 0) {
-            usleep(sleepBeforeDistance);
-        }
-        printf("Distance = ");
-        float totalDistance = 0;
-        float avgDistance = 0;
-        for (int j = 1; j <= distanceCount; j++) {
-            float dist = distanceMeter.getDistance();
-            totalDistance += dist;
-            printf("%f, ", dist);
-        }
-        avgDistance = totalDistance / distanceCount;
-        printf(" ==> %f\n", avgDistance);
-
-    }
-
+bool EchoLocator::isInitializedFor(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoBasePin,
+        int _servoHeadPin, int _servoLongTime, int _servoStepTime, int _distanceCount) {
+    return initialized
+            && _distanceTriggerPin == distanceTriggerPin
+            && _distanceEchoPin == distanceEchoPin
+            && _distanceTimeout == distanceTimeout
+            && _sleepBeforeDistance == sleepBeforeDistance
+            && _servoBasePin == servoBasePin
+            && _servoHeadPin == servoHeadPin
+            && _servoLongTime == servoLongTime
+            && _servoStepTime == servoStepTime
+            && _distanceCount == distanceCount;
 }
 
-float** EchoLocator::scanDistance() {
+float* EchoLocator::scanDistance(int servoBaseFrom, int servoBaseTo, int servoBaseStep, int servoHeadNormal, bool trustToLastPosition) {
 
-    int size = servoBaseTo - servoBaseFrom + 1;
-    float **result = new float*[2];
-    for (int i = 0; i < 2; i++) {
-        result[i] = new float[size];
+    int step;
+    int currentPosition = servoBaseFrom;
+    if (servoBaseFrom < servoBaseTo) {
+        size = servoBaseTo - servoBaseFrom + 1;
+        step = servoBaseStep;
+    } else {
+        size = servoBaseFrom - servoBaseTo + 1;
+        step = -servoBaseStep;
     }
 
+    float *result = new float[size];
 
-    servoBase.softPwmWriteAndWait(servoBaseFrom, servoLongTime);
-    servoHead.softPwmWriteAndWait(servoHeadNormal, servoLongTime);
+    // Move to start position only if needed:
+    if (!(trustToLastPosition && lastServoBasePosition == servoBaseFrom)) {
+        servoBase.softPwmWriteAndWait(servoBaseFrom, servoLongTime);
+        lastServoBasePosition = servoBaseFrom;
+    }
+    if (!(trustToLastPosition && lastServoHeadPosition == servoHeadNormal)) {
+        servoHead.softPwmWriteAndWait(servoHeadNormal, servoLongTime);
+        lastServoHeadPosition = servoHeadNormal;
+    }
 
     int index = 0;
-    for (int i = servoBaseFrom; i <= servoBaseTo; i += servoBaseStep) {
-        servoBase.softPwmWriteAndWait(i, servoStepTime * servoBaseStep);
+    for (int i = 1; i <= size; i++) {
+        currentPosition += step;
+        servoBase.softPwmWriteAndWait(currentPosition, servoStepTime * servoBaseStep);
+        lastServoBasePosition = currentPosition;
         if (sleepBeforeDistance > 0) {
             usleep(sleepBeforeDistance);
         }
-        printf("Distance = ");
         float totalDistance = 0;
         float avgDistance = 0;
         for (int j = 1; j <= distanceCount; j++) {
             float dist = distanceMeter.getDistance();
             totalDistance += dist;
-            printf("%f, ", dist);
         }
         avgDistance = totalDistance / distanceCount;
-        result[0][index] = i;
-        result[1][index] = avgDistance;
-        printf(" ==> %f\n", avgDistance);
+        result[index] = avgDistance;
         index++;
     }
 

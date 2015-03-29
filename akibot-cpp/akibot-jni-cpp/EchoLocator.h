@@ -15,27 +15,25 @@ class EchoLocator {
     int sleepBeforeDistance;
     int servoBasePin;
     int servoHeadPin;
-    int servoBaseFrom;
-    int servoBaseTo;
-    int servoBaseStep;
-    int servoHeadNormal;
     int servoLongTime;
     int servoStepTime;
     int distanceCount;
-    
     bool initialized;
     
+    int lastServoBasePosition;
+    int lastServoHeadPosition;
+        
     DistanceMeterSRF05 distanceMeter;
     Servo servoBase;
     Servo servoHead;
     
 public:
+    int size;        
     EchoLocator();
     virtual ~EchoLocator();
-    void initialize(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoBasePin, int _servoHeadPin, int _servoBaseFrom, 
-        int _servoBaseTo, int _servoBaseStep, int _servoHeadNormal, int _servoLongTime, int _servoStepTime, int _distanceCount);
-    void run();
-    float** scanDistance();
+    void initialize(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoBasePin, int _servoHeadPin, int _servoLongTime, int _servoStepTime, int _distanceCount);
+    bool isInitializedFor(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoBasePin, int _servoHeadPin, int _servoLongTime, int _servoStepTime, int _distanceCount);
+    float* scanDistance(int _servoBaseFrom, int _servoBaseTo, int _servoBaseStep, int _servoHeadNormal, bool trustToLastPosition);
     
 private:
 };
