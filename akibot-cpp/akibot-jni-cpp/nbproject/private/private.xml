@@ -16,14 +16,17 @@
         </group>
         <group name="netbeans-github-akibot">
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/DistanceMeterSRF05.h</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/DistanceMeterSRF05_1.h</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/DistanceMeterSRF05.cpp</file>
-            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/main.cpp</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotJniLibrary.cpp</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotUtils.h</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/EchoLocator.cpp</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/Servo.cpp</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotUtils.cpp</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotJniLibrary.h</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/Akibot.h</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/main.cpp</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/EchoLocator.h</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotException.h</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/Servo.h</file>
         </group>

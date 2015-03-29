@@ -39,6 +39,14 @@ JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_servo
 JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_pulseIn
   (JNIEnv *, jobject, jint, jint, jint);
 
+/*
+ * Class:     akibot_jni_java_AkibotJniLibrary
+ * Method:    echoLocator
+ * Signature: (IIIIIIIIIIIII)[[F
+ */
+JNIEXPORT jobjectArray JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocator
+  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint);
+
 #ifdef __cplusplus
 }
 #endif

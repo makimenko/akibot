@@ -19,3 +19,4 @@
 #include "Servo.h"
 #include "AkibotUtils.h"
 #include "AkibotException.h"
+#include "EchoLocator.h"

@@ -26,7 +26,7 @@ float DistanceMeterSRF05::getDistance() {
     }
 
     digitalWrite(triggerPin, LOW);
-    usleep(2);
+    usleep(10);
     digitalWrite(triggerPin, HIGH);
     usleep(10);
     digitalWrite(triggerPin, LOW);
