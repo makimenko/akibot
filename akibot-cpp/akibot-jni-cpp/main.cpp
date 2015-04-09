@@ -3,7 +3,7 @@
 int main(int argc, char** argv) {
     EchoLocator echoLocator;
 
-    echoLocator.initialize(25, 27, 500000, 50000, 23, 24, 400000, 35000, 1);
+    echoLocator.initialize(13, 12, 500000, 50000, 0, 7, 400000, 35000, 1);
 
 
     float* result;

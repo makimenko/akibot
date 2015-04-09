@@ -5,6 +5,7 @@ import com.akibot.engine2.message.Message;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
@@ -15,6 +16,17 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	private GpioPinDigitalOutput leftForwardPin;
 	private GpioPinDigitalOutput rightBackwardPin;
 	private GpioPinDigitalOutput rightForwardPin;
+	private Pin rightIApin;
+	private Pin rightIBpin;
+	private Pin leftIApin;
+	private Pin leftIBpin;
+	
+	public DD1TankTrackComponent(Pin rightIApin, Pin rightIBpin, Pin leftIApin, Pin leftIBpin) {
+		this.rightIApin = rightIApin;
+		this.rightIBpin = rightIBpin;
+		this.leftIApin = leftIApin;
+		this.leftIBpin = leftIBpin;
+	}
 
 	private void defaultState() {
 		if (leftForwardPin.isHigh())
@@ -73,11 +85,12 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 		log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
 		gpio = GpioFactory.getInstance();
 
-		rightBackwardPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "rightIA", PinState.LOW);
-		rightForwardPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "rightIB", PinState.LOW);
+		
+		rightBackwardPin = gpio.provisionDigitalOutputPin(rightIApin, "rightIA", PinState.LOW);
+		rightForwardPin = gpio.provisionDigitalOutputPin(rightIBpin, "rightIB", PinState.LOW);
 
-		leftBackwardPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "leftIA", PinState.LOW);
-		leftForwardPin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "leftIB", PinState.LOW);
+		leftBackwardPin = gpio.provisionDigitalOutputPin(leftIApin, "leftIA", PinState.LOW);
+		leftForwardPin = gpio.provisionDigitalOutputPin(leftIBpin, "leftIB", PinState.LOW);
 
 		defaultState();
 

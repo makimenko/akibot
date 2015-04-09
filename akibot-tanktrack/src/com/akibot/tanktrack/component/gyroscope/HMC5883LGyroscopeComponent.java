@@ -19,19 +19,16 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	private double offsetZ;
 	private final double RAD_TO_DEG = 57.295779513082320876798154814105f;
 
-	public HMC5883LGyroscopeComponent() throws IOException {
-		this(0, 0, 0, 0);
-	}
 
-	public HMC5883LGyroscopeComponent(double offsetX, double offsetY, double offsetZ, double offsetDegrees) throws IOException {
+	public HMC5883LGyroscopeComponent(int busNumber, int deviceAddress, double offsetX, double offsetY, double offsetZ, double offsetDegrees) throws IOException {
 		log.debug(this.getAkibotClient() + ": Initializing HMC5883LGyroscopeComponent");
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.offsetZ = offsetZ;
 		this.offsetDegrees = offsetDegrees;
 
-		I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
-		hmc5883l = bus.getDevice(0x1e);
+		I2CBus bus = I2CFactory.getInstance(busNumber);
+		hmc5883l = bus.getDevice(deviceAddress);
 
 		hmc5883l.write(2, (byte) 0); // enable
 		hmc5883l.write("0b01110000".getBytes(), 0, "0b01110000".length());

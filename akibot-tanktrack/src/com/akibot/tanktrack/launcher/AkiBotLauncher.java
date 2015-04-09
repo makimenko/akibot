@@ -34,14 +34,11 @@ public class AkiBotLauncher {
 		server.start();
 
 		// TankTrack:
-		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(), serverAddress);
+		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB), serverAddress);
 		tankTrack.getMyClientDescription().getTopicList().add(new StickMotionRequest());
 
 		// Gyroscope:
-		// old: 337.0, -106.0, 486.0
-		// 2015.01.14: 380.0, 114.5, 397.5
-		// 2015.03.10: 58.0, -47.5, 129.5
-		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(58.0, -47.5, 129.5, 180), serverAddress);
+		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER, Constants.GYROSCOPE_DEVICE_ADDRESS, Constants.GYROSCOPE_OFFSET_X, Constants.GYROSCOPE_OFFSET_Y, Constants.GYROSCOPE_OFFSET_Z, Constants.GYROSCOPE_OFFSET_DEGREES), serverAddress);
 		gyroscope.getMyClientDescription().getTopicList().add(new GyroscopeRequest());
 
 		// SpeechSynthesis:
@@ -58,7 +55,7 @@ public class AkiBotLauncher {
 		// speechSynthesisComponent, speechSynthesisDescription);
 
 		// Distance Meter
-		AkibotClient distance = new AkibotClient("akibot.distance", new DistanceMeterComponent(25, 27, 50000), serverAddress);
+		AkibotClient distance = new AkibotClient("akibot.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN, Constants.FRONT_DISTANCE_ECHO_PIN, 50000), serverAddress);
 		distance.getMyClientDescription().getTopicList().add(new DistanceRequest());
 
 		// Obstacle:
@@ -72,10 +69,10 @@ public class AkiBotLauncher {
 		// DistanceResponse());
 
 		// Servo motors
-		AkibotClient servoBase = new AkibotClient("akibot.servo.base", new ServoComponent(23, 0, 200, 200), serverAddress);
+		AkibotClient servoBase = new AkibotClient("akibot.servo.base", new ServoComponent(Constants.FRONT_SERVO_BASE_PIN, 0, 200, 200), serverAddress);
 		servoBase.getMyClientDescription().getTopicList().add(new ServoRequest());
 
-		AkibotClient servoHead = new AkibotClient("akibot.servo.head", new ServoComponent(24, 0, 200, 200), serverAddress);
+		AkibotClient servoHead = new AkibotClient("akibot.servo.head", new ServoComponent(Constants.FRONT_SERVO_HEAD_PIN, 0, 200, 200), serverAddress);
 		servoHead.getMyClientDescription().getTopicList().add(new ServoRequest());
 
 		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), serverAddress);

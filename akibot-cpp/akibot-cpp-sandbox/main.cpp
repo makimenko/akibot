@@ -14,7 +14,7 @@
 int main(int argc, char** argv) {
     printf("Starting:...\n");
    
-     DistanceMeter distanceMeter(25,27);
+     DistanceMeter distanceMeter(13,12);
         
     while (true) {
         printf("Current Distance = %f\n", distanceMeter.getDistance());
