@@ -7,5 +7,11 @@
 	<classpathentry kind="lib" path="lib/jME3-lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/jME3-lwjgl-natives.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/akibot-commons"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/akibot-engine2"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-api-2.2.jar"/>
+	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-core-2.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/akibot-tanktrack/bin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

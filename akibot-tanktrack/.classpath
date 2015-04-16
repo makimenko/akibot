@@ -37,5 +37,6 @@
 	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-api-2.2.jar"/>
 	<classpathentry kind="lib" path="/akibot-commons/lib/apache/log4j-core-2.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/akibot-jme3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
