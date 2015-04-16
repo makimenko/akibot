@@ -5,7 +5,7 @@
 			<PatternLayout
 				pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n" />
 		</Console>
-		<!--
+<!-- 
 		<JDBC name="databaseAppender" tableName="T_LOG" bufferSize="0">
 			<ConnectionFactory class="com.akibot.engine2.logger.AkiConnectionFactory"
 				method="getDatabaseConnection" />
@@ -16,7 +16,7 @@
 			<Column name="MESSAGE" pattern="%message" />
 			<Column name="THROWABLE" pattern="%ex{full}" isClob="true" />
 		</JDBC>
- 		-->
+-->
 	</Appenders>
 	<Loggers>
 		<Logger name="org.apache.log4j.xml" level="info" />

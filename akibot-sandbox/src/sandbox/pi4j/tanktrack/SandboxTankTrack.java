@@ -16,12 +16,12 @@ public class SandboxTankTrack {
 		// final GpioPinDigitalOutput rightBackward =
 		// gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00, "rightIA",
 		// PinState.LOW);
-		final GpioPinDigitalOutput rightForward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "rightIB", PinState.LOW);
+		final GpioPinDigitalOutput rightForward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_25, "rightIB", PinState.LOW);
 
 		// final GpioPinDigitalOutput leftBackward =
 		// gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "leftIA",
 		// PinState.LOW);
-		final GpioPinDigitalOutput leftForward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "leftIB", PinState.LOW);
+		final GpioPinDigitalOutput leftForward = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "leftIB", PinState.LOW);
 
 		leftForward.high();
 		rightForward.high();
