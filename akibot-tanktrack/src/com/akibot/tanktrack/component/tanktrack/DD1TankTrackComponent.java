@@ -7,7 +7,6 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;
 
 public class DD1TankTrackComponent extends TankTrackComponent {
 	static final AkiLogger log = AkiLogger.create(DD1TankTrackComponent.class);
@@ -20,7 +19,7 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	private Pin rightIBpin;
 	private Pin leftIApin;
 	private Pin leftIBpin;
-	
+
 	public DD1TankTrackComponent(Pin rightIApin, Pin rightIBpin, Pin leftIApin, Pin leftIBpin) {
 		this.rightIApin = rightIApin;
 		this.rightIBpin = rightIBpin;
@@ -85,7 +84,6 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 		log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
 		gpio = GpioFactory.getInstance();
 
-		
 		rightBackwardPin = gpio.provisionDigitalOutputPin(rightIApin, "rightIA", PinState.LOW);
 		rightForwardPin = gpio.provisionDigitalOutputPin(rightIBpin, "rightIB", PinState.LOW);
 

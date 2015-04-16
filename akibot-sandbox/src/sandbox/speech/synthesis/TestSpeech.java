@@ -19,6 +19,7 @@ public class TestSpeech {
 		System.out.println("Generating...");
 
 		LineListener lineListener = new LineListener() {
+			@Override
 			public void update(LineEvent event) {
 				if (event.getType() == LineEvent.Type.START) {
 					System.err.println("Audio started playing.");

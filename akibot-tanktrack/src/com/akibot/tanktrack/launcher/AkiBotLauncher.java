@@ -11,6 +11,7 @@ import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorConfig;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
@@ -34,11 +35,14 @@ public class AkiBotLauncher {
 		server.start();
 
 		// TankTrack:
-		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB), serverAddress);
+		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
+				Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB), serverAddress);
 		tankTrack.getMyClientDescription().getTopicList().add(new StickMotionRequest());
 
 		// Gyroscope:
-		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER, Constants.GYROSCOPE_DEVICE_ADDRESS, Constants.GYROSCOPE_OFFSET_X, Constants.GYROSCOPE_OFFSET_Y, Constants.GYROSCOPE_OFFSET_Z, Constants.GYROSCOPE_OFFSET_DEGREES), serverAddress);
+		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER,
+				Constants.GYROSCOPE_DEVICE_ADDRESS, Constants.GYROSCOPE_OFFSET_X, Constants.GYROSCOPE_OFFSET_Y, Constants.GYROSCOPE_OFFSET_Z,
+				Constants.GYROSCOPE_OFFSET_DEGREES), serverAddress);
 		gyroscope.getMyClientDescription().getTopicList().add(new GyroscopeRequest());
 
 		// SpeechSynthesis:
@@ -55,7 +59,8 @@ public class AkiBotLauncher {
 		// speechSynthesisComponent, speechSynthesisDescription);
 
 		// Distance Meter
-		AkibotClient distance = new AkibotClient("akibot.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN, Constants.FRONT_DISTANCE_ECHO_PIN, 50000), serverAddress);
+		AkibotClient distance = new AkibotClient("akibot.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN,
+				Constants.FRONT_DISTANCE_ECHO_PIN, Constants.FRONT_DISTANCE_TIMEOUT), serverAddress);
 		distance.getMyClientDescription().getTopicList().add(new DistanceRequest());
 
 		// Obstacle:
@@ -79,8 +84,22 @@ public class AkiBotLauncher {
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
 
 		// EchoLocator:
-		AkibotClient echoLocator = new AkibotClient("akibot.echolocator",
-				new EchoLocatorComponent("akibot.distance", "akibot.servo.base", "akibot.servo.head"), serverAddress);
+		EchoLocatorConfig echoLocatorConfig = new EchoLocatorConfig();
+
+		echoLocatorConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_DISTANCE_TRIGGER_PIN);
+		echoLocatorConfig.setDistanceEchoPin(Constants.ECHOLOCATOR_DISTANCE_ECHO_PIN);
+		echoLocatorConfig.setDistanceTimeout(Constants.ECHOLOCATOR_DISTANCE_TIMEOUT);
+		echoLocatorConfig.setSleepBeforeDistance(Constants.ECHOLOCATOR_SLEEP_BEFORE_DISNTANCE);
+		echoLocatorConfig.setServoBasePin(Constants.ECHOLOCATOR_SERVO_BASE_PIN);
+		echoLocatorConfig.setServoHeadPin(Constants.ECHOLOCATOR_SERVO_HEAD_PIN);
+		// TODO: Put into request servoLongTime?:
+		echoLocatorConfig.setServoLongTime(Constants.ECHOLOCATOR_SERVO_LONG_TIME);
+		echoLocatorConfig.setServoStepTime(Constants.ECHOLOCATOR_SERVO_STEP_TIME);
+		echoLocatorConfig.setDistanceCount(Constants.ECHOLOCATOR_DISTANCE_COUNT);
+		// 13, 12, 500000, 50000, 0, 7,
+		// 4, 24, 1, 14,
+		// 400000, 35000, 1, true);
+		AkibotClient echoLocator = new AkibotClient("akibot.echolocator", new EchoLocatorComponent(echoLocatorConfig), serverAddress);
 		echoLocator.getMyClientDescription().getTopicList().add(new EchoLocatorRequest());
 		echoLocator.getMyClientDescription().getTopicList().add(new DistanceResponse());
 		echoLocator.getMyClientDescription().getTopicList().add(new ServoResponse());

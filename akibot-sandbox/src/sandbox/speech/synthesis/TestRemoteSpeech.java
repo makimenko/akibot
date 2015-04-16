@@ -19,6 +19,7 @@ public class TestRemoteSpeech {
 		int port = 59125;
 
 		LineListener lineListener = new LineListener() {
+			@Override
 			public void update(LineEvent event) {
 				if (event.getType() == LineEvent.Type.START) {
 					System.err.println("Audio started playing.");
@@ -35,7 +36,9 @@ public class TestRemoteSpeech {
 		System.out.println("1");
 		MaryInterface marytts = new RemoteMaryInterface(hostname, port);
 		System.out.println("2");
-		marytts.setVoice("voice-voxforge-ru-nsh"); // marytts-lang-ru // voice-voxforge-ru-nsh // cmu-slt-hsmm
+		marytts.setVoice("voice-voxforge-ru-nsh"); // marytts-lang-ru //
+													// voice-voxforge-ru-nsh //
+													// cmu-slt-hsmm
 		System.out.println("3");
 		AudioInputStream audio = marytts.generateAudio("Hello world. What is your name? How can I help you?");
 		System.out.println("4");

@@ -109,6 +109,7 @@ public class HMC5883L implements MultiAxisGyro {
 		this.mode = mode;
 	}
 
+	@Override
 	public Gyroscope init(Gyroscope triggeringAxis, int triggeringMode) throws IOException {
 		enable();
 
@@ -266,7 +267,7 @@ public class HMC5883L implements MultiAxisGyro {
 			int z = hmc5883l.Z.getRawValue();
 
 			double RAD_TO_DEG = 57.295779513082320876798154814105f;
-			double bearing = Math.atan2((double) y, (double) x) * RAD_TO_DEG;
+			double bearing = Math.atan2(y, x) * RAD_TO_DEG;
 
 			System.out.format("%10d, %10d, %10d / %10.3f %n", x, y, z, bearing);
 			Thread.sleep(250);

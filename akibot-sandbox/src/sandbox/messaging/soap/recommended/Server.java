@@ -19,6 +19,7 @@ public class Server {
 		serverSocket = new ServerSocket(port);
 
 		Thread accept = new Thread() {
+			@Override
 			public void run() {
 				while (true) {
 					try {
@@ -35,6 +36,7 @@ public class Server {
 		accept.start();
 
 		Thread messageHandling = new Thread() {
+			@Override
 			public void run() {
 				while (true) {
 					try {
@@ -65,6 +67,7 @@ public class Server {
 			out = new ObjectOutputStream(socket.getOutputStream());
 
 			Thread read = new Thread() {
+				@Override
 				public void run() {
 					while (true) {
 						try {

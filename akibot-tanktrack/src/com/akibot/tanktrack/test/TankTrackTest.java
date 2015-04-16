@@ -127,5 +127,29 @@ public class TankTrackTest {
 		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoHeadRequest, 1000);
 	}
 
-	
+	@Test
+	public void testEchoLocator() throws FailedToSendMessageException, InterruptedException {
+		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
+		EchoLocatorResponse echoLocatorResponse;
+
+		// Step 1:
+		echoLocatorRequest.setServoBaseFrom(4);
+		echoLocatorRequest.setServoBaseTo(24);
+		echoLocatorRequest.setServoBaseStep(1);
+		echoLocatorRequest.setServoHeadNormal(14);
+		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 3000);
+		assertEquals("Validate 1 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 21,
+				echoLocatorResponse.getEchoLocatorResult().length);
+
+		// Step 2:
+		echoLocatorRequest.setServoBaseFrom(24);
+		echoLocatorRequest.setServoBaseTo(14);
+		echoLocatorRequest.setServoBaseStep(1);
+		echoLocatorRequest.setServoHeadNormal(14);
+		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 2000);
+		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 11,
+				echoLocatorResponse.getEchoLocatorResult().length);
+
+	}
+
 }
