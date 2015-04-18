@@ -29,7 +29,7 @@ public class VisualizerComponent extends DefaultComponent {
 			Sphere sphere = new Sphere(10, 10, 10);
 			Geometry geometry = visualizerWindow.putShape(node, sphere, ColorRGBA.Red, false);
 			geometry.move(visualUtils.pointToVector3f(request.getAkiPoint()));
-			node.updateGeometricState();
+			// node.updateGeometricState();
 
 		}
 	}

@@ -137,7 +137,7 @@ public class TankTrackTest {
 		echoLocatorRequest.setServoBaseTo(24);
 		echoLocatorRequest.setServoBaseStep(1);
 		echoLocatorRequest.setServoHeadNormal(14);
-		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 3000);
+		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
 		assertEquals("Validate 1 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 21,
 				echoLocatorResponse.getEchoLocatorResult().length);
 
@@ -146,9 +146,33 @@ public class TankTrackTest {
 		echoLocatorRequest.setServoBaseTo(14);
 		echoLocatorRequest.setServoBaseStep(1);
 		echoLocatorRequest.setServoHeadNormal(14);
-		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 2000);
+		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
 		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 11,
 				echoLocatorResponse.getEchoLocatorResult().length);
+
+	}
+
+	@Test
+	public void testMultipleActions() throws FailedToSendMessageException, InterruptedException {
+		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
+		EchoLocatorResponse echoLocatorResponse;
+
+		StickMotionRequest forwardRequest = new StickMotionRequest(DirectionType.FORWARD);
+		StickMotionRequest backRequest = new StickMotionRequest(DirectionType.BACKWARD);
+		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
+
+		// Step 2:
+		echoLocatorRequest.setServoBaseFrom(24);
+		echoLocatorRequest.setServoBaseTo(14);
+		echoLocatorRequest.setServoBaseStep(1);
+		echoLocatorRequest.setServoHeadNormal(14);
+		testClient.getOutgoingMessageManager().broadcastMessage(forwardRequest);
+		testClient.getOutgoingMessageManager().broadcastMessage(echoLocatorRequest);
+		Thread.sleep(1000);
+		testClient.getOutgoingMessageManager().broadcastMessage(backRequest);
+		Thread.sleep(1000);
+		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
+		Thread.sleep(1000);
 
 	}
 
