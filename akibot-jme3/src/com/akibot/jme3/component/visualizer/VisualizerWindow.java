@@ -15,7 +15,7 @@ import com.jme3.scene.shape.Sphere;
 
 public class VisualizerWindow extends SimpleApplication {
 	private Node baseNode;
-	private Node coordinatesCenterNode;
+	private MaterialStorage materialStorage;
 
 	public VisualizerWindow() {
 		// TODO Auto-generated constructor stub
@@ -23,6 +23,7 @@ public class VisualizerWindow extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp() {
+		materialStorage = new MaterialStorage(assetManager);
 		flyCam.setEnabled(true);
 		flyCam.setMoveSpeed(90);
 		drawGrid();
@@ -31,7 +32,7 @@ public class VisualizerWindow extends SimpleApplication {
 			baseNode.scale(0.01f);
 			rootNode.attachChild(baseNode);
 
-			coordinatesCenterNode = new Node();
+			Node coordinatesCenterNode = new Node();
 			baseNode.attachChild(coordinatesCenterNode);
 			Sphere sphereMesh = new Sphere(32, 32, 10);
 			coordinatesCenterNode.move(337, -106, 486);
@@ -73,7 +74,7 @@ public class VisualizerWindow extends SimpleApplication {
 	public void drawGrid() {
 		Mesh gridMesh = new MyGridMesh(200, 5);
 		Geometry lineGeometry = new Geometry("grid", gridMesh);
-		lineGeometry.setMaterial(MaterialStorage.getMaterial(assetManager, "green"));
+		lineGeometry.setMaterial(materialStorage.getMaterial("green"));
 		lineGeometry.setLocalTranslation(0, -5, 0); // move down a little
 		rootNode.attachChild(lineGeometry);
 	}
@@ -82,8 +83,8 @@ public class VisualizerWindow extends SimpleApplication {
 		return baseNode;
 	}
 
-	public Node getCoordinatesCenterNode() {
-		return coordinatesCenterNode;
+	public MaterialStorage getMaterialStorage() {
+		return materialStorage;
 	}
 
 }

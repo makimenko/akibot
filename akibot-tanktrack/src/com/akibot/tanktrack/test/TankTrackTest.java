@@ -168,11 +168,11 @@ public class TankTrackTest {
 		echoLocatorRequest.setServoHeadNormal(14);
 		testClient.getOutgoingMessageManager().broadcastMessage(forwardRequest);
 		testClient.getOutgoingMessageManager().broadcastMessage(echoLocatorRequest);
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		testClient.getOutgoingMessageManager().broadcastMessage(backRequest);
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 
 	}
 

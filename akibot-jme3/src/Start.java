@@ -112,7 +112,8 @@ public class Start extends SimpleApplication {
 	public void drawGrid() {
 		Mesh gridMesh = new MyGridMesh(200, 5);
 		Geometry lineGeometry = new Geometry("grid", gridMesh);
-		lineGeometry.setMaterial(MaterialStorage.getMaterial(assetManager, "green"));
+		MaterialStorage materialStorage = new MaterialStorage(assetManager);
+		lineGeometry.setMaterial(materialStorage.getMaterial("green"));
 		lineGeometry.setLocalTranslation(0, -5, 0); // move down a little
 		rootNode.attachChild(lineGeometry);
 	}

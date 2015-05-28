@@ -10,25 +10,35 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.texture.Texture;
 
 public class MaterialStorage {
-	static HashMap<String, Material> materials;
+	private static HashMap<String, Material> materials;
+	private AssetManager assetManager;
 
-	public static void loadMaterials(AssetManager assetManager) {
+	public MaterialStorage(AssetManager assetManager) {
+		this.assetManager = assetManager;
+	}
+
+	private void loadInitialMaterials() {
 		materials = new HashMap<String, Material>();
 		// materials.put("material1", loadMaterialFromFile(assetManager,
 		// "res/texture/tex1.jpg"));
-		materials.put("green", loadSimpleColor(assetManager, new ColorRGBA(0, 1, 0, 0.3f)));
-		materials.put("red", loadSimpleColor(assetManager, ColorRGBA.Red));
-		materials.put("blue", loadSimpleColor(assetManager, ColorRGBA.Blue));
+		materials.put("green", loadSimpleColor(new ColorRGBA(0, 1, 0, 0.3f), false));
+		materials.put("red", loadSimpleColor(ColorRGBA.Red, false));
+		materials.put("blue", loadSimpleColor(ColorRGBA.Blue, false));
+
+		materials.put("ground", loadSimpleColor(ColorRGBA.Brown, true));
+		materials.put("object", loadSimpleColor(ColorRGBA.Pink, false));
+
 	}
 
-	private static Material loadSimpleColor(AssetManager assetManager, ColorRGBA color) {
+	public Material loadSimpleColor(ColorRGBA color, boolean wireframe) {
 		Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 		mat.setColor("Color", color);
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+		mat.getAdditionalRenderState().setWireframe(wireframe);
 		return mat;
 	}
 
-	private static Material loadMaterialFromFile(AssetManager assetManager, String texture) {
+	public Material loadMaterialFromFile(String texture) {
 		Material mat = new Material(assetManager, "Common/MatDefs/Misc/SimpleTextured.j3md");
 		TextureKey key = new TextureKey(texture, true);
 		key.setGenerateMips(true);
@@ -38,9 +48,9 @@ public class MaterialStorage {
 		return mat;
 	}
 
-	public static Material getMaterial(AssetManager assetManager, String name) {
+	public Material getMaterial(String name) {
 		if (materials == null)
-			loadMaterials(assetManager);
+			loadInitialMaterials();
 		return materials.get(name);
 	}
 

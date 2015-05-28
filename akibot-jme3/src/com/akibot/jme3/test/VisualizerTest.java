@@ -10,7 +10,10 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
-import com.akibot.jme3.component.visualizer.VisualizerRequest;
+import com.akibot.jme3.component.visualizer.NodeRegistrationRequest;
+import com.akibot.jme3.component.visualizer.utils.AkiGeometry;
+import com.akibot.jme3.component.visualizer.utils.AkiNode;
+import com.akibot.jme3.component.visualizer.utils.AkiNodeTransformation;
 import com.akibot.jme3.component.visualizer.utils.AkiPoint;
 
 public class VisualizerTest {
@@ -34,20 +37,29 @@ public class VisualizerTest {
 	}
 
 	@Test
-	public void testMovement() throws FailedToSendMessageException, InterruptedException {
-		VisualizerRequest request = new VisualizerRequest();
+	public void test() throws FailedToSendMessageException, InterruptedException {
 
-		request.setAkiPoint(new AkiPoint(10, 20, 30));
-		testClient.getOutgoingMessageManager().broadcastMessage(request);
-		Thread.sleep(1000);
+		AkiNode homeNode = new AkiNode("home");
+		AkiGeometry homeGeometry = new AkiGeometry();
+		homeGeometry.setDimension(new AkiPoint(100, 50, 10));
+		homeGeometry.setMaterialName("ground");
+		homeNode.setGeometry(homeGeometry);
+		testClient.getOutgoingMessageManager().broadcastMessage(new NodeRegistrationRequest(homeNode));
 
-		request.setAkiPoint(new AkiPoint(100, 200, 300));
-		testClient.getOutgoingMessageManager().broadcastMessage(request);
-		Thread.sleep(1000);
+		AkiNode robotNode = new AkiNode("robot");
+		AkiGeometry robotGeometry = new AkiGeometry();
+		robotGeometry.setDimension(new AkiPoint(110, 5, 5));
+		robotGeometry.setMaterialName("object");
+		robotNode.setGeometry(robotGeometry);
 
-		request.setAkiPoint(new AkiPoint(1000, 2000, 3000));
-		testClient.getOutgoingMessageManager().broadcastMessage(request);
-		Thread.sleep(1000);
+		AkiNodeTransformation robotAkiNodeTransformation = new AkiNodeTransformation();
+		// robotAkiNodeTransformation.setTranslation(new AkiPoint(10, 0, +10));
+		// robotAkiNodeTransformation.setRotation(new AkiPoint(1, 1, 1));
+		robotNode.setTransformation(robotAkiNodeTransformation);
+
+		// robotNode.setParentNode(homeNode);
+
+		testClient.getOutgoingMessageManager().broadcastMessage(new NodeRegistrationRequest(robotNode));
 
 	}
 
