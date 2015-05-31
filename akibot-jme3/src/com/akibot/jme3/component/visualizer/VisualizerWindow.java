@@ -1,12 +1,15 @@
 package com.akibot.jme3.component.visualizer;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import graphics.mesh.MyGridMesh;
 import graphics.storage.MaterialStorage;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.akibot.engine2.logger.AkiLogger;
+import com.akibot.jme3.component.message.NodeRegistrationRequest;
+import com.akibot.jme3.component.message.NodeTransformationRequest;
 import com.akibot.jme3.component.message.VisualizerRequest;
 import com.akibot.jme3.component.visualizer.utils.AkiGeometry;
 import com.akibot.jme3.component.visualizer.utils.AkiNode;
@@ -33,7 +36,8 @@ public class VisualizerWindow extends SimpleApplication {
 	private MaterialStorage materialStorage;
 	private VisualUtils visualUtils;
 	private Queue<VisualizerRequest> queue = new LinkedList<VisualizerRequest>();
-	
+	private HashMap<String, Node> nodeList = new HashMap<String, Node>();
+
 	public VisualizerWindow() {
 		// TODO Auto-generated constructor stub
 		visualUtils = new VisualUtils();
@@ -159,6 +163,45 @@ public class VisualizerWindow extends SimpleApplication {
 
 	public void addQueue(VisualizerRequest visualizerRequest) {
 		queue.add(visualizerRequest);
-		
+
+	}
+
+	public void nodeRegistrarion(NodeRegistrationRequest nodeRegistrationRequest) {
+		AkiNode akiNode = nodeRegistrationRequest.getAkiNode();
+		Node findNode = nodeList.get(akiNode.getName());
+		if (findNode == null) {
+			Node node = visualUtils.akiNodeToNode(akiNode);
+			if (akiNode.getParentNode() == null) {
+				addNode(getBaseNode(), node);
+			} else {
+				Node findParentNode = nodeList.get(akiNode.getParentNode().getName());
+				if (findParentNode != null) {
+					addNode(findParentNode, node);
+				} else {
+					log.warn("Node [" + akiNode.getName() + "] can't find parent node [" + akiNode.getParentNode() + "] not found!");
+				}
+			}
+			nodeList.put(akiNode.getName(), node);
+			nodeTransformation(node, akiNode.getTransformation());
+			nodeGeometry(node, akiNode);
+		}
+	}
+
+	@Override
+	public void update() {
+
+		while (!queue.isEmpty()) {
+			VisualizerRequest visualizerRequest = queue.remove();
+			if (visualizerRequest instanceof NodeRegistrationRequest) {
+				nodeRegistrarion((NodeRegistrationRequest) visualizerRequest);
+			} else if (visualizerRequest instanceof NodeTransformationRequest) {
+				NodeTransformationRequest nodeTransformationRequest = (NodeTransformationRequest) visualizerRequest;
+				AkiNode akiNode = nodeTransformationRequest.getAkiNode();
+				AkiNodeTransformation akiNodeTransformation = akiNode.getTransformation();
+				Node findNode = nodeList.get(akiNode.getName());
+				nodeTransformation(findNode, akiNodeTransformation);
+			}
+		}
+		super.update();
 	}
 }

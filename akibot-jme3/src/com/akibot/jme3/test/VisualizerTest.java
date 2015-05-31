@@ -60,12 +60,12 @@ public class VisualizerTest {
 		Thread.sleep(1000);
 		for (int i = 0; i <= 50; i++) {
 			AkiNodeTransformation nodeTransformation = new AkiNodeTransformation();
-			nodeTransformation.setTranslation(new AkiPoint(i/2f, 0, 0));
+			nodeTransformation.setTranslation(new AkiPoint(i / 2f, 0, 0));
 			robotNode.setTransformation(nodeTransformation);
 			testClient.getOutgoingMessageManager().broadcastMessage(new NodeTransformationRequest(robotNode));
 			Thread.sleep(50);
 		}
-		
+
 		for (int i = 0; i <= 10; i++) {
 			AkiNodeTransformation nodeTransformation = new AkiNodeTransformation();
 			nodeTransformation.setTranslation(new AkiPoint(i, 0, 0));
