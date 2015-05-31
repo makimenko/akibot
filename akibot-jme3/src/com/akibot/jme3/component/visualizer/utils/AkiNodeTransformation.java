@@ -54,7 +54,7 @@ public class AkiNodeTransformation implements Serializable {
 	}
 
 	public boolean isChanged() {
-		return rotationChanged && scaleChanged && translationChanged;
+		return rotationChanged || scaleChanged || translationChanged;
 	}
 
 }

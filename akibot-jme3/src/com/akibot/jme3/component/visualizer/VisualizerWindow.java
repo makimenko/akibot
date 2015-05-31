@@ -1,8 +1,18 @@
 package com.akibot.jme3.component.visualizer;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import graphics.mesh.MyGridMesh;
 import graphics.storage.MaterialStorage;
 
+import com.akibot.engine2.logger.AkiLogger;
+import com.akibot.jme3.component.message.VisualizerRequest;
+import com.akibot.jme3.component.visualizer.utils.AkiGeometry;
+import com.akibot.jme3.component.visualizer.utils.AkiNode;
+import com.akibot.jme3.component.visualizer.utils.AkiNodeTransformation;
+import com.akibot.jme3.component.visualizer.utils.AkiPoint;
+import com.akibot.jme3.component.visualizer.utils.VisualUtils;
 import com.jme3.app.SimpleApplication;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
@@ -15,14 +25,18 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Sphere;
+import com.jme3.scene.shape.Box;
 
 public class VisualizerWindow extends SimpleApplication {
+	static final AkiLogger log = AkiLogger.create(VisualizerWindow.class);
 	private Node baseNode;
 	private MaterialStorage materialStorage;
-
+	private VisualUtils visualUtils;
+	private Queue<VisualizerRequest> queue = new LinkedList<VisualizerRequest>();
+	
 	public VisualizerWindow() {
 		// TODO Auto-generated constructor stub
+		visualUtils = new VisualUtils();
 	}
 
 	@Override
@@ -99,4 +113,52 @@ public class VisualizerWindow extends SimpleApplication {
 		return materialStorage;
 	}
 
+	public void addNode(Node parentNode, Node node) {
+		attachCoordinateAxes(node);
+		parentNode.attachChild(node);
+	}
+
+	public void nodeTransformation(Node node, AkiNodeTransformation akiNodeTransformation) {
+
+		if (node != null && akiNodeTransformation != null && akiNodeTransformation.isChanged()) {
+
+			if (akiNodeTransformation.isRotationChanged()) {
+				// TODO: validate
+				node.rotateUpTo(visualUtils.pointToVector3f(akiNodeTransformation.getRotation()));
+			}
+
+			if (akiNodeTransformation.isScaleChanged()) {
+				// TODO: validate
+				node.setLocalScale(visualUtils.pointToVector3f(akiNodeTransformation.getScale()));
+			}
+
+			if (akiNodeTransformation.isTranslationChanged()) {
+				// TODO: validate
+				node.setLocalTranslation(visualUtils.pointToVector3f(akiNodeTransformation.getTranslation()));
+			}
+		}
+	}
+
+	public void nodeGeometry(Node node, AkiNode akiNode) {
+		AkiGeometry akiGeometry = akiNode.getGeometry();
+
+		if (akiGeometry != null) {
+			AkiPoint dimension = akiNode.getGeometry().getDimension();
+			if (dimension != null) {
+				Box box = new Box(dimension.getX(), dimension.getY(), dimension.getZ());
+				Geometry geometry = new Geometry(akiNode.getName() + " geometry", box);
+				// geometry.setLocalTranslation(new Vector3f(1,-1,1));
+				String materialName = (akiNode.getGeometry().getMaterialName() != null ? akiNode.getGeometry().getMaterialName() : "red");
+
+				geometry.setMaterial(getMaterialStorage().getMaterial(materialName));
+				node.attachChild(geometry);
+			}
+		}
+
+	}
+
+	public void addQueue(VisualizerRequest visualizerRequest) {
+		queue.add(visualizerRequest);
+		
+	}
 }
