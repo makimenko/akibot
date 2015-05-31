@@ -5,6 +5,8 @@ import java.util.HashMap;
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.jme3.component.message.NodeRegistrationRequest;
+import com.akibot.jme3.component.message.NodeTransformationRequest;
 import com.akibot.jme3.component.visualizer.utils.AkiGeometry;
 import com.akibot.jme3.component.visualizer.utils.AkiNode;
 import com.akibot.jme3.component.visualizer.utils.AkiNodeTransformation;
@@ -42,6 +44,9 @@ public class VisualizerComponent extends DefaultComponent {
 			Node node = visualUtils.akiNodeToNode(akiNode);
 			if (akiNode.getParentNode() == null) {
 				visualizerWindow.getBaseNode().attachChild(node);
+				visualizerWindow.attachCoordinateAxes(node);
+				visualizerWindow.getRootNode().updateGeometricState();
+				// rootNode.updateGeometricState()
 			} else {
 				Node findParentNode = nodeList.get(akiNode.getParentNode());
 				if (findParentNode != null) {

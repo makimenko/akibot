@@ -1,4 +1,4 @@
-package com.akibot.jme3.component.visualizer;
+package com.akibot.jme3.component.message;
 
 import com.akibot.engine2.message.Request;
 

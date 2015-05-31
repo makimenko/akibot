@@ -1,18 +1,14 @@
-package com.akibot.jme3.component.visualizer;
+package com.akibot.jme3.component.message;
 
 import com.akibot.jme3.component.visualizer.utils.AkiNode;
 
-public class NodeRegistrationRequest extends VisualizerRequest {
+public class NodeTransformationRequest extends VisualizerRequest {
 
 	private static final long serialVersionUID = 1L;
 
 	private AkiNode akiNode;
 
-	public NodeRegistrationRequest() {
-
-	}
-
-	public NodeRegistrationRequest(AkiNode akiNode) {
+	public NodeTransformationRequest(AkiNode akiNode) {
 		this.akiNode = akiNode;
 	}
 

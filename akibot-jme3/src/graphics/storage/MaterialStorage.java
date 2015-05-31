@@ -26,7 +26,7 @@ public class MaterialStorage {
 		materials.put("blue", loadSimpleColor(ColorRGBA.Blue, false));
 
 		materials.put("ground", loadSimpleColor(ColorRGBA.Brown, true));
-		materials.put("object", loadSimpleColor(ColorRGBA.Pink, false));
+		materials.put("object", loadSimpleColor(ColorRGBA.Pink, true));
 
 	}
 

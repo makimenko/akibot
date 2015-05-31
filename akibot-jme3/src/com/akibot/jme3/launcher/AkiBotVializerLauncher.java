@@ -3,8 +3,8 @@ package com.akibot.jme3.launcher;
 import java.net.InetSocketAddress;
 
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.jme3.component.message.VisualizerRequest;
 import com.akibot.jme3.component.visualizer.VisualizerComponent;
-import com.akibot.jme3.component.visualizer.VisualizerRequest;
 import com.akibot.jme3.component.visualizer.VisualizerWindow;
 import com.jme3.system.AppSettings;
 
