@@ -93,43 +93,54 @@ public class TankTrackTest {
 		DistanceResponse distanceResponse = (DistanceResponse) testClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 2000);
 
 		double result = distanceResponse.getMm();
-		assertEquals("Check value " + result, true, result > 100);
+		assertEquals("Check value " + result, true, result > 100 && result < 7000);
 	}
 
 	@Test
 	public void testServo() throws FailedToSendMessageException, InterruptedException {
+		callServo("akibot.servo.front");
+		callServo("akibot.servo.back");
+	}
+
+	private void callServo(String to) throws FailedToSendMessageException {
 		ServoResponse servoResponse;
 
-		ServoRequest servoBaseRequest = new ServoRequest();
-		servoBaseRequest.setMicroseconds(500000);
-		servoBaseRequest.setTo("akibot.servo.base");
+		ServoRequest servoFrontBaseRequest = new ServoRequest();
+		servoFrontBaseRequest.setMicroseconds(500000);
+		servoFrontBaseRequest.setTo(to + ".base");
 
-		ServoRequest servoHeadRequest = new ServoRequest();
-		servoHeadRequest.setMicroseconds(500000);
-		servoHeadRequest.setTo("akibot.servo.head");
+		ServoRequest servoFrontHeadRequest = new ServoRequest();
+		servoFrontHeadRequest.setMicroseconds(500000);
+		servoFrontHeadRequest.setTo(to + ".head");
 
-		servoBaseRequest.setValue(4);
-		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoBaseRequest, 1000);
+		servoFrontBaseRequest.setValue(4);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
 
-		servoBaseRequest.setValue(14);
-		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoBaseRequest, 1000);
+		servoFrontBaseRequest.setValue(14);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
 
-		servoBaseRequest.setValue(24);
-		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoBaseRequest, 1000);
+		servoFrontBaseRequest.setValue(24);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
 
-		servoBaseRequest.setValue(14);
-		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoBaseRequest, 1000);
+		servoFrontBaseRequest.setValue(14);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
 
-		servoHeadRequest.setValue(24);
-		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoHeadRequest, 1000);
+		servoFrontHeadRequest.setValue(24);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontHeadRequest, 1000);
 
-		servoHeadRequest.setValue(14);
-		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoHeadRequest, 1000);
+		servoFrontHeadRequest.setValue(14);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontHeadRequest, 1000);
 	}
 
 	@Test
 	public void testEchoLocator() throws FailedToSendMessageException, InterruptedException {
+		callEchoLocator("akibot.echolocator.front");
+		callEchoLocator("akibot.echolocator.back");
+	}
+
+	private void callEchoLocator(String to) throws FailedToSendMessageException {
 		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
+		echoLocatorRequest.setTo(to);
 		EchoLocatorResponse echoLocatorResponse;
 
 		// Step 1:
@@ -149,7 +160,6 @@ public class TankTrackTest {
 		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
 		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 11,
 				echoLocatorResponse.getEchoLocatorResult().length);
-
 	}
 
 	@Test

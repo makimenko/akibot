@@ -59,7 +59,7 @@ public class AkiBotLauncher {
 		// speechSynthesisComponent, speechSynthesisDescription);
 
 		// Distance Meter
-		AkibotClient distance = new AkibotClient("akibot.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN,
+		AkibotClient distance = new AkibotClient("akibot.front.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN,
 				Constants.FRONT_DISTANCE_ECHO_PIN, Constants.FRONT_DISTANCE_TIMEOUT), serverAddress);
 		distance.getMyClientDescription().getTopicList().add(new DistanceRequest());
 
@@ -74,35 +74,58 @@ public class AkiBotLauncher {
 		// DistanceResponse());
 
 		// Servo motors
-		AkibotClient servoBase = new AkibotClient("akibot.servo.base", new ServoComponent(Constants.FRONT_SERVO_BASE_PIN, 0, 200, 200), serverAddress);
-		servoBase.getMyClientDescription().getTopicList().add(new ServoRequest());
+		AkibotClient servoFrontBase = new AkibotClient("akibot.servo.front.base", new ServoComponent(Constants.FRONT_SERVO_BASE_PIN, 0, 200, 200),
+				serverAddress);
+		servoFrontBase.getMyClientDescription().getTopicList().add(new ServoRequest());
 
-		AkibotClient servoHead = new AkibotClient("akibot.servo.head", new ServoComponent(Constants.FRONT_SERVO_HEAD_PIN, 0, 200, 200), serverAddress);
-		servoHead.getMyClientDescription().getTopicList().add(new ServoRequest());
+		AkibotClient servoFrontHead = new AkibotClient("akibot.servo.front.head", new ServoComponent(Constants.FRONT_SERVO_HEAD_PIN, 0, 200, 200),
+				serverAddress);
+		servoFrontHead.getMyClientDescription().getTopicList().add(new ServoRequest());
+
+		AkibotClient servoBackBase = new AkibotClient("akibot.servo.back.base", new ServoComponent(Constants.BACK_SERVO_BASE_PIN, 0, 200, 200), serverAddress);
+		servoBackBase.getMyClientDescription().getTopicList().add(new ServoRequest());
+
+		AkibotClient servoBackHead = new AkibotClient("akibot.servo.back.head", new ServoComponent(Constants.BACK_SERVO_HEAD_PIN, 0, 200, 200), serverAddress);
+		servoBackHead.getMyClientDescription().getTopicList().add(new ServoRequest());
 
 		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), serverAddress);
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
 
-		// EchoLocator:
-		EchoLocatorConfig echoLocatorConfig = new EchoLocatorConfig();
-
-		echoLocatorConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_DISTANCE_TRIGGER_PIN);
-		echoLocatorConfig.setDistanceEchoPin(Constants.ECHOLOCATOR_DISTANCE_ECHO_PIN);
-		echoLocatorConfig.setDistanceTimeout(Constants.ECHOLOCATOR_DISTANCE_TIMEOUT);
-		echoLocatorConfig.setSleepBeforeDistance(Constants.ECHOLOCATOR_SLEEP_BEFORE_DISNTANCE);
-		echoLocatorConfig.setServoBasePin(Constants.ECHOLOCATOR_SERVO_BASE_PIN);
-		echoLocatorConfig.setServoHeadPin(Constants.ECHOLOCATOR_SERVO_HEAD_PIN);
+		// EchoLocatorFront:
+		EchoLocatorConfig echoLocatorFrontConfig = new EchoLocatorConfig();
+		echoLocatorFrontConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_FRONT_DISTANCE_TRIGGER_PIN);
+		echoLocatorFrontConfig.setDistanceEchoPin(Constants.ECHOLOCATOR_FRONT_DISTANCE_ECHO_PIN);
+		echoLocatorFrontConfig.setDistanceTimeout(Constants.ECHOLOCATOR_FRONT_DISTANCE_TIMEOUT);
+		echoLocatorFrontConfig.setSleepBeforeDistance(Constants.ECHOLOCATOR_FRONT_SLEEP_BEFORE_DISNTANCE);
+		echoLocatorFrontConfig.setServoBasePin(Constants.ECHOLOCATOR_FRONT_SERVO_BASE_PIN);
+		echoLocatorFrontConfig.setServoHeadPin(Constants.ECHOLOCATOR_FRONT_SERVO_HEAD_PIN);
 		// TODO: Put into request servoLongTime?:
-		echoLocatorConfig.setServoLongTime(Constants.ECHOLOCATOR_SERVO_LONG_TIME);
-		echoLocatorConfig.setServoStepTime(Constants.ECHOLOCATOR_SERVO_STEP_TIME);
-		echoLocatorConfig.setDistanceCount(Constants.ECHOLOCATOR_DISTANCE_COUNT);
-		// 13, 12, 500000, 50000, 0, 7,
-		// 4, 24, 1, 14,
-		// 400000, 35000, 1, true);
-		AkibotClient echoLocator = new AkibotClient("akibot.echolocator", new EchoLocatorComponent(echoLocatorConfig), serverAddress);
-		echoLocator.getMyClientDescription().getTopicList().add(new EchoLocatorRequest());
-		echoLocator.getMyClientDescription().getTopicList().add(new DistanceResponse());
-		echoLocator.getMyClientDescription().getTopicList().add(new ServoResponse());
+		echoLocatorFrontConfig.setServoLongTime(Constants.ECHOLOCATOR_FRONT_SERVO_LONG_TIME);
+		echoLocatorFrontConfig.setServoStepTime(Constants.ECHOLOCATOR_FRONT_SERVO_STEP_TIME);
+		echoLocatorFrontConfig.setDistanceCount(Constants.ECHOLOCATOR_FRONT_DISTANCE_COUNT);
+
+		AkibotClient echoLocatorFront = new AkibotClient("akibot.echolocator.front", new EchoLocatorComponent(echoLocatorFrontConfig), serverAddress);
+		echoLocatorFront.getMyClientDescription().getTopicList().add(new EchoLocatorRequest());
+		echoLocatorFront.getMyClientDescription().getTopicList().add(new DistanceResponse());
+		echoLocatorFront.getMyClientDescription().getTopicList().add(new ServoResponse());
+
+		// EchoLocatorFront:
+		EchoLocatorConfig echoLocatorBackConfig = new EchoLocatorConfig();
+		echoLocatorBackConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_BACK_DISTANCE_TRIGGER_PIN);
+		echoLocatorBackConfig.setDistanceEchoPin(Constants.ECHOLOCATOR_BACK_DISTANCE_ECHO_PIN);
+		echoLocatorBackConfig.setDistanceTimeout(Constants.ECHOLOCATOR_BACK_DISTANCE_TIMEOUT);
+		echoLocatorBackConfig.setSleepBeforeDistance(Constants.ECHOLOCATOR_BACK_SLEEP_BEFORE_DISNTANCE);
+		echoLocatorBackConfig.setServoBasePin(Constants.ECHOLOCATOR_BACK_SERVO_BASE_PIN);
+		echoLocatorBackConfig.setServoHeadPin(Constants.ECHOLOCATOR_BACK_SERVO_HEAD_PIN);
+		// TODO: Put into request servoLongTime?:
+		echoLocatorBackConfig.setServoLongTime(Constants.ECHOLOCATOR_BACK_SERVO_LONG_TIME);
+		echoLocatorBackConfig.setServoStepTime(Constants.ECHOLOCATOR_BACK_SERVO_STEP_TIME);
+		echoLocatorBackConfig.setDistanceCount(Constants.ECHOLOCATOR_BACK_DISTANCE_COUNT);
+
+		AkibotClient echoLocatorBack = new AkibotClient("akibot.echolocator.back", new EchoLocatorComponent(echoLocatorBackConfig), serverAddress);
+		echoLocatorBack.getMyClientDescription().getTopicList().add(new EchoLocatorRequest());
+		echoLocatorBack.getMyClientDescription().getTopicList().add(new DistanceResponse());
+		echoLocatorBack.getMyClientDescription().getTopicList().add(new ServoResponse());
 
 		// Start all
 		tankTrack.start();
@@ -110,10 +133,13 @@ public class AkiBotLauncher {
 		// speechSynthesisClient.start();
 		distance.start();
 		// obstacle.start();
-		servoBase.start();
-		servoHead.start();
+		servoFrontBase.start();
+		servoFrontHead.start();
+		servoBackHead.start();
+		servoBackBase.start();
 		testComponent.start();
-		echoLocator.start();
+		echoLocatorFront.start();
+		echoLocatorBack.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

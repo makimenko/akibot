@@ -8,9 +8,16 @@ public class Constants {
 	public static final int FRONT_SERVO_BASE_PIN = 0;
 	public static final int FRONT_SERVO_HEAD_PIN = 7;
 
+	public static final int BACK_SERVO_BASE_PIN = 3;
+	public static final int BACK_SERVO_HEAD_PIN = 2;
+
 	public static final int FRONT_DISTANCE_TRIGGER_PIN = 13;
 	public static final int FRONT_DISTANCE_ECHO_PIN = 12;
 	public static final int FRONT_DISTANCE_TIMEOUT = 50000;
+
+	public static final int BACK_DISTANCE_TRIGGER_PIN = 21;
+	public static final int BACK_DISTANCE_ECHO_PIN = 14;
+	public static final int BACK_DISTANCE_TIMEOUT = 50000;
 
 	public static final Pin TANK_TRACK_RIGHT_IA = RaspiPin.GPIO_24;
 	public static final Pin TANK_TRACK_RIGHT_IB = RaspiPin.GPIO_25;
@@ -19,19 +26,31 @@ public class Constants {
 
 	public static final int GYROSCOPE_BUS_NUMBER = I2CBus.BUS_1;
 	public static final int GYROSCOPE_DEVICE_ADDRESS = 0x1e;
-	public static final double GYROSCOPE_OFFSET_X = 58.0;
-	public static final double GYROSCOPE_OFFSET_Y = -47.5;
-	public static final double GYROSCOPE_OFFSET_Z = 129.5;
+	//com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse: new offset = (709.0, 220.0, -872.0)
+	//(557.0, 294.5, -801.5)
+	public static final double GYROSCOPE_OFFSET_X = 557.0;
+	public static final double GYROSCOPE_OFFSET_Y = 294.5;
+	public static final double GYROSCOPE_OFFSET_Z = -801.5;
 	public static final double GYROSCOPE_OFFSET_DEGREES = 180;
 
-	public static final int ECHOLOCATOR_SLEEP_BEFORE_DISNTANCE = 50000;
-	public static final int ECHOLOCATOR_DISTANCE_TRIGGER_PIN = FRONT_DISTANCE_TRIGGER_PIN;
-	public static final int ECHOLOCATOR_DISTANCE_ECHO_PIN = FRONT_DISTANCE_ECHO_PIN;
-	public static final int ECHOLOCATOR_DISTANCE_TIMEOUT = FRONT_DISTANCE_TIMEOUT;
-	public static final int ECHOLOCATOR_SERVO_BASE_PIN = 0;
-	public static final int ECHOLOCATOR_SERVO_HEAD_PIN = 7;
-	public static final int ECHOLOCATOR_SERVO_LONG_TIME = 400000;
-	public static final int ECHOLOCATOR_SERVO_STEP_TIME = 35000;
-	public static final int ECHOLOCATOR_DISTANCE_COUNT = 1;
+	public static final int ECHOLOCATOR_FRONT_SLEEP_BEFORE_DISNTANCE = 50000;
+	public static final int ECHOLOCATOR_FRONT_DISTANCE_TRIGGER_PIN = FRONT_DISTANCE_TRIGGER_PIN;
+	public static final int ECHOLOCATOR_FRONT_DISTANCE_ECHO_PIN = FRONT_DISTANCE_ECHO_PIN;
+	public static final int ECHOLOCATOR_FRONT_DISTANCE_TIMEOUT = FRONT_DISTANCE_TIMEOUT;
+	public static final int ECHOLOCATOR_FRONT_SERVO_HEAD_PIN = FRONT_SERVO_HEAD_PIN;
+	public static final int ECHOLOCATOR_FRONT_SERVO_BASE_PIN = FRONT_SERVO_BASE_PIN;
+	public static final int ECHOLOCATOR_FRONT_SERVO_LONG_TIME = 400000;
+	public static final int ECHOLOCATOR_FRONT_SERVO_STEP_TIME = 35000;
+	public static final int ECHOLOCATOR_FRONT_DISTANCE_COUNT = 1;
+
+	public static final int ECHOLOCATOR_BACK_SLEEP_BEFORE_DISNTANCE = 50000;
+	public static final int ECHOLOCATOR_BACK_DISTANCE_TRIGGER_PIN = BACK_DISTANCE_TRIGGER_PIN;
+	public static final int ECHOLOCATOR_BACK_DISTANCE_ECHO_PIN = BACK_DISTANCE_ECHO_PIN;
+	public static final int ECHOLOCATOR_BACK_DISTANCE_TIMEOUT = BACK_DISTANCE_TIMEOUT;
+	public static final int ECHOLOCATOR_BACK_SERVO_HEAD_PIN = BACK_SERVO_HEAD_PIN;
+	public static final int ECHOLOCATOR_BACK_SERVO_BASE_PIN = BACK_SERVO_BASE_PIN;
+	public static final int ECHOLOCATOR_BACK_SERVO_LONG_TIME = 400000;
+	public static final int ECHOLOCATOR_BACK_SERVO_STEP_TIME = 35000;
+	public static final int ECHOLOCATOR_BACK_DISTANCE_COUNT = 1;
 
 }

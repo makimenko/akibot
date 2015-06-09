@@ -76,7 +76,7 @@ public class AwtControllerAppl {
 
 		SpeechSynthesisRequest messageSpeechSynthesis = new SpeechSynthesisRequest("Hello, Michael! Akibot is ready for work. Awaiting your commands.");
 
-		messageDistanceRequest.setTo("akibot.distance");
+		messageDistanceRequest.setTo("akibot.front.distance");
 		messageStop.setTo(tankTrackName);
 		messageForward.setTo(tankTrackName);
 		messageBackward.setTo(tankTrackName);
@@ -103,7 +103,7 @@ public class AwtControllerAppl {
 				try {
 					long startTime = System.currentTimeMillis();
 					DistanceRequest distanceRequest = new DistanceRequest();
-					distanceRequest.setTo("akibot.distance");
+					distanceRequest.setTo("akibot.front.distance");
 
 					for (int i = 1; i <= 10; i++) {
 						response = akibotClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 1000);
