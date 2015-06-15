@@ -26,11 +26,13 @@ public class Constants {
 
 	public static final int GYROSCOPE_BUS_NUMBER = I2CBus.BUS_1;
 	public static final int GYROSCOPE_DEVICE_ADDRESS = 0x1e;
-	//com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse: new offset = (709.0, 220.0, -872.0)
-	//(557.0, 294.5, -801.5)
-	public static final double GYROSCOPE_OFFSET_X = 557.0;
-	public static final double GYROSCOPE_OFFSET_Y = 294.5;
-	public static final double GYROSCOPE_OFFSET_Z = -801.5;
+	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse:
+	// new offset = (709.0, 220.0, -872.0)
+	// (557.0, 294.5, -801.5)
+	// 729.5, 111.5, -1415.0
+	public static final double GYROSCOPE_OFFSET_X = 729.5;
+	public static final double GYROSCOPE_OFFSET_Y = 111.5;
+	public static final double GYROSCOPE_OFFSET_Z = -1415.0;
 	public static final double GYROSCOPE_OFFSET_DEGREES = 180;
 
 	public static final int ECHOLOCATOR_FRONT_SLEEP_BEFORE_DISNTANCE = 50000;
@@ -52,5 +54,9 @@ public class Constants {
 	public static final int ECHOLOCATOR_BACK_SERVO_LONG_TIME = 400000;
 	public static final int ECHOLOCATOR_BACK_SERVO_STEP_TIME = 35000;
 	public static final int ECHOLOCATOR_BACK_DISTANCE_COUNT = 1;
+
+	public static final String SPEECH_HOST = "192.168.0.106";
+	public static final int SPEECH_PORT = 59125;
+	public static final String SPEECH_VOICE = "cmu-slt-hsmm";
 
 }

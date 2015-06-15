@@ -7,6 +7,8 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
+import com.akibot.tanktrack.component.audio.AudioComponent;
+import com.akibot.tanktrack.component.audio.AudioRequest;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
@@ -18,6 +20,8 @@ import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
+import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
+import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
@@ -46,17 +50,9 @@ public class AkiBotLauncher {
 		gyroscope.getMyClientDescription().getTopicList().add(new GyroscopeRequest());
 
 		// SpeechSynthesis:
-		// String maryttsHost = "192.168.0.102";
-		// int maryttsPort = 59125;
-		// String maryttsVoice = "cmu-slt-hsmm";
-		// SpeechSynthesisComponent speechSynthesisComponent = new
-		// SpeechSynthesisComponent(maryttsHost, maryttsPort, maryttsVoice);
-		// ClientDescription speechSynthesisDescription = new
-		// ClientDescription("akibot.speech.synthesis");
-		// speechSynthesisDescription.getTopicList().add(new
-		// SpeechSynthesisRequest());
-		// Client speechSynthesisClient = new Client(akibotHost, akibotPort,
-		// speechSynthesisComponent, speechSynthesisDescription);
+		AkibotClient speechSynthesisClient = new AkibotClient("akibot.speech", new SpeechSynthesisComponent(Constants.SPEECH_HOST, Constants.SPEECH_PORT,
+				Constants.SPEECH_VOICE), serverAddress);
+		speechSynthesisClient.getMyClientDescription().getTopicList().add(new SpeechSynthesisRequest());
 
 		// Distance Meter
 		AkibotClient distance = new AkibotClient("akibot.front.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN,
@@ -90,6 +86,9 @@ public class AkiBotLauncher {
 
 		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), serverAddress);
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
+
+		AkibotClient audioComponent = new AkibotClient("akibot.audio", new AudioComponent(), serverAddress);
+		audioComponent.getMyClientDescription().getTopicList().add(new AudioRequest());
 
 		// EchoLocatorFront:
 		EchoLocatorConfig echoLocatorFrontConfig = new EchoLocatorConfig();
@@ -130,7 +129,7 @@ public class AkiBotLauncher {
 		// Start all
 		tankTrack.start();
 		gyroscope.start();
-		// speechSynthesisClient.start();
+		speechSynthesisClient.start();
 		distance.start();
 		// obstacle.start();
 		servoFrontBase.start();
@@ -140,6 +139,7 @@ public class AkiBotLauncher {
 		testComponent.start();
 		echoLocatorFront.start();
 		echoLocatorBack.start();
+		audioComponent.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

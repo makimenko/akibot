@@ -12,6 +12,8 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
+import com.akibot.tanktrack.component.audio.AudioRequest;
+import com.akibot.tanktrack.component.audio.AudioResponse;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
@@ -20,6 +22,8 @@ import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
+import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
+import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
@@ -165,7 +169,6 @@ public class TankTrackTest {
 	@Test
 	public void testMultipleActions() throws FailedToSendMessageException, InterruptedException {
 		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
-		EchoLocatorResponse echoLocatorResponse;
 
 		StickMotionRequest forwardRequest = new StickMotionRequest(DirectionType.FORWARD);
 		StickMotionRequest backRequest = new StickMotionRequest(DirectionType.BACKWARD);
@@ -183,6 +186,33 @@ public class TankTrackTest {
 		Thread.sleep(1500);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		Thread.sleep(1500);
+
+	}
+
+	@Test
+	public void testSpeech() throws FailedToSendMessageException, InterruptedException {
+		SpeechSynthesisRequest speechSynthesisRequest = new SpeechSynthesisRequest();
+		SpeechSynthesisResponse speechSynthesisResponse;
+		speechSynthesisRequest.setVoice("voxforge-ru-nsh");
+
+		long startTime = System.currentTimeMillis();
+		speechSynthesisRequest.setSpeechText("Привет! Меня зовут АкиБот. Давай дружить?");
+		speechSynthesisResponse = (SpeechSynthesisResponse) testClient.getOutgoingMessageManager().sendSyncRequest(speechSynthesisRequest, 10000);
+		long duration = System.currentTimeMillis() - startTime;
+		assertEquals("Duration of speech", true, duration > 4000);
+
+	}
+
+	@Test
+	public void testAudio() throws FailedToSendMessageException, InterruptedException {
+		AudioRequest audioRequest = new AudioRequest();
+		AudioResponse audioResponse;
+
+		long startTime = System.currentTimeMillis();
+		audioRequest.setAudioUrl("file:///usr/share/scratch/Media/Sounds/Effects/Bubbles.wav");
+		audioResponse = (AudioResponse) testClient.getOutgoingMessageManager().sendSyncRequest(audioRequest, 10000);
+		long duration = System.currentTimeMillis() - startTime;
+		assertEquals("Duration of audio", true, duration > 4000);
 
 	}
 

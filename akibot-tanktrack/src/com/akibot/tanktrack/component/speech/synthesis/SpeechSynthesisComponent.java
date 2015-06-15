@@ -17,22 +17,29 @@ import com.akibot.engine2.message.Message;
 public class SpeechSynthesisComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(SpeechSynthesisComponent.class);
 	private LineListener lineListener;
-	private String marytssVoice;
+	private String marytssDefaultVoice;
 	private MaryInterface marytts;
 	private String maryttsHost;
 	private int maryttsPort;
 
-	public SpeechSynthesisComponent(String maryttsHost, int maryttsPort, String marytssVoice) {
+	public SpeechSynthesisComponent(String maryttsHost, int maryttsPort, String marytssDefaultVoice) {
 		this.maryttsHost = maryttsHost;
 		this.maryttsPort = maryttsPort;
-		this.marytssVoice = marytssVoice;
+		this.marytssDefaultVoice = marytssDefaultVoice;
 	}
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof SpeechSynthesisRequest) {
 			SpeechSynthesisRequest request = (SpeechSynthesisRequest) message;
+			SpeechSynthesisResponse response = new SpeechSynthesisResponse();
 			log.debug(this.getAkibotClient() + ": Speech request: " + request);
+			marytts.setVoice(marytssDefaultVoice);
+
+			if (request.getVoice() != null && request.getVoice().length() > 0 && !marytts.getVoice().equals(request.getVoice())) {
+				marytts.setVoice(request.getVoice());
+			}
+			log.debug(this.getAkibotClient() + " Voice: " + marytts.getVoice());
 
 			if (request.getSpeechText() != null && request.getSpeechText().length() > 0) {
 				AudioInputStream audio = marytts.generateAudio(request.getSpeechText());
@@ -40,6 +47,8 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 				player.start();
 				player.join();
 			}
+			response.copySyncId(message);
+			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 	}
 
@@ -47,7 +56,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	public void start() {
 		try {
 			marytts = new RemoteMaryInterface(maryttsHost, maryttsPort);
-			marytts.setVoice(marytssVoice);
+			marytts.setVoice(marytssDefaultVoice);
 
 			lineListener = new LineListener() {
 				@Override
