@@ -199,7 +199,7 @@ public class TankTrackTest {
 		speechSynthesisRequest.setSpeechText("Привет! Меня зовут АкиБот. Давай дружить?");
 		speechSynthesisResponse = (SpeechSynthesisResponse) testClient.getOutgoingMessageManager().sendSyncRequest(speechSynthesisRequest, 10000);
 		long duration = System.currentTimeMillis() - startTime;
-		assertEquals("Duration of speech", true, duration > 4000);
+		assertEquals("Duration of speech", true, duration > 3800);
 
 	}
 

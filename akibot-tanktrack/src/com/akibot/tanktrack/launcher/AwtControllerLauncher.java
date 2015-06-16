@@ -25,16 +25,11 @@ public class AwtControllerLauncher {
 		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), serverAddress);
 		awtController.getMyClientDescription().getTopicList().add(new Response());
 
-		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent("akibot.tanktrack", "akibot.gyroscope"), serverAddress);
-		orientation.getMyClientDescription().getTopicList().add(new OrientationRequest());
-		orientation.getMyClientDescription().getTopicList().add(new Response());
-
 		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), serverAddress);
 		gyroscopeCalibration.getMyClientDescription().getTopicList().add(new GyroscopeCalibrationRequest());
 		gyroscopeCalibration.getMyClientDescription().getTopicList().add(new GyroscopeResponse());
 
 		awtController.start();
-		orientation.start();
 		gyroscopeCalibration.start();
 
 		System.out.println("AwtControllerLauncher: Started");

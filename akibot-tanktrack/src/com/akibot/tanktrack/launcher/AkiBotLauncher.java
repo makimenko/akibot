@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultServerComponent;
 import com.akibot.engine2.logger.AkiLogger;
+import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
@@ -17,6 +18,8 @@ import com.akibot.tanktrack.component.echolocator.EchoLocatorConfig;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
+import com.akibot.tanktrack.component.orientation.OrientationComponent;
+import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
@@ -126,6 +129,10 @@ public class AkiBotLauncher {
 		echoLocatorBack.getMyClientDescription().getTopicList().add(new DistanceResponse());
 		echoLocatorBack.getMyClientDescription().getTopicList().add(new ServoResponse());
 
+		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent("akibot.tanktrack", "akibot.gyroscope"), serverAddress);
+		orientation.getMyClientDescription().getTopicList().add(new OrientationRequest());
+		orientation.getMyClientDescription().getTopicList().add(new Response());
+
 		// Start all
 		tankTrack.start();
 		gyroscope.start();
@@ -140,6 +147,7 @@ public class AkiBotLauncher {
 		echoLocatorFront.start();
 		echoLocatorBack.start();
 		audioComponent.start();
+		orientation.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:
