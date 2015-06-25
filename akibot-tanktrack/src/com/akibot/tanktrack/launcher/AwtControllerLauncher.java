@@ -9,8 +9,6 @@ import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
-import com.akibot.tanktrack.component.orientation.OrientationComponent;
-import com.akibot.tanktrack.component.orientation.OrientationRequest;
 
 public class AwtControllerLauncher {
 	static final AkiLogger log = AkiLogger.create(AwtControllerLauncher.class);

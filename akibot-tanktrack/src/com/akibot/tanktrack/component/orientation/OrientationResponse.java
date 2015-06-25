@@ -25,7 +25,7 @@ public class OrientationResponse extends Response {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + ": " + isSuccess();
+		return this.getClass().getName() + ": " + isSuccess() + " (" + northDegrreesXY + ")";
 	}
 
 }

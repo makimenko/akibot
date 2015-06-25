@@ -29,6 +29,7 @@ public class TankTrackComponent extends DefaultComponent {
 				log.debug(this.getAkibotClient() + ": STOP");
 				break;
 			}
+
 		}
 	}
 

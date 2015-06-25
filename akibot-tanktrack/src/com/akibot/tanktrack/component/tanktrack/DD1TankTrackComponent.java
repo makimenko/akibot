@@ -76,6 +76,9 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 				defaultState();
 				break;
 			}
+			StickMotionResponse response = new StickMotionResponse();
+			response.copySyncId(message);
+			this.getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 	}
 

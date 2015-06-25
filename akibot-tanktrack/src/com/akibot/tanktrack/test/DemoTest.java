@@ -17,7 +17,6 @@ import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
-import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
@@ -100,24 +99,20 @@ public class DemoTest {
 		say("Благодаря гироскопу я могу ориентироватся в пространстве");
 		Thread.sleep(1000);
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
-		messageOrientationRequest.setNorthDegrreesXY(0);
+		messageOrientationRequest.setNorthDegrreesXY(90);
 		messageOrientationRequest.setPrecissionDegrees(1);
 		messageOrientationRequest.setTimeoutMillis(10000);
 		sendSync(messageOrientationRequest, 13000);
 
-		say("Север там");
+		say("Запад. В этой стороне нахоидся запад!");
 		broadcast(forwardRequest);
 		Thread.sleep(1000);
 		broadcast(backRequest);
 		Thread.sleep(1000);
 		broadcast(stopRequest);
-	}
 
-	@Test
-	public void step2() throws FailedToSendMessageException, InterruptedException {
-		sayAsync("Лучшее домашнее животное – это АкиБот. Наш девиз – педальку вниз!");
-		sayAsync("Завоевание галактики начнётся здесь!");
-		sayAsync("Землю – крестьянам! Небо – инопланетянам!");
+		// -----------------------------------------------------------------------------------
+		sayAsync("Лучшее домашнее животное – это АкиБот.");
 		sayAsync("Я бы спас Вселенную, но уже в пижаме и собрался спать.");
 	}
 

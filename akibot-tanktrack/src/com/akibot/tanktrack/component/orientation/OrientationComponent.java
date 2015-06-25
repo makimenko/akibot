@@ -1,6 +1,7 @@
 package com.akibot.tanktrack.component.orientation;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.network.AkibotClient;
@@ -13,22 +14,28 @@ public class OrientationComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(AkibotClient.class);
 	private String gyroscopeName;
 	private String tankTrackName;
+	private GyroscopeValueRequest gyroscopeValueRequest;
+	private int syncRequestTimeout;
+	private long stepMillis;
+	private long totalDegrees;
 
 	public OrientationComponent(String tankTrackName, String gyroscopeName) {
 		this.tankTrackName = tankTrackName;
 		this.gyroscopeName = gyroscopeName;
+		this.gyroscopeValueRequest = new GyroscopeValueRequest();
+		this.gyroscopeValueRequest.setTo(this.gyroscopeName);
+		this.syncRequestTimeout = 2000; // 2 second timeout
+		this.stepMillis = 100; // TODO: Configuratble
+		this.totalDegrees = 360;
 	}
 
 	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
 		double aXY = gyroscopeResponse.getNorthDegrreesXY();
 		double eXY = orientationRequest.getNorthDegrreesXY();
 		double ePrecission = orientationRequest.getPrecissionDegrees();
-
 		double minXY = eXY - ePrecission;
 		double maxXY = eXY + ePrecission;
-
 		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin
-
 	}
 
 	@Override
@@ -41,12 +48,7 @@ public class OrientationComponent extends DefaultComponent {
 
 				log.debug(this.getAkibotClient() + ": OrientationRequest: " + orientationRequest);
 				long startTimeMills = System.currentTimeMillis();
-				int syncRequestTimeout = 2000; // 2 second timeout
-				long stepMillis = 100; // TODO: Configuratble
-				long totalDegrees = 360;
 
-				GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
-				gyroscopeValueRequest.setTo(gyroscopeName);
 				StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
 				StickMotionRequest leftRequest = new StickMotionRequest(DirectionType.LEFT);
 				StickMotionRequest rightRequest = new StickMotionRequest(DirectionType.RIGHT);
@@ -58,12 +60,14 @@ public class OrientationComponent extends DefaultComponent {
 				int lastDirection = 0;
 
 				while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
-					gyroscopeResponse = (GyroscopeResponse) getAkibotClient().getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest,
-							syncRequestTimeout);
+					gyroscopeResponse = getGyroscopeResponse();
 
 					if (isExpected(orientationRequest, gyroscopeResponse)) {
 						log.debug(this.getAkibotClient() + ": Orientation Succeeded");
-						getAkibotClient().getOutgoingMessageManager().broadcastMessage(stopRequest);
+
+						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
+						Thread.sleep(stepMillis);
+						gyroscopeResponse = getGyroscopeResponse();
 						OrientationResponse successOrientationResponse = new OrientationResponse();
 						successOrientationResponse.setSuccess(true);
 						successOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
@@ -89,7 +93,10 @@ public class OrientationComponent extends DefaultComponent {
 					}
 				}
 				log.debug(this.getAkibotClient() + ": Orientation Failed");
-				getAkibotClient().getOutgoingMessageManager().broadcastMessage(stopRequest);
+				getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
+				Thread.sleep(stepMillis);
+				gyroscopeResponse = getGyroscopeResponse();
+
 				OrientationResponse failedOrientationResponse = new OrientationResponse();
 				failedOrientationResponse.setSuccess(false);
 				failedOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
@@ -101,6 +108,10 @@ public class OrientationComponent extends DefaultComponent {
 			}
 
 		}
+	}
+
+	private GyroscopeResponse getGyroscopeResponse() throws FailedToSendMessageException {
+		return (GyroscopeResponse) getAkibotClient().getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, syncRequestTimeout);
 	}
 
 }
