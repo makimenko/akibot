@@ -1,6 +1,5 @@
 package com.akibot.tanktrack.launcher;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultServerComponent;

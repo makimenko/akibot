@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.net.InetSocketAddress;
 

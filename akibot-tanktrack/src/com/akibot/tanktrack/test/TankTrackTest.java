@@ -20,6 +20,8 @@ import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
+import com.akibot.tanktrack.component.orientation.OrientationRequest;
+import com.akibot.tanktrack.component.orientation.OrientationResponse;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
@@ -213,6 +215,55 @@ public class TankTrackTest {
 		audioResponse = (AudioResponse) testClient.getOutgoingMessageManager().sendSyncRequest(audioRequest, 10000);
 		long duration = System.currentTimeMillis() - startTime;
 		assertEquals("Duration of audio", true, duration > 4000);
+
+	}
+
+	@Test
+	public void testGyroscopeAround() throws FailedToSendMessageException, InterruptedException {
+		StickMotionRequest leftRequest = new StickMotionRequest(DirectionType.LEFT);
+		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
+		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
+
+		testClient.getOutgoingMessageManager().broadcastMessage(leftRequest);
+
+		int sample = 0;
+		double minValue = 0;
+		double maxValue = 0;
+
+		long startTime = System.currentTimeMillis();
+		while (System.currentTimeMillis() - startTime <= 15000) {
+			GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
+			double value = gyroscopeValueResponse.getNorthDegrreesXY();
+			sample++;
+			if (sample == 1) {
+				minValue = value;
+				maxValue = value;
+			}
+			if (value < minValue) {
+				minValue = value;
+			}
+			if (value > maxValue) {
+				maxValue = value;
+			}
+		}
+
+		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
+		System.out.println("RESULT: Compass range [" + minValue + ", max=" + maxValue + "]");
+		assertEquals("MIN compass value must be close to 0 (" + minValue + ")", true, minValue < 20);
+		assertEquals("MAX compass value must be close to 360 (" + maxValue + ")", true, maxValue > 350);
+
+	}
+
+	@Test
+	public void testOrientation() throws FailedToSendMessageException, InterruptedException {
+		OrientationRequest orientationRequest = new OrientationRequest();
+		orientationRequest.setNorthDegrreesXY(90);
+		orientationRequest.setPrecissionDegrees(1);
+		orientationRequest.setTimeoutMillis(10000);
+		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
+		System.out.println(orientationResponse);
+		assertEquals("Orientation status", true, orientationResponse.isSuccess());
+		assertEquals("Orientation value", true, orientationResponse.getNorthDegrreesXY() >= 80 && orientationResponse.getNorthDegrreesXY() <= 100);
 
 	}
 
