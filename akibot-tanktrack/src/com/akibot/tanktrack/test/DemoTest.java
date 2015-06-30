@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.net.InetSocketAddress;
 
@@ -114,6 +114,12 @@ public class DemoTest {
 		// -----------------------------------------------------------------------------------
 		sayAsync("Ћучшее домашнее животное Ц это јкиЅот.");
 		sayAsync("я бы спас ¬селенную, но уже в пижаме и собралс€ спать.");
+	}
+
+	@Test
+	public void test2() throws Exception {
+		callEchoLocator("akibot.echolocator.front");
+		callEchoLocator("akibot.echolocator.back");
 	}
 
 	private void callEchoLocator(String to) throws FailedToSendMessageException {

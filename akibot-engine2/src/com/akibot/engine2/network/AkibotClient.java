@@ -162,8 +162,8 @@ public class AkibotClient extends Thread {
 	@Override
 	public void start() {
 		log.debug(this + ": Starting AkibotClient...");
-		super.start();
 		try {
+			super.start();
 			component.start();
 			incommingMessageManager.start();
 			outgoingMessageManager.start();

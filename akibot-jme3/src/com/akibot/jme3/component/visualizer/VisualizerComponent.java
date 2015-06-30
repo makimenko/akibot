@@ -7,7 +7,7 @@ import com.akibot.jme3.component.message.VisualizerRequest;
 
 public class VisualizerComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(VisualizerComponent.class);
- 
+
 	private VisualizerWindow visualizerWindow;
 
 	public VisualizerComponent(VisualizerWindow visualizerWindow) {
