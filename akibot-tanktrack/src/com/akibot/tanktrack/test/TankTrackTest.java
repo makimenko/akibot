@@ -229,6 +229,8 @@ public class TankTrackTest {
 		int sample = 0;
 		double minValue = 0;
 		double maxValue = 0;
+		double expectedMin = 20;
+		double expectedMax = 350;
 
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime <= 15000) {
@@ -245,12 +247,15 @@ public class TankTrackTest {
 			if (value > maxValue) {
 				maxValue = value;
 			}
+			if (minValue < expectedMin && maxValue > expectedMax) {
+				break;
+			}
 		}
 
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		System.out.println("RESULT: Compass range [" + minValue + ", max=" + maxValue + "]");
-		assertEquals("MIN compass value must be close to 0 (" + minValue + ")", true, minValue < 20);
-		assertEquals("MAX compass value must be close to 360 (" + maxValue + ")", true, maxValue > 350);
+		assertEquals("MIN compass value must be close to 0 (" + minValue + ")", true, minValue < expectedMin);
+		assertEquals("MAX compass value must be close to 360 (" + maxValue + ")", true, maxValue > expectedMax);
 
 	}
 
@@ -258,12 +263,15 @@ public class TankTrackTest {
 	public void testOrientation() throws FailedToSendMessageException, InterruptedException {
 		OrientationRequest orientationRequest = new OrientationRequest();
 		orientationRequest.setNorthDegrreesXY(90);
-		orientationRequest.setPrecissionDegrees(1);
+		orientationRequest.setPrecissionDegrees(20);
 		orientationRequest.setTimeoutMillis(10000);
 		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
 		System.out.println(orientationResponse);
 		assertEquals("Orientation status", true, orientationResponse.isSuccess());
-		assertEquals("Orientation value", true, orientationResponse.getNorthDegrreesXY() >= 80 && orientationResponse.getNorthDegrreesXY() <= 100);
+
+		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
+		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
+		assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
 
 	}
 

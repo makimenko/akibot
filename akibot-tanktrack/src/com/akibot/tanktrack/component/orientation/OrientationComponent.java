@@ -35,7 +35,7 @@ public class OrientationComponent extends DefaultComponent {
 		double ePrecission = orientationRequest.getPrecissionDegrees();
 		double minXY = eXY - ePrecission;
 		double maxXY = eXY + ePrecission;
-		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin
+		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin (0 grad)
 	}
 
 	@Override
@@ -59,6 +59,10 @@ public class OrientationComponent extends DefaultComponent {
 				GyroscopeResponse gyroscopeResponse = new GyroscopeResponse();
 				int lastDirection = 0;
 
+				OrientationResponse orientationResponse = new OrientationResponse();
+				orientationRequest.copySyncId(message);
+				boolean success = false;
+
 				while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
 					gyroscopeResponse = getGyroscopeResponse();
 
@@ -68,12 +72,8 @@ public class OrientationComponent extends DefaultComponent {
 						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
 						Thread.sleep(stepMillis);
 						gyroscopeResponse = getGyroscopeResponse();
-						OrientationResponse successOrientationResponse = new OrientationResponse();
-						successOrientationResponse.setSuccess(true);
-						successOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
-						successOrientationResponse.copySyncId(message);
-						getAkibotClient().getOutgoingMessageManager().broadcastMessage(successOrientationResponse);
-						return;
+						// success = true;
+						break;
 					} else {
 						double aXY = gyroscopeResponse.getNorthDegrreesXY();
 						double eXY = orientationRequest.getNorthDegrreesXY();
@@ -97,11 +97,10 @@ public class OrientationComponent extends DefaultComponent {
 				Thread.sleep(stepMillis);
 				gyroscopeResponse = getGyroscopeResponse();
 
-				OrientationResponse failedOrientationResponse = new OrientationResponse();
-				failedOrientationResponse.setSuccess(false);
-				failedOrientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
-				failedOrientationResponse.copySyncId(message);
-				getAkibotClient().getOutgoingMessageManager().broadcastMessage(failedOrientationResponse);
+				orientationResponse.setSuccess(isExpected(orientationRequest, gyroscopeResponse));
+				orientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
+				orientationResponse.copySyncId(message);
+				getAkibotClient().getOutgoingMessageManager().broadcastMessage(orientationResponse);
 
 			} else {
 				log.error(this.getAkibotClient() + ": Invalid Orientation Request");
