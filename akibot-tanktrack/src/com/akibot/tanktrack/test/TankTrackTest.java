@@ -22,6 +22,7 @@ import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
+import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
@@ -34,6 +35,7 @@ public class TankTrackTest {
 	private final static String serverHost = "raspberrypi";
 	private final static int serverPort = 2000;
 	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+	private RoundRobinUtils roundRobinUtils = new RoundRobinUtils(360);
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -231,11 +233,16 @@ public class TankTrackTest {
 		double maxValue = 0;
 		double expectedMin = 20;
 		double expectedMax = 350;
+		boolean between = false;
+		double previousValue = -1;
+		double minDiff = 0;
+		double maxDiff = 0;
 
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime <= 15000) {
 			GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
 			double value = gyroscopeValueResponse.getNorthDegrreesXY();
+
 			sample++;
 			if (sample == 1) {
 				minValue = value;
@@ -247,22 +254,39 @@ public class TankTrackTest {
 			if (value > maxValue) {
 				maxValue = value;
 			}
-			if (minValue < expectedMin && maxValue > expectedMax) {
+			if (!between && value > 100 && value < 200) {
+				between = true;
+			}
+			if (minValue < expectedMin && maxValue > expectedMax && between) {
 				break;
 			}
+			if (previousValue != -1) {
+				double diff = Math.min(roundRobinUtils.rightDistance(value, previousValue), roundRobinUtils.leftDistance(value, previousValue));
+
+				System.out.println("value=" + value + ", diff=" + diff);
+				if (diff > maxDiff) {
+					maxDiff = diff;
+				}
+
+			}
+			previousValue = value;
+			Thread.sleep(10);
 		}
 
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
-		System.out.println("RESULT: Compass range [" + minValue + ", max=" + maxValue + "]");
+		System.out.println("RESULT: Compass range [" + minValue + ", max=" + maxValue + "], maxDiffs=" + maxDiff);
 		assertEquals("MIN compass value must be close to 0 (" + minValue + ")", true, minValue < expectedMin);
 		assertEquals("MAX compass value must be close to 360 (" + maxValue + ")", true, maxValue > expectedMax);
+		assertEquals("BETWEEN compass", true, between);
+		assertEquals("Step difference low (" + maxDiff + ")", true, maxDiff > 5);
+		assertEquals("Step difference high (" + maxDiff + ")", true, maxDiff < 45);
 
 	}
 
 	@Test
 	public void testOrientation() throws FailedToSendMessageException, InterruptedException {
 		OrientationRequest orientationRequest = new OrientationRequest();
-		orientationRequest.setNorthDegrreesXY(90);
+		orientationRequest.setNorthDegrreesXY(0);
 		orientationRequest.setPrecissionDegrees(20);
 		orientationRequest.setTimeoutMillis(10000);
 		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);

@@ -17,7 +17,7 @@ public class OrientationComponent extends DefaultComponent {
 	private GyroscopeValueRequest gyroscopeValueRequest;
 	private int syncRequestTimeout;
 	private long stepMillis;
-	private long totalDegrees;
+	private RoundRobinUtils robinUtils;
 
 	public OrientationComponent(String tankTrackName, String gyroscopeName) {
 		this.tankTrackName = tankTrackName;
@@ -26,16 +26,14 @@ public class OrientationComponent extends DefaultComponent {
 		this.gyroscopeValueRequest.setTo(this.gyroscopeName);
 		this.syncRequestTimeout = 2000; // 2 second timeout
 		this.stepMillis = 100; // TODO: Configuratble
-		this.totalDegrees = 360;
+		this.robinUtils = new RoundRobinUtils(360);
 	}
 
 	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
 		double aXY = gyroscopeResponse.getNorthDegrreesXY();
 		double eXY = orientationRequest.getNorthDegrreesXY();
 		double ePrecission = orientationRequest.getPrecissionDegrees();
-		double minXY = eXY - ePrecission;
-		double maxXY = eXY + ePrecission;
-		return (aXY >= minXY && aXY <= maxXY); // TODO: implement round-robin (0 grad)
+		return (robinUtils.leftDistance(aXY, eXY) <= ePrecission || robinUtils.rightDistance(aXY, eXY) <= ePrecission);
 	}
 
 	@Override
@@ -61,7 +59,6 @@ public class OrientationComponent extends DefaultComponent {
 
 				OrientationResponse orientationResponse = new OrientationResponse();
 				orientationRequest.copySyncId(message);
-				boolean success = false;
 
 				while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
 					gyroscopeResponse = getGyroscopeResponse();
@@ -72,19 +69,17 @@ public class OrientationComponent extends DefaultComponent {
 						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
 						Thread.sleep(stepMillis);
 						gyroscopeResponse = getGyroscopeResponse();
-						// success = true;
 						break;
 					} else {
 						double aXY = gyroscopeResponse.getNorthDegrreesXY();
 						double eXY = orientationRequest.getNorthDegrreesXY();
+						double rightDistance = robinUtils.rightDistance(aXY, eXY);
+						double leftDistance = robinUtils.leftDistance(aXY, eXY);
 
-						double positive = (aXY < eXY ? eXY - aXY : eXY - aXY + totalDegrees);
-						double negative = (aXY < eXY ? eXY - aXY - totalDegrees : eXY - aXY);
-
-						if (positive <= Math.abs(negative) && lastDirection != -1) {
+						if (leftDistance <= rightDistance && lastDirection != -1) {
 							lastDirection = -1;
 							getAkibotClient().getOutgoingMessageManager().broadcastMessage(leftRequest);
-						} else if (positive > Math.abs(negative) && lastDirection != +1) {
+						} else if (rightDistance < leftDistance && lastDirection != +1) {
 							lastDirection = +1;
 							getAkibotClient().getOutgoingMessageManager().broadcastMessage(rightRequest);
 						}
