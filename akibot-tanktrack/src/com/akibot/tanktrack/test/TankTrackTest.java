@@ -83,15 +83,15 @@ public class TankTrackTest {
 		Thread.sleep(1000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		GyroscopeResponse middlePosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
-		double diff = startPosition.getNorthDegrreesXY() - middlePosition.getNorthDegrreesXY();
-		assertEquals("Check value " + diff, true, diff > 2);
+		double diffAfterMoveToTheRight = roundRobinUtils.rightDistance(startPosition.getNorthDegrreesXY(), middlePosition.getNorthDegrreesXY());
+		assertEquals("Check value diffAfterMoveToTheRight " + diffAfterMoveToTheRight, true, diffAfterMoveToTheRight > 2);
 
 		testClient.getOutgoingMessageManager().broadcastMessage(leftRequest);
 		Thread.sleep(1000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		GyroscopeResponse endPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
-		double diff2 = middlePosition.getNorthDegrreesXY() - endPosition.getNorthDegrreesXY();
-		assertEquals("Check value " + diff2, true, diff2 < 2);
+		double diffAfterMoveToTheLeft = roundRobinUtils.leftDistance(middlePosition.getNorthDegrreesXY(), endPosition.getNorthDegrreesXY());
+		assertEquals("Check value diffAfterMoveToTheLeft " + diffAfterMoveToTheLeft, true, diffAfterMoveToTheLeft > 2);
 
 	}
 
@@ -263,7 +263,7 @@ public class TankTrackTest {
 			if (previousValue != -1) {
 				double diff = Math.min(roundRobinUtils.rightDistance(value, previousValue), roundRobinUtils.leftDistance(value, previousValue));
 
-				System.out.println("value=" + value + ", diff=" + diff);
+				// System.out.println("value=" + value + ", diff=" + diff);
 				if (diff > maxDiff) {
 					maxDiff = diff;
 				}
@@ -286,7 +286,7 @@ public class TankTrackTest {
 	@Test
 	public void testOrientation() throws FailedToSendMessageException, InterruptedException {
 		OrientationRequest orientationRequest = new OrientationRequest();
-		orientationRequest.setNorthDegrreesXY(0);
+		orientationRequest.setNorthDegrreesXY(90);
 		orientationRequest.setPrecissionDegrees(20);
 		orientationRequest.setTimeoutMillis(10000);
 		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
