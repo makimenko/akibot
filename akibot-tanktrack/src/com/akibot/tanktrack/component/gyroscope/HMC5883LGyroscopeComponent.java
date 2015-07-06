@@ -65,7 +65,6 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 		hmc5883l = bus.getDevice(deviceAddress);
 
 		modeIdle();
-		modeContinuousMeasurement();
 		// selfTest(gain_0_88, cra_8samples_15Hz_normal);
 		// selfTest(gain_8_1, cra_8samples_15Hz_normal);
 
@@ -135,7 +134,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 			double z = readShort(dataOutputMSBRegisterZ, hmc5883l) - offsetZ;
 
 			// Calculating North Degrees:
-			double bearing = -(Math.atan2(y, x) * RAD_TO_DEG) + 180;
+			double bearing = (Math.atan2(y, x) * RAD_TO_DEG) + 180;
 			double northDegreesXY = bearing + offsetDegrees;
 
 			if (northDegreesXY > 360) {
