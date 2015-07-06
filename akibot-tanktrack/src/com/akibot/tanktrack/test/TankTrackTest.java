@@ -287,7 +287,7 @@ public class TankTrackTest {
 	public void testOrientation() throws FailedToSendMessageException, InterruptedException {
 		OrientationRequest orientationRequest = new OrientationRequest();
 		orientationRequest.setNorthDegrreesXY(90);
-		orientationRequest.setPrecissionDegrees(20);
+		orientationRequest.setPrecissionDegrees(5);
 		orientationRequest.setTimeoutMillis(10000);
 		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
 		System.out.println(orientationResponse);
@@ -296,31 +296,6 @@ public class TankTrackTest {
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
 		assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
-
-	}
-
-	@Test
-	public void test() throws FailedToSendMessageException, InterruptedException {
-		OrientationRequest orientationRequest = new OrientationRequest();
-		orientationRequest.setNorthDegrreesXY(90);
-		orientationRequest.setPrecissionDegrees(20);
-		orientationRequest.setTimeoutMillis(10000);
-		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
-		System.out.println(orientationResponse);
-		// assertEquals("Orientation status", true, orientationResponse.isSuccess());
-
-		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
-		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
-		// assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
-
-		AudioRequest audioRequest = new AudioRequest();
-		AudioResponse audioResponse;
-
-		long startTime = System.currentTimeMillis();
-		audioRequest.setAudioUrl("file:///usr/share/scratch/Media/Sounds/Effects/Bubbles.wav");
-		audioResponse = (AudioResponse) testClient.getOutgoingMessageManager().sendSyncRequest(audioRequest, 10000);
-		long duration = System.currentTimeMillis() - startTime;
-		// assertEquals("Duration of audio", true, duration > 4000);
 
 	}
 

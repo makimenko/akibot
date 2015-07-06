@@ -54,7 +54,7 @@ public class ClientDescriptionUtils {
 
 	public static boolean isInterestedInMessage(ClientDescription clientDescription, Message message) {
 		ArrayList<Message> topicList = clientDescription.getTopicList();
-		if (topicList == null || topicList.size() == 0) {
+		if (message == null || topicList == null || topicList.size() == 0) {
 			return false;
 		} else {
 			for (Message topicMessage : topicList) {
@@ -67,7 +67,7 @@ public class ClientDescriptionUtils {
 	}
 
 	public static boolean isAddressedToClient(ClientDescription clientDescription, Message message) {
-		if (message.getTo() == null || message.getTo().length() == 0) {
+		if (message == null || message.getTo() == null || message.getTo().length() == 0) {
 			return true;
 		} else {
 			return message.getTo().equals(clientDescription.getName());

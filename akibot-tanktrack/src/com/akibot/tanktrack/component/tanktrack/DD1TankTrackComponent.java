@@ -45,40 +45,65 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof StickMotionRequest) {
 			StickMotionRequest request = (StickMotionRequest) message;
-
+			log.debug(this.getAkibotClient() + ": " + request);
 			switch (request.getDirectionType()) {
 			case FORWARD:
-				log.debug(this.getAkibotClient() + ": FORWARD");
 				defaultState();
 				rightForwardPin.high();
 				leftForwardPin.high();
 				break;
 			case BACKWARD:
-				log.debug(this.getAkibotClient() + ": BACKWARD");
 				defaultState();
 				rightBackwardPin.high();
 				leftBackwardPin.high();
 				break;
 			case LEFT:
-				log.debug(this.getAkibotClient() + ": LEFT");
 				defaultState();
 				rightForwardPin.high();
 				leftBackwardPin.high();
 				break;
 			case RIGHT:
-				log.debug(this.getAkibotClient() + ": RIGHT");
 				defaultState();
 				leftForwardPin.high();
 				rightBackwardPin.high();
 				break;
 			default:
-				log.debug(this.getAkibotClient() + ": STOP");
 				defaultState();
 				break;
 			}
 			StickMotionResponse response = new StickMotionResponse();
 			response.copySyncId(message);
 			this.getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+		} else if (message instanceof TimedMotionRequest) {
+			TimedMotionRequest timedMotionRequest = (TimedMotionRequest) message;
+			log.debug(this.getAkibotClient() + ": " + timedMotionRequest);
+
+			defaultState();
+			switch (timedMotionRequest.getDirectionType()) {
+			case FORWARD:
+				rightForwardPin.high();
+				leftForwardPin.high();
+				break;
+			case BACKWARD:
+				rightBackwardPin.high();
+				leftBackwardPin.high();
+				break;
+			case LEFT:
+				rightForwardPin.high();
+				leftBackwardPin.high();
+				break;
+			case RIGHT:
+				leftForwardPin.high();
+				rightBackwardPin.high();
+				break;
+			}
+			Thread.sleep(timedMotionRequest.getMilliseconds());
+			defaultState();
+
+			TimedMotionResponse response = new TimedMotionResponse();
+			response.copySyncId(message);
+			this.getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+
 		}
 	}
 

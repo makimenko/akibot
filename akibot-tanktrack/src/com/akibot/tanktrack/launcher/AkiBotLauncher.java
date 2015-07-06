@@ -26,7 +26,7 @@ import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
-import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
+import com.akibot.tanktrack.component.tanktrack.MotionRequest;
 
 public class AkiBotLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotLauncher.class);
@@ -44,7 +44,7 @@ public class AkiBotLauncher {
 		// TankTrack:
 		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
 				Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB), serverAddress);
-		tankTrack.getMyClientDescription().getTopicList().add(new StickMotionRequest());
+		tankTrack.getMyClientDescription().getTopicList().add(new MotionRequest());
 
 		// Gyroscope:
 		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER,
