@@ -34,9 +34,10 @@ public class Constants {
 	// 522.0, 51.5, -1010.0
 	// 2015.07.01: 368.5, 54.5, -832.0
 	// 533.0, -208.0, -710.5
-	public static final double GYROSCOPE_OFFSET_X = 533.0;
-	public static final double GYROSCOPE_OFFSET_Y = -208.0;
-	public static final double GYROSCOPE_OFFSET_Z = -710.5;
+	// (488.0, -84.0, -891.5)
+	public static final double GYROSCOPE_OFFSET_X = 488.0;
+	public static final double GYROSCOPE_OFFSET_Y = -84.0;
+	public static final double GYROSCOPE_OFFSET_Z = -891.5;
 	public static final double GYROSCOPE_OFFSET_DEGREES = 180;
 
 	public static final int ECHOLOCATOR_FRONT_SLEEP_BEFORE_DISNTANCE = 50000;

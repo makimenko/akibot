@@ -99,7 +99,7 @@ public class DemoTest {
 		say("Благодаря гироскопу я могу ориентироватся в пространстве");
 		Thread.sleep(1000);
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
-		messageOrientationRequest.setNorthDegrreesXY(90);
+		messageOrientationRequest.setNorthDegrreesXY(270);
 		messageOrientationRequest.setPrecissionDegrees(1);
 		messageOrientationRequest.setTimeoutMillis(10000);
 		sendSync(messageOrientationRequest, 13000);
@@ -116,7 +116,6 @@ public class DemoTest {
 		sayAsync("Я бы спас Вселенную, но уже в пижаме и собрался спать.");
 	}
 
-	@Test
 	public void test2() throws Exception {
 		callEchoLocator("akibot.echolocator.front");
 		callEchoLocator("akibot.echolocator.back");
