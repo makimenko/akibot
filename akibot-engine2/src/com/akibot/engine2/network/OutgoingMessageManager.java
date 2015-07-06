@@ -106,6 +106,8 @@ public class OutgoingMessageManager {
 				sync.getSyncId().wait(timeout);
 			}
 
+			sync.setSyncId(null); // release sync id
+
 			if (sync.getSyncResponse() == null) {
 				throw new Exception("Timeout occured while waiting sync response");
 			} else {

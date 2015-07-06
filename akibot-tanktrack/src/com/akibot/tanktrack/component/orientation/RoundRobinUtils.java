@@ -11,7 +11,7 @@ public class RoundRobinUtils {
 
 	public double add(double a, double b) {
 		double x = a + b;
-		long rounds = (long) Math.floor(x /degrees);
+		long rounds = (long) Math.floor(x / degrees);
 		if (rounds != 0) {
 			x = x - (360 * rounds);
 		}

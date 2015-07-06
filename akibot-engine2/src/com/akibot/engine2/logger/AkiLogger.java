@@ -12,8 +12,7 @@ import org.apache.logging.log4j.spi.ExtendedLoggerWrapper;
 import com.akibot.engine2.network.AkibotClient;
 
 /**
- * Extended Logger interface with convenience methods for the MSG custom log
- * level.
+ * Extended Logger interface with convenience methods for the MSG custom log level.
  */
 public final class AkiLogger extends ExtendedLoggerWrapper {
 	private static final long serialVersionUID = 3473427601231L;
@@ -38,12 +37,10 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Returns a custom Logger using the fully qualified name of the Class as
-	 * the Logger name.
+	 * Returns a custom Logger using the fully qualified name of the Class as the Logger name.
 	 * 
 	 * @param loggerName
-	 *            The Class whose name should be used as the Logger name. If
-	 *            null it will default to the calling class.
+	 *            The Class whose name should be used as the Logger name. If null it will default to the calling class.
 	 * @return The custom Logger.
 	 */
 	public static AkiLogger create(final Class<?> loggerName) {
@@ -52,16 +49,12 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Returns a custom Logger using the fully qualified name of the Class as
-	 * the Logger name.
+	 * Returns a custom Logger using the fully qualified name of the Class as the Logger name.
 	 * 
 	 * @param loggerName
-	 *            The Class whose name should be used as the Logger name. If
-	 *            null it will default to the calling class.
+	 *            The Class whose name should be used as the Logger name. If null it will default to the calling class.
 	 * @param messageFactory
-	 *            The message factory is used only when creating a logger,
-	 *            subsequent use does not change the logger but will log a
-	 *            warning if mismatched.
+	 *            The message factory is used only when creating a logger, subsequent use does not change the logger but will log a warning if mismatched.
 	 * @return The custom Logger.
 	 */
 	public static AkiLogger create(final Class<?> loggerName, final MessageFactory factory) {
@@ -70,13 +63,10 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Returns a custom Logger using the fully qualified class name of the value
-	 * as the Logger name.
+	 * Returns a custom Logger using the fully qualified class name of the value as the Logger name.
 	 * 
 	 * @param value
-	 *            The value whose class name should be used as the Logger name.
-	 *            If null the name of the calling class will be used as the
-	 *            logger name.
+	 *            The value whose class name should be used as the Logger name. If null the name of the calling class will be used as the logger name.
 	 * @return The custom Logger.
 	 */
 	public static AkiLogger create(final Object value) {
@@ -85,17 +75,12 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Returns a custom Logger using the fully qualified class name of the value
-	 * as the Logger name.
+	 * Returns a custom Logger using the fully qualified class name of the value as the Logger name.
 	 * 
 	 * @param value
-	 *            The value whose class name should be used as the Logger name.
-	 *            If null the name of the calling class will be used as the
-	 *            logger name.
+	 *            The value whose class name should be used as the Logger name. If null the name of the calling class will be used as the logger name.
 	 * @param messageFactory
-	 *            The message factory is used only when creating a logger,
-	 *            subsequent use does not change the logger but will log a
-	 *            warning if mismatched.
+	 *            The message factory is used only when creating a logger, subsequent use does not change the logger but will log a warning if mismatched.
 	 * @return The custom Logger.
 	 */
 	public static AkiLogger create(final Object value, final MessageFactory factory) {
@@ -107,8 +92,7 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	 * Returns a custom Logger with the specified name.
 	 * 
 	 * @param name
-	 *            The logger name. If null the name of the calling class will be
-	 *            used.
+	 *            The logger name. If null the name of the calling class will be used.
 	 * @return The custom Logger.
 	 */
 	public static AkiLogger create(final String name) {
@@ -120,12 +104,9 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	 * Returns a custom Logger with the specified name.
 	 * 
 	 * @param name
-	 *            The logger name. If null the name of the calling class will be
-	 *            used.
+	 *            The logger name. If null the name of the calling class will be used.
 	 * @param messageFactory
-	 *            The message factory is used only when creating a logger,
-	 *            subsequent use does not change the logger but will log a
-	 *            warning if mismatched.
+	 *            The message factory is used only when creating a logger, subsequent use does not change the logger but will log a warning if mismatched.
 	 * @return The custom Logger.
 	 */
 	public static AkiLogger create(final String name, final MessageFactory factory) {
@@ -172,8 +153,7 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Logs a message at the {@code MSG} level including the stack trace of the
-	 * {@link Throwable} {@code t} passed as parameter.
+	 * Logs a message at the {@code MSG} level including the stack trace of the {@link Throwable} {@code t} passed as parameter.
 	 * 
 	 * @param marker
 	 *            the marker data specific to this log statement
@@ -214,8 +194,7 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Logs a message at the {@code MSG} level including the stack trace of the
-	 * {@link Throwable} {@code t} passed as parameter.
+	 * Logs a message at the {@code MSG} level including the stack trace of the {@link Throwable} {@code t} passed as parameter.
 	 * 
 	 * @param marker
 	 *            the marker data specific to this log statement
@@ -261,8 +240,7 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Logs a message at the {@code MSG} level including the stack trace of the
-	 * {@link Throwable} {@code t} passed as parameter.
+	 * Logs a message at the {@code MSG} level including the stack trace of the {@link Throwable} {@code t} passed as parameter.
 	 * 
 	 * @param message
 	 *            the message to log.
@@ -297,8 +275,7 @@ public final class AkiLogger extends ExtendedLoggerWrapper {
 	}
 
 	/**
-	 * Logs a message at the {@code MSG} level including the stack trace of the
-	 * {@link Throwable} {@code t} passed as parameter.
+	 * Logs a message at the {@code MSG} level including the stack trace of the {@link Throwable} {@code t} passed as parameter.
 	 * 
 	 * @param message
 	 *            the message to log.

@@ -80,14 +80,14 @@ public class TankTrackTest {
 		GyroscopeResponse startPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
 
 		testClient.getOutgoingMessageManager().broadcastMessage(rightRequest);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		GyroscopeResponse middlePosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
 		double diffAfterMoveToTheRight = roundRobinUtils.rightDistance(startPosition.getNorthDegrreesXY(), middlePosition.getNorthDegrreesXY());
 		assertEquals("Check value diffAfterMoveToTheRight " + diffAfterMoveToTheRight, true, diffAfterMoveToTheRight > 2);
 
 		testClient.getOutgoingMessageManager().broadcastMessage(leftRequest);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		GyroscopeResponse endPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
 		double diffAfterMoveToTheLeft = roundRobinUtils.leftDistance(middlePosition.getNorthDegrreesXY(), endPosition.getNorthDegrreesXY());
@@ -254,7 +254,7 @@ public class TankTrackTest {
 			if (value > maxValue) {
 				maxValue = value;
 			}
-			if (!between && value > 100 && value < 200) {
+			if (!between && value > 160 && value < 200) {
 				between = true;
 			}
 			if (minValue < expectedMin && maxValue > expectedMax && between) {
@@ -296,6 +296,31 @@ public class TankTrackTest {
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
 		assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
+
+	}
+
+	@Test
+	public void test() throws FailedToSendMessageException, InterruptedException {
+		OrientationRequest orientationRequest = new OrientationRequest();
+		orientationRequest.setNorthDegrreesXY(90);
+		orientationRequest.setPrecissionDegrees(20);
+		orientationRequest.setTimeoutMillis(10000);
+		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
+		System.out.println(orientationResponse);
+		// assertEquals("Orientation status", true, orientationResponse.isSuccess());
+
+		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
+		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
+		// assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
+
+		AudioRequest audioRequest = new AudioRequest();
+		AudioResponse audioResponse;
+
+		long startTime = System.currentTimeMillis();
+		audioRequest.setAudioUrl("file:///usr/share/scratch/Media/Sounds/Effects/Bubbles.wav");
+		audioResponse = (AudioResponse) testClient.getOutgoingMessageManager().sendSyncRequest(audioRequest, 10000);
+		long duration = System.currentTimeMillis() - startTime;
+		// assertEquals("Duration of audio", true, duration > 4000);
 
 	}
 

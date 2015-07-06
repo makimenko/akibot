@@ -2,7 +2,7 @@ package com.akibot.engine2.test.component;
 
 import com.akibot.engine2.message.Response;
 
-public class TestResponse extends Response {
+public class TestResponse2 extends Response {
 
 	/**
 	 * 

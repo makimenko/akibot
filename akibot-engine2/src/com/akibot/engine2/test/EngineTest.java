@@ -17,8 +17,10 @@ import com.akibot.engine2.network.ClientDescriptionUtils;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
+import com.akibot.engine2.test.component.TestResponse2;
+import com.akibot.engine2.test.component.TestSleepRequest;
 
-public class AkibotTest {
+public class EngineTest {
 	private static AkibotClient clientA;
 	private static AkibotClient clientB;
 	private static AkibotClient server;
@@ -34,10 +36,12 @@ public class AkibotTest {
 
 		clientA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
 		clientA.getMyClientDescription().getTopicList().add(new TestResponse());
+		clientA.getMyClientDescription().getTopicList().add(new TestResponse2());
 		clientA.start();
 
 		clientB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
 		clientB.getMyClientDescription().getTopicList().add(new TestRequest());
+		clientB.getMyClientDescription().getTopicList().add(new TestSleepRequest());
 		clientB.start();
 
 		Thread.sleep(1000);
@@ -132,6 +136,52 @@ public class AkibotTest {
 		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2a) > 0);
 		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2b) > 0);
 		assertEquals("Client 2c received", true, ClientDescriptionUtils.findByName(clientDescriptionList, client2c) > 0);
+
+	}
+
+	@Test
+	public void testConcurrentSyncMessage() throws FailedToSendMessageException {
+
+		TestSleepRequest testSleepRequest1 = new TestSleepRequest(200);
+		TestSleepRequest testSleepRequest2 = new TestSleepRequest(500);
+
+		TestResponse testResponse1 = new TestResponse();
+		TestResponse testResponse2 = new TestResponse();
+		try {
+			testResponse1 = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testSleepRequest1, 50);
+		} catch (FailedToSendMessageException e) {
+
+		}
+		try {
+			testResponse2 = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testSleepRequest2, 1000);
+		} catch (FailedToSendMessageException e) {
+
+		}
+
+		assertEquals("Request 2", 500, testResponse2.getResult());
+
+	}
+
+	@Test
+	public void testConcurrentSyncMessage2() throws FailedToSendMessageException {
+
+		TestSleepRequest testSleepRequest1 = new TestSleepRequest(200);
+		TestSleepRequest testSleepRequest2 = new TestSleepRequest(501);
+
+		TestResponse testResponse1 = new TestResponse();
+		TestResponse2 testResponse2 = new TestResponse2();
+		try {
+			testResponse1 = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testSleepRequest1, 50);
+		} catch (FailedToSendMessageException e) {
+
+		}
+		try {
+			testResponse2 = (TestResponse2) clientA.getOutgoingMessageManager().sendSyncRequest(testSleepRequest2, 1000);
+		} catch (FailedToSendMessageException e) {
+
+		}
+
+		assertEquals("Request 2", 501, testResponse2.getResult());
 
 	}
 
