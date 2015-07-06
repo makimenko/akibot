@@ -185,4 +185,18 @@ public class EngineTest {
 
 	}
 
+	@Test
+	public void testNullMessage() throws FailedToSendMessageException {
+		try {
+			TestResponse testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(null, 100);
+		} catch (FailedToSendMessageException e) {
+
+		}
+		try {
+			clientA.getOutgoingMessageManager().broadcastMessage(null);
+		} catch (FailedToSendMessageException e) {
+
+		}
+	}
+
 }
