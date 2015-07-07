@@ -29,9 +29,6 @@ public class IncommingMessageExecutor extends Thread {
 				} else {
 					akibotClient.getComponent().onMessageReceived(message);
 				}
-
-			} catch (InterruptedException e) {
-				log.catching(akibotClient, e);
 			} catch (Exception e) {
 				log.catching(akibotClient, e);
 			}

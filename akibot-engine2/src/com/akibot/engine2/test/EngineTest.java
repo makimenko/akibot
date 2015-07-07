@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.NooneInterestedException;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.engine2.network.ClientDescriptionUtils;
@@ -24,12 +25,13 @@ public class EngineTest {
 	private static AkibotClient clientA;
 	private static AkibotClient clientB;
 	private static AkibotClient server;
+	private static InetSocketAddress serverAddress;
 
 	@BeforeClass
 	public static void onceExecutedBeforeAll() throws Exception {
 		String serverHost = "localhost";
 		int serverPort = 2001;
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+		serverAddress = new InetSocketAddress(serverHost, serverPort);
 
 		server = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
 		server.start();
@@ -136,15 +138,12 @@ public class EngineTest {
 		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2a) > 0);
 		assertEquals("Client 2c received", false, ClientDescriptionUtils.findByName(clientDescriptionList, client2b) > 0);
 		assertEquals("Client 2c received", true, ClientDescriptionUtils.findByName(clientDescriptionList, client2c) > 0);
-
 	}
 
 	@Test
 	public void testConcurrentSyncMessage() throws FailedToSendMessageException {
-
 		TestSleepRequest testSleepRequest1 = new TestSleepRequest(200);
 		TestSleepRequest testSleepRequest2 = new TestSleepRequest(500);
-
 		TestResponse testResponse1 = new TestResponse();
 		TestResponse testResponse2 = new TestResponse();
 		try {
@@ -157,17 +156,13 @@ public class EngineTest {
 		} catch (FailedToSendMessageException e) {
 
 		}
-
 		assertEquals("Request 2", 500, testResponse2.getResult());
-
 	}
 
 	@Test
 	public void testConcurrentSyncMessage2() throws FailedToSendMessageException {
-
 		TestSleepRequest testSleepRequest1 = new TestSleepRequest(200);
 		TestSleepRequest testSleepRequest2 = new TestSleepRequest(501);
-
 		TestResponse testResponse1 = new TestResponse();
 		TestResponse2 testResponse2 = new TestResponse2();
 		try {
@@ -180,9 +175,7 @@ public class EngineTest {
 		} catch (FailedToSendMessageException e) {
 
 		}
-
 		assertEquals("Request 2", 501, testResponse2.getResult());
-
 	}
 
 	@Test
@@ -190,13 +183,33 @@ public class EngineTest {
 		try {
 			TestResponse testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(null, 100);
 		} catch (FailedToSendMessageException e) {
-
 		}
 		try {
 			clientA.getOutgoingMessageManager().broadcastMessage(null);
 		} catch (FailedToSendMessageException e) {
-
 		}
 	}
 
+	@Test
+	public void testQuickSendOnStartup() throws Exception {
+		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), serverAddress);
+		clientC.getMyClientDescription().getTopicList().add(new TestResponse());
+		clientC.start();
+
+		TestRequest request = new TestRequest();
+		request.setX(1);
+
+		TestResponse response = new TestResponse();
+		try {
+			response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
+			assertEquals("check (if possible)", 2, response.getResult());
+		} catch (NooneInterestedException e) {
+		}
+
+		Thread.sleep(1000);
+		request.setX(2);
+		response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
+
+		assertEquals("check", 3, response.getResult());
+	}
 }

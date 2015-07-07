@@ -19,6 +19,8 @@ import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
+import com.akibot.tanktrack.component.servo.ServoRequest;
+import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
@@ -63,6 +65,8 @@ public class DemoTest {
 		// -----------------------------------------------------------------------------------
 		say("Мне один год, но я уже много что умею");
 		Thread.sleep(1000);
+
+		callServo("akibot.servo.front");
 
 		// -----------------------------------------------------------------------------------
 		sayAsync("У меня есть гусеничные ноги, и я умею ходить вперёд и назад");
@@ -116,11 +120,6 @@ public class DemoTest {
 		sayAsync("Я бы спас Вселенную, но уже в пижаме и собрался спать.");
 	}
 
-	public void test2() throws Exception {
-		callEchoLocator("akibot.echolocator.front");
-		callEchoLocator("akibot.echolocator.back");
-	}
-
 	private void callEchoLocator(String to) throws FailedToSendMessageException {
 		EchoLocatorRequest echoLocatorRequest = new EchoLocatorRequest();
 		echoLocatorRequest.setTo(to);
@@ -143,6 +142,36 @@ public class DemoTest {
 		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
 		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 11,
 				echoLocatorResponse.getEchoLocatorResult().length);
+	}
+
+	private void callServo(String to) throws FailedToSendMessageException {
+		ServoResponse servoResponse;
+
+		ServoRequest servoFrontBaseRequest = new ServoRequest();
+		servoFrontBaseRequest.setMicroseconds(500000);
+		servoFrontBaseRequest.setTo(to + ".base");
+
+		ServoRequest servoFrontHeadRequest = new ServoRequest();
+		servoFrontHeadRequest.setMicroseconds(500000);
+		servoFrontHeadRequest.setTo(to + ".head");
+
+		servoFrontBaseRequest.setValue(4);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
+
+		servoFrontBaseRequest.setValue(14);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
+
+		servoFrontBaseRequest.setValue(24);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
+
+		servoFrontBaseRequest.setValue(14);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontBaseRequest, 1000);
+
+		servoFrontHeadRequest.setValue(24);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontHeadRequest, 1000);
+
+		servoFrontHeadRequest.setValue(14);
+		servoResponse = (ServoResponse) testClient.getOutgoingMessageManager().sendSyncRequest(servoFrontHeadRequest, 1000);
 	}
 
 	private static void broadcast(Message message) throws FailedToSendMessageException {

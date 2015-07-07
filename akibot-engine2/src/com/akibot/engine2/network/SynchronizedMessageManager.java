@@ -2,6 +2,7 @@ package com.akibot.engine2.network;
 
 import java.util.UUID;
 
+import com.akibot.engine2.exception.EnrichmentFailedException;
 import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
 
@@ -15,8 +16,14 @@ public class SynchronizedMessageManager {
 		this.akibotClient = akibotClient;
 	}
 
-	public Request enrichRequest(Request originalRequest) throws CloneNotSupportedException {
-		Request request = (Request) originalRequest.clone();
+	public Request enrichRequest(Request originalRequest) throws EnrichmentFailedException {
+		
+		Request request;
+		try {
+			request = (Request) originalRequest.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new EnrichmentFailedException();
+		}
 		setSyncId(UUID.randomUUID().toString());
 		request.setSyncId(getSyncId());
 		request.setFrom(akibotClient.getName());

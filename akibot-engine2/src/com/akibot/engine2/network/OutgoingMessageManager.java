@@ -7,6 +7,9 @@ import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.IncompleteMessageException;
+import com.akibot.engine2.exception.NooneInterestedException;
+import com.akibot.engine2.exception.SyncResponseWaitTimeoutException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Request;
@@ -23,39 +26,31 @@ public class OutgoingMessageManager {
 
 	public void broadcastMessage(Message message) throws FailedToSendMessageException {
 		if (message == null) {
-			throw new FailedToSendMessageException();
+			throw new IncompleteMessageException();
 		} else {
 			int count = 0;
 			if (akibotClient.getClientDescriptionList() != null && akibotClient.getClientDescriptionList().size() > 0) {
 				log.trace(akibotClient + ": broadcastMessage: " + message);
-				// boolean advancedDebug = true;
-				// //akibotClient.toString().equals("[akibot.test]") && message
-				// instanceof TestResponse;
-				// if (advancedDebug) {
-				// log.trace(akibotClient + ": !!!: getClientDescriptionList: " +
-				// akibotClient.getClientDescriptionList());
-				// }
 				for (ClientDescription client : akibotClient.getClientDescriptionList()) {
-					// if (advancedDebug) {
-					// log.trace(akibotClient + ": !!!: client: " + client+
-					// ": isSystemMessage="+ClientDescriptionUtils.isSystemMessage(message)+", isAddressedToClient="+ClientDescriptionUtils.isAddressedToClient(client,
-					// message)+", isInterestedInMessage="+
-					// ClientDescriptionUtils.isInterestedInMessage(client,
-					// message)+" / to="+message.getTo());
-					// }
 					if (ClientDescriptionUtils.isSystemMessage(message)
 							|| (ClientDescriptionUtils.isAddressedToClient(client, message) && ClientDescriptionUtils.isInterestedInMessage(client, message))) {
 						count++;
 						send(client, message);
 					}
 				}
+				if (count == 0) {
+					log.warn(akibotClient + ": broadcastMessage: Noone interested in: " + message + " (to=" + message.getTo()
+							+ "); akibotClient.clientDescriptionList=(" + akibotClient.getClientDescriptionList() + ")");
+					if (message.getSyncId() != null && akibotClient.getSynchronizedMessageManager().getSyncId().equals(message.getSyncId())) {
+						throw new NooneInterestedException();
+					}
+				}
+			} else if (akibotClient.getParentSocketAddress() == null) {
+				// Server without clients
 			} else {
 				log.warn(akibotClient + ": broadcastMessage: Skip broadcasting. No Clients!");
 			}
-			if (count == 0) {
-				log.warn(akibotClient + ": broadcastMessage: Noone interested in: " + message + " (to=" + message.getTo()
-						+ "); akibotClient.clientDescriptionList=(" + akibotClient.getClientDescriptionList() + ")");
-			}
+
 		}
 	}
 
@@ -72,8 +67,7 @@ public class OutgoingMessageManager {
 		try {
 			msg = message.clone();
 		} catch (CloneNotSupportedException e1) {
-			log.catching(akibotClient, e1);
-			throw new FailedToSendMessageException();
+			throw new FailedToSendMessageException(e1);
 		}
 
 		String host = clientDescription.getAddress().getHostString();
@@ -92,8 +86,7 @@ public class OutgoingMessageManager {
 			DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, address);
 			akibotClient.getSocket().send(datagramPacket);
 		} catch (IOException e) {
-			log.catching(akibotClient, e);
-			throw new FailedToSendMessageException();
+			throw new FailedToSendMessageException(e);
 		}
 	}
 
@@ -103,6 +96,7 @@ public class OutgoingMessageManager {
 			try {
 				SynchronizedMessageManager sync = akibotClient.getSynchronizedMessageManager();
 				newRequest = sync.enrichRequest(request);
+				sync.setSyncResponse(null);
 
 				log.trace(akibotClient + ": Sync messasge sent: " + newRequest + " (syncId=" + newRequest.getSyncId() + ")");
 				broadcastMessage(newRequest);
@@ -114,15 +108,16 @@ public class OutgoingMessageManager {
 				sync.setSyncId(null); // release sync id
 
 				if (sync.getSyncResponse() == null) {
-					throw new Exception("Timeout occured while waiting sync response");
+					throw new SyncResponseWaitTimeoutException();
 				} else {
 					log.trace(akibotClient + ": Sync messasge received: " + sync.getSyncResponse().getSyncId() + ": " + sync.getSyncResponse());
 				}
 				return sync.getSyncResponse();
 
-			} catch (Exception e) {
-				log.catching(akibotClient, e);
-				throw new FailedToSendMessageException();
+			} catch (FailedToSendMessageException e) {
+				throw e;
+			} catch (InterruptedException e) {
+				throw new FailedToSendMessageException(e);
 			}
 		} else {
 			throw new FailedToSendMessageException();
