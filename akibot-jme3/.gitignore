@@ -1,1 +1,5 @@
 /bin/
+/lwjgl.dll
+/lwjgl64.dll
+/OpenAL32.dll
+/OpenAL64.dll
