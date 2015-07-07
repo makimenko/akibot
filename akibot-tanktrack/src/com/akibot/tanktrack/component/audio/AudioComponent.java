@@ -70,7 +70,7 @@ public class AudioComponent extends DefaultComponent {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.catching(getAkibotClient(), e);
 		} finally {
 			if (din != null) {
 				try {

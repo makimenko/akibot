@@ -53,11 +53,7 @@ public class IncommingMessageReceiver extends Thread {
 					log.trace(akibotClient + ": Message Received: " + message);
 					akibotClient.getIncommingMessageManager().getQueue().put(message);
 				}
-			} catch (IOException e) {
-				log.catching(akibotClient, e);
-			} catch (ClassNotFoundException e) {
-				log.catching(akibotClient, e);
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				log.catching(akibotClient, e);
 			}
 		}

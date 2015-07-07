@@ -59,7 +59,7 @@ public class VisualizerWindow extends SimpleApplication {
 			attachCoordinateAxes(baseNode);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.catching(e);
 			System.exit(1);
 		}
 	}

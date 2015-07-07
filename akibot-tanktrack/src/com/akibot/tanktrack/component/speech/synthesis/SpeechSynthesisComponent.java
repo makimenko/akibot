@@ -21,6 +21,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	private MaryInterface marytts;
 	private String maryttsHost;
 	private int maryttsPort;
+	private String lastSpeech;
 
 	public SpeechSynthesisComponent(String maryttsHost, int maryttsPort, String marytssDefaultVoice) {
 		this.maryttsHost = maryttsHost;
@@ -43,6 +44,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 
 			if (request.getSpeechText() != null && request.getSpeechText().length() > 0) {
 				AudioInputStream audio = marytts.generateAudio(request.getSpeechText());
+				lastSpeech = request.getSpeechText();
 				AudioPlayer player = new AudioPlayer(audio, lineListener);
 				player.start();
 				player.join();
@@ -57,14 +59,13 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 		try {
 			marytts = new RemoteMaryInterface(maryttsHost, maryttsPort);
 			marytts.setVoice(marytssDefaultVoice);
-
 			lineListener = new LineListener() {
 				@Override
 				public void update(LineEvent event) {
 					if (event.getType() == LineEvent.Type.START) {
-						log.trace("Audio started playing");
+						log.trace("Speech Started: " + lastSpeech);
 					} else if (event.getType() == LineEvent.Type.STOP) {
-						log.trace("Audio stopped playing");
+						log.trace("Speech Stoped: " + lastSpeech);
 					} else if (event.getType() == LineEvent.Type.OPEN) {
 						log.trace("Audio line opened");
 					} else if (event.getType() == LineEvent.Type.CLOSE) {

@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
@@ -27,6 +28,8 @@ import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
 public class AwtControllerAppl {
+	static final AkiLogger log = AkiLogger.create(AwtControllerAppl.class);
+
 	private AkibotClient akibotClient;
 	private Frame mainFrame;
 	private TextArea textArea;
@@ -112,10 +115,8 @@ public class AwtControllerAppl {
 
 					textArea.append("Total ms: " + (System.currentTimeMillis() - startTime) + "\n");
 				} catch (FailedToSendMessageException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					log.catching(akibotClient, e1);
 				}
-
 			}
 		});
 
