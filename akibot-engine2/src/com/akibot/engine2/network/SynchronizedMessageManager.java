@@ -17,7 +17,7 @@ public class SynchronizedMessageManager {
 	}
 
 	public Request enrichRequest(Request originalRequest) throws EnrichmentFailedException {
-		
+
 		Request request;
 		try {
 			request = (Request) originalRequest.clone();

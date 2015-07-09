@@ -2,6 +2,7 @@ package com.akibot.tanktrack.component.gyroscope;
 
 import java.io.IOException;
 
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.pi4j.io.i2c.I2CBus;
@@ -19,6 +20,8 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 
 	private I2CDevice hmc5883l;
 
+	private int busNumber;
+	private int deviceAddress;
 	private double offsetDegrees;
 	private double offsetX;
 	private double offsetY;
@@ -55,24 +58,13 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 
 	public HMC5883LGyroscopeComponent(int busNumber, int deviceAddress, double offsetX, double offsetY, double offsetZ, double offsetDegrees)
 			throws IOException, InterruptedException {
-		log.debug(this.getAkibotClient() + ": Initializing HMC5883LGyroscopeComponent");
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.offsetZ = offsetZ;
 		this.offsetDegrees = offsetDegrees;
+		this.busNumber = busNumber;
+		this.deviceAddress = deviceAddress;
 
-		I2CBus bus = I2CFactory.getInstance(busNumber);
-		hmc5883l = bus.getDevice(deviceAddress);
-
-		modeIdle();
-		// selfTest(gain_0_88, cra_8samples_15Hz_normal);
-		// selfTest(gain_8_1, cra_8samples_15Hz_normal);
-
-		hmc5883l.write(configurationRegisterA, cra_8samples_15Hz_normal);
-		hmc5883l.write(configurationRegisterB, gain_1_3_default);
-		modeContinuousMeasurement();
-
-		log.debug(this.getAkibotClient() + ": HMC5883LGyroscopeComponent initialized");
 	}
 
 	private void selfTest(byte gain, byte cra) throws IOException, InterruptedException {
@@ -165,6 +157,27 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 			return -((65535 - val) + 1);
 		} else {
 			return val;
+		}
+	}
+
+	@Override
+	public void start() throws FailedToStartException {
+		try {
+			log.debug(this.getAkibotClient() + ": Initializing HMC5883LGyroscopeComponent");
+			I2CBus bus = I2CFactory.getInstance(busNumber);
+			hmc5883l = bus.getDevice(deviceAddress);
+
+			modeIdle();
+			// selfTest(gain_0_88, cra_8samples_15Hz_normal);
+			// selfTest(gain_8_1, cra_8samples_15Hz_normal);
+
+			hmc5883l.write(configurationRegisterA, cra_8samples_15Hz_normal);
+			hmc5883l.write(configurationRegisterB, gain_1_3_default);
+			modeContinuousMeasurement();
+
+			log.debug(this.getAkibotClient() + ": HMC5883LGyroscopeComponent initialized");
+		} catch (Exception e) {
+			throw new FailedToStartException(e);
 		}
 	}
 

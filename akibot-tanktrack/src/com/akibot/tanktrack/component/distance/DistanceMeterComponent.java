@@ -3,6 +3,7 @@ package com.akibot.tanktrack.component.distance;
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -14,8 +15,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 	private int timeoutMicroseconds;
 
 	public DistanceMeterComponent(int triggerPin, int echoPin, int timeoutMicroseconds) {
-		this.lib = new AkibotJniLibrary();
-		this.lib.initialize();
+
 		this.triggerPin = triggerPin;
 		this.echoPin = echoPin;
 		this.timeoutMicroseconds = timeoutMicroseconds;
@@ -39,8 +39,13 @@ public class DistanceMeterComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() {
-
+	public void start() throws FailedToStartException {
+		try {
+			this.lib = new AkibotJniLibrary();
+			this.lib.initialize();
+		} catch (Exception e) {
+			throw new FailedToStartException(e);
+		}
 	}
 
 }

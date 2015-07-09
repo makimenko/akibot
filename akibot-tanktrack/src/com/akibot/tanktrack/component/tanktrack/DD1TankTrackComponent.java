@@ -1,5 +1,6 @@
 package com.akibot.tanktrack.component.tanktrack;
 
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.pi4j.io.gpio.GpioController;
@@ -108,19 +109,23 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	}
 
 	@Override
-	public void start() {
-		log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
-		gpio = GpioFactory.getInstance();
+	public void start() throws FailedToStartException {
+		try {
+			log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
+			gpio = GpioFactory.getInstance();
 
-		rightBackwardPin = gpio.provisionDigitalOutputPin(rightIApin, "rightIA", PinState.LOW);
-		rightForwardPin = gpio.provisionDigitalOutputPin(rightIBpin, "rightIB", PinState.LOW);
+			rightBackwardPin = gpio.provisionDigitalOutputPin(rightIApin, "rightIA", PinState.LOW);
+			rightForwardPin = gpio.provisionDigitalOutputPin(rightIBpin, "rightIB", PinState.LOW);
 
-		leftBackwardPin = gpio.provisionDigitalOutputPin(leftIApin, "leftIA", PinState.LOW);
-		leftForwardPin = gpio.provisionDigitalOutputPin(leftIBpin, "leftIB", PinState.LOW);
+			leftBackwardPin = gpio.provisionDigitalOutputPin(leftIApin, "leftIA", PinState.LOW);
+			leftForwardPin = gpio.provisionDigitalOutputPin(leftIBpin, "leftIB", PinState.LOW);
 
-		defaultState();
+			defaultState();
 
-		log.debug(this.getAkibotClient() + ": TankTrack GPIOs initialized successfully");
+			log.debug(this.getAkibotClient() + ": TankTrack GPIOs initialized successfully");
+		} catch (Exception e) {
+			throw new FailedToStartException(e);
+		}
 	}
 
 }

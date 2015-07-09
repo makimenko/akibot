@@ -173,6 +173,7 @@ public class AkibotClient extends Thread {
 		} catch (Exception e) {
 			log.catching(this, e);
 			log.error(this + ": Failed to start");
+			this.interrupt();
 		}
 
 	}

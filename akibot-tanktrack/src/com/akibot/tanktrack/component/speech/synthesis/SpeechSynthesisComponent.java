@@ -11,6 +11,7 @@ import marytts.client.RemoteMaryInterface;
 import marytts.util.data.audio.AudioPlayer;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -55,7 +56,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() {
+	public void start() throws FailedToStartException {
 		try {
 			marytts = new RemoteMaryInterface(maryttsHost, maryttsPort);
 			marytts.setVoice(marytssDefaultVoice);
@@ -74,7 +75,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 				}
 			};
 		} catch (IOException e) {
-			log.catching(getAkibotClient(), e);
+			throw new FailedToStartException(e);
 		}
 
 	}

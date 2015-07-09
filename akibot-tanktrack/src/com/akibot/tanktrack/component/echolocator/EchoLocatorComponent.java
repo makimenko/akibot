@@ -3,6 +3,7 @@ package com.akibot.tanktrack.component.echolocator;
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -13,7 +14,6 @@ public class EchoLocatorComponent extends DefaultComponent {
 
 	public EchoLocatorComponent(EchoLocatorConfig echoLocatorConfig) {
 		this.echoLocatorConfig = echoLocatorConfig;
-		this.lib = new AkibotJniLibrary();
 	}
 
 	@Override
@@ -34,4 +34,14 @@ public class EchoLocatorComponent extends DefaultComponent {
 			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
 		}
 	}
+
+	@Override
+	public void start() throws FailedToStartException {
+		try {
+			this.lib = new AkibotJniLibrary();
+		} catch (Exception e) {
+			throw new FailedToStartException(e);
+		}
+	}
+
 }

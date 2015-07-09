@@ -36,11 +36,6 @@ public class AudioComponent extends DefaultComponent {
 		}
 	}
 
-	@Override
-	public void start() {
-
-	}
-
 	private void play(String audioUrl) {
 		AudioInputStream din = null;
 		try {

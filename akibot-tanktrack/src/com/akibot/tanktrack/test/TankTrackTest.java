@@ -41,13 +41,8 @@ public class TankTrackTest {
 	public static void setUpBeforeClass() throws Exception {
 		testClient = new AkibotClient("akibot.client", new TestComponent(), serverAddress);
 		testClient.getMyClientDescription().getTopicList().add(new Response());
-
 		testClient.start();
 		Thread.sleep(5000);
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
 	}
 
 	@Test
@@ -204,20 +199,16 @@ public class TankTrackTest {
 		speechSynthesisResponse = (SpeechSynthesisResponse) testClient.getOutgoingMessageManager().sendSyncRequest(speechSynthesisRequest, 10000);
 		long duration = System.currentTimeMillis() - startTime;
 		assertEquals("Duration of speech", true, duration > 3800);
-
 	}
 
 	@Test
 	public void testAudio() throws FailedToSendMessageException, InterruptedException {
 		AudioRequest audioRequest = new AudioRequest();
-		AudioResponse audioResponse;
-
 		long startTime = System.currentTimeMillis();
 		audioRequest.setAudioUrl("file:///usr/share/scratch/Media/Sounds/Effects/Bubbles.wav");
-		audioResponse = (AudioResponse) testClient.getOutgoingMessageManager().sendSyncRequest(audioRequest, 10000);
+		AudioResponse audioResponse = (AudioResponse) testClient.getOutgoingMessageManager().sendSyncRequest(audioRequest, 10000);
 		long duration = System.currentTimeMillis() - startTime;
 		assertEquals("Duration of audio", true, duration > 4000);
-
 	}
 
 	@Test
@@ -225,9 +216,7 @@ public class TankTrackTest {
 		StickMotionRequest leftRequest = new StickMotionRequest(DirectionType.LEFT);
 		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
-
 		testClient.getOutgoingMessageManager().broadcastMessage(leftRequest);
-
 		int sample = 0;
 		double minValue = 0;
 		double maxValue = 0;
@@ -262,17 +251,14 @@ public class TankTrackTest {
 			}
 			if (previousValue != -1) {
 				double diff = Math.min(roundRobinUtils.rightDistance(value, previousValue), roundRobinUtils.leftDistance(value, previousValue));
-
 				// System.out.println("value=" + value + ", diff=" + diff);
 				if (diff > maxDiff) {
 					maxDiff = diff;
 				}
-
 			}
 			previousValue = value;
 			Thread.sleep(10);
 		}
-
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		System.out.println("RESULT: Compass range [" + minValue + ", max=" + maxValue + "], maxDiffs=" + maxDiff);
 		assertEquals("MIN compass value must be close to 0 (" + minValue + ")", true, minValue < expectedMin);
@@ -280,7 +266,6 @@ public class TankTrackTest {
 		assertEquals("BETWEEN compass", true, between);
 		assertEquals("Step difference low (" + maxDiff + ")", true, maxDiff > 5);
 		assertEquals("Step difference high (" + maxDiff + ")", true, maxDiff < 45);
-
 	}
 
 	@Test
@@ -296,7 +281,6 @@ public class TankTrackTest {
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
 		assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
-
 	}
 
 }

@@ -3,6 +3,7 @@ package com.akibot.tanktrack.component.servo;
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -15,8 +16,6 @@ public class ServoComponent extends DefaultComponent {
 	private int divisor;
 
 	public ServoComponent(int servoPin, int initialValue, int pwmRange, int divisor) {
-		this.lib = new AkibotJniLibrary();
-		this.lib.initialize();
 		this.servoPin = servoPin;
 		this.initialValue = initialValue;
 		this.pwmRange = pwmRange;
@@ -39,8 +38,13 @@ public class ServoComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() {
-
+	public void start() throws FailedToStartException {
+		try {
+			this.lib = new AkibotJniLibrary();
+			this.lib.initialize();
+		} catch (Exception e) {
+			throw new FailedToStartException(e);
+		}
 	}
 
 }
