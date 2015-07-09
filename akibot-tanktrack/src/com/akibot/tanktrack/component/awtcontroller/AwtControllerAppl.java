@@ -23,9 +23,11 @@ import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
 import com.akibot.tanktrack.component.obstacle.ObstacleRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
+import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
+import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
 
 public class AwtControllerAppl {
 	static final AkiLogger log = AkiLogger.create(AwtControllerAppl.class);
@@ -97,6 +99,60 @@ public class AwtControllerAppl {
 		Button buttonSpeechSynthesis = new Button("Speech Synthesis");
 		Button buttonGyroscopeCalibrationRequest = new Button("Gyroscope Calibration");
 		Button buttonObstacleRequest = new Button("Obstacle");
+		Button buttonTimedMotionRequest = new Button("Forward (1 sec)");
+		buttonTimedMotionRequest.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Response response = null;
+				try {
+					TimedMotionRequest messageTimedMotionRequest = new TimedMotionRequest();
+					messageTimedMotionRequest.setDirectionType(DirectionType.FORWARD);
+					messageTimedMotionRequest.setMilliseconds(1000);
+
+					response = akibotClient.getOutgoingMessageManager().sendSyncRequest(messageTimedMotionRequest, 2000);
+					textArea.append("SYNC RESPONSE: " + response + "\n");
+
+				} catch (FailedToSendMessageException e1) {
+					log.catching(akibotClient, e1);
+				}
+			}
+		});
+
+		Button buttonServoCenterRequest = new Button("Servo Center");
+		buttonServoCenterRequest.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Response response = null;
+				try {
+					ServoRequest servoFrontBaseRequest = new ServoRequest();
+					servoFrontBaseRequest.setMicroseconds(500000);
+					servoFrontBaseRequest.setValue(14);
+
+					ServoRequest servoFrontHeadRequest = new ServoRequest();
+					servoFrontHeadRequest.setMicroseconds(500000);
+					servoFrontHeadRequest.setValue(14);
+
+					servoFrontBaseRequest.setTo("akibot.servo.back.base");
+					servoFrontHeadRequest.setTo("akibot.servo.back.head");
+					akibotClient.getOutgoingMessageManager().broadcastMessage(servoFrontBaseRequest);
+					Thread.sleep(1000);
+					akibotClient.getOutgoingMessageManager().broadcastMessage(servoFrontHeadRequest);
+					Thread.sleep(1000);
+
+					servoFrontBaseRequest.setTo("akibot.servo.front.base");
+					servoFrontHeadRequest.setTo("akibot.servo.front.head");
+					akibotClient.getOutgoingMessageManager().broadcastMessage(servoFrontBaseRequest);
+					Thread.sleep(1000);
+					akibotClient.getOutgoingMessageManager().broadcastMessage(servoFrontHeadRequest);
+					Thread.sleep(1000);
+
+				} catch (FailedToSendMessageException e1) {
+					log.catching(akibotClient, e1);
+				} catch (InterruptedException e1) {
+					log.catching(akibotClient, e1);
+				}
+			}
+		});
 
 		Button buttonSync = new Button("Sync Request");
 		buttonSync.addActionListener(new ActionListener() {
@@ -174,6 +230,8 @@ public class AwtControllerAppl {
 		cursorPanel.add(buttonSpeechSynthesis);
 		cursorPanel.add(buttonGyroscopeCalibrationRequest);
 		cursorPanel.add(buttonObstacleRequest);
+		cursorPanel.add(buttonTimedMotionRequest);
+		cursorPanel.add(buttonServoCenterRequest);
 
 		Panel mainPanel = new Panel();
 

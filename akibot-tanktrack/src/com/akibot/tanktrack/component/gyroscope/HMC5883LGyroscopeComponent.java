@@ -154,7 +154,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	private int readShort(int address, I2CDevice i2c) throws IOException {
 		int val = readRawShort(address, i2c);
 		if (val > Short.MAX_VALUE) {
-			return -((65535 - val) + 1);
+			return -((Short.MAX_VALUE + 1 - val) + 1);
 		} else {
 			return val;
 		}

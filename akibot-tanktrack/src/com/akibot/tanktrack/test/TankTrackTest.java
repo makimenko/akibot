@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.InetSocketAddress;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,7 +27,11 @@ import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
+import com.akibot.tanktrack.component.tanktrack.MotionDistanceCounterRequest;
+import com.akibot.tanktrack.component.tanktrack.MotionDistanceCounterResponse;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
+import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
+import com.akibot.tanktrack.component.tanktrack.TimedMotionResponse;
 
 public class TankTrackTest {
 	private static AkibotClient testClient;
@@ -46,7 +49,7 @@ public class TankTrackTest {
 	}
 
 	@Test
-	public void testMovement() throws FailedToSendMessageException, InterruptedException {
+	public void testStickMovement() throws FailedToSendMessageException, InterruptedException {
 		StickMotionRequest forwardRequest = new StickMotionRequest(DirectionType.FORWARD);
 		StickMotionRequest backRequest = new StickMotionRequest(DirectionType.BACKWARD);
 		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
@@ -283,4 +286,46 @@ public class TankTrackTest {
 		assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
 	}
 
+	@Test
+	public void testMovementDistanceCounter() throws FailedToSendMessageException, InterruptedException {
+		MotionDistanceCounterRequest motionDistanceCounterRequest = new MotionDistanceCounterRequest();
+		StickMotionRequest forwardRequest = new StickMotionRequest(DirectionType.FORWARD);
+		StickMotionRequest backRequest = new StickMotionRequest(DirectionType.BACKWARD);
+		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
+
+		MotionDistanceCounterResponse motionDistanceCounterResponseBefore = (MotionDistanceCounterResponse) testClient.getOutgoingMessageManager()
+				.sendSyncRequest(motionDistanceCounterRequest, 500);
+
+		testClient.getOutgoingMessageManager().broadcastMessage(forwardRequest);
+		Thread.sleep(500);
+		testClient.getOutgoingMessageManager().broadcastMessage(backRequest);
+		Thread.sleep(500);
+		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
+		Thread.sleep(100);
+		MotionDistanceCounterResponse motionDistanceCounterResponseAfter = (MotionDistanceCounterResponse) testClient.getOutgoingMessageManager()
+				.sendSyncRequest(motionDistanceCounterRequest, 500);
+
+		assertEquals("Compare Right Distance Counter", true, motionDistanceCounterResponseAfter.getDistanceCounter().getRightDistanceCounter()
+				- motionDistanceCounterResponseBefore.getDistanceCounter().getRightDistanceCounter() > 500);
+
+		// TODO: Skip due to sensor issue: assertEquals("Compare Left Distance Counter", true,
+		// motionDistanceCounterResponseAfter.getDistanceCounter().getLeftDistanceCounter() -
+		// motionDistanceCounterResponseBefore.getDistanceCounter().getLeftDistanceCounter() > 100);
+
+	}
+
+	@Test
+	public void testTimedMovement() throws FailedToSendMessageException, InterruptedException {
+		TimedMotionRequest timedMotionRequest = new TimedMotionRequest();
+		timedMotionRequest.setDirectionType(DirectionType.FORWARD);
+		timedMotionRequest.setMilliseconds(500);
+		TimedMotionResponse timedMotionResponse;
+
+		timedMotionResponse = (TimedMotionResponse) testClient.getOutgoingMessageManager().sendSyncRequest(timedMotionRequest, 1000);
+		assertEquals("Check distance 1", true, timedMotionResponse.getDistanceCounter().getRightDistanceCounter() > 100);
+
+		timedMotionRequest.setDirectionType(DirectionType.BACKWARD);
+		timedMotionResponse = (TimedMotionResponse) testClient.getOutgoingMessageManager().sendSyncRequest(timedMotionRequest, 1000);
+		assertEquals("Check distance 2", true, timedMotionResponse.getDistanceCounter().getRightDistanceCounter() > 100);
+	}
 }

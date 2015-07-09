@@ -43,7 +43,7 @@ public class AkiBotLauncher {
 
 		// TankTrack:
 		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
-				Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB), serverAddress);
+				Constants.TANK_TRACK_RIGHT_SPEED, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB, Constants.TANK_TRACK_LEFT_SPEED), serverAddress);
 		tankTrack.getMyClientDescription().getTopicList().add(new MotionRequest());
 
 		// Gyroscope:

@@ -24,6 +24,9 @@ public class Constants {
 	public static final Pin TANK_TRACK_LEFT_IA = RaspiPin.GPIO_28;
 	public static final Pin TANK_TRACK_LEFT_IB = RaspiPin.GPIO_27;
 
+	public static final Pin TANK_TRACK_RIGHT_SPEED = RaspiPin.GPIO_23;
+	public static final Pin TANK_TRACK_LEFT_SPEED = RaspiPin.GPIO_29;
+
 	public static final int GYROSCOPE_BUS_NUMBER = I2CBus.BUS_1;
 	public static final int GYROSCOPE_DEVICE_ADDRESS = 0x1e;
 	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse:
