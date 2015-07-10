@@ -1,6 +1,8 @@
 package com.akibot.tanktrack.component.tanktrack;
 
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.pi4j.io.gpio.GpioController;
@@ -31,8 +33,11 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	private GpioPinDigitalInput leftSpeedPinInput;
 	private GpioPinDigitalInput rightSpeedPinInput;
 	// Speed and Distance counters
-	private long rightDistanceCounter;
-	private long leftDistanceCounter;
+	private long rightDistanceCounterTotal;
+	private long leftDistanceCounterTotal;
+
+	private long rightDistanceCounterInteration;
+	private long leftDistanceCounterInteration;
 
 	public DD1TankTrackComponent(Pin rightIApin, Pin rightIBpin, Pin rightSpeedPin, Pin leftIApin, Pin leftIBpin, Pin leftSpeedPin) {
 		this.rightIApin = rightIApin;
@@ -44,8 +49,8 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 	}
 
 	private void resetDistanceCounters() {
-		this.rightDistanceCounter = 0;
-		this.leftDistanceCounter = 0;
+		this.rightDistanceCounterTotal = 0;
+		this.leftDistanceCounterTotal = 0;
 	}
 
 	private void defaultState() {
@@ -62,86 +67,79 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 			rightBackwardPinOutput.low();
 	}
 
+	private void changeDirection(DirectionType direction) {
+		switch (direction) {
+		case FORWARD:
+			defaultState();
+			rightForwardPinOutput.high();
+			leftForwardPinOutput.high();
+			break;
+		case BACKWARD:
+			defaultState();
+			rightBackwardPinOutput.high();
+			leftBackwardPinOutput.high();
+			break;
+		case LEFT:
+			defaultState();
+			rightForwardPinOutput.high();
+			leftBackwardPinOutput.high();
+			break;
+		case RIGHT:
+			defaultState();
+			leftForwardPinOutput.high();
+			rightBackwardPinOutput.high();
+			break;
+		default:
+			defaultState();
+			break;
+		}
+	}
+
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof StickMotionRequest) {
-			StickMotionRequest request = (StickMotionRequest) message;
-			log.debug(this.getAkibotClient() + ": " + request);
-			switch (request.getDirectionType()) {
-			case FORWARD:
-				defaultState();
-				rightForwardPinOutput.high();
-				leftForwardPinOutput.high();
-				break;
-			case BACKWARD:
-				defaultState();
-				rightBackwardPinOutput.high();
-				leftBackwardPinOutput.high();
-				break;
-			case LEFT:
-				defaultState();
-				rightForwardPinOutput.high();
-				leftBackwardPinOutput.high();
-				break;
-			case RIGHT:
-				defaultState();
-				leftForwardPinOutput.high();
-				rightBackwardPinOutput.high();
-				break;
-			default:
-				defaultState();
-				break;
-			}
-			StickMotionResponse response = new StickMotionResponse();
-			response.copySyncId(message);
-			this.getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
-
+			onStickMotionRequest((StickMotionRequest) message);
 		} else if (message instanceof TimedMotionRequest) {
-			TimedMotionRequest timedMotionRequest = (TimedMotionRequest) message;
-			log.debug(this.getAkibotClient() + ": " + timedMotionRequest);
-
-			defaultState();
-			long startLeftDistanceCounter = leftDistanceCounter;
-			long startRightDistanceCounter = rightDistanceCounter;
-
-			switch (timedMotionRequest.getDirectionType()) {
-			case FORWARD:
-				rightForwardPinOutput.high();
-				leftForwardPinOutput.high();
-				break;
-			case BACKWARD:
-				rightBackwardPinOutput.high();
-				leftBackwardPinOutput.high();
-				break;
-			case LEFT:
-				rightForwardPinOutput.high();
-				leftBackwardPinOutput.high();
-				break;
-			case RIGHT:
-				leftForwardPinOutput.high();
-				rightBackwardPinOutput.high();
-				break;
-			}
-			Thread.sleep(timedMotionRequest.getMilliseconds());
-			defaultState();
-
-			TimedMotionResponse response = new TimedMotionResponse();
-			response.copySyncId(message);
-			response.getDistanceCounter().setLeftDistanceCounter(leftDistanceCounter - startLeftDistanceCounter);
-			response.getDistanceCounter().setRightDistanceCounter(rightDistanceCounter - startRightDistanceCounter);
-			this.getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
-
+			onTimedMotionRequest((TimedMotionRequest) message);
 		} else if (message instanceof MotionDistanceCounterRequest) {
-			MotionDistanceCounterRequest request = (MotionDistanceCounterRequest) message;
-			MotionDistanceCounterResponse response = new MotionDistanceCounterResponse();
-			response.copySyncId(message);
-			response.getDistanceCounter().setLeftDistanceCounter(leftDistanceCounter);
-			response.getDistanceCounter().setRightDistanceCounter(rightDistanceCounter);
-			if (request.isResetAfterResponse()) {
-				resetDistanceCounters();
-			}
-			this.getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			onMotionDistanceCounterRequest((MotionDistanceCounterRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
+	}
+
+	private void onStickMotionRequest(StickMotionRequest stickMotionRequest) throws FailedToSendMessageException {
+		log.debug(this.getAkibotClient() + ": " + stickMotionRequest);
+		changeDirection(stickMotionRequest.getDirectionType());
+		StickMotionResponse response = new StickMotionResponse();
+		broadcastResponse(response, stickMotionRequest);
+	}
+
+	private void onTimedMotionRequest(TimedMotionRequest timedMotionRequest) throws InterruptedException, FailedToSendMessageException {
+		log.debug(this.getAkibotClient() + ": " + timedMotionRequest);
+
+		defaultState();
+		long startLeftDistanceCounter = leftDistanceCounterTotal;
+		long startRightDistanceCounter = rightDistanceCounterTotal;
+
+		changeDirection(timedMotionRequest.getDirectionType());
+		Thread.sleep(timedMotionRequest.getMilliseconds());
+		defaultState();
+
+		TimedMotionResponse response = new TimedMotionResponse();
+		response.getDistanceCounter().setLeftDistanceCounter(leftDistanceCounterTotal - startLeftDistanceCounter);
+		response.getDistanceCounter().setRightDistanceCounter(rightDistanceCounterTotal - startRightDistanceCounter);
+		broadcastResponse(response, timedMotionRequest);
+	}
+
+	private void onMotionDistanceCounterRequest(MotionDistanceCounterRequest motionDistanceCounterRequest) throws FailedToSendMessageException {
+		MotionDistanceCounterResponse response = new MotionDistanceCounterResponse();
+		response.getDistanceCounter().setLeftDistanceCounter(leftDistanceCounterTotal);
+		response.getDistanceCounter().setRightDistanceCounter(rightDistanceCounterTotal);
+		if (motionDistanceCounterRequest.isResetAfterResponse()) {
+			resetDistanceCounters();
+		}
+		broadcastResponse(response, motionDistanceCounterRequest);
 	}
 
 	@Override
@@ -162,14 +160,14 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 				@Override
 				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 					// System.out.println(" --> RIGHT GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
-					rightDistanceCounter++;
+					rightDistanceCounterTotal++;
 				}
 			});
 			leftSpeedPinInput.addListener(new GpioPinListenerDigital() {
 				@Override
 				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
 					// System.out.println(" --> LEFT GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
-					leftDistanceCounter++;
+					leftDistanceCounterTotal++;
 				}
 			});
 

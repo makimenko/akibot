@@ -3,7 +3,9 @@ package com.akibot.tanktrack.component.servo;
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -29,12 +31,16 @@ public class ServoComponent extends DefaultComponent {
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof ServoRequest) {
-			ServoRequest request = (ServoRequest) message;
-			ServoResponse response = new ServoResponse();
-			this.lib.servo(servoPin, initialValue, pwmRange, divisor, request.getValue(), request.getMicroseconds());
-			response.copySyncId(message);
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			onServoRequest((ServoRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
+	}
+
+	private void onServoRequest(ServoRequest servoRequest) throws FailedToSendMessageException {
+		ServoResponse response = new ServoResponse();
+		this.lib.servo(servoPin, initialValue, pwmRange, divisor, servoRequest.getValue(), servoRequest.getMicroseconds());
+		broadcastResponse(response, servoRequest);
 	}
 
 	@Override

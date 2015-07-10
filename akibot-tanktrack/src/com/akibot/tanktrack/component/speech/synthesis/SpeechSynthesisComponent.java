@@ -8,10 +8,13 @@ import javax.sound.sampled.LineListener;
 
 import marytts.MaryInterface;
 import marytts.client.RemoteMaryInterface;
+import marytts.exceptions.SynthesisException;
 import marytts.util.data.audio.AudioPlayer;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -33,26 +36,34 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof SpeechSynthesisRequest) {
-			SpeechSynthesisRequest request = (SpeechSynthesisRequest) message;
-			SpeechSynthesisResponse response = new SpeechSynthesisResponse();
-			log.debug(this.getAkibotClient() + ": Speech request: " + request);
-			marytts.setVoice(marytssDefaultVoice);
-
-			if (request.getVoice() != null && request.getVoice().length() > 0 && !marytts.getVoice().equals(request.getVoice())) {
-				marytts.setVoice(request.getVoice());
-			}
-			log.debug(this.getAkibotClient() + " Voice: " + marytts.getVoice());
-
-			if (request.getSpeechText() != null && request.getSpeechText().length() > 0) {
-				AudioInputStream audio = marytts.generateAudio(request.getSpeechText());
-				lastSpeech = request.getSpeechText();
-				AudioPlayer player = new AudioPlayer(audio, lineListener);
-				player.start();
-				player.join();
-			}
-			response.copySyncId(message);
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			onSpeechSynthesisRequest((SpeechSynthesisRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
+	}
+
+	private void onSpeechSynthesisRequest(SpeechSynthesisRequest speechSynthesisRequest) throws SynthesisException, FailedToSendMessageException,
+			InterruptedException {
+		SpeechSynthesisResponse response = new SpeechSynthesisResponse();
+
+		log.debug(this.getAkibotClient() + ": Speech request: " + speechSynthesisRequest);
+		marytts.setVoice(marytssDefaultVoice);
+
+		if (speechSynthesisRequest.getVoice() != null && speechSynthesisRequest.getVoice().length() > 0
+				&& !marytts.getVoice().equals(speechSynthesisRequest.getVoice())) {
+			marytts.setVoice(speechSynthesisRequest.getVoice());
+		}
+		log.debug(this.getAkibotClient() + " Voice: " + marytts.getVoice());
+
+		if (speechSynthesisRequest.getSpeechText() != null && speechSynthesisRequest.getSpeechText().length() > 0) {
+			AudioInputStream audio = marytts.generateAudio(speechSynthesisRequest.getSpeechText());
+			lastSpeech = speechSynthesisRequest.getSpeechText();
+			AudioPlayer player = new AudioPlayer(audio, lineListener);
+			player.start();
+			player.join();
+		}
+
+		broadcastResponse(response, speechSynthesisRequest);
 	}
 
 	@Override

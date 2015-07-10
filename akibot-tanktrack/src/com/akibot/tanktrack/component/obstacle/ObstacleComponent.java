@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
@@ -22,44 +23,55 @@ public class ObstacleComponent extends DefaultComponent {
 	private boolean hasGyroscope = false;
 	private ObstacleResponse response;
 	private String id;
+	private ObstacleRequest obstacleRequest;
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof ObstacleRequest) {
-			ObstacleRequest request = (ObstacleRequest) message;
-			response = new ObstacleResponse();
-			response.copySyncId(request);
-			id = UUID.randomUUID().toString();
-
-			gyroscopeValueRequest.setTo(request.getGyroscopeName());
-			distanceReqest.setTo(request.getDistanceName());
-			gyroscopeValueRequest.setSyncId(id);
-			distanceReqest.setSyncId(id);
-
-			hasDistance = false;
-			hasGyroscope = false;
-
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(gyroscopeValueRequest);
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(distanceReqest);
-
+			onObstacleRequest((ObstacleRequest) message);
 		} else if (message instanceof GyroscopeResponse) {
-			if (message.getSyncId() != null && message.getSyncId().equalsIgnoreCase(id)) {
-				gyroscopeResponse = (GyroscopeResponse) message;
-				hasGyroscope = true;
-				prepareResponse();
-			}
+			onGyroscopeResponse((GyroscopeResponse) message);
 		} else if (message instanceof DistanceResponse) {
-			if (message.getSyncId() != null && message.getSyncId().equalsIgnoreCase(id)) {
-				distanceResponse = (DistanceResponse) message;
-				hasDistance = true;
-				prepareResponse();
-			}
+			onDistanceResponse((DistanceResponse) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
+		}
+	}
+
+	private void onObstacleRequest(ObstacleRequest obstacleRequest) throws FailedToSendMessageException {
+		this.obstacleRequest = obstacleRequest;
+		response = new ObstacleResponse();
+
+		id = UUID.randomUUID().toString();
+
+		gyroscopeValueRequest.setTo(obstacleRequest.getGyroscopeName());
+		distanceReqest.setTo(obstacleRequest.getDistanceName());
+		gyroscopeValueRequest.setSyncId(id);
+		distanceReqest.setSyncId(id);
+
+		hasDistance = false;
+		hasGyroscope = false;
+
+		broadcastMessage(gyroscopeValueRequest);
+		broadcastMessage(distanceReqest);
+	}
+
+	private void onGyroscopeResponse(GyroscopeResponse gyroscopeResponse) throws FailedToSendMessageException {
+		if (gyroscopeResponse.getSyncId() != null && gyroscopeResponse.getSyncId().equalsIgnoreCase(id)) {
+			hasGyroscope = true;
+			prepareResponse();
+		}
+	}
+
+	private void onDistanceResponse(DistanceResponse distanceResponse) throws FailedToSendMessageException {
+		if (distanceResponse.getSyncId() != null && distanceResponse.getSyncId().equalsIgnoreCase(id)) {
+			hasDistance = true;
+			prepareResponse();
 		}
 	}
 
 	private void prepareResponse() throws FailedToSendMessageException {
 		if (hasDistance && hasGyroscope) {
-
 			log.debug(this.getAkibotClient() + ": Calculation Input: " + gyroscopeResponse.getNorthDegrreesXY() + ", " + distanceResponse.getMm());
 
 			double radians = Math.toRadians(gyroscopeResponse.getNorthDegrreesXY());
@@ -68,8 +80,8 @@ public class ObstacleComponent extends DefaultComponent {
 			response.setX(x);
 			response.setY(y);
 
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
-
+			broadcastResponse(response, this.obstacleRequest);
+			this.obstacleRequest = null;
 		}
 	}
 

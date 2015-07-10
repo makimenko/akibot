@@ -4,6 +4,7 @@ import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToStartException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -20,7 +21,6 @@ public class EchoLocatorComponent extends DefaultComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof EchoLocatorRequest) {
 			EchoLocatorResponse response = new EchoLocatorResponse();
-			response.copySyncId(message);
 			EchoLocatorRequest request = (EchoLocatorRequest) message;
 
 			float result[] = lib.echoLocator(echoLocatorConfig.getDistanceTriggerPin(), echoLocatorConfig.getDistanceEchoPin(),
@@ -31,7 +31,9 @@ public class EchoLocatorComponent extends DefaultComponent {
 
 			response.setEchoLocatorResult(result);
 
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			broadcastResponse(response, request);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
 	}
 

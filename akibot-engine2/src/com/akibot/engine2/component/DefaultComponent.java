@@ -1,8 +1,11 @@
 package com.akibot.engine2.component;
 
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Request;
+import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 
 public class DefaultComponent implements Component {
@@ -27,6 +30,15 @@ public class DefaultComponent implements Component {
 	@Override
 	public void start() throws FailedToStartException {
 
+	}
+
+	public void broadcastMessage(Message message) throws FailedToSendMessageException {
+		getAkibotClient().getOutgoingMessageManager().broadcastMessage(message);
+	}
+
+	public void broadcastResponse(Response response, Request request) throws FailedToSendMessageException {
+		response.copySyncId(request);
+		broadcastMessage(response);
 	}
 
 }

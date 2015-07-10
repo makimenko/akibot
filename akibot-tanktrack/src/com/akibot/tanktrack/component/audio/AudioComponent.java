@@ -10,30 +10,30 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
 public class AudioComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(AudioComponent.class);
 
-	public AudioComponent() {
-
-	}
-
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof AudioRequest) {
-			AudioRequest request = (AudioRequest) message;
-			AudioResponse response = new AudioResponse();
-			log.debug(this.getAkibotClient() + ": " + request);
-
-			if (request.getAudioUrl() != null) {
-				play(request.getAudioUrl());
-			}
-
-			response.copySyncId(message);
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			onAudioRequest((AudioRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
+	}
+
+	private void onAudioRequest(AudioRequest audioRequest) throws FailedToSendMessageException {
+		log.debug(this.getAkibotClient() + ": " + audioRequest);
+		AudioResponse response = new AudioResponse();
+		if (audioRequest.getAudioUrl() != null) {
+			play(audioRequest.getAudioUrl());
+		}
+		broadcastResponse(response, audioRequest);
 	}
 
 	private void play(String audioUrl) {
@@ -61,9 +61,7 @@ public class AudioComponent extends DefaultComponent {
 				line.stop();
 				line.close();
 				din.close();
-
 			}
-
 		} catch (Exception e) {
 			log.catching(getAkibotClient(), e);
 		} finally {

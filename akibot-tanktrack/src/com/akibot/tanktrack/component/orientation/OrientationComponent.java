@@ -2,6 +2,7 @@ package com.akibot.tanktrack.component.orientation;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.network.AkibotClient;
@@ -65,72 +66,76 @@ public class OrientationComponent extends DefaultComponent {
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof OrientationRequest) {
-			OrientationRequest orientationRequest = (OrientationRequest) message;
-			if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360 && orientationRequest.getPrecissionDegrees() > 0
-					&& orientationRequest.getPrecissionDegrees() < 360 && orientationRequest.getTimeoutMillis() > 0
-					&& orientationRequest.getTimeoutMillis() <= 60000) {
+			onOrientationRequest((OrientationRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
+		}
+	}
 
-				log.debug(this.getAkibotClient() + ": OrientationRequest: " + orientationRequest);
-				long startTimeMills = System.currentTimeMillis();
+	private void onOrientationRequest(OrientationRequest orientationRequest) throws FailedToSendMessageException, InterruptedException,
+			InvalidOrientationRequestException {
 
-				GyroscopeResponse gyroscopeResponse = new GyroscopeResponse();
-				int lastDirection = 0;
-				boolean easyMove = false;
+		if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360 && orientationRequest.getPrecissionDegrees() > 0
+				&& orientationRequest.getPrecissionDegrees() < 360 && orientationRequest.getTimeoutMillis() > 0
+				&& orientationRequest.getTimeoutMillis() <= 60000) {
 
-				OrientationResponse orientationResponse = new OrientationResponse();
-				orientationRequest.copySyncId(message);
+			log.debug(this.getAkibotClient() + ": OrientationRequest: " + orientationRequest);
+			long startTimeMills = System.currentTimeMillis();
 
-				while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
-					gyroscopeResponse = getGyroscopeResponse();
+			GyroscopeResponse gyroscopeResponse = new GyroscopeResponse();
+			int lastDirection = 0;
+			boolean easyMove = false;
 
-					if (isExpected(orientationRequest, gyroscopeResponse)) {
-						break;
-					} else {
-						double aXY = gyroscopeResponse.getNorthDegrreesXY();
-						double eXY = orientationRequest.getNorthDegrreesXY();
-						double rightDistance = robinUtils.rightDistance(aXY, eXY);
-						double leftDistance = robinUtils.leftDistance(aXY, eXY);
+			OrientationResponse orientationResponse = new OrientationResponse();
 
-						easyMove = easyMove || Math.min(rightDistance, leftDistance) < easyDegrees;
+			while (System.currentTimeMillis() - startTimeMills < orientationRequest.getTimeoutMillis()) {
+				gyroscopeResponse = getGyroscopeResponse();
 
-						if (leftDistance <= rightDistance && easyMove) {
-							lastDirection = 0;
-							// System.out.println("LEFT (easy)");
-							getAkibotClient().getOutgoingMessageManager().sendSyncRequest(easyLeftRequest, syncRequestTimeout);
-						} else if (rightDistance < leftDistance && easyMove) {
-							lastDirection = 0;
-							// System.out.println("RIGHT (easy)");
-							getAkibotClient().getOutgoingMessageManager().sendSyncRequest(easyRightRequest, syncRequestTimeout);
-						} else if (leftDistance <= rightDistance && lastDirection != -1) {
-							lastDirection = -1;
-							// System.out.println("LEFT");
-							getAkibotClient().getOutgoingMessageManager().sendSyncRequest(leftRequest, syncRequestTimeout);
-						} else if (rightDistance < leftDistance && lastDirection != +1) {
-							lastDirection = +1;
-							// System.out.println("RIGHT");
-							getAkibotClient().getOutgoingMessageManager().sendSyncRequest(rightRequest, syncRequestTimeout);
+				if (isExpected(orientationRequest, gyroscopeResponse)) {
+					break;
+				} else {
+					double aXY = gyroscopeResponse.getNorthDegrreesXY();
+					double eXY = orientationRequest.getNorthDegrreesXY();
+					double rightDistance = robinUtils.rightDistance(aXY, eXY);
+					double leftDistance = robinUtils.leftDistance(aXY, eXY);
 
-						}
-						Thread.sleep(stepMillis);
+					easyMove = easyMove || Math.min(rightDistance, leftDistance) < easyDegrees;
+
+					if (leftDistance <= rightDistance && easyMove) {
+						lastDirection = 0;
+						// System.out.println("LEFT (easy)");
+						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(easyLeftRequest, syncRequestTimeout);
+					} else if (rightDistance < leftDistance && easyMove) {
+						lastDirection = 0;
+						// System.out.println("RIGHT (easy)");
+						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(easyRightRequest, syncRequestTimeout);
+					} else if (leftDistance <= rightDistance && lastDirection != -1) {
+						lastDirection = -1;
+						// System.out.println("LEFT");
+						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(leftRequest, syncRequestTimeout);
+					} else if (rightDistance < leftDistance && lastDirection != +1) {
+						lastDirection = +1;
+						// System.out.println("RIGHT");
+						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(rightRequest, syncRequestTimeout);
+
 					}
-				}
-				if (!easyMove) {
-					getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
 					Thread.sleep(stepMillis);
 				}
-				gyroscopeResponse = getGyroscopeResponse();
-				boolean expected = isExpected(orientationRequest, gyroscopeResponse);
-				orientationResponse.setSuccess(expected);
-				log.debug(this.getAkibotClient() + ": Orientation: " + expected);
-
-				orientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
-				orientationResponse.copySyncId(message);
-				getAkibotClient().getOutgoingMessageManager().broadcastMessage(orientationResponse);
-
-			} else {
-				log.error(this.getAkibotClient() + ": Invalid Orientation Request");
 			}
+			if (!easyMove) {
+				getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
+				Thread.sleep(stepMillis);
+			}
+			gyroscopeResponse = getGyroscopeResponse();
+			boolean expected = isExpected(orientationRequest, gyroscopeResponse);
+			orientationResponse.setSuccess(expected);
+			log.debug(this.getAkibotClient() + ": Orientation: " + expected);
 
+			orientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
+			broadcastResponse(orientationResponse, orientationRequest);
+
+		} else {
+			throw new InvalidOrientationRequestException(orientationRequest.toString());
 		}
 	}
 

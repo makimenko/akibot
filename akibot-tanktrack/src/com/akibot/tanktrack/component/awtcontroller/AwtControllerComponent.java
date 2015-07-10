@@ -1,22 +1,24 @@
 package com.akibot.tanktrack.component.awtcontroller;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Response;
 
 public class AwtControllerComponent extends DefaultComponent {
 	AwtControllerAppl appl;
 
-	public AwtControllerComponent() {
-
-	}
-
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof Response) {
-			appl.getTextArea().append(message + "\n");
+			onResponse((Response) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
-		super.onMessageReceived(message);
+	}
+
+	private void onResponse(Response response) {
+		appl.getTextArea().append(response + "\n");
 	}
 
 	@Override

@@ -3,7 +3,9 @@ package com.akibot.tanktrack.component.distance;
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -28,14 +30,18 @@ public class DistanceMeterComponent extends DefaultComponent {
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof DistanceRequest) {
-			long startTime = System.currentTimeMillis();
-			DistanceRequest request = (DistanceRequest) message;
-			DistanceResponse response = new DistanceResponse();
-			response.setMm(lib.getDistance(triggerPin, echoPin, timeoutMicroseconds));
-			response.copySyncId(message);
-			log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			onDistanceRequest((DistanceRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
 		}
+	}
+
+	private void onDistanceRequest(DistanceRequest distanceRequest) throws FailedToSendMessageException {
+		long startTime = System.currentTimeMillis();
+		DistanceResponse response = new DistanceResponse();
+		response.setMm(lib.getDistance(triggerPin, echoPin, timeoutMicroseconds));
+		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
+		broadcastResponse(response, distanceRequest);
 	}
 
 	@Override

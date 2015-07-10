@@ -2,7 +2,9 @@ package com.akibot.tanktrack.component.gyroscope;
 
 import java.io.IOException;
 
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.pi4j.io.i2c.I2CBus;
@@ -105,44 +107,47 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GyroscopeConfigurationRequest) {
-			GyroscopeConfigurationRequest config = (GyroscopeConfigurationRequest) message;
-			offsetX = config.getOffsetX();
-			offsetY = config.getOffsetY();
-			offsetZ = config.getOffsetZ();
-			offsetDegrees = config.getOffsetDegrees();
-			log.debug("GyroscopeConfigurationRequest: offsetX=" + offsetX + ", offsetY=" + offsetY + ", offsetZ=" + offsetZ + ", offsetDegrees="
-					+ offsetDegrees);
-
+			onGyroscopeConfigurationRequest((GyroscopeConfigurationRequest) message);
 		} else if (message instanceof GyroscopeValueRequest) {
-			long startTime = System.currentTimeMillis();
-			GyroscopeResponse response = new GyroscopeResponse();
-			response.copySyncId(message);
+			onGyroscopeValueRequest((GyroscopeValueRequest) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
+		}
+	}
 
-			// GyroscopeValueRequest request = (GyroscopeValueRequest) message;
+	private void onGyroscopeConfigurationRequest(GyroscopeConfigurationRequest gyroscopeConfigurationRequest) {
+		offsetX = gyroscopeConfigurationRequest.getOffsetX();
+		offsetY = gyroscopeConfigurationRequest.getOffsetY();
+		offsetZ = gyroscopeConfigurationRequest.getOffsetZ();
+		offsetDegrees = gyroscopeConfigurationRequest.getOffsetDegrees();
+		log.debug("GyroscopeConfigurationRequest: offsetX=" + offsetX + ", offsetY=" + offsetY + ", offsetZ=" + offsetZ + ", offsetDegrees=" + offsetDegrees);
+	}
 
-			// Reading magnetometer data:
-			double x = readShort(dataOutputMSBRegisterX, hmc5883l) - offsetX;
-			double y = readShort(dataOutputMSBRegisterY, hmc5883l) - offsetY;
-			double z = readShort(dataOutputMSBRegisterZ, hmc5883l) - offsetZ;
+	private void onGyroscopeValueRequest(GyroscopeValueRequest gyroscopeValueRequest) throws IOException, FailedToSendMessageException {
+		long startTime = System.currentTimeMillis();
+		GyroscopeResponse response = new GyroscopeResponse();
 
-			// Calculating North Degrees:
-			double bearing = (Math.atan2(y, x) * RAD_TO_DEG) + 180;
-			double northDegreesXY = bearing + offsetDegrees;
+		// Reading magnetometer data:
+		double x = readShort(dataOutputMSBRegisterX, hmc5883l) - offsetX;
+		double y = readShort(dataOutputMSBRegisterY, hmc5883l) - offsetY;
+		double z = readShort(dataOutputMSBRegisterZ, hmc5883l) - offsetZ;
 
-			if (northDegreesXY > 360) {
-				northDegreesXY = northDegreesXY - 360.0;
-			}
+		// Calculating North Degrees:
+		double bearing = (Math.atan2(y, x) * RAD_TO_DEG) + 180;
+		double northDegreesXY = bearing + offsetDegrees;
 
-			// Preparing response
-			response.setX(x);
-			response.setY(y);
-			response.setZ(z);
-			response.setNorthDegrreesXY(northDegreesXY);
-
-			log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+		if (northDegreesXY > 360) {
+			northDegreesXY = northDegreesXY - 360.0;
 		}
 
+		// Preparing response
+		response.setX(x);
+		response.setY(y);
+		response.setZ(z);
+		response.setNorthDegrreesXY(northDegreesXY);
+
+		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
+		broadcastResponse(response, gyroscopeValueRequest);
 	}
 
 	private int readRawShort(int address, I2CDevice i2c) throws IOException {

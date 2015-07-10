@@ -2,6 +2,7 @@ package com.akibot.engine2.test.component;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 
@@ -19,35 +20,41 @@ public class TestComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void onMessageReceived(Message message) throws FailedToSendMessageException, InterruptedException {
-		log.trace(this.getAkibotClient() + ": onMessageReceived: " + message);
+	public void onMessageReceived(Message message) throws FailedToSendMessageException, InterruptedException, UnsupportedMessageException {
 		if (message instanceof TestRequest) {
-			TestRequest request = (TestRequest) message;
-			TestResponse response = new TestResponse();
-			response.setResult(request.getX() + 1);
-			response.copySyncId(request);
-			getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
+			onTestRequest((TestRequest) message);
 		} else if (message instanceof TestSleepRequest) {
-			TestSleepRequest testSleepRequest = (TestSleepRequest) message;
-
-			Thread.sleep(testSleepRequest.getSleepMills());
-			if (testSleepRequest.getSleepMills() <= 500) {
-				TestResponse response = new TestResponse();
-				response.copySyncId(message);
-				response.setResult((int) testSleepRequest.getSleepMills());
-				getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
-			} else {
-				TestResponse2 response = new TestResponse2();
-				response.copySyncId(message);
-				response.setResult((int) testSleepRequest.getSleepMills());
-				getAkibotClient().getOutgoingMessageManager().broadcastMessage(response);
-			}
-
+			onTestSleepRequest((TestSleepRequest) message);
 		} else if (message instanceof TestResponse) {
-			lastTestResponse = (TestResponse) message;
-			if (array != null) {
-				array[lastTestResponse.getResult() - 1] = 1;
-			}
+			onTestResponse((TestResponse) message);
+		} else {
+			throw new UnsupportedMessageException(message.toString());
+		}
+	}
+
+	private void onTestRequest(TestRequest testRequest) throws FailedToSendMessageException {
+		TestResponse response = new TestResponse();
+		response.setResult(testRequest.getX() + 1);
+		broadcastResponse(response, testRequest);
+	}
+
+	private void onTestSleepRequest(TestSleepRequest testSleepRequest) throws InterruptedException, FailedToSendMessageException {
+		Thread.sleep(testSleepRequest.getSleepMills());
+		if (testSleepRequest.getSleepMills() <= 500) {
+			TestResponse response = new TestResponse();
+			response.setResult((int) testSleepRequest.getSleepMills());
+			broadcastResponse(response, testSleepRequest);
+		} else {
+			TestResponse2 response = new TestResponse2();
+			response.setResult((int) testSleepRequest.getSleepMills());
+			broadcastResponse(response, testSleepRequest);
+		}
+	}
+
+	private void onTestResponse(TestResponse testResponse) {
+		lastTestResponse = testResponse;
+		if (array != null) {
+			array[lastTestResponse.getResult() - 1] = 1;
 		}
 	}
 
