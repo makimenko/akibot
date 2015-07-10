@@ -7,6 +7,8 @@ import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.distance.DistanceResponse;
+import com.akibot.tanktrack.component.servo.ServoResponse;
 
 public class EchoLocatorComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(EchoLocatorComponent.class);
@@ -32,7 +34,11 @@ public class EchoLocatorComponent extends DefaultComponent {
 			response.setEchoLocatorResult(result);
 
 			broadcastResponse(response, request);
-		} else {
+		} else if (message instanceof DistanceResponse) {
+			// Nothing
+		} else if (message instanceof ServoResponse) {
+			// Nothing
+		}else {
 			throw new UnsupportedMessageException(message.toString());
 		}
 	}

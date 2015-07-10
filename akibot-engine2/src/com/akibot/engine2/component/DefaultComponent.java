@@ -41,4 +41,8 @@ public class DefaultComponent implements Component {
 		broadcastMessage(response);
 	}
 
+	public Response sendSyncRequest(Request request, int timeout) throws FailedToSendMessageException {
+		return getAkibotClient().getOutgoingMessageManager().sendSyncRequest(request, timeout);
+	}
+
 }

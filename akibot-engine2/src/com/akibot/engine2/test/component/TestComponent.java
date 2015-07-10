@@ -11,10 +11,6 @@ public class TestComponent extends DefaultComponent {
 	private TestResponse lastTestResponse;
 	private int[] array;
 
-	public TestComponent() {
-
-	}
-
 	public TestResponse getLastTestResponse() {
 		return lastTestResponse;
 	}
@@ -28,7 +24,8 @@ public class TestComponent extends DefaultComponent {
 		} else if (message instanceof TestResponse) {
 			onTestResponse((TestResponse) message);
 		} else {
-			throw new UnsupportedMessageException(message.toString());
+			// throw new UnsupportedMessageException(message.toString());
+			// Nothing, because it's test component with all messages
 		}
 	}
 

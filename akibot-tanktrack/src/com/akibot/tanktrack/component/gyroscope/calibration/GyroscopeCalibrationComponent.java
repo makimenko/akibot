@@ -23,6 +23,8 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GyroscopeCalibrationRequest) {
 			onGyroscopeCalibrationRequest((GyroscopeCalibrationRequest) message);
+		} else if (message instanceof GyroscopeResponse) {
+			// Nothing
 		} else {
 			throw new UnsupportedMessageException(message.toString());
 		}

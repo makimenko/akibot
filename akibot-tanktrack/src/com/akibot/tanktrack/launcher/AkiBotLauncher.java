@@ -17,6 +17,7 @@ import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorConfig;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeRequest;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
 import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
@@ -27,6 +28,7 @@ import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
 import com.akibot.tanktrack.component.tanktrack.MotionRequest;
+import com.akibot.tanktrack.component.tanktrack.MotionResponse;
 
 public class AkiBotLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotLauncher.class);
@@ -61,16 +63,6 @@ public class AkiBotLauncher {
 		AkibotClient distance = new AkibotClient("akibot.front.distance", new DistanceMeterComponent(Constants.FRONT_DISTANCE_TRIGGER_PIN,
 				Constants.FRONT_DISTANCE_ECHO_PIN, Constants.FRONT_DISTANCE_TIMEOUT), serverAddress);
 		distance.getMyClientDescription().getTopicList().add(new DistanceRequest());
-
-		// Obstacle:
-		// AkibotClient obstacle = new AkibotClient("akibot.obstacle", new
-		// ObstacleComponent(), serverAddress);
-		// obstacle.getMyClientDescription().getTopicList().add(new
-		// ObstacleRequest());
-		// obstacle.getMyClientDescription().getTopicList().add(new
-		// GyroscopeResponse());
-		// obstacle.getMyClientDescription().getTopicList().add(new
-		// DistanceResponse());
 
 		// Servo motors
 		AkibotClient servoFrontBase = new AkibotClient("akibot.servo.front.base", new ServoComponent(Constants.FRONT_SERVO_BASE_PIN, 0, 200, 200),
@@ -131,7 +123,8 @@ public class AkiBotLauncher {
 
 		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent("akibot.tanktrack", "akibot.gyroscope"), serverAddress);
 		orientation.getMyClientDescription().getTopicList().add(new OrientationRequest());
-		orientation.getMyClientDescription().getTopicList().add(new Response());
+		orientation.getMyClientDescription().getTopicList().add(new MotionResponse());
+		orientation.getMyClientDescription().getTopicList().add(new GyroscopeResponse());
 
 		// Start all
 		tankTrack.start();

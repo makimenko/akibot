@@ -9,6 +9,7 @@ import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
+import com.akibot.tanktrack.component.tanktrack.MotionResponse;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
 
@@ -67,6 +68,10 @@ public class OrientationComponent extends DefaultComponent {
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof OrientationRequest) {
 			onOrientationRequest((OrientationRequest) message);
+		} else if (message instanceof MotionResponse) {
+			// Nothing
+		} else if (message instanceof GyroscopeResponse) {
+			// Nothing
 		} else {
 			throw new UnsupportedMessageException(message.toString());
 		}
@@ -104,26 +109,25 @@ public class OrientationComponent extends DefaultComponent {
 					if (leftDistance <= rightDistance && easyMove) {
 						lastDirection = 0;
 						// System.out.println("LEFT (easy)");
-						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(easyLeftRequest, syncRequestTimeout);
+						sendSyncRequest(easyLeftRequest, syncRequestTimeout);
 					} else if (rightDistance < leftDistance && easyMove) {
 						lastDirection = 0;
 						// System.out.println("RIGHT (easy)");
-						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(easyRightRequest, syncRequestTimeout);
+						sendSyncRequest(easyRightRequest, syncRequestTimeout);
 					} else if (leftDistance <= rightDistance && lastDirection != -1) {
 						lastDirection = -1;
 						// System.out.println("LEFT");
-						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(leftRequest, syncRequestTimeout);
+						sendSyncRequest(leftRequest, syncRequestTimeout);
 					} else if (rightDistance < leftDistance && lastDirection != +1) {
 						lastDirection = +1;
 						// System.out.println("RIGHT");
-						getAkibotClient().getOutgoingMessageManager().sendSyncRequest(rightRequest, syncRequestTimeout);
-
+						sendSyncRequest(rightRequest, syncRequestTimeout);
 					}
 					Thread.sleep(stepMillis);
 				}
 			}
 			if (!easyMove) {
-				getAkibotClient().getOutgoingMessageManager().sendSyncRequest(stopRequest, syncRequestTimeout);
+				sendSyncRequest(stopRequest, syncRequestTimeout);
 				Thread.sleep(stepMillis);
 			}
 			gyroscopeResponse = getGyroscopeResponse();
@@ -140,7 +144,7 @@ public class OrientationComponent extends DefaultComponent {
 	}
 
 	private GyroscopeResponse getGyroscopeResponse() throws FailedToSendMessageException {
-		return (GyroscopeResponse) getAkibotClient().getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, syncRequestTimeout);
+		return (GyroscopeResponse) sendSyncRequest(gyroscopeValueRequest, syncRequestTimeout);
 	}
 
 }
