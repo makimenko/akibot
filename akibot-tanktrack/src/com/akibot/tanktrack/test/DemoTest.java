@@ -27,12 +27,23 @@ import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 
 public class DemoTest {
+	private static final String VOICE = "voxforge-ru-nsh";
+	private static final String SAY1_HELLO = "Привет! Меня зовут АкиБот";
+	private static final String SAY2_CAN = "Мне один год, но я уже много что умею";
+	private static final String SAY3_MOVE = "У меня есть гусеничные ноги, и я умею ходить вперёд и назад";
+	private static final String SAY4_TURN = "Могу поворачивать в разные стороны";
+	private static final String SAY5_ECHOLOCATOR = "У меня даже есть ультросонар как у дельфинов. Только у меня их два!";
+	private static final String SAY6_WONDER = "Я уверен, вы удивлены, но это еще не все мои способности";
+	private static final String SAY7_GYROSCOPE = "Благодаря гироскопу я могу ориентироватся в пространстве";
+	private static final String SAY8_WEST = "Запад. В этой стороне нахоидся запад!";
+	private static final String SAY9_BYE1 = "Лучшее домашнее животное – это АкиБот.";
+	private static final String SAY10_BYE2 = "Я бы спас Вселенную, но уже в пижаме и собрался спать.";
+
 	private static AkibotClient testClient;
 	private final static String serverHost = "raspberrypi";
 	private final static int serverPort = 2000;
 	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 	private static final int MAX_WAIT = 20000;
-	private static final String VOICE = "voxforge-ru-nsh";
 
 	private static final StickMotionRequest forwardRequest = new StickMotionRequest(DirectionType.FORWARD);
 	private static final StickMotionRequest backRequest = new StickMotionRequest(DirectionType.BACKWARD);
@@ -59,17 +70,17 @@ public class DemoTest {
 	public void step1() throws FailedToSendMessageException, InterruptedException {
 
 		// -----------------------------------------------------------------------------------
-		say("Привет! Меня зовут АкиБот");
+		say(SAY1_HELLO);
 		Thread.sleep(1000);
 
 		// -----------------------------------------------------------------------------------
-		say("Мне один год, но я уже много что умею");
+		say(SAY2_CAN);
 		Thread.sleep(1000);
 
 		callServo("akibot.servo.front");
 
 		// -----------------------------------------------------------------------------------
-		sayAsync("У меня есть гусеничные ноги, и я умею ходить вперёд и назад");
+		sayAsync(SAY3_MOVE);
 
 		broadcast(forwardRequest);
 		Thread.sleep(2000);
@@ -78,7 +89,7 @@ public class DemoTest {
 		broadcast(stopRequest);
 
 		// -----------------------------------------------------------------------------------
-		sayAsync("Могу поворачивать в разные стороны");
+		sayAsync(SAY4_TURN);
 
 		broadcast(leftRequest);
 		Thread.sleep(1000);
@@ -90,17 +101,17 @@ public class DemoTest {
 		Thread.sleep(1000);
 
 		// -----------------------------------------------------------------------------------
-		sayAsync("У меня даже есть ультросонар как у дельфинов. Только у меня их два!");
+		sayAsync(SAY5_ECHOLOCATOR);
 
 		callEchoLocator("akibot.echolocator.front");
 		callEchoLocator("akibot.echolocator.back");
 
 		// -----------------------------------------------------------------------------------
-		say("Я уверен, вы удивлены, но это еще не все мои способности");
+		say(SAY6_WONDER);
 		Thread.sleep(1000);
 
 		// -----------------------------------------------------------------------------------
-		say("Благодаря гироскопу я могу ориентироватся в пространстве");
+		say(SAY7_GYROSCOPE);
 		Thread.sleep(1000);
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
 		messageOrientationRequest.setNorthDegrreesXY(270);
@@ -108,7 +119,7 @@ public class DemoTest {
 		messageOrientationRequest.setTimeoutMillis(10000);
 		sendSync(messageOrientationRequest, 13000);
 
-		say("Запад. В этой стороне нахоидся запад!");
+		say(SAY8_WEST);
 		broadcast(forwardRequest);
 		Thread.sleep(1000);
 		broadcast(backRequest);
@@ -116,8 +127,8 @@ public class DemoTest {
 		broadcast(stopRequest);
 
 		// -----------------------------------------------------------------------------------
-		sayAsync("Лучшее домашнее животное – это АкиБот.");
-		sayAsync("Я бы спас Вселенную, но уже в пижаме и собрался спать.");
+		sayAsync(SAY9_BYE1);
+		sayAsync(SAY10_BYE2);
 	}
 
 	private void callEchoLocator(String to) throws FailedToSendMessageException {

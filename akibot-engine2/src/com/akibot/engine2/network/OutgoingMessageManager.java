@@ -39,7 +39,7 @@ public class OutgoingMessageManager {
 					}
 				}
 				if (count == 0) {
-					log.warn(akibotClient + ": broadcastMessage: Noone interested in: " + message + " (to=" + message.getTo()
+					log.warn(akibotClient + ": broadcastMessage: Noone is interested in: " + message + " (to=" + message.getTo()
 							+ "); akibotClient.clientDescriptionList=(" + akibotClient.getClientDescriptionList() + ")");
 					if (message.getSyncId() != null && akibotClient.getSynchronizedMessageManager().getSyncId().equals(message.getSyncId())) {
 						throw new NooneInterestedException();
