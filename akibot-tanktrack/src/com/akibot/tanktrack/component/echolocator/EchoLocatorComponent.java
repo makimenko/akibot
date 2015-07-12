@@ -38,7 +38,7 @@ public class EchoLocatorComponent extends DefaultComponent {
 			// Nothing
 		} else if (message instanceof ServoResponse) {
 			// Nothing
-		}else {
+		} else {
 			throw new UnsupportedMessageException(message.toString());
 		}
 	}

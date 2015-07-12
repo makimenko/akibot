@@ -38,9 +38,12 @@ public class Constants {
 	// 2015.07.01: 368.5, 54.5, -832.0
 	// 533.0, -208.0, -710.5
 	// (488.0, -84.0, -891.5)
-	public static final double GYROSCOPE_OFFSET_X = 488.0;
-	public static final double GYROSCOPE_OFFSET_Y = -84.0;
-	public static final double GYROSCOPE_OFFSET_Z = -891.5;
+	//
+	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse: new offset = (16383.5, 16382.5, 21300.0)
+	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse: new offset = (343.5, 16382.5, 20889.5)
+	public static final double GYROSCOPE_OFFSET_X = 408.0;
+	public static final double GYROSCOPE_OFFSET_Y = -330.0;
+	public static final double GYROSCOPE_OFFSET_Z = -1095.5;
 	public static final double GYROSCOPE_OFFSET_DEGREES = 180;
 
 	public static final int ECHOLOCATOR_FRONT_SLEEP_BEFORE_DISNTANCE = 50000;

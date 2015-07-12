@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultServerComponent;
 import com.akibot.engine2.logger.AkiLogger;
-import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;

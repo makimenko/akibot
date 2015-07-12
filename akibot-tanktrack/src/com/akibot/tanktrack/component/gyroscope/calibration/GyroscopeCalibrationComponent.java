@@ -48,7 +48,7 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 		resetStats();
 
 		while (System.currentTimeMillis() - startTime < gyroscopeCalibrationRequest.getDurationMilliseconds()) {
-			GyroscopeResponse gyroscopeResponse = (GyroscopeResponse) getAkibotClient().getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest,
+			GyroscopeResponse gyroscopeResponse = (GyroscopeResponse) sendSyncRequest(gyroscopeValueRequest,
 					(int) gyroscopeCalibrationRequest.getDurationMilliseconds());
 			updateStats(gyroscopeResponse.getX(), gyroscopeResponse.getY(), gyroscopeResponse.getZ());
 			Thread.sleep(gyroscopeCalibrationRequest.getSleepMilliseconds());
@@ -72,12 +72,12 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 	}
 
 	private void resetStats() {
-		minX = 10000;
-		minY = 10000;
-		minZ = 10000;
-		maxX = -10000;
-		maxY = -10000;
-		maxZ = -10000;
+		minX = 100000;
+		minY = 100000;
+		minZ = 100000;
+		maxX = -100000;
+		maxY = -100000;
+		maxZ = -100000;
 	}
 
 	private void updateStats(double x, double y, double z) {

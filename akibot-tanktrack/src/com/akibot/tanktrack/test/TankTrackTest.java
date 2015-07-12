@@ -227,7 +227,6 @@ public class TankTrackTest {
 		double expectedMax = 350;
 		boolean between = false;
 		double previousValue = -1;
-		double minDiff = 0;
 		double maxDiff = 0;
 
 		long startTime = System.currentTimeMillis();
