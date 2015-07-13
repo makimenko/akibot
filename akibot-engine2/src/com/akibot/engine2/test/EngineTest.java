@@ -10,6 +10,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.ConfigurationComponent;
+import com.akibot.engine2.component.configuration.GetConfigurationRequest;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.component.configuration.PutConfigurationRequest;
+import com.akibot.engine2.component.configuration.PutConfigurationResponse;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.NooneInterestedException;
 import com.akibot.engine2.network.AkibotClient;
@@ -39,6 +44,8 @@ public class EngineTest {
 		clientA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
 		clientA.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientA.getMyClientDescription().getTopicList().add(new TestResponse2());
+		clientA.getMyClientDescription().getTopicList().add(new GetConfigurationResponse());
+		clientA.getMyClientDescription().getTopicList().add(new PutConfigurationResponse());
 		clientA.start();
 
 		clientB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
@@ -212,4 +219,59 @@ public class EngineTest {
 
 		assertEquals("check", 3, response.getResult());
 	}
+
+	@Test
+	public void testConfiguration() throws Exception {
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent(), serverAddress);
+		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
+		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
+		configClient.start();
+		Thread.sleep(500);
+
+		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
+		String name = "test1";
+		putConfigurationRequest.setName(name);
+		TestRequest testRequest = new TestRequest();
+		testRequest.setX(777);
+		putConfigurationRequest.setValue(testRequest);
+
+		PutConfigurationResponse putConfigurationResponse = (PutConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
+				putConfigurationRequest, 2000);
+
+		GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest(name);
+		GetConfigurationResponse getConfigurationResponse = (GetConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
+				getConfigurationRequest, 2000);
+
+		TestRequest resultTestRequest = (TestRequest) getConfigurationResponse.getValue();
+
+		assertEquals("Compare properties", 777, resultTestRequest.getX());
+
+	}
+
+	@Test
+	public void testConfigurationString() throws Exception {
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent(), serverAddress);
+		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
+		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
+		configClient.start();
+		Thread.sleep(500);
+
+		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
+		String name = "test2/x*&81_ `~ ";
+		putConfigurationRequest.setName(name);
+		putConfigurationRequest.setValue("A");
+
+		PutConfigurationResponse putConfigurationResponse = (PutConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
+				putConfigurationRequest, 2000);
+
+		GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest(name);
+		GetConfigurationResponse getConfigurationResponse = (GetConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
+				getConfigurationRequest, 2000);
+
+		String value = (String) getConfigurationResponse.getValue();
+
+		assertEquals("Compare properties", "A", value);
+
+	}
+
 }
