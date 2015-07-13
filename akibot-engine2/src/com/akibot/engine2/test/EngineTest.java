@@ -258,6 +258,7 @@ public class EngineTest {
 
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
 		String name = "test2&78234**_21/|:\\../../";
+		
 		putConfigurationRequest.setName(name);
 		putConfigurationRequest.setValue("A");
 
