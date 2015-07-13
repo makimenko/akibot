@@ -257,7 +257,7 @@ public class EngineTest {
 		Thread.sleep(500);
 
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
-		String name = "test2/x*&81_ `~ ";
+		String name = "test2";
 		putConfigurationRequest.setName(name);
 		putConfigurationRequest.setValue("A");
 
