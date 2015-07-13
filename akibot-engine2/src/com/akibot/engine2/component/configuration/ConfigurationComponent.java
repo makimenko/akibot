@@ -15,10 +15,14 @@ import com.akibot.engine2.message.Message;
 
 public class ConfigurationComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(ConfigurationComponent.class);
-	private final String DIR_NAME = ".";
+	private String dir = ".";
 	private final String FILE_NAME_REGEX_EXCLUDE = "[^\\w\\.\\-+]";
 	private final String FILE_EXTENSION = ".akiconfig";
-	
+
+	public ConfigurationComponent(String dir) {
+		this.dir = dir;
+	}
+
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GetConfigurationRequest) {
@@ -63,6 +67,6 @@ public class ConfigurationComponent extends DefaultComponent {
 	}
 
 	private String nameToFileName(String name) {
-		return DIR_NAME + "/" + name.replaceAll(FILE_NAME_REGEX_EXCLUDE, "_") + FILE_EXTENSION;
+		return dir + "/" + name.replaceAll(FILE_NAME_REGEX_EXCLUDE, "_") + FILE_EXTENSION;
 	}
 }

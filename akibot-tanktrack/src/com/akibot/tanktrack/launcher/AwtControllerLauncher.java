@@ -15,8 +15,8 @@ public class AwtControllerLauncher {
 
 	public static void main(String[] args) throws Exception {
 		// AAA
-		String serverHost = "raspberrypi";
-		int serverPort = 2000;
+		String serverHost = Constants.SERVER_HOST;
+		int serverPort = Constants.SERVER_PORT;
 
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 

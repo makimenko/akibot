@@ -71,7 +71,7 @@ public class AwtControllerAppl {
 		Message messageRight = new StickMotionRequest(DirectionType.RIGHT);
 		Message messageDistanceRequest = new DistanceRequest();
 		Message messageGyroscopeValueRequest = new GyroscopeValueRequest();
-		Message messageGyroscopeCalibrationRequest = new GyroscopeCalibrationRequest(30000, 50, true, false);
+		Message messageGyroscopeCalibrationRequest = new GyroscopeCalibrationRequest(30000, 50, false);
 		Message messageObstacleRequest = new ObstacleRequest();
 
 		OrientationRequest messageOrientationRequest = new OrientationRequest();

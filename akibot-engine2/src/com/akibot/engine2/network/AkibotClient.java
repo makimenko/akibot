@@ -170,6 +170,8 @@ public class AkibotClient extends Thread {
 			synchronizedMessageManager.start();
 			refreshClientDescriptionList();
 			log.debug(this + ": started.");
+			component.loadConfiguration();
+			log.debug(this + ": configured.");
 		} catch (Exception e) {
 			log.catching(this, e);
 			log.error(this + ": Failed to start");

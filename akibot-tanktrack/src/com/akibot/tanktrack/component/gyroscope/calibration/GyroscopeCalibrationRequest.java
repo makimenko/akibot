@@ -7,17 +7,15 @@ public class GyroscopeCalibrationRequest extends Request {
 
 	private long durationMilliseconds;
 	private long sleepMilliseconds;
-	private boolean resetOffset;
 	private boolean updateConfiguration;
 
 	public GyroscopeCalibrationRequest() {
-		this(10000, 100, true, true);
+		this(10000, 100, true);
 	}
 
-	public GyroscopeCalibrationRequest(long durationMilliseconds, long sleepMilliseconds, boolean resetOffset, boolean updateConfiguration) {
+	public GyroscopeCalibrationRequest(long durationMilliseconds, long sleepMilliseconds, boolean updateConfiguration) {
 		this.durationMilliseconds = durationMilliseconds;
 		this.sleepMilliseconds = sleepMilliseconds;
-		this.resetOffset = resetOffset;
 		this.updateConfiguration = updateConfiguration;
 	}
 
@@ -35,14 +33,6 @@ public class GyroscopeCalibrationRequest extends Request {
 
 	public void setDurationMilliseconds(long durationMilliseconds) {
 		this.durationMilliseconds = durationMilliseconds;
-	}
-
-	public boolean isResetOffset() {
-		return resetOffset;
-	}
-
-	public void setResetOffset(boolean resetOffset) {
-		this.resetOffset = resetOffset;
 	}
 
 	public boolean isUpdateConfiguration() {

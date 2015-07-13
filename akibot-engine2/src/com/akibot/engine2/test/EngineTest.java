@@ -222,7 +222,7 @@ public class EngineTest {
 
 	@Test
 	public void testConfiguration() throws Exception {
-		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent(), serverAddress);
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), serverAddress);
 		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
 		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
 		configClient.start();
@@ -250,7 +250,7 @@ public class EngineTest {
 
 	@Test
 	public void testConfigurationString() throws Exception {
-		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent(), serverAddress);
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), serverAddress);
 		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
 		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
 		configClient.start();
@@ -258,7 +258,7 @@ public class EngineTest {
 
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
 		String name = "test2&78234**_21/|:\\../../";
-		
+
 		putConfigurationRequest.setName(name);
 		putConfigurationRequest.setValue("A");
 

@@ -29,22 +29,12 @@ public class Constants {
 
 	public static final int GYROSCOPE_BUS_NUMBER = I2CBus.BUS_1;
 	public static final int GYROSCOPE_DEVICE_ADDRESS = 0x1e;
-	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse:
-	// new offset = (709.0, 220.0, -872.0)
-	// (557.0, 294.5, -801.5)
-	// 729.5, 111.5, -1415.0
-	// (345.5, 279.5, -1483.0)
-	// 522.0, 51.5, -1010.0
-	// 2015.07.01: 368.5, 54.5, -832.0
-	// 533.0, -208.0, -710.5
+
 	// (488.0, -84.0, -891.5)
-	//
-	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse: new offset = (16383.5, 16382.5, 21300.0)
-	// com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse: new offset = (343.5, 16382.5, 20889.5)
-	public static final double GYROSCOPE_OFFSET_X = 408.0;
-	public static final double GYROSCOPE_OFFSET_Y = -330.0;
-	public static final double GYROSCOPE_OFFSET_Z = -1095.5;
-	public static final double GYROSCOPE_OFFSET_DEGREES = 180;
+	// public static final double GYROSCOPE_OFFSET_X = 408.0;
+	// public static final double GYROSCOPE_OFFSET_Y = -330.0;
+	// public static final double GYROSCOPE_OFFSET_Z = -1095.5;
+	// public static final double GYROSCOPE_OFFSET_DEGREES = 180;
 
 	public static final int ECHOLOCATOR_FRONT_SLEEP_BEFORE_DISNTANCE = 50000;
 	public static final int ECHOLOCATOR_FRONT_DISTANCE_TRIGGER_PIN = FRONT_DISTANCE_TRIGGER_PIN;
@@ -69,5 +59,8 @@ public class Constants {
 	public static final String SPEECH_HOST = "192.168.0.106";
 	public static final int SPEECH_PORT = 59125;
 	public static final String SPEECH_VOICE = "cmu-slt-hsmm";
+
+	public static final String SERVER_HOST = "raspberrypi";
+	public static final int SERVER_PORT = 2000;
 
 }

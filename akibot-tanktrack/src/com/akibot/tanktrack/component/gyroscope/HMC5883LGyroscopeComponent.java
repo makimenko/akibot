@@ -2,11 +2,15 @@ package com.akibot.tanktrack.component.gyroscope;
 
 import java.io.IOException;
 
+import com.akibot.engine2.component.configuration.GetConfigurationRequest;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
@@ -24,10 +28,7 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 
 	private int busNumber;
 	private int deviceAddress;
-	private double offsetDegrees;
-	private double offsetX;
-	private double offsetY;
-	private double offsetZ;
+	private GyroscopeConfiguration gyroscopeConfiguration;
 	private final double RAD_TO_DEG = 57.295779513082320876798154814105f;
 
 	// HMC5883L Register Addresses:
@@ -57,16 +58,12 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	private final byte continuous_measurement_mode = 0b00;
 	private final byte single_measurement_mode = 0b01;
 	private final byte idle_mode = 0b11;
+	private RoundRobinUtils roundRobinUtils;
 
-	public HMC5883LGyroscopeComponent(int busNumber, int deviceAddress, double offsetX, double offsetY, double offsetZ, double offsetDegrees)
-			throws IOException, InterruptedException {
-		this.offsetX = offsetX;
-		this.offsetY = offsetY;
-		this.offsetZ = offsetZ;
-		this.offsetDegrees = offsetDegrees;
+	public HMC5883LGyroscopeComponent(int busNumber, int deviceAddress) throws IOException, InterruptedException {
 		this.busNumber = busNumber;
 		this.deviceAddress = deviceAddress;
-
+		this.roundRobinUtils = new RoundRobinUtils(360);
 	}
 
 	private void selfTest(byte gain, byte cra) throws IOException, InterruptedException {
@@ -116,11 +113,8 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	}
 
 	private void onGyroscopeConfigurationRequest(GyroscopeConfigurationRequest gyroscopeConfigurationRequest) {
-		offsetX = gyroscopeConfigurationRequest.getOffsetX();
-		offsetY = gyroscopeConfigurationRequest.getOffsetY();
-		offsetZ = gyroscopeConfigurationRequest.getOffsetZ();
-		offsetDegrees = gyroscopeConfigurationRequest.getOffsetDegrees();
-		log.debug("GyroscopeConfigurationRequest: offsetX=" + offsetX + ", offsetY=" + offsetY + ", offsetZ=" + offsetZ + ", offsetDegrees=" + offsetDegrees);
+		gyroscopeConfiguration = gyroscopeConfigurationRequest.getGyroscopeConfiguration();
+		log.debug("GyroscopeConfigurationRequest: " + gyroscopeConfiguration);
 	}
 
 	private void onGyroscopeValueRequest(GyroscopeValueRequest gyroscopeValueRequest) throws IOException, FailedToSendMessageException {
@@ -128,17 +122,19 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 		GyroscopeResponse response = new GyroscopeResponse();
 
 		// Reading magnetometer data:
-		double x = readShort(dataOutputMSBRegisterX, hmc5883l) - offsetX;
-		double y = readShort(dataOutputMSBRegisterY, hmc5883l) - offsetY;
-		double z = readShort(dataOutputMSBRegisterZ, hmc5883l) - offsetZ;
+		double x = readShort(dataOutputMSBRegisterX, hmc5883l);
+		double y = readShort(dataOutputMSBRegisterY, hmc5883l);
+		double z = readShort(dataOutputMSBRegisterZ, hmc5883l);
+
+		if (!gyroscopeValueRequest.isIgnoreOffset()) {
+			x -= gyroscopeConfiguration.getOffsetX();
+			y -= gyroscopeConfiguration.getOffsetY();
+			z -= gyroscopeConfiguration.getOffsetZ();
+		}
 
 		// Calculating North Degrees:
 		double bearing = (Math.atan2(y, x) * RAD_TO_DEG) + 180;
-		double northDegreesXY = bearing + offsetDegrees;
-
-		if (northDegreesXY > 360) {
-			northDegreesXY = northDegreesXY - 360.0;
-		}
+		double northDegreesXY = roundRobinUtils.add(bearing, gyroscopeConfiguration.getOffsetDegrees());
 
 		// Preparing response
 		response.setX(x);
@@ -166,9 +162,23 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 	}
 
 	@Override
+	public void loadConfiguration() throws FailedToConfigureException {
+		try {
+			Thread.sleep(500);
+			GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest();
+			getConfigurationRequest.setName(getAkibotClient().getName() + "-gyroscopeConfiguration");
+			GetConfigurationResponse getConfigurationResponse = (GetConfigurationResponse) sendSyncRequest(getConfigurationRequest, 2000);
+			this.gyroscopeConfiguration = (GyroscopeConfiguration) getConfigurationResponse.getValue();
+		} catch (Exception e) {
+			throw new FailedToConfigureException(e);
+		}
+	}
+
+	@Override
 	public void start() throws FailedToStartException {
 		try {
 			log.debug(this.getAkibotClient() + ": Initializing HMC5883LGyroscopeComponent");
+
 			I2CBus bus = I2CFactory.getInstance(busNumber);
 			hmc5883l = bus.getDevice(deviceAddress);
 

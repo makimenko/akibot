@@ -1,5 +1,6 @@
 package com.akibot.engine2.component;
 
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.logger.AkiLogger;
@@ -29,6 +30,11 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void start() throws FailedToStartException {
+
+	}
+
+	@Override
+	public void loadConfiguration() throws FailedToConfigureException {
 
 	}
 

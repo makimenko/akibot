@@ -3,6 +3,10 @@ package com.akibot.tanktrack.launcher;
 import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultServerComponent;
+import com.akibot.engine2.component.configuration.ConfigurationComponent;
+import com.akibot.engine2.component.configuration.GetConfigurationRequest;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.component.configuration.PutConfigurationRequest;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.test.component.TestComponent;
@@ -33,14 +37,19 @@ public class AkiBotLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotLauncher.class);
 
 	public static void main(String[] args) throws Exception {
-		String serverHost = "raspberrypi";
-		int serverPort = 2000;
+		String serverHost = Constants.SERVER_HOST;
+		int serverPort = Constants.SERVER_PORT;
 
 		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
 		// Server:
 		AkibotClient server = new AkibotClient("akibot.server", new DefaultServerComponent(), serverPort);
 		server.start();
+
+		// ConfigurationComponent:
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("."), serverAddress);
+		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
+		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
 
 		// TankTrack:
 		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
@@ -49,9 +58,9 @@ public class AkiBotLauncher {
 
 		// Gyroscope:
 		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER,
-				Constants.GYROSCOPE_DEVICE_ADDRESS, Constants.GYROSCOPE_OFFSET_X, Constants.GYROSCOPE_OFFSET_Y, Constants.GYROSCOPE_OFFSET_Z,
-				Constants.GYROSCOPE_OFFSET_DEGREES), serverAddress);
+				Constants.GYROSCOPE_DEVICE_ADDRESS), serverAddress);
 		gyroscope.getMyClientDescription().getTopicList().add(new GyroscopeRequest());
+		gyroscope.getMyClientDescription().getTopicList().add(new GetConfigurationResponse());
 
 		// SpeechSynthesis:
 		AkibotClient speechSynthesisClient = new AkibotClient("akibot.speech", new SpeechSynthesisComponent(Constants.SPEECH_HOST, Constants.SPEECH_PORT,
@@ -126,6 +135,8 @@ public class AkiBotLauncher {
 		orientation.getMyClientDescription().getTopicList().add(new GyroscopeResponse());
 
 		// Start all
+		configClient.start();
+		Thread.sleep(1000);
 		tankTrack.start();
 		gyroscope.start();
 		speechSynthesisClient.start();

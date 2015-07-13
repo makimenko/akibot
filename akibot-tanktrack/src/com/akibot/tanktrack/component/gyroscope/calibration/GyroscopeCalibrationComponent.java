@@ -5,6 +5,7 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeConfiguration;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeConfigurationRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
@@ -34,15 +35,8 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 			InterruptedException {
 		GyroscopeCalibrationResponse response = new GyroscopeCalibrationResponse();
 
-		if (gyroscopeCalibrationRequest.isResetOffset()) {
-			GyroscopeConfigurationRequest gyroscopeConfigurationRequest = new GyroscopeConfigurationRequest();
-			gyroscopeConfigurationRequest.setOffsetX(0);
-			gyroscopeConfigurationRequest.setOffsetY(0);
-			gyroscopeConfigurationRequest.setOffsetZ(0);
-			broadcastMessage(gyroscopeConfigurationRequest);
-		}
-
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
+		gyroscopeValueRequest.setIgnoreOffset(true); // real values needed
 
 		long startTime = System.currentTimeMillis();
 		resetStats();
@@ -63,9 +57,11 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 
 		if (gyroscopeCalibrationRequest.isUpdateConfiguration()) {
 			GyroscopeConfigurationRequest gyroscopeConfigurationRequest = new GyroscopeConfigurationRequest();
-			gyroscopeConfigurationRequest.setOffsetX(offsetX);
-			gyroscopeConfigurationRequest.setOffsetY(offsetY);
-			gyroscopeConfigurationRequest.setOffsetZ(offsetZ);
+			GyroscopeConfiguration gyroscopeConfiguration = new GyroscopeConfiguration();
+			gyroscopeConfiguration.setOffsetX(offsetX);
+			gyroscopeConfiguration.setOffsetY(offsetY);
+			gyroscopeConfiguration.setOffsetZ(offsetZ);
+			gyroscopeConfigurationRequest.setGyroscopeConfiguration(gyroscopeConfiguration);
 			broadcastMessage(gyroscopeConfigurationRequest);
 		}
 		broadcastResponse(response, gyroscopeCalibrationRequest);
