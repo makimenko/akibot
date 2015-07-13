@@ -19,6 +19,7 @@ public class ConfigurationComponent extends DefaultComponent {
 	private final String FILE_NAME_REGEX_EXCLUDE = "[^\\w\\.\\-+]";
 	private final String FILE_EXTENSION = ".akiconfig";
 
+	
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GetConfigurationRequest) {
