@@ -159,6 +159,9 @@ public class AkibotClient extends Thread {
 		this.synchronizedMessageManager = synchronizedMessageManager;
 	}
 
+	/**
+	 * Start AkiBotClient includes start of Thread, Component, Messaging threads, refreshing client list and loading of configuration
+	 */
 	@Override
 	public void start() {
 		try {
@@ -166,7 +169,7 @@ public class AkibotClient extends Thread {
 
 			// Start Threads:
 			super.start();
-			component.start();
+			component.startComponent();
 			incommingMessageManager.start();
 			outgoingMessageManager.start();
 			synchronizedMessageManager.start();

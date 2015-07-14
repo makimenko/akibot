@@ -12,7 +12,7 @@ import com.akibot.engine2.component.configuration.PutConfigurationResponse;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.tanktrack.component.gyroscope.GyroscopeConfiguration;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeOffsetConfiguration;
 
 public class LoadConfiguration {
 	static final AkiLogger log = AkiLogger.create(LoadConfiguration.class);
@@ -43,13 +43,15 @@ public class LoadConfiguration {
 	public static void main(String[] args) throws Exception {
 		System.out.println("Initializing...");
 		LoadConfiguration loadConfiguration = new LoadConfiguration();
+
 		System.out.println("Upload default configuration...");
 		loadConfiguration.setGyroscopeConfiguration();
+
 		System.out.println("Done.");
 	}
 
 	private void setGyroscopeConfiguration() throws FailedToSendMessageException {
-		GyroscopeConfiguration gyroscopeConfiguration = new GyroscopeConfiguration();
+		GyroscopeOffsetConfiguration gyroscopeConfiguration = new GyroscopeOffsetConfiguration();
 		gyroscopeConfiguration.setOffsetDegrees(180);
 		gyroscopeConfiguration.setOffsetX(408.0);
 		gyroscopeConfiguration.setOffsetY(-330.0);
@@ -59,7 +61,6 @@ public class LoadConfiguration {
 		putConfigurationRequest.setName("akibot.gyroscope-gyroscopeConfiguration");
 		putConfigurationRequest.setValue(gyroscopeConfiguration);
 		client.getOutgoingMessageManager().broadcastMessage(putConfigurationRequest);
-
 	}
 
 }

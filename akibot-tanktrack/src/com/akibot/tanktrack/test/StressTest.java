@@ -21,12 +21,13 @@ import com.akibot.engine2.network.ClientDescriptionUtils;
 import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
+import com.akibot.tanktrack.launcher.Constants;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StressTest {
 	private static AkibotClient testClient;
-	private final static String serverHost = "raspberrypi";
-	private final static int serverPort = 2000;
+	private final static String serverHost = Constants.SERVER_HOST;
+	private final static int serverPort = Constants.SERVER_PORT;
 	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 
 	@BeforeClass

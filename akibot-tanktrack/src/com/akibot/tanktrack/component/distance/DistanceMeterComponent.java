@@ -12,19 +12,13 @@ import com.akibot.engine2.message.Message;
 public class DistanceMeterComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(DistanceMeterComponent.class);
 	private AkibotJniLibrary lib;
-	private int triggerPin;
-	private int echoPin;
-	private int timeoutMicroseconds;
+	private DistanceMeterConfiguration distanceMeterConfiguration;
 
 	public DistanceMeterComponent(int triggerPin, int echoPin, int timeoutMicroseconds) {
-
-		this.triggerPin = triggerPin;
-		this.echoPin = echoPin;
-		this.timeoutMicroseconds = timeoutMicroseconds;
-	}
-
-	public DistanceMeterComponent() throws Exception {
-		throw new Exception("Unimplemented constructor!");
+		this.distanceMeterConfiguration = new DistanceMeterConfiguration();
+		distanceMeterConfiguration.setTriggerPin(triggerPin);
+		distanceMeterConfiguration.setEchoPin(echoPin);
+		distanceMeterConfiguration.setTimeoutMicroseconds(timeoutMicroseconds);
 	}
 
 	@Override
@@ -44,13 +38,14 @@ public class DistanceMeterComponent extends DefaultComponent {
 	private void onDistanceRequest(DistanceRequest distanceRequest) throws FailedToSendMessageException {
 		long startTime = System.currentTimeMillis();
 		DistanceResponse response = new DistanceResponse();
-		response.setMm(lib.getDistance(triggerPin, echoPin, timeoutMicroseconds));
+		response.setMm(lib.getDistance(distanceMeterConfiguration.getTriggerPin(), distanceMeterConfiguration.getEchoPin(),
+				distanceMeterConfiguration.getTimeoutMicroseconds()));
 		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 		broadcastResponse(response, distanceRequest);
 	}
 
 	@Override
-	public void start() throws FailedToStartException {
+	public void startComponent() throws FailedToStartException {
 		try {
 			this.lib = new AkibotJniLibrary();
 			this.lib.initialize();

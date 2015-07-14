@@ -11,12 +11,12 @@ import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.tanktrack.component.audio.AudioComponent;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;
-import com.akibot.tanktrack.component.echolocator.EchoLocatorConfig;
-import com.akibot.tanktrack.component.gyroscope.HMC5883LGyroscopeComponent;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorConfiguration;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeComponent;
 import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
-import com.akibot.tanktrack.component.tanktrack.DD1TankTrackComponent;
+import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
 
 public class AkiBotLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotLauncher.class);
@@ -35,12 +35,12 @@ public class AkiBotLauncher {
 		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("."), serverAddress);
 
 		// TankTrack:
-		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new DD1TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
+		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
 				Constants.TANK_TRACK_RIGHT_SPEED, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB, Constants.TANK_TRACK_LEFT_SPEED), serverAddress);
 
 		// Gyroscope:
-		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new HMC5883LGyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER,
-				Constants.GYROSCOPE_DEVICE_ADDRESS), serverAddress);
+		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope",
+				new GyroscopeComponent(Constants.GYROSCOPE_BUS_NUMBER, Constants.GYROSCOPE_DEVICE_ADDRESS), serverAddress);
 
 		// SpeechSynthesis:
 		AkibotClient speechSynthesisClient = new AkibotClient("akibot.speech", new SpeechSynthesisComponent(Constants.SPEECH_HOST, Constants.SPEECH_PORT,
@@ -67,7 +67,7 @@ public class AkiBotLauncher {
 		AkibotClient audioComponent = new AkibotClient("akibot.audio", new AudioComponent(), serverAddress);
 
 		// EchoLocatorFront:
-		EchoLocatorConfig echoLocatorFrontConfig = new EchoLocatorConfig();
+		EchoLocatorConfiguration echoLocatorFrontConfig = new EchoLocatorConfiguration();
 		echoLocatorFrontConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_FRONT_DISTANCE_TRIGGER_PIN);
 		echoLocatorFrontConfig.setDistanceEchoPin(Constants.ECHOLOCATOR_FRONT_DISTANCE_ECHO_PIN);
 		echoLocatorFrontConfig.setDistanceTimeout(Constants.ECHOLOCATOR_FRONT_DISTANCE_TIMEOUT);
@@ -82,7 +82,7 @@ public class AkiBotLauncher {
 		AkibotClient echoLocatorFront = new AkibotClient("akibot.echolocator.front", new EchoLocatorComponent(echoLocatorFrontConfig), serverAddress);
 
 		// EchoLocatorFront:
-		EchoLocatorConfig echoLocatorBackConfig = new EchoLocatorConfig();
+		EchoLocatorConfiguration echoLocatorBackConfig = new EchoLocatorConfiguration();
 		echoLocatorBackConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_BACK_DISTANCE_TRIGGER_PIN);
 		echoLocatorBackConfig.setDistanceEchoPin(Constants.ECHOLOCATOR_BACK_DISTANCE_ECHO_PIN);
 		echoLocatorBackConfig.setDistanceTimeout(Constants.ECHOLOCATOR_BACK_DISTANCE_TIMEOUT);

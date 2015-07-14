@@ -5,6 +5,9 @@ import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CBus;
 
 public class Constants {
+	public static final String SERVER_HOST = "raspberrypi";
+	public static final int SERVER_PORT = 2000;
+
 	public static final int FRONT_SERVO_BASE_PIN = 0;
 	public static final int FRONT_SERVO_HEAD_PIN = 7;
 
@@ -59,8 +62,4 @@ public class Constants {
 	public static final String SPEECH_HOST = "192.168.0.106";
 	public static final int SPEECH_PORT = 59125;
 	public static final String SPEECH_VOICE = "cmu-slt-hsmm";
-
-	public static final String SERVER_HOST = "raspberrypi";
-	public static final int SERVER_PORT = 2000;
-
 }

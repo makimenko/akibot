@@ -49,7 +49,7 @@ public class ServoComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() throws FailedToStartException {
+	public void startComponent() throws FailedToStartException {
 		try {
 			this.lib = new AkibotJniLibrary();
 			this.lib.initialize();

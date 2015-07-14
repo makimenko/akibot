@@ -13,9 +13,9 @@ import com.akibot.tanktrack.component.servo.ServoResponse;
 public class EchoLocatorComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(EchoLocatorComponent.class);
 	private AkibotJniLibrary lib;
-	private EchoLocatorConfig echoLocatorConfig;
+	private EchoLocatorConfiguration echoLocatorConfig;
 
-	public EchoLocatorComponent(EchoLocatorConfig echoLocatorConfig) {
+	public EchoLocatorComponent(EchoLocatorConfiguration echoLocatorConfig) {
 		this.echoLocatorConfig = echoLocatorConfig;
 	}
 
@@ -51,7 +51,7 @@ public class EchoLocatorComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() throws FailedToStartException {
+	public void startComponent() throws FailedToStartException {
 		try {
 			this.lib = new AkibotJniLibrary();
 		} catch (Exception e) {

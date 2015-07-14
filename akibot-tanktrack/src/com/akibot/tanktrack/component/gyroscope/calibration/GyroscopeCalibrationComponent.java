@@ -5,8 +5,8 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
-import com.akibot.tanktrack.component.gyroscope.GyroscopeConfiguration;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeConfigurationRequest;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeOffsetConfiguration;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 
@@ -63,11 +63,11 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 
 		if (gyroscopeCalibrationRequest.isUpdateConfiguration()) {
 			GyroscopeConfigurationRequest gyroscopeConfigurationRequest = new GyroscopeConfigurationRequest();
-			GyroscopeConfiguration gyroscopeConfiguration = new GyroscopeConfiguration();
+			GyroscopeOffsetConfiguration gyroscopeConfiguration = new GyroscopeOffsetConfiguration();
 			gyroscopeConfiguration.setOffsetX(offsetX);
 			gyroscopeConfiguration.setOffsetY(offsetY);
 			gyroscopeConfiguration.setOffsetZ(offsetZ);
-			gyroscopeConfigurationRequest.setGyroscopeConfiguration(gyroscopeConfiguration);
+			gyroscopeConfigurationRequest.setGyroscopeOffsetConfiguration(gyroscopeConfiguration);
 			broadcastMessage(gyroscopeConfigurationRequest);
 		}
 		broadcastResponse(response, gyroscopeCalibrationRequest);

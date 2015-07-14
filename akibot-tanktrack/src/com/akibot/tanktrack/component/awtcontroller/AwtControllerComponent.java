@@ -22,7 +22,7 @@ public class AwtControllerComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() {
+	public void startComponent() {
 		this.appl = new AwtControllerAppl(getAkibotClient());
 		appl.start();
 	}

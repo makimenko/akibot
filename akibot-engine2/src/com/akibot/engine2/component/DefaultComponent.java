@@ -29,7 +29,7 @@ public class DefaultComponent implements Component {
 	}
 
 	@Override
-	public void start() throws FailedToStartException {
+	public void startComponent() throws FailedToStartException {
 
 	}
 

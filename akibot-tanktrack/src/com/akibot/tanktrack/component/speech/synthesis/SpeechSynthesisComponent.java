@@ -72,7 +72,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void start() throws FailedToStartException {
+	public void startComponent() throws FailedToStartException {
 		try {
 			marytts = new RemoteMaryInterface(maryttsHost, maryttsPort);
 			marytts.setVoice(marytssDefaultVoice);

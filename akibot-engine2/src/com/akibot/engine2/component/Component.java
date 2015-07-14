@@ -11,7 +11,7 @@ public interface Component {
 
 	public void setAkibotClient(AkibotClient akibotClient);
 
-	public void start() throws FailedToStartException;
+	public void startComponent() throws FailedToStartException;
 
 	/**
 	 * Define Message types in which Component is interested (update AkibotClient topic list)

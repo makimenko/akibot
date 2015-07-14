@@ -2,7 +2,7 @@ package com.akibot.tanktrack.component.gyroscope;
 
 import java.io.Serializable;
 
-public class GyroscopeConfiguration implements Serializable {
+public class GyroscopeOffsetConfiguration implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private double offsetDegrees;
 	private double offsetX;

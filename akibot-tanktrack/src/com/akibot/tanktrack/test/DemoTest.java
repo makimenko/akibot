@@ -25,6 +25,7 @@ import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
+import com.akibot.tanktrack.launcher.Constants;
 
 public class DemoTest {
 	private static final String VOICE = "voxforge-ru-nsh";
@@ -40,8 +41,8 @@ public class DemoTest {
 	private static final String SAY10_BYE2 = "я бы спас ¬селенную, но уже в пижаме и собралс€ спать.";
 
 	private static AkibotClient testClient;
-	private final static String serverHost = "raspberrypi";
-	private final static int serverPort = 2000;
+	private final static String serverHost = Constants.SERVER_HOST;
+	private final static int serverPort = Constants.SERVER_PORT;
 	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
 	private static final int MAX_WAIT = 20000;
 
