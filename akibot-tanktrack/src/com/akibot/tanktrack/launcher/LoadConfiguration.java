@@ -53,9 +53,9 @@ public class LoadConfiguration {
 	private void setGyroscopeConfiguration() throws FailedToSendMessageException {
 		GyroscopeOffsetConfiguration gyroscopeConfiguration = new GyroscopeOffsetConfiguration();
 		gyroscopeConfiguration.setOffsetDegrees(180);
-		gyroscopeConfiguration.setOffsetX(408.0);
-		gyroscopeConfiguration.setOffsetY(-330.0);
-		gyroscopeConfiguration.setOffsetZ(-1095.5);
+		gyroscopeConfiguration.setOffsetX(466.5);
+		gyroscopeConfiguration.setOffsetY(-256.5);
+		gyroscopeConfiguration.setOffsetZ(-1091.0);
 
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
 		putConfigurationRequest.setName("akibot.gyroscope-gyroscopeConfiguration");

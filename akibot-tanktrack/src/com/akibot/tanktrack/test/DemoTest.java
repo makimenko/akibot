@@ -28,6 +28,7 @@ import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.launcher.Constants;
 
 public class DemoTest {
+
 	private static final String VOICE = "voxforge-ru-nsh";
 	private static final String SAY1_HELLO = "Привет! Меня зовут АкиБот";
 	private static final String SAY2_CAN = "Мне один год, но я уже много что умею";
@@ -40,6 +41,16 @@ public class DemoTest {
 	private static final String SAY9_BYE1 = "Лучшее домашнее животное – это АкиБот.";
 	private static final String SAY10_BYE2 = "Я бы спас Вселенную, но уже в пижаме и собрался спать.";
 
+	/*
+	 * private static final String VOICE = "cmu-slt-hsmm"; private static final String SAY1_HELLO = "Hey there! My name is AkiBot!"; private static final String
+	 * SAY2_CAN = "I'm only 1 year old, nevertheless already can do basic actions."; private static final String SAY3_MOVE =
+	 * "I have a tank track which allows me to go forward and backward."; private static final String SAY4_TURN = "Turn to the left and right."; private static
+	 * final String SAY5_ECHOLOCATOR = "I also have an ultra sonar same as dolphins have. But I have an extra one on the back side."; private static final
+	 * String SAY6_WONDER = "I hope you wondered, but it's only beginning of my assembling and education!"; private static final String SAY7_GYROSCOPE =
+	 * "Ah, forgot to mention. I have a compass which help to navigate."; private static final String SAY8_WEST = "West is there!"; private static final String
+	 * SAY9_BYE1 = "The best pet is AkiBot!"; private static final String SAY10_BYE2 =
+	 * "Hey, human! are your pants reflective aluminum alloy? because i can see myself in them.";
+	 */
 	private static AkibotClient testClient;
 	private final static String serverHost = Constants.SERVER_HOST;
 	private final static int serverPort = Constants.SERVER_PORT;
@@ -60,7 +71,7 @@ public class DemoTest {
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 
 		testClient.start();
-		Thread.sleep(6000);
+		Thread.sleep(10000);
 	}
 
 	@AfterClass
@@ -76,7 +87,7 @@ public class DemoTest {
 
 		// -----------------------------------------------------------------------------------
 		say(SAY2_CAN);
-		Thread.sleep(1000);
+		// Thread.sleep(1000);
 
 		callServo("akibot.servo.front");
 
