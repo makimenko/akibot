@@ -28,6 +28,11 @@ public class DistanceMeterComponent extends DefaultComponent {
 	}
 
 	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new DistanceRequest());
+	}
+
+	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof DistanceRequest) {
 			onDistanceRequest((DistanceRequest) message);

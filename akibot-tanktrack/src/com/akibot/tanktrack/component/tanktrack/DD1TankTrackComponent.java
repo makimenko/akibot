@@ -180,4 +180,8 @@ public class DD1TankTrackComponent extends TankTrackComponent {
 		}
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new MotionRequest());
+	}
 }

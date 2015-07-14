@@ -29,6 +29,11 @@ public class ServoComponent extends DefaultComponent {
 	}
 
 	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new ServoRequest());
+	}
+
+	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof ServoRequest) {
 			onServoRequest((ServoRequest) message);

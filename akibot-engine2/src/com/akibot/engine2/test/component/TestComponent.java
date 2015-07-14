@@ -16,6 +16,11 @@ public class TestComponent extends DefaultComponent {
 	}
 
 	@Override
+	public void loadDefaultTopicList() {
+		// No default because depends on a test case
+	}
+
+	@Override
 	public void onMessageReceived(Message message) throws FailedToSendMessageException, InterruptedException, UnsupportedMessageException {
 		if (message instanceof TestRequest) {
 			onTestRequest((TestRequest) message);

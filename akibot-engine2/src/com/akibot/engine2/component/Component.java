@@ -13,6 +13,11 @@ public interface Component {
 
 	public void start() throws FailedToStartException;
 
+	/**
+	 * Define Message types in which Component is interested (update AkibotClient topic list)
+	 */
+	public void loadDefaultTopicList();
+
 	public void loadConfiguration() throws FailedToConfigureException;
 
 }

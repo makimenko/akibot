@@ -24,6 +24,12 @@ public class ConfigurationComponent extends DefaultComponent {
 	}
 
 	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new GetConfigurationRequest());
+		addTopic(new PutConfigurationRequest());
+	}
+
+	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof GetConfigurationRequest) {
 			onGetConfigurationRequest((GetConfigurationRequest) message);

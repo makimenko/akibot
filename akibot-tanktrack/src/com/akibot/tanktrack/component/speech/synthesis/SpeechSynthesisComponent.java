@@ -34,6 +34,11 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 	}
 
 	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new SpeechSynthesisRequest());
+	}
+
+	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof SpeechSynthesisRequest) {
 			onSpeechSynthesisRequest((SpeechSynthesisRequest) message);

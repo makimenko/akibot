@@ -196,4 +196,9 @@ public class HMC5883LGyroscopeComponent extends GyroscopeComponent {
 		}
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new GyroscopeRequest());
+		addTopic(new GetConfigurationResponse());
+	}
 }

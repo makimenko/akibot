@@ -27,6 +27,11 @@ public class AudioComponent extends DefaultComponent {
 		}
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new AudioRequest());
+	}
+
 	private void onAudioRequest(AudioRequest audioRequest) throws FailedToSendMessageException {
 		log.debug(this.getAkibotClient() + ": " + audioRequest);
 		AudioResponse response = new AudioResponse();

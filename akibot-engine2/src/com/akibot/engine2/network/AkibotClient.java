@@ -161,23 +161,27 @@ public class AkibotClient extends Thread {
 
 	@Override
 	public void start() {
-		log.debug(this + ": Starting AkibotClient...");
 		try {
+			log.debug(this + ": Starting AkibotClient...");
+
+			// Start Threads:
 			super.start();
 			component.start();
 			incommingMessageManager.start();
 			outgoingMessageManager.start();
 			synchronizedMessageManager.start();
+
+			// Load configuration:
+			component.loadDefaultTopicList();
 			refreshClientDescriptionList();
-			log.debug(this + ": started.");
 			component.loadConfiguration();
-			log.debug(this + ": configured.");
+
+			log.debug(this + ": started and configured.");
 		} catch (Exception e) {
 			log.catching(this, e);
 			log.error(this + ": Failed to start");
 			this.interrupt();
 		}
-
 	}
 
 	@Override

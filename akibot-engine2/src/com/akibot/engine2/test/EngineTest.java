@@ -223,8 +223,6 @@ public class EngineTest {
 	@Test
 	public void testConfiguration() throws Exception {
 		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), serverAddress);
-		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
-		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
 		configClient.start();
 		Thread.sleep(500);
 
@@ -251,8 +249,6 @@ public class EngineTest {
 	@Test
 	public void testConfigurationString() throws Exception {
 		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), serverAddress);
-		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
-		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
 		configClient.start();
 		Thread.sleep(500);
 

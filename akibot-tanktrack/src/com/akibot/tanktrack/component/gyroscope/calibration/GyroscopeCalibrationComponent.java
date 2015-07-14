@@ -31,6 +31,12 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 		}
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new GyroscopeCalibrationRequest());
+		addTopic(new GyroscopeResponse());
+	}
+
 	private void onGyroscopeCalibrationRequest(GyroscopeCalibrationRequest gyroscopeCalibrationRequest) throws FailedToSendMessageException,
 			InterruptedException {
 		GyroscopeCalibrationResponse response = new GyroscopeCalibrationResponse();

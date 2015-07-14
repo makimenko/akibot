@@ -27,4 +27,9 @@ public class AwtControllerComponent extends DefaultComponent {
 		appl.start();
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new Response());
+
+	}
 }

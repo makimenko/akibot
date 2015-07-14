@@ -57,6 +57,14 @@ public class OrientationComponent extends DefaultComponent {
 
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new OrientationRequest());
+		addTopic(new MotionResponse());
+		addTopic(new GyroscopeResponse());
+
+	}
+
 	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
 		double aXY = gyroscopeResponse.getNorthDegrreesXY();
 		double eXY = orientationRequest.getNorthDegrreesXY();

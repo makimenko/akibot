@@ -20,6 +20,13 @@ public class EchoLocatorComponent extends DefaultComponent {
 	}
 
 	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new EchoLocatorRequest());
+		addTopic(new DistanceResponse());
+		addTopic(new ServoResponse());
+	}
+
+	@Override
 	public void onMessageReceived(Message message) throws Exception {
 		if (message instanceof EchoLocatorRequest) {
 			EchoLocatorResponse response = new EchoLocatorResponse();

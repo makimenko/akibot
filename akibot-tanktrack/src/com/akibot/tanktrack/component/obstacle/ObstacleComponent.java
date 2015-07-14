@@ -38,6 +38,13 @@ public class ObstacleComponent extends DefaultComponent {
 		}
 	}
 
+	@Override
+	public void loadDefaultTopicList() {
+		addTopic(new ObstacleRequest());
+		addTopic(new GyroscopeResponse());
+		addTopic(new DistanceResponse());
+	}
+
 	private void onObstacleRequest(ObstacleRequest obstacleRequest) throws FailedToSendMessageException {
 		this.obstacleRequest = obstacleRequest;
 		response = new ObstacleResponse();

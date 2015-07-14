@@ -51,4 +51,13 @@ public class DefaultComponent implements Component {
 		return getAkibotClient().getOutgoingMessageManager().sendSyncRequest(request, timeout);
 	}
 
+	public void addTopic(Message message) {
+		getAkibotClient().getMyClientDescription().getTopicList().add(message);
+	}
+
+	@Override
+	public void loadDefaultTopicList() {
+
+	}
+
 }
