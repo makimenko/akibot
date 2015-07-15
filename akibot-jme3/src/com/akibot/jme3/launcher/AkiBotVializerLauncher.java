@@ -6,14 +6,15 @@ import com.akibot.engine2.network.AkibotClient;
 import com.akibot.jme3.component.message.VisualizerRequest;
 import com.akibot.jme3.component.visualizer.VisualizerComponent;
 import com.akibot.jme3.component.visualizer.VisualizerWindow;
+import com.akibot.tanktrack.launcher.Constants;
 import com.jme3.system.AppSettings;
 
 public class AkiBotVializerLauncher {
 
 	public static void main(String[] args) throws Exception {
-		String serverHost = "raspberrypi";
-		int serverPort = 2000;
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+		String dnsHost = Constants.DNS_HOST;
+		int dnsPort = Constants.DNS_PORT;
+		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
 		// JME3 Visualizer Window
 		VisualizerWindow visualizerWindow = new VisualizerWindow();
@@ -24,7 +25,7 @@ public class AkiBotVializerLauncher {
 		visualizerWindow.setShowSettings(false);
 
 		// Visualizer Component:
-		AkibotClient visualizer = new AkibotClient("akibot.visualizer", new VisualizerComponent(visualizerWindow), serverAddress);
+		AkibotClient visualizer = new AkibotClient("akibot.visualizer", new VisualizerComponent(visualizerWindow), dnsAddress);
 		visualizer.getMyClientDescription().getTopicList().add(new VisualizerRequest());
 
 		// Start All

@@ -52,9 +52,9 @@ public class DemoTest {
 	 * "Hey, human! are your pants reflective aluminum alloy? because i can see myself in them.";
 	 */
 	private static AkibotClient testClient;
-	private final static String serverHost = Constants.SERVER_HOST;
-	private final static int serverPort = Constants.SERVER_PORT;
-	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+	private final static String dnsHost = Constants.DNS_HOST;
+	private final static int dnsPort = Constants.DNS_PORT;
+	private final static InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 	private static final int MAX_WAIT = 20000;
 
 	private static final StickMotionRequest forwardRequest = new StickMotionRequest(DirectionType.FORWARD);
@@ -67,7 +67,7 @@ public class DemoTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		testClient = new AkibotClient("akibot.client", new TestComponent(), serverAddress);
+		testClient = new AkibotClient("akibot.client", new TestComponent(), dnsAddress);
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 
 		testClient.start();

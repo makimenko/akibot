@@ -16,17 +16,18 @@ import com.akibot.jme3.component.visualizer.utils.AkiGeometry;
 import com.akibot.jme3.component.visualizer.utils.AkiNode;
 import com.akibot.jme3.component.visualizer.utils.AkiNodeTransformation;
 import com.akibot.jme3.component.visualizer.utils.AkiPoint;
+import com.akibot.tanktrack.launcher.Constants;
 
 public class VisualizerTest {
 
 	private static AkibotClient testClient;
-	private final static String serverHost = "raspberrypi";
-	private final static int serverPort = 2000;
-	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+	private final static String dnsHost = Constants.DNS_HOST;
+	private final static int dnsPort = Constants.DNS_PORT;
+	private final static InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		testClient = new AkibotClient("akibot.client", new TestComponent(), serverAddress);
+		testClient = new AkibotClient("akibot.client", new TestComponent(), dnsAddress);
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 
 		testClient.start();

@@ -3,7 +3,7 @@ package com.akibot.tanktrack.launcher;
 import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultComponent;
-import com.akibot.engine2.component.DefaultServerComponent;
+import com.akibot.engine2.component.DefaultDNSComponent;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
 import com.akibot.engine2.component.configuration.GetConfigurationRequest;
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
@@ -19,21 +19,21 @@ public class LoadConfiguration {
 	private AkibotClient client;
 
 	public LoadConfiguration() throws Exception {
-		String serverHost = Constants.SERVER_HOST;
-		int serverPort = Constants.SERVER_PORT + 1;
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+		String dnsHost = Constants.DNS_HOST;
+		int dnsPort = Constants.DNS_PORT + 1;
+		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
-		AkibotClient server = new AkibotClient("LoadConfiguration.server", new DefaultServerComponent(), serverPort);
+		AkibotClient dns = new AkibotClient("LoadConfiguration.dns", new DefaultDNSComponent(), dnsPort);
 
-		AkibotClient configClient = new AkibotClient("LoadConfiguration.config", new ConfigurationComponent("."), serverAddress);
+		AkibotClient configClient = new AkibotClient("LoadConfiguration.config", new ConfigurationComponent("."), dnsAddress);
 		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
 		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
 
-		client = new AkibotClient("LoadConfiguration.client", new DefaultComponent(), serverAddress);
+		client = new AkibotClient("LoadConfiguration.client", new DefaultComponent(), dnsAddress);
 		client.getMyClientDescription().getTopicList().add(new GetConfigurationResponse());
 		client.getMyClientDescription().getTopicList().add(new PutConfigurationResponse());
 
-		server.start();
+		dns.start();
 		configClient.start();
 		client.start();
 

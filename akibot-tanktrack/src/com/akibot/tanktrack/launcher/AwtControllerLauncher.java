@@ -12,12 +12,12 @@ public class AwtControllerLauncher {
 
 	public static void main(String[] args) throws Exception {
 		// AAA
-		String serverHost = Constants.SERVER_HOST;
-		int serverPort = Constants.SERVER_PORT;
-		InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+		String dnsHost = Constants.DNS_HOST;
+		int dnsPort = Constants.DNS_PORT;
+		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
-		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), serverAddress);
-		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), serverAddress);
+		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), dnsAddress);
+		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), dnsAddress);
 
 		awtController.start();
 		gyroscopeCalibration.start();

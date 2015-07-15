@@ -5,8 +5,8 @@ import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CBus;
 
 public class Constants {
-	public static final String SERVER_HOST = "raspberrypi";
-	public static final int SERVER_PORT = 2000;
+	public static final String DNS_HOST = "raspberrypi";
+	public static final int DNS_PORT = 2000;
 
 	public static final int FRONT_SERVO_BASE_PIN = 0;
 	public static final int FRONT_SERVO_HEAD_PIN = 7;

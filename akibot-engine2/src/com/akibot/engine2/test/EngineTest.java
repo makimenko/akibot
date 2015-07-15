@@ -29,26 +29,26 @@ import com.akibot.engine2.test.component.TestSleepRequest;
 public class EngineTest {
 	private static AkibotClient clientA;
 	private static AkibotClient clientB;
-	private static AkibotClient server;
-	private static InetSocketAddress serverAddress;
+	private static AkibotClient dns;
+	private static InetSocketAddress dnsAddress;
 
 	@BeforeClass
 	public static void onceExecutedBeforeAll() throws Exception {
-		String serverHost = "localhost";
-		int serverPort = 2001;
-		serverAddress = new InetSocketAddress(serverHost, serverPort);
+		String dnsHost = "localhost";
+		int dnsPort = 2001;
+		dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
-		server = new AkibotClient("akibot.server", new DefaultComponent(), serverPort);
-		server.start();
+		dns = new AkibotClient("akibot.dns", new DefaultComponent(), dnsPort);
+		dns.start();
 
-		clientA = new AkibotClient("akibot.clientA", new TestComponent(), serverAddress);
+		clientA = new AkibotClient("akibot.clientA", new TestComponent(), dnsAddress);
 		clientA.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientA.getMyClientDescription().getTopicList().add(new TestResponse2());
 		clientA.getMyClientDescription().getTopicList().add(new GetConfigurationResponse());
 		clientA.getMyClientDescription().getTopicList().add(new PutConfigurationResponse());
 		clientA.start();
 
-		clientB = new AkibotClient("akibot.clientB", new TestComponent(), serverAddress);
+		clientB = new AkibotClient("akibot.clientB", new TestComponent(), dnsAddress);
 		clientB.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientB.getMyClientDescription().getTopicList().add(new TestSleepRequest());
 		clientB.start();
@@ -199,7 +199,7 @@ public class EngineTest {
 
 	@Test
 	public void testQuickSendOnStartup() throws Exception {
-		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), serverAddress);
+		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), dnsAddress);
 		clientC.getMyClientDescription().getTopicList().add(new TestResponse());
 		clientC.start();
 
@@ -222,7 +222,7 @@ public class EngineTest {
 
 	@Test
 	public void testConfiguration() throws Exception {
-		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), serverAddress);
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), dnsAddress);
 		configClient.start();
 		Thread.sleep(500);
 
@@ -248,7 +248,7 @@ public class EngineTest {
 
 	@Test
 	public void testConfigurationString() throws Exception {
-		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), serverAddress);
+		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), dnsAddress);
 		configClient.start();
 		Thread.sleep(500);
 

@@ -49,4 +49,14 @@ public class UtilityFunctionTest {
 		assertEquals(1, robinUtils.leftDistance(330.000000001, 329.000000001), 0);
 	}
 
+	@Test
+	public void roundRobinModularDistance() {
+		assertEquals(10, robinUtils.modularDistance(80, 90), 0);
+		assertEquals(10, robinUtils.modularDistance(90, 80), 0);
+		assertEquals(10, robinUtils.modularDistance(355, 5), 0);
+		assertEquals(10, robinUtils.modularDistance(5, 355), 0);
+		assertEquals(0, robinUtils.modularDistance(-5, 355), 0);
+		assertEquals(0, robinUtils.modularDistance(1, 1), 0);
+	}
+
 }

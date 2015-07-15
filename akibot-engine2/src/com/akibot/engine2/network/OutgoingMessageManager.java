@@ -46,7 +46,7 @@ public class OutgoingMessageManager {
 					}
 				}
 			} else if (akibotClient.getParentSocketAddress() == null) {
-				// Server without clients
+				// DNS component without parent
 			} else {
 				log.warn(akibotClient + ": broadcastMessage: Skip broadcasting. No Clients!");
 			}

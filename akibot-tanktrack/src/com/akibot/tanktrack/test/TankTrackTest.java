@@ -36,14 +36,14 @@ import com.akibot.tanktrack.launcher.Constants;
 
 public class TankTrackTest {
 	private static AkibotClient testClient;
-	private final static String serverHost = Constants.SERVER_HOST;
-	private final static int serverPort = Constants.SERVER_PORT;
-	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+	private final static String dnsHost = Constants.DNS_HOST;
+	private final static int dnsPort = Constants.DNS_PORT;
+	private final static InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 	private RoundRobinUtils roundRobinUtils = new RoundRobinUtils(360);
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		testClient = new AkibotClient("akibot.client", new TestComponent(), serverAddress);
+		testClient = new AkibotClient("akibot.client", new TestComponent(), dnsAddress);
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 		testClient.start();
 		Thread.sleep(5000);
@@ -246,14 +246,14 @@ public class TankTrackTest {
 			if (value > maxValue) {
 				maxValue = value;
 			}
-			if (!between && value > 160 && value < 200) {
+			if (!between && roundRobinUtils.modularDistance(value, 180) < 20) {
 				between = true;
 			}
 			if (minValue < expectedMin && maxValue > expectedMax && between) {
 				break;
 			}
 			if (previousValue != -1) {
-				double diff = Math.min(roundRobinUtils.rightDistance(value, previousValue), roundRobinUtils.leftDistance(value, previousValue));
+				double diff = roundRobinUtils.modularDistance(value, previousValue);
 				// System.out.println("value=" + value + ", diff=" + diff);
 				if (diff > maxDiff) {
 					maxDiff = diff;
@@ -283,7 +283,7 @@ public class TankTrackTest {
 
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
-		assertEquals("Orientation value", true, gyroscopeValueResponse.getNorthDegrreesXY() >= 70 && gyroscopeValueResponse.getNorthDegrreesXY() <= 110);
+		assertEquals("Orientation value", true, roundRobinUtils.modularDistance(gyroscopeValueResponse.getNorthDegrreesXY(), 90) < 20);
 	}
 
 	@Test

@@ -6,7 +6,6 @@ public class RoundRobinUtils {
 
 	public RoundRobinUtils(double degrees) {
 		this.degrees = degrees;
-
 	}
 
 	public double add(double a, double b) {
@@ -29,6 +28,10 @@ public class RoundRobinUtils {
 	public double rightDistance(double from, double to) {
 		double x = add(to, -from);
 		return x;
+	}
+
+	public double modularDistance(double from, double to) {
+		return Math.min(leftDistance(from, to), rightDistance(from, to));
 	}
 
 }

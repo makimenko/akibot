@@ -26,13 +26,13 @@ import com.akibot.tanktrack.launcher.Constants;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StressTest {
 	private static AkibotClient testClient;
-	private final static String serverHost = Constants.SERVER_HOST;
-	private final static int serverPort = Constants.SERVER_PORT;
-	private final static InetSocketAddress serverAddress = new InetSocketAddress(serverHost, serverPort);
+	private final static String dnsHost = Constants.DNS_HOST;
+	private final static int dnsPort = Constants.DNS_PORT;
+	private final static InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		testClient = new AkibotClient("akibot.client", new TestComponent(), serverAddress);
+		testClient = new AkibotClient("akibot.client", new TestComponent(), dnsAddress);
 		testClient.getMyClientDescription().getTopicList().add(new Response());
 
 		testClient.start();
@@ -74,7 +74,7 @@ public class StressTest {
 		List clients = new ArrayList<AkibotClient>();
 
 		for (int i = 1; i <= totalClients; i++) {
-			AkibotClient client = new AkibotClient("akibot.client." + i, new TestComponent(), serverAddress);
+			AkibotClient client = new AkibotClient("akibot.client." + i, new TestComponent(), dnsAddress);
 			client.getMyClientDescription().getTopicList().add(new Response());
 			clients.add(client);
 			client.start();
