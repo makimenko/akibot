@@ -1,5 +1,6 @@
 package com.akibot.tanktrack.launcher;
 
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultComponent;
@@ -17,6 +18,7 @@ import com.akibot.tanktrack.component.gyroscope.GyroscopeOffsetConfiguration;
 public class LoadConfiguration {
 	static final AkiLogger log = AkiLogger.create(LoadConfiguration.class);
 	private AkibotClient client;
+	private int TIMEOUT = 1000;
 
 	public LoadConfiguration() throws Exception {
 		String dnsHost = Constants.DNS_HOST;
@@ -41,13 +43,12 @@ public class LoadConfiguration {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println("Initializing...");
 		LoadConfiguration loadConfiguration = new LoadConfiguration();
 
-		System.out.println("Upload default configuration...");
+		System.out.println("Upload default configuration:");
 		loadConfiguration.setGyroscopeConfiguration();
 
-		System.out.println("Done.");
+		System.out.println("Done");
 	}
 
 	private void setGyroscopeConfiguration() throws FailedToSendMessageException {
@@ -57,10 +58,15 @@ public class LoadConfiguration {
 		gyroscopeConfiguration.setOffsetY(-256.5);
 		gyroscopeConfiguration.setOffsetZ(-1091.0);
 
+		save("akibot.gyroscope-gyroscopeConfiguration", gyroscopeConfiguration);
+	}
+
+	private void save(String name, Serializable value) throws FailedToSendMessageException {
+		System.out.println("  Save: " + name);
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
-		putConfigurationRequest.setName("akibot.gyroscope-gyroscopeConfiguration");
-		putConfigurationRequest.setValue(gyroscopeConfiguration);
-		client.getOutgoingMessageManager().broadcastMessage(putConfigurationRequest);
+		putConfigurationRequest.setName(name);
+		putConfigurationRequest.setValue(value);
+		client.getOutgoingMessageManager().sendSyncRequest(putConfigurationRequest, TIMEOUT);
 	}
 
 }

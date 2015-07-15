@@ -52,13 +52,28 @@ public class ClientDescriptionUtils {
 		return -1;
 	}
 
+	public static boolean hasTopic(List<ClientDescription> list, Message topic, boolean exactMatch) {
+		for (ClientDescription descr : list) {
+			if (isInterestedInMessage(descr, topic, exactMatch)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static boolean isInterestedInMessage(ClientDescription clientDescription, Message message) {
+		return isInterestedInMessage(clientDescription, message, false);
+	}
+
+	public static boolean isInterestedInMessage(ClientDescription clientDescription, Message message, boolean exactMatch) {
 		ArrayList<Message> topicList = clientDescription.getTopicList();
 		if (message == null || topicList == null || topicList.size() == 0) {
 			return false;
 		} else {
 			for (Message topicMessage : topicList) {
-				if (topicMessage.getClass().isAssignableFrom(message.getClass())) {
+				if (exactMatch && topicMessage.getClass().equals(message.getClass())) {
+					return true;
+				} else if (!exactMatch && topicMessage.getClass().isAssignableFrom(message.getClass())) {
 					return true;
 				}
 			}

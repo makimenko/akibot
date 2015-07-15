@@ -165,7 +165,6 @@ public class GyroscopeComponent extends DefaultComponent {
 	@Override
 	public void loadConfiguration() throws FailedToConfigureException {
 		try {
-			Thread.sleep(500);
 			GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest();
 			getConfigurationRequest.setName(getAkibotClient().getName() + "-gyroscopeConfiguration");
 			GetConfigurationResponse getConfigurationResponse = (GetConfigurationResponse) sendSyncRequest(getConfigurationRequest, 2000);

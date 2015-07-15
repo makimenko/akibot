@@ -2,10 +2,14 @@ package com.akibot.engine2.network;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.akibot.engine2.component.Component;
+import com.akibot.engine2.component.configuration.GetConfigurationRequest;
+import com.akibot.engine2.exception.FailedClientConstructorException;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -25,26 +29,46 @@ public class AkibotClient extends Thread {
 	private InetSocketAddress parentSocketAddress;
 	private DatagramSocket socket;
 	private SynchronizedMessageManager synchronizedMessageManager;
-	private NetworkUtils networkUtils;
 
-	public AkibotClient(String name, Component component, InetSocketAddress parentSocketAddress) throws Exception {
+	/**
+	 * The network client which has component (Actor Type and Name), receive and send messages via queue.
+	 * 
+	 * @param name
+	 *            Unique Component/Actor Name
+	 * @param component
+	 *            Actor Type / Component
+	 * @param parentSocketAddress
+	 *            DNS or Parent Component Address
+	 * @throws Exception
+	 */
+	public AkibotClient(String name, Component component, InetSocketAddress parentSocketAddress) throws FailedClientConstructorException {
 		this(name, component, null, parentSocketAddress);
 	}
 
-	public AkibotClient(String name, Component component, int port) throws Exception {
+	public AkibotClient(String name, Component component, int port) throws FailedClientConstructorException {
 		this(name, component, port, null);
 	}
 
-	public AkibotClient(String name, Component component, Integer port, InetSocketAddress parentSocketAddress) throws Exception {
+	public AkibotClient(String name, Component component, Integer port, InetSocketAddress parentSocketAddress) throws FailedClientConstructorException {
+		log.debug(this + ": Initializing...");
+
 		this.setName(name);
 		this.setDaemon(true);
-		log.debug(this + ": Initializing...");
 		this.component = component;
-		this.networkUtils = new NetworkUtils();
-		this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
 
-		// this.socket.setTrafficClass(0x04);
-		this.myInetSocketAddress = new InetSocketAddress(networkUtils.getLocalIP(), socket.getLocalPort());
+		try {
+			this.socket = (port == null ? new DatagramSocket() : new DatagramSocket(port));
+			// this.socket.setTrafficClass(0x04);
+		} catch (SocketException e) {
+			throw new FailedClientConstructorException(e);
+		}
+
+		try {
+			NetworkUtils networkUtils = new NetworkUtils();
+			this.myInetSocketAddress = new InetSocketAddress(networkUtils.getLocalIP(), socket.getLocalPort());
+		} catch (Exception e) {
+			throw new FailedClientConstructorException(e);
+		}
 		this.parentSocketAddress = parentSocketAddress;
 		this.incommingMessageManager = new IncommingMessageManager(this);
 		this.outgoingMessageManager = new OutgoingMessageManager(this);
@@ -58,7 +82,6 @@ public class AkibotClient extends Thread {
 			ClientDescription parentClientDescription = new ClientDescription(null, getParentSocketAddress());
 			clientDescriptionList.add(parentClientDescription);
 		}
-
 		log.info(this + ": initialized.");
 	}
 
@@ -101,22 +124,37 @@ public class AkibotClient extends Thread {
 	public void onSystemMessageReceived(Message message) throws Exception {
 		log.trace(this + ": onSystemMessageReceived (from=" + message.getFrom() + "): " + message);
 		if (message instanceof ClientDescriptionRequest) {
-			ClientDescriptionRequest request = (ClientDescriptionRequest) message;
-			clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(this, request.getClientDescription(), clientDescriptionList);
-			ClientDescriptionResponse response = new ClientDescriptionResponse();
-			response.setClientDescriptionList(clientDescriptionList);
-			outgoingMessageManager.broadcastMessage(response);
+			onClientDescriptionRequest((ClientDescriptionRequest) message);
 		} else if (message instanceof ClientDescriptionResponse) {
-			ClientDescriptionResponse response = (ClientDescriptionResponse) message;
-			clientDescriptionList = ClientDescriptionUtils.mergeList(this, response.getClientDescriptionList(), clientDescriptionList);
+			onClientDescriptionResponse((ClientDescriptionResponse) message);
 		} else if (message instanceof StatusRequest) {
-			StatusResponse statusResponse = new StatusResponse();
-			statusResponse.setClientDescriptionList(clientDescriptionList);
-			statusResponse.setMyClientDescription(myClientDescription);
-			statusResponse.setCurrentTime(System.currentTimeMillis());
-			statusResponse.setStartupTime(startupTime);
-			outgoingMessageManager.broadcastMessage(statusResponse);
+			onStatusRequest((StatusRequest) message);
 		}
+	}
+
+	private void onClientDescriptionRequest(ClientDescriptionRequest clientDescriptionRequest) throws FailedToSendMessageException {
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(this, clientDescriptionRequest.getClientDescription(), clientDescriptionList);
+		ClientDescriptionResponse response = new ClientDescriptionResponse();
+		response.setClientDescriptionList(clientDescriptionList);
+		outgoingMessageManager.broadcastMessage(response);
+	}
+
+	private void onClientDescriptionResponse(ClientDescriptionResponse clientDescriptionResponse) throws FailedToConfigureException {
+		clientDescriptionList = ClientDescriptionUtils.mergeList(this, clientDescriptionResponse.getClientDescriptionList(), clientDescriptionList);
+
+		if (ClientDescriptionUtils.hasTopic(clientDescriptionList, new GetConfigurationRequest(), true)) {
+			component.loadConfiguration();
+		}
+
+	}
+
+	private void onStatusRequest(StatusRequest statusRequest) throws FailedToSendMessageException {
+		StatusResponse statusResponse = new StatusResponse();
+		statusResponse.setClientDescriptionList(clientDescriptionList);
+		statusResponse.setMyClientDescription(myClientDescription);
+		statusResponse.setCurrentTime(System.currentTimeMillis());
+		statusResponse.setStartupTime(startupTime);
+		outgoingMessageManager.broadcastMessage(statusResponse);
 	}
 
 	public String printClients() {
@@ -167,17 +205,14 @@ public class AkibotClient extends Thread {
 		try {
 			log.debug(this + ": Starting AkibotClient...");
 
-			// Start Threads:
 			super.start();
+			component.loadDefaultTopicList();
 			component.startComponent();
 			incommingMessageManager.start();
 			outgoingMessageManager.start();
 			synchronizedMessageManager.start();
 
-			// Load configuration:
-			component.loadDefaultTopicList();
 			refreshClientDescriptionList();
-			component.loadConfiguration();
 
 			log.debug(this + ": started and configured.");
 		} catch (Exception e) {
