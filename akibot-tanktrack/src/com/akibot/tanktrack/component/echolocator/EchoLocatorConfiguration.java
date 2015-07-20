@@ -1,8 +1,8 @@
 package com.akibot.tanktrack.component.echolocator;
 
-import java.io.Serializable;
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
 
-public class EchoLocatorConfiguration implements Serializable {
+public class EchoLocatorConfiguration extends ComponentConfiguration {
 	private int distanceTriggerPin;
 	private int distanceEchoPin;
 	private int distanceTimeout;

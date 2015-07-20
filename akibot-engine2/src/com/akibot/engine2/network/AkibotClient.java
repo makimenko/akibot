@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.akibot.engine2.component.Component;
 import com.akibot.engine2.component.configuration.GetConfigurationRequest;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.exception.FailedClientConstructorException;
 import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
@@ -29,6 +30,7 @@ public class AkibotClient extends Thread {
 	private InetSocketAddress parentSocketAddress;
 	private DatagramSocket socket;
 	private SynchronizedMessageManager synchronizedMessageManager;
+	private boolean executedOnConfigurationClientAvailable = false;
 
 	/**
 	 * The network client which has component (Actor Type and Name), receive and send messages via queue.
@@ -129,6 +131,8 @@ public class AkibotClient extends Thread {
 			onClientDescriptionResponse((ClientDescriptionResponse) message);
 		} else if (message instanceof StatusRequest) {
 			onStatusRequest((StatusRequest) message);
+		} else if (message instanceof GetConfigurationResponse) {
+			this.component.onGetConfigurationResponse((GetConfigurationResponse) message);
 		}
 	}
 
@@ -141,11 +145,22 @@ public class AkibotClient extends Thread {
 
 	private void onClientDescriptionResponse(ClientDescriptionResponse clientDescriptionResponse) throws FailedToConfigureException {
 		clientDescriptionList = ClientDescriptionUtils.mergeList(this, clientDescriptionResponse.getClientDescriptionList(), clientDescriptionList);
-
-		if (ClientDescriptionUtils.hasTopic(clientDescriptionList, new GetConfigurationRequest(), true)) {
-			component.loadConfiguration();
+		if (!executedOnConfigurationClientAvailable && ClientDescriptionUtils.hasTopic(clientDescriptionList, new GetConfigurationRequest(), true)) {
+			onConfigurationClientAvailable();
+			executedOnConfigurationClientAvailable = true;
 		}
+	}
 
+	private void onConfigurationClientAvailable() throws FailedToConfigureException {
+		if (getComponent().getComponentConfiguration() == null) {
+			try {
+				GetConfigurationRequest getConfigurationRequest = new GetConfigurationRequest();
+				getConfigurationRequest.setName(getName());
+				getOutgoingMessageManager().broadcastMessage(getConfigurationRequest);
+			} catch (Exception e) {
+				throw new FailedToConfigureException(e);
+			}
+		}
 	}
 
 	private void onStatusRequest(StatusRequest statusRequest) throws FailedToSendMessageException {
@@ -206,7 +221,7 @@ public class AkibotClient extends Thread {
 			log.debug(this + ": Starting AkibotClient...");
 
 			super.start();
-			component.loadDefaultTopicList();
+			component.loadDefaults();
 			component.startComponent();
 			incommingMessageManager.start();
 			outgoingMessageManager.start();

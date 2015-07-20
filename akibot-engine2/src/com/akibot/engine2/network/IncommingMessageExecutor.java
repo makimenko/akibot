@@ -2,6 +2,7 @@ package com.akibot.engine2.network;
 
 import java.util.concurrent.BlockingQueue;
 
+import com.akibot.engine2.exception.ComponentNotReadyException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.SystemRequest;
@@ -26,6 +27,8 @@ public class IncommingMessageExecutor extends Thread {
 				Message message = messageQueue.take();
 				if (message instanceof SystemRequest || message instanceof SystemResponse) {
 					akibotClient.onSystemMessageReceived(message);
+				} else if (!akibotClient.getComponent().getComponentStatus().isReady()) {
+					throw new ComponentNotReadyException();
 				} else {
 					akibotClient.getComponent().onMessageReceived(message);
 				}

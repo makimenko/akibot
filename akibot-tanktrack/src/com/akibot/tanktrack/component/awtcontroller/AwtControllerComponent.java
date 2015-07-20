@@ -28,8 +28,8 @@ public class AwtControllerComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new Response());
-
+		getComponentStatus().setReady(true);
 	}
 }

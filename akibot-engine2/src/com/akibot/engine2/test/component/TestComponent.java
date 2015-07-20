@@ -2,6 +2,7 @@ package com.akibot.engine2.test.component;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -16,7 +17,7 @@ public class TestComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		// No default because depends on a test case
 	}
 
@@ -66,6 +67,11 @@ public class TestComponent extends DefaultComponent {
 
 	public void setArray(int[] array) {
 		this.array = array;
+	}
+
+	@Override
+	public void startComponent() throws FailedToStartException {
+		super.getComponentStatus().setReady(true);
 	}
 
 }

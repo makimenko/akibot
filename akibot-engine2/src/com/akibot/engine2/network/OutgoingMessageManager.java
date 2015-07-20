@@ -32,8 +32,8 @@ public class OutgoingMessageManager {
 			if (akibotClient.getClientDescriptionList() != null && akibotClient.getClientDescriptionList().size() > 0) {
 				log.trace(akibotClient + ": broadcastMessage: " + message);
 				for (ClientDescription client : akibotClient.getClientDescriptionList()) {
-					if (ClientDescriptionUtils.isSystemMessage(message)
-							|| (ClientDescriptionUtils.isAddressedToClient(client, message) && ClientDescriptionUtils.isInterestedInMessage(client, message))) {
+					if (ClientDescriptionUtils.isAddressedToClient(client, message)
+							&& (ClientDescriptionUtils.isSystemMessage(message) || ClientDescriptionUtils.isInterestedInMessage(client, message))) {
 						count++;
 						send(client, message);
 					}

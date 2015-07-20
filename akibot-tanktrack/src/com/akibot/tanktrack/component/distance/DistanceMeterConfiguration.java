@@ -1,8 +1,8 @@
 package com.akibot.tanktrack.component.distance;
 
-import java.io.Serializable;
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
 
-public class DistanceMeterConfiguration implements Serializable {
+public class DistanceMeterConfiguration extends ComponentConfiguration {
 	private static final long serialVersionUID = 1L;
 	private int triggerPin;
 	private int echoPin;

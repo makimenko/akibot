@@ -1,5 +1,8 @@
 package com.akibot.engine2.component;
 
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.engine2.component.configuration.EmptyComponentConfiguration;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
@@ -13,6 +16,7 @@ public class DefaultComponent implements Component {
 	private static final AkiLogger log = AkiLogger.create(DefaultComponent.class);
 
 	private AkibotClient akibotClient;
+	private ComponentStatus componentStatus = new ComponentStatus();
 
 	public AkibotClient getAkibotClient() {
 		return akibotClient;
@@ -30,11 +34,6 @@ public class DefaultComponent implements Component {
 
 	@Override
 	public void startComponent() throws FailedToStartException {
-
-	}
-
-	@Override
-	public void loadConfiguration() throws FailedToConfigureException {
 
 	}
 
@@ -56,8 +55,23 @@ public class DefaultComponent implements Component {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 
+	}
+
+	@Override
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
+
+	}
+
+	@Override
+	public ComponentStatus getComponentStatus() {
+		return componentStatus;
+	}
+
+	@Override
+	public ComponentConfiguration getComponentConfiguration() {
+		return new EmptyComponentConfiguration();
 	}
 
 }

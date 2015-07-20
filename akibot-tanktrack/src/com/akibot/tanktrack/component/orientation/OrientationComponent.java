@@ -58,11 +58,11 @@ public class OrientationComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new OrientationRequest());
 		addTopic(new MotionResponse());
 		addTopic(new GyroscopeResponse());
-
+		getComponentStatus().setReady(true);
 	}
 
 	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {

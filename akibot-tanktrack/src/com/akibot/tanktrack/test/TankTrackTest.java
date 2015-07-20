@@ -268,7 +268,7 @@ public class TankTrackTest {
 		assertEquals("MAX compass value must be close to 360 (" + maxValue + ")", true, maxValue > expectedMax);
 		assertEquals("BETWEEN compass", true, between);
 		assertEquals("Step difference low (" + maxDiff + ")", true, maxDiff > 5);
-		assertEquals("Step difference high (" + maxDiff + ")", true, maxDiff < 45);
+		assertEquals("Step difference high (" + maxDiff + ")", true, maxDiff < 50);
 	}
 
 	@Test

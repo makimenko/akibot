@@ -3,8 +3,9 @@ package com.akibot.tanktrack.component.distance;
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
-import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -12,17 +13,10 @@ import com.akibot.engine2.message.Message;
 public class DistanceMeterComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(DistanceMeterComponent.class);
 	private AkibotJniLibrary lib;
-	private DistanceMeterConfiguration distanceMeterConfiguration;
-
-	public DistanceMeterComponent(int triggerPin, int echoPin, int timeoutMicroseconds) {
-		this.distanceMeterConfiguration = new DistanceMeterConfiguration();
-		distanceMeterConfiguration.setTriggerPin(triggerPin);
-		distanceMeterConfiguration.setEchoPin(echoPin);
-		distanceMeterConfiguration.setTimeoutMicroseconds(timeoutMicroseconds);
-	}
+	private DistanceMeterConfiguration componentConfiguration;
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new DistanceRequest());
 	}
 
@@ -38,20 +32,28 @@ public class DistanceMeterComponent extends DefaultComponent {
 	private void onDistanceRequest(DistanceRequest distanceRequest) throws FailedToSendMessageException {
 		long startTime = System.currentTimeMillis();
 		DistanceResponse response = new DistanceResponse();
-		response.setMm(lib.getDistance(distanceMeterConfiguration.getTriggerPin(), distanceMeterConfiguration.getEchoPin(),
-				distanceMeterConfiguration.getTimeoutMicroseconds()));
+		response.setMm(lib.getDistance(componentConfiguration.getTriggerPin(), componentConfiguration.getEchoPin(),
+				componentConfiguration.getTimeoutMicroseconds()));
 		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 		broadcastResponse(response, distanceRequest);
 	}
 
 	@Override
-	public void startComponent() throws FailedToStartException {
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
 		try {
+			getComponentStatus().setReady(false);
+			componentConfiguration = (DistanceMeterConfiguration) getConfigurationResponse.getComponentConfiguration();
 			this.lib = new AkibotJniLibrary();
 			this.lib.initialize();
+			getComponentStatus().setReady(true);
 		} catch (Exception e) {
-			throw new FailedToStartException(e);
+			throw new FailedToConfigureException(e);
 		}
+	}
+
+	@Override
+	public DistanceMeterConfiguration getComponentConfiguration() {
+		return componentConfiguration;
 	}
 
 }

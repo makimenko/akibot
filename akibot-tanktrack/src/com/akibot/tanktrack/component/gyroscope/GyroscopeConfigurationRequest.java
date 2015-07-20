@@ -3,14 +3,14 @@ package com.akibot.tanktrack.component.gyroscope;
 public class GyroscopeConfigurationRequest extends GyroscopeRequest {
 	private static final long serialVersionUID = 1L;
 
-	private GyroscopeOffsetConfiguration gyroscopeOffsetConfiguration;
+	private GyroscopeConfiguration gyroscopeConfiguration;
 
-	public GyroscopeOffsetConfiguration getGyroscopeOffsetConfiguration() {
-		return gyroscopeOffsetConfiguration;
+	public GyroscopeConfiguration getGyroscopeConfiguration() {
+		return gyroscopeConfiguration;
 	}
 
-	public void setGyroscopeOffsetConfiguration(GyroscopeOffsetConfiguration gyroscopeOffsetConfiguration) {
-		this.gyroscopeOffsetConfiguration = gyroscopeOffsetConfiguration;
+	public void setGyroscopeConfiguration(GyroscopeConfiguration gyroscopeConfiguration) {
+		this.gyroscopeConfiguration = gyroscopeConfiguration;
 	}
 
 }

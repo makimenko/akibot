@@ -1,17 +1,12 @@
 package com.akibot.tanktrack.component.gyroscope;
 
-import java.io.Serializable;
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
 
-public class GyroscopeOffsetConfiguration implements Serializable {
+public class GyroscopeOffsetConfiguration extends ComponentConfiguration {
 	private static final long serialVersionUID = 1L;
-	private double offsetDegrees;
 	private double offsetX;
 	private double offsetY;
 	private double offsetZ;
-
-	public double getOffsetDegrees() {
-		return offsetDegrees;
-	}
 
 	public double getOffsetX() {
 		return offsetX;
@@ -23,10 +18,6 @@ public class GyroscopeOffsetConfiguration implements Serializable {
 
 	public double getOffsetZ() {
 		return offsetZ;
-	}
-
-	public void setOffsetDegrees(double offsetDegrees) {
-		this.offsetDegrees = offsetDegrees;
 	}
 
 	public void setOffsetX(double offsetX) {
@@ -43,6 +34,6 @@ public class GyroscopeOffsetConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		return "GyroscopeConfiguration (" + offsetX + ", " + offsetY + ", " + offsetZ + "): " + offsetDegrees;
+		return "GyroscopeConfiguration (" + offsetX + ", " + offsetY + ", " + offsetZ + ")";
 	}
 }

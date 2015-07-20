@@ -1,5 +1,7 @@
 package com.akibot.engine2.component;
 
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.message.Message;
@@ -16,8 +18,11 @@ public interface Component {
 	/**
 	 * Define Message types in which Component is interested (update AkibotClient topic list)
 	 */
-	public void loadDefaultTopicList();
+	public void loadDefaults();
 
-	public void loadConfiguration() throws FailedToConfigureException;
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException;
 
+	public ComponentStatus getComponentStatus();
+
+	public ComponentConfiguration getComponentConfiguration();
 }

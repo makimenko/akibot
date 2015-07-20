@@ -21,6 +21,7 @@ import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.engine2.network.ClientDescriptionUtils;
 import com.akibot.engine2.test.component.TestComponent;
+import com.akibot.engine2.test.component.TestConfiguration;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
 import com.akibot.engine2.test.component.TestResponse2;
@@ -229,9 +230,9 @@ public class EngineTest {
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
 		String name = "test1";
 		putConfigurationRequest.setName(name);
-		TestRequest testRequest = new TestRequest();
-		testRequest.setX(777);
-		putConfigurationRequest.setValue(testRequest);
+		TestConfiguration testConfiguration = new TestConfiguration();
+		testConfiguration.setX(777);
+		putConfigurationRequest.setComponentConfiguration(testConfiguration);
 
 		PutConfigurationResponse putConfigurationResponse = (PutConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
 				putConfigurationRequest, 2000);
@@ -240,9 +241,9 @@ public class EngineTest {
 		GetConfigurationResponse getConfigurationResponse = (GetConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
 				getConfigurationRequest, 2000);
 
-		TestRequest resultTestRequest = (TestRequest) getConfigurationResponse.getValue();
+		TestConfiguration resultTestConfiguration = (TestConfiguration) getConfigurationResponse.getComponentConfiguration();
 
-		assertEquals("Compare properties", 777, resultTestRequest.getX());
+		assertEquals("Compare properties", 777, resultTestConfiguration.getX());
 
 	}
 
@@ -255,8 +256,10 @@ public class EngineTest {
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
 		String name = "test2&78234**_21/|:\\../../";
 
+		TestConfiguration testConfiguration = new TestConfiguration();
+		testConfiguration.setX(999);
 		putConfigurationRequest.setName(name);
-		putConfigurationRequest.setValue("A");
+		putConfigurationRequest.setComponentConfiguration(testConfiguration);
 
 		PutConfigurationResponse putConfigurationResponse = (PutConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
 				putConfigurationRequest, 2000);
@@ -265,9 +268,9 @@ public class EngineTest {
 		GetConfigurationResponse getConfigurationResponse = (GetConfigurationResponse) clientA.getOutgoingMessageManager().sendSyncRequest(
 				getConfigurationRequest, 2000);
 
-		String value = (String) getConfigurationResponse.getValue();
+		TestConfiguration r = (TestConfiguration) getConfigurationResponse.getComponentConfiguration();
 
-		assertEquals("Compare properties", "A", value);
+		assertEquals("Compare properties", 999, r.getX());
 
 	}
 

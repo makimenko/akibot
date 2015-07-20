@@ -28,8 +28,9 @@ public class AudioComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new AudioRequest());
+		getComponentStatus().setReady(true);
 	}
 
 	private void onAudioRequest(AudioRequest audioRequest) throws FailedToSendMessageException {

@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -24,7 +25,7 @@ public class ConfigurationComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new GetConfigurationRequest());
 		addTopic(new PutConfigurationRequest());
 	}
@@ -44,18 +45,19 @@ public class ConfigurationComponent extends DefaultComponent {
 			IOException {
 		log.debug(this.getAkibotClient() + ": " + getConfigurationRequest);
 		GetConfigurationResponse getConfigurationResponse = new GetConfigurationResponse();
-		getConfigurationResponse.setValue(loadFromFile(nameToFileName(getConfigurationRequest.getName())));
+		getConfigurationResponse.setComponentConfiguration(loadFromFile(nameToFileName(getConfigurationRequest.getName())));
+		getConfigurationResponse.setTo(getConfigurationRequest.getFrom());
 		broadcastResponse(getConfigurationResponse, getConfigurationRequest);
 	}
 
 	private void onPutConfigurationRequest(PutConfigurationRequest putConfigurationRequest) throws FailedToSendMessageException, IOException {
 		log.debug(this.getAkibotClient() + ": " + putConfigurationRequest);
 		PutConfigurationResponse putConfigurationResponse = new PutConfigurationResponse();
-		saveToFile(nameToFileName(putConfigurationRequest.getName()), putConfigurationRequest.getValue());
+		saveToFile(nameToFileName(putConfigurationRequest.getName()), putConfigurationRequest.getComponentConfiguration());
 		broadcastResponse(putConfigurationResponse, putConfigurationRequest);
 	}
 
-	private void saveToFile(String fileName, Serializable value) throws IOException {
+	private void saveToFile(String fileName, ComponentConfiguration value) throws IOException {
 		log.debug(getAkibotClient() + ": Save configuration to file: " + fileName);
 		FileOutputStream fout = new FileOutputStream(fileName);
 		ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -63,16 +65,21 @@ public class ConfigurationComponent extends DefaultComponent {
 		oos.close();
 	}
 
-	private Serializable loadFromFile(String fileName) throws IOException, ClassNotFoundException {
+	private ComponentConfiguration loadFromFile(String fileName) throws IOException, ClassNotFoundException {
 		log.debug(getAkibotClient() + ": Load configuration from file: " + fileName);
 		FileInputStream fin = new FileInputStream(fileName);
 		ObjectInputStream ois = new ObjectInputStream(fin);
 		Serializable value = (Serializable) ois.readObject();
 		ois.close();
-		return value;
+		return (ComponentConfiguration) value;
 	}
 
 	private String nameToFileName(String name) {
 		return dir + "/" + name.replaceAll(FILE_NAME_REGEX_EXCLUDE, "_") + FILE_EXTENSION;
+	}
+
+	@Override
+	public void startComponent() throws FailedToStartException {
+		super.getComponentStatus().setReady(true);
 	}
 }

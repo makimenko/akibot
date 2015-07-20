@@ -5,8 +5,8 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
-import com.akibot.tanktrack.component.gyroscope.GyroscopeConfigurationRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeOffsetConfiguration;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeOffsetConfigurationRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 
@@ -32,9 +32,10 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new GyroscopeCalibrationRequest());
 		addTopic(new GyroscopeResponse());
+		getComponentStatus().setReady(true);
 	}
 
 	private void onGyroscopeCalibrationRequest(GyroscopeCalibrationRequest gyroscopeCalibrationRequest) throws FailedToSendMessageException,
@@ -62,13 +63,13 @@ public class GyroscopeCalibrationComponent extends DefaultComponent {
 		response.setNewOffsetZ(offsetZ);
 
 		if (gyroscopeCalibrationRequest.isUpdateConfiguration()) {
-			GyroscopeConfigurationRequest gyroscopeConfigurationRequest = new GyroscopeConfigurationRequest();
-			GyroscopeOffsetConfiguration gyroscopeConfiguration = new GyroscopeOffsetConfiguration();
-			gyroscopeConfiguration.setOffsetX(offsetX);
-			gyroscopeConfiguration.setOffsetY(offsetY);
-			gyroscopeConfiguration.setOffsetZ(offsetZ);
-			gyroscopeConfigurationRequest.setGyroscopeOffsetConfiguration(gyroscopeConfiguration);
-			broadcastMessage(gyroscopeConfigurationRequest);
+			GyroscopeOffsetConfigurationRequest gyroscopeOffsetConfigurationRequest = new GyroscopeOffsetConfigurationRequest();
+			GyroscopeOffsetConfiguration gyroscopeOffsetConfiguration = new GyroscopeOffsetConfiguration();
+			gyroscopeOffsetConfiguration.setOffsetX(offsetX);
+			gyroscopeOffsetConfiguration.setOffsetY(offsetY);
+			gyroscopeOffsetConfiguration.setOffsetZ(offsetZ);
+			gyroscopeOffsetConfigurationRequest.setGyroscopeOffsetConfiguration(gyroscopeOffsetConfiguration);
+			broadcastMessage(gyroscopeOffsetConfigurationRequest);
 		}
 		broadcastResponse(response, gyroscopeCalibrationRequest);
 	}

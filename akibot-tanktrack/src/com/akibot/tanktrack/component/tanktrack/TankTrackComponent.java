@@ -182,7 +182,8 @@ public class TankTrackComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new MotionRequest());
+		getComponentStatus().setReady(true);
 	}
 }

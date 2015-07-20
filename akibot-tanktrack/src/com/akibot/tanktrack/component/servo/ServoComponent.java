@@ -29,8 +29,9 @@ public class ServoComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void loadDefaults() {
 		addTopic(new ServoRequest());
+		getComponentStatus().setReady(true);
 	}
 
 	@Override

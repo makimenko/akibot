@@ -2,21 +2,21 @@ package com.akibot.engine2.component.configuration;
 
 import java.io.Serializable;
 
-import com.akibot.engine2.message.Response;
+import com.akibot.engine2.message.SystemResponse;
 
-public class GetConfigurationResponse extends Response {
+public class GetConfigurationResponse extends SystemResponse {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private Serializable value;
+	private ComponentConfiguration componentConfiguration;
 
 	public GetConfigurationResponse() {
 
 	}
 
-	public GetConfigurationResponse(String name, Serializable value) {
+	public GetConfigurationResponse(String name, ComponentConfiguration value) {
 		this.name = name;
-		this.value = value;
+		this.componentConfiguration = value;
 	}
 
 	public String getName() {
@@ -27,12 +27,12 @@ public class GetConfigurationResponse extends Response {
 		this.name = name;
 	}
 
-	public Serializable getValue() {
-		return value;
+	public Serializable getComponentConfiguration() {
+		return componentConfiguration;
 	}
 
-	public void setValue(Serializable value) {
-		this.value = value;
+	public void setComponentConfiguration(ComponentConfiguration value) {
+		this.componentConfiguration = value;
 	}
 
 }

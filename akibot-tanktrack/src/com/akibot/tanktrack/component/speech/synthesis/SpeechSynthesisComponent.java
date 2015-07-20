@@ -12,8 +12,9 @@ import marytts.exceptions.SynthesisException;
 import marytts.util.data.audio.AudioPlayer;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
-import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -21,20 +22,45 @@ import com.akibot.engine2.message.Message;
 public class SpeechSynthesisComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(SpeechSynthesisComponent.class);
 	private LineListener lineListener;
-	private String marytssDefaultVoice;
+	private SpeechSynthesisConfiguration componentConfiguration;
 	private MaryInterface marytts;
-	private String maryttsHost;
-	private int maryttsPort;
 	private String lastSpeech;
 
-	public SpeechSynthesisComponent(String maryttsHost, int maryttsPort, String marytssDefaultVoice) {
-		this.maryttsHost = maryttsHost;
-		this.maryttsPort = maryttsPort;
-		this.marytssDefaultVoice = marytssDefaultVoice;
+	@Override
+	public SpeechSynthesisConfiguration getComponentConfiguration() {
+		return componentConfiguration;
 	}
 
 	@Override
-	public void loadDefaultTopicList() {
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
+		getComponentStatus().setReady(false);
+		try {
+			componentConfiguration = (SpeechSynthesisConfiguration) getConfigurationResponse.getComponentConfiguration();
+			marytts = new RemoteMaryInterface(componentConfiguration.getMaryttsHost(), componentConfiguration.getMaryttsPort());
+			marytts.setVoice(componentConfiguration.getMarytssDefaultVoice());
+			lineListener = new LineListener() {
+				@Override
+				public void update(LineEvent event) {
+					if (event.getType() == LineEvent.Type.START) {
+						log.trace("Speech Started: " + lastSpeech);
+					} else if (event.getType() == LineEvent.Type.STOP) {
+						log.trace("Speech Stoped: " + lastSpeech);
+					} else if (event.getType() == LineEvent.Type.OPEN) {
+						log.trace("Audio line opened");
+					} else if (event.getType() == LineEvent.Type.CLOSE) {
+						log.trace("Audio line closed");
+					}
+				}
+			};
+			getComponentStatus().setReady(true);
+			log.debug(getAkibotClient() + ": Initialized.");
+		} catch (IOException e) {
+			throw new FailedToConfigureException(e);
+		}
+	}
+
+	@Override
+	public void loadDefaults() {
 		addTopic(new SpeechSynthesisRequest());
 	}
 
@@ -52,7 +78,7 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 		SpeechSynthesisResponse response = new SpeechSynthesisResponse();
 
 		log.debug(this.getAkibotClient() + ": Speech request: " + speechSynthesisRequest);
-		marytts.setVoice(marytssDefaultVoice);
+		marytts.setVoice(componentConfiguration.getMarytssDefaultVoice());
 
 		if (speechSynthesisRequest.getVoice() != null && speechSynthesisRequest.getVoice().length() > 0
 				&& !marytts.getVoice().equals(speechSynthesisRequest.getVoice())) {
@@ -69,31 +95,6 @@ public class SpeechSynthesisComponent extends DefaultComponent {
 		}
 
 		broadcastResponse(response, speechSynthesisRequest);
-	}
-
-	@Override
-	public void startComponent() throws FailedToStartException {
-		try {
-			marytts = new RemoteMaryInterface(maryttsHost, maryttsPort);
-			marytts.setVoice(marytssDefaultVoice);
-			lineListener = new LineListener() {
-				@Override
-				public void update(LineEvent event) {
-					if (event.getType() == LineEvent.Type.START) {
-						log.trace("Speech Started: " + lastSpeech);
-					} else if (event.getType() == LineEvent.Type.STOP) {
-						log.trace("Speech Stoped: " + lastSpeech);
-					} else if (event.getType() == LineEvent.Type.OPEN) {
-						log.trace("Audio line opened");
-					} else if (event.getType() == LineEvent.Type.CLOSE) {
-						log.trace("Audio line closed");
-					}
-				}
-			};
-		} catch (IOException e) {
-			throw new FailedToStartException(e);
-		}
-
 	}
 
 }

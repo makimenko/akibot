@@ -1,22 +1,20 @@
 package com.akibot.engine2.component.configuration;
 
-import java.io.Serializable;
-
 import com.akibot.engine2.message.Request;
 
 public class PutConfigurationRequest extends Request {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private Serializable value;
+	private ComponentConfiguration componentConfiguration;
 
 	public PutConfigurationRequest() {
 
 	}
 
-	public PutConfigurationRequest(String name, Serializable value) {
+	public PutConfigurationRequest(String name, ComponentConfiguration value) {
 		this.name = name;
-		this.value = value;
+		this.componentConfiguration = value;
 	}
 
 	public String getName() {
@@ -27,12 +25,12 @@ public class PutConfigurationRequest extends Request {
 		this.name = name;
 	}
 
-	public Serializable getValue() {
-		return value;
+	public ComponentConfiguration getComponentConfiguration() {
+		return componentConfiguration;
 	}
 
-	public void setValue(Serializable value) {
-		this.value = value;
+	public void setComponentConfiguration(ComponentConfiguration value) {
+		this.componentConfiguration = value;
 	}
 
 }
