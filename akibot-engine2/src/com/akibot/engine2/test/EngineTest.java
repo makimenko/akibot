@@ -21,6 +21,7 @@ import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.engine2.network.ClientDescriptionUtils;
 import com.akibot.engine2.test.component.TestComponent;
+import com.akibot.engine2.test.component.TestComponentWithConfig;
 import com.akibot.engine2.test.component.TestConfiguration;
 import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.engine2.test.component.TestResponse;
@@ -248,7 +249,7 @@ public class EngineTest {
 	}
 
 	@Test
-	public void testConfigurationString() throws Exception {
+	public void testConfigurationFileName() throws Exception {
 		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("./config"), dnsAddress);
 		configClient.start();
 		Thread.sleep(500);
@@ -271,6 +272,46 @@ public class EngineTest {
 		TestConfiguration r = (TestConfiguration) getConfigurationResponse.getComponentConfiguration();
 
 		assertEquals("Compare properties", 999, r.getX());
+
+	}
+
+	@Test
+	public void testComponentWithConfiguration() throws Exception {
+		String clientName = "akibot.clientD";
+		AkibotClient clientD = new AkibotClient(clientName, new TestComponentWithConfig(), dnsAddress);
+		clientD.getMyClientDescription().getTopicList().add(new TestRequest());
+		clientD.start();
+		Thread.sleep(500);
+
+		TestRequest testRequest = new TestRequest();
+		testRequest.setTo(clientName);
+		testRequest.setX(1);
+
+		boolean failed;
+
+		failed = false;
+		try {
+			TestResponse testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
+		} catch (FailedToSendMessageException e) {
+			failed = true;
+		}
+		assertEquals("Expecting to fail (before configuration)", true, failed);
+
+		TestConfiguration testConfiguration = new TestConfiguration();
+		GetConfigurationResponse getConfigurationResponse = new GetConfigurationResponse();
+		getConfigurationResponse.setComponentConfiguration(testConfiguration);
+		getConfigurationResponse.setTo(clientName);
+		clientA.getOutgoingMessageManager().broadcastMessage(getConfigurationResponse);
+		Thread.sleep(500);
+
+		failed = false;
+		try {
+			TestResponse testResponse = (TestResponse) clientA.getOutgoingMessageManager().sendSyncRequest(testRequest, 1000);
+			assertEquals("Check response", 2, testResponse.getResult());
+		} catch (FailedToSendMessageException e) {
+			failed = true;
+		}
+		assertEquals("Not expecting to fail (after configuration)", false, failed);
 
 	}
 

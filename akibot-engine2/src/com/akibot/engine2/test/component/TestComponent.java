@@ -18,7 +18,7 @@ public class TestComponent extends DefaultComponent {
 
 	@Override
 	public void loadDefaults() {
-		// No default because depends on a test case
+		super.getComponentStatus().setReady(true);
 	}
 
 	@Override
@@ -67,11 +67,6 @@ public class TestComponent extends DefaultComponent {
 
 	public void setArray(int[] array) {
 		this.array = array;
-	}
-
-	@Override
-	public void startComponent() throws FailedToStartException {
-		super.getComponentStatus().setReady(true);
 	}
 
 }
