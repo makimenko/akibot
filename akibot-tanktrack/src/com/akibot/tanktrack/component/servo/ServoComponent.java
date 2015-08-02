@@ -1,8 +1,13 @@
 package com.akibot.tanktrack.component.servo;
 
+import java.io.Serializable;
+
 import akibot.jni.java.AkibotJniLibrary;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
@@ -12,26 +17,45 @@ import com.akibot.engine2.message.Message;
 public class ServoComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(ServoComponent.class);
 	private AkibotJniLibrary lib;
-	private int servoPin;
-	private int initialValue;
-	private int pwmRange;
-	private int divisor;
+	private ServoConfiguration componentConfiguration;
 
-	public ServoComponent(int servoPin, int initialValue, int pwmRange, int divisor) {
-		this.servoPin = servoPin;
-		this.initialValue = initialValue;
-		this.pwmRange = pwmRange;
-		this.divisor = divisor;
+	@Override
+	public ComponentConfiguration getComponentConfiguration() {
+		return this.componentConfiguration;
 	}
 
-	public ServoComponent() throws Exception {
-		throw new Exception("Unimplemented constructor!");
+	@Override
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
+		Serializable responseValue = getConfigurationResponse.getComponentConfiguration();
+		if (responseValue instanceof ServoConfiguration) {
+			setComponentConfiguration((ServoConfiguration) responseValue);
+		} else {
+			throw new FailedToConfigureException(responseValue.toString());
+		}
+	}
+
+	public void setComponentConfiguration(ServoConfiguration componentConfiguration) throws FailedToConfigureException {
+		this.componentConfiguration = componentConfiguration;
+		init();
+	}
+
+	private void init() throws FailedToConfigureException {
+		log.debug(this.getAkibotClient() + ": Initializing Servo...");
+		getComponentStatus().setReady(false);
+		if (componentConfiguration != null) {
+			try {
+				this.lib = new AkibotJniLibrary();
+				this.lib.initialize();
+				getComponentStatus().setReady(true);
+			} catch (Exception e) {
+				throw new FailedToConfigureException(e);
+			}
+		}
 	}
 
 	@Override
 	public void loadDefaults() {
 		addTopic(new ServoRequest());
-		getComponentStatus().setReady(true);
 	}
 
 	@Override
@@ -45,18 +69,14 @@ public class ServoComponent extends DefaultComponent {
 
 	private void onServoRequest(ServoRequest servoRequest) throws FailedToSendMessageException {
 		ServoResponse response = new ServoResponse();
-		this.lib.servo(servoPin, initialValue, pwmRange, divisor, servoRequest.getValue(), servoRequest.getMicroseconds());
+		this.lib.servo(componentConfiguration.getServoPin(), componentConfiguration.getInitialValue(), componentConfiguration.getPwmRange(),
+				componentConfiguration.getDivisor(), servoRequest.getValue(), servoRequest.getMicroseconds());
 		broadcastResponse(response, servoRequest);
 	}
 
 	@Override
 	public void startComponent() throws FailedToStartException {
-		try {
-			this.lib = new AkibotJniLibrary();
-			this.lib.initialize();
-		} catch (Exception e) {
-			throw new FailedToStartException(e);
-		}
+
 	}
 
 }

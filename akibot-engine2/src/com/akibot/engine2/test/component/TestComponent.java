@@ -2,7 +2,6 @@ package com.akibot.engine2.test.component;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
-import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;

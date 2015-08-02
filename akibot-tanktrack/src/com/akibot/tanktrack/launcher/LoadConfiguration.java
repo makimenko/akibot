@@ -17,7 +17,10 @@ import com.akibot.tanktrack.component.distance.DistanceMeterConfiguration;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorConfiguration;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeConfiguration;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeOffsetConfiguration;
+import com.akibot.tanktrack.component.orientation.OrientationConfiguration;
+import com.akibot.tanktrack.component.servo.ServoConfiguration;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisConfiguration;
+import com.akibot.tanktrack.component.tanktrack.TankTrackConfiguration;
 
 public class LoadConfiguration {
 	static final AkiLogger log = AkiLogger.create(LoadConfiguration.class);
@@ -33,6 +36,12 @@ public class LoadConfiguration {
 		loadConfiguration.saveAkibotFrontEcholocator();
 		loadConfiguration.saveAkibotBackEcholocator();
 		loadConfiguration.saveAkibotSpeech();
+		loadConfiguration.saveAkibotOrientation();
+		loadConfiguration.saveAkibotServoFrontBase();
+		loadConfiguration.saveAkibotServoFrontHead();
+		loadConfiguration.saveAkibotServoBackBase();
+		loadConfiguration.saveAkibotServoBackHead();
+		loadConfiguration.saveAkibotTankTrack();
 		System.out.println("Done");
 	}
 
@@ -129,4 +138,68 @@ public class LoadConfiguration {
 		save("akibot.speech", speechSynthesisConfiguration);
 	}
 
+	private void saveAkibotOrientation() throws FailedToSendMessageException {
+		OrientationConfiguration orientationConfiguration = new OrientationConfiguration();
+		orientationConfiguration.setTankTrackName("akibot.tanktrack");
+		orientationConfiguration.setGyroscopeName("akibot.gyroscope");
+		orientationConfiguration.setSyncRequestTimeout(2000);
+		orientationConfiguration.setEasyDegrees(45);
+		orientationConfiguration.setEasyMillis(100);
+		orientationConfiguration.setStepMillis(100);
+		save("akibot.orientation", orientationConfiguration);
+	}
+
+	private void saveAkibotServoFrontBase() throws FailedToSendMessageException {
+		ServoConfiguration servoConfiguration = new ServoConfiguration();
+		servoConfiguration.setServoPin(Constants.FRONT_SERVO_BASE_PIN);
+		servoConfiguration.setInitialValue(0);
+		servoConfiguration.setPwmRange(200);
+		servoConfiguration.setDivisor(200);
+		save("akibot.servo.front.base", servoConfiguration);
+	}
+
+	private void saveAkibotServoFrontHead() throws FailedToSendMessageException {
+		ServoConfiguration servoConfiguration = new ServoConfiguration();
+		servoConfiguration.setServoPin(Constants.FRONT_SERVO_HEAD_PIN);
+		servoConfiguration.setInitialValue(0);
+		servoConfiguration.setPwmRange(200);
+		servoConfiguration.setDivisor(200);
+		save("akibot.servo.front.head", servoConfiguration);
+	}
+
+	private void saveAkibotServoBackBase() throws FailedToSendMessageException {
+		ServoConfiguration servoConfiguration = new ServoConfiguration();
+		servoConfiguration.setServoPin(Constants.BACK_SERVO_BASE_PIN);
+		servoConfiguration.setInitialValue(0);
+		servoConfiguration.setPwmRange(200);
+		servoConfiguration.setDivisor(200);
+		save("akibot.servo.back.base", servoConfiguration);
+	}
+
+	private void saveAkibotServoBackHead() throws FailedToSendMessageException {
+		ServoConfiguration servoConfiguration = new ServoConfiguration();
+		servoConfiguration.setServoPin(Constants.BACK_SERVO_HEAD_PIN);
+		servoConfiguration.setInitialValue(0);
+		servoConfiguration.setPwmRange(200);
+		servoConfiguration.setDivisor(200);
+		save("akibot.servo.back.head", servoConfiguration);
+	}
+
+	private void saveAkibotTankTrack() throws FailedToSendMessageException {
+		TankTrackConfiguration tankTrackConfiguration = new TankTrackConfiguration();
+
+		tankTrackConfiguration.setRightIApin(Constants.TANK_TRACK_RIGHT_IA);
+		tankTrackConfiguration.setRightIBpin(Constants.TANK_TRACK_RIGHT_IB);
+		tankTrackConfiguration.setRightSpeedPin(Constants.TANK_TRACK_RIGHT_SPEED);
+
+		tankTrackConfiguration.setLeftIApin(Constants.TANK_TRACK_LEFT_IA);
+		tankTrackConfiguration.setLeftIBpin(Constants.TANK_TRACK_LEFT_IB);
+		tankTrackConfiguration.setLeftSpeedPin(Constants.TANK_TRACK_LEFT_SPEED);
+
+		save("akibot.tanktrack", tankTrackConfiguration);
+	}
+
+	// (Pin rightIApin, Pin rightIBpin, Pin rightSpeedPin, Pin leftIApin, Pin leftIBpin, Pin leftSpeedPin) {
+	// AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
+	// Constants.TANK_TRACK_RIGHT_SPEED, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB, Constants.TANK_TRACK_LEFT_SPEED), dnsAddress);
 }

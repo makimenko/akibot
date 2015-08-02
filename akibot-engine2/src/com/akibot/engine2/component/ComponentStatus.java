@@ -6,11 +6,7 @@ public class ComponentStatus implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private boolean ready;
-
-	public ComponentStatus() {
-		ready = false;
-	}
+	private boolean ready = false;
 
 	public boolean isReady() {
 		return ready;

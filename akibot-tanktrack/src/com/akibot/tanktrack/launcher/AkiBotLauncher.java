@@ -34,8 +34,7 @@ public class AkiBotLauncher {
 		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("."), dnsAddress);
 
 		// TankTrack:
-		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
-				Constants.TANK_TRACK_RIGHT_SPEED, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB, Constants.TANK_TRACK_LEFT_SPEED), dnsAddress);
+		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(), dnsAddress);
 
 		// Gyroscope:
 		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new GyroscopeComponent(), dnsAddress);
@@ -47,13 +46,13 @@ public class AkiBotLauncher {
 		AkibotClient distance = new AkibotClient("akibot.front.distance", new DistanceMeterComponent(), dnsAddress);
 
 		// Servo motors
-		AkibotClient servoFrontBase = new AkibotClient("akibot.servo.front.base", new ServoComponent(Constants.FRONT_SERVO_BASE_PIN, 0, 200, 200), dnsAddress);
+		AkibotClient servoFrontBase = new AkibotClient("akibot.servo.front.base", new ServoComponent(), dnsAddress);
 
-		AkibotClient servoFrontHead = new AkibotClient("akibot.servo.front.head", new ServoComponent(Constants.FRONT_SERVO_HEAD_PIN, 0, 200, 200), dnsAddress);
+		AkibotClient servoFrontHead = new AkibotClient("akibot.servo.front.head", new ServoComponent(), dnsAddress);
 
-		AkibotClient servoBackBase = new AkibotClient("akibot.servo.back.base", new ServoComponent(Constants.BACK_SERVO_BASE_PIN, 0, 200, 200), dnsAddress);
+		AkibotClient servoBackBase = new AkibotClient("akibot.servo.back.base", new ServoComponent(), dnsAddress);
 
-		AkibotClient servoBackHead = new AkibotClient("akibot.servo.back.head", new ServoComponent(Constants.BACK_SERVO_HEAD_PIN, 0, 200, 200), dnsAddress);
+		AkibotClient servoBackHead = new AkibotClient("akibot.servo.back.head", new ServoComponent(), dnsAddress);
 
 		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), dnsAddress);
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
@@ -62,7 +61,7 @@ public class AkiBotLauncher {
 		AkibotClient echoLocatorFront = new AkibotClient("akibot.echolocator.front", new EchoLocatorComponent(), dnsAddress);
 		AkibotClient echoLocatorBack = new AkibotClient("akibot.echolocator.back", new EchoLocatorComponent(), dnsAddress);
 
-		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent("akibot.tanktrack", "akibot.gyroscope"), dnsAddress);
+		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent(), dnsAddress);
 
 		// Start all
 		configClient.start();

@@ -305,6 +305,8 @@ public class TankTrackTest {
 		MotionDistanceCounterResponse motionDistanceCounterResponseAfter = (MotionDistanceCounterResponse) testClient.getOutgoingMessageManager()
 				.sendSyncRequest(motionDistanceCounterRequest, 500);
 
+		System.out.println("motionDistanceCounterResponseBefore=" + motionDistanceCounterResponseBefore.getDistanceCounter().getRightDistanceCounter());
+		System.out.println("motionDistanceCounterResponseAfter=" + motionDistanceCounterResponseAfter.getDistanceCounter().getRightDistanceCounter());
 		assertEquals("Compare Right Distance Counter", true, motionDistanceCounterResponseAfter.getDistanceCounter().getRightDistanceCounter()
 				- motionDistanceCounterResponseBefore.getDistanceCounter().getRightDistanceCounter() > 500);
 

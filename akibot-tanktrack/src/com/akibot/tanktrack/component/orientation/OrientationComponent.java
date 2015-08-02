@@ -1,11 +1,14 @@
 package com.akibot.tanktrack.component.orientation;
 
+import java.io.Serializable;
+
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
-import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.tanktrack.DirectionType;
@@ -14,47 +17,52 @@ import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
 
 public class OrientationComponent extends DefaultComponent {
-	static final AkiLogger log = AkiLogger.create(AkibotClient.class);
-	private String gyroscopeName;
-	private String tankTrackName;
-	private GyroscopeValueRequest gyroscopeValueRequest;
-	private int syncRequestTimeout;
-	private long stepMillis;
-	private long easyMillis;
-	private long easyDegrees;
-	private RoundRobinUtils robinUtils;
+	static final AkiLogger log = AkiLogger.create(OrientationComponent.class);
 
+	private OrientationConfiguration orientationConfiguration;
+	private RoundRobinUtils robinUtils = new RoundRobinUtils(360);
+	private GyroscopeValueRequest gyroscopeValueRequest;
 	private StickMotionRequest stopRequest;
 	private StickMotionRequest leftRequest;
 	private StickMotionRequest rightRequest;
 	private TimedMotionRequest easyLeftRequest;
 	private TimedMotionRequest easyRightRequest;
 
-	public OrientationComponent(String tankTrackName, String gyroscopeName) {
-		this.tankTrackName = tankTrackName;
-		this.gyroscopeName = gyroscopeName;
+	@Override
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
+		Serializable responseValue = getConfigurationResponse.getComponentConfiguration();
+		if (responseValue instanceof OrientationConfiguration) {
+			setOrientationConfiguration((OrientationConfiguration) responseValue);
+		} else {
+			throw new FailedToConfigureException(responseValue.toString());
+		}
+	}
+
+	public void setOrientationConfiguration(OrientationConfiguration orientationConfiguration) {
+		this.orientationConfiguration = orientationConfiguration;
+		init();
+	}
+
+	public void init() {
+		log.debug(this.getAkibotClient() + ": Initializing orientation");
+		getComponentStatus().setReady(false);
 		this.gyroscopeValueRequest = new GyroscopeValueRequest();
-		this.gyroscopeValueRequest.setTo(this.gyroscopeName);
-		this.syncRequestTimeout = 2000; // 2 second timeout
-		this.stepMillis = 100; // TODO: Configuratble
-		this.easyDegrees = 45;
-		this.easyMillis = 100; // TODO: Configuratble
-		this.robinUtils = new RoundRobinUtils(360);
+		this.gyroscopeValueRequest.setTo(orientationConfiguration.getGyroscopeName());
 
 		stopRequest = new StickMotionRequest(DirectionType.STOP);
 		leftRequest = new StickMotionRequest(DirectionType.LEFT);
 		rightRequest = new StickMotionRequest(DirectionType.RIGHT);
-		stopRequest.setTo(tankTrackName);
-		leftRequest.setTo(tankTrackName);
-		rightRequest.setTo(tankTrackName);
+		stopRequest.setTo(orientationConfiguration.getTankTrackName());
+		leftRequest.setTo(orientationConfiguration.getTankTrackName());
+		rightRequest.setTo(orientationConfiguration.getTankTrackName());
 
 		easyLeftRequest = new TimedMotionRequest(DirectionType.LEFT);
 		easyRightRequest = new TimedMotionRequest(DirectionType.RIGHT);
-		easyLeftRequest.setMilliseconds(easyMillis);
-		easyRightRequest.setMilliseconds(easyMillis);
-		easyLeftRequest.setTo(tankTrackName);
-		easyRightRequest.setTo(tankTrackName);
-
+		easyLeftRequest.setMilliseconds(orientationConfiguration.getEasyMillis());
+		easyRightRequest.setMilliseconds(orientationConfiguration.getEasyMillis());
+		easyLeftRequest.setTo(orientationConfiguration.getTankTrackName());
+		easyRightRequest.setTo(orientationConfiguration.getTankTrackName());
+		getComponentStatus().setReady(true);
 	}
 
 	@Override
@@ -62,7 +70,6 @@ public class OrientationComponent extends DefaultComponent {
 		addTopic(new OrientationRequest());
 		addTopic(new MotionResponse());
 		addTopic(new GyroscopeResponse());
-		getComponentStatus().setReady(true);
 	}
 
 	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
@@ -112,31 +119,31 @@ public class OrientationComponent extends DefaultComponent {
 					double rightDistance = robinUtils.rightDistance(aXY, eXY);
 					double leftDistance = robinUtils.leftDistance(aXY, eXY);
 
-					easyMove = easyMove || Math.min(rightDistance, leftDistance) < easyDegrees;
+					easyMove = easyMove || Math.min(rightDistance, leftDistance) < orientationConfiguration.getEasyDegrees();
 
 					if (leftDistance <= rightDistance && easyMove) {
 						lastDirection = 0;
 						// System.out.println("LEFT (easy)");
-						sendSyncRequest(easyLeftRequest, syncRequestTimeout);
+						sendSyncRequest(easyLeftRequest, orientationConfiguration.getSyncRequestTimeout());
 					} else if (rightDistance < leftDistance && easyMove) {
 						lastDirection = 0;
 						// System.out.println("RIGHT (easy)");
-						sendSyncRequest(easyRightRequest, syncRequestTimeout);
+						sendSyncRequest(easyRightRequest, orientationConfiguration.getSyncRequestTimeout());
 					} else if (leftDistance <= rightDistance && lastDirection != -1) {
 						lastDirection = -1;
 						// System.out.println("LEFT");
-						sendSyncRequest(leftRequest, syncRequestTimeout);
+						sendSyncRequest(leftRequest, orientationConfiguration.getSyncRequestTimeout());
 					} else if (rightDistance < leftDistance && lastDirection != +1) {
 						lastDirection = +1;
 						// System.out.println("RIGHT");
-						sendSyncRequest(rightRequest, syncRequestTimeout);
+						sendSyncRequest(rightRequest, orientationConfiguration.getSyncRequestTimeout());
 					}
-					Thread.sleep(stepMillis);
+					Thread.sleep(orientationConfiguration.getStepMillis());
 				}
 			}
 			if (!easyMove) {
-				sendSyncRequest(stopRequest, syncRequestTimeout);
-				Thread.sleep(stepMillis);
+				sendSyncRequest(stopRequest, orientationConfiguration.getSyncRequestTimeout());
+				Thread.sleep(orientationConfiguration.getStepMillis());
 			}
 			gyroscopeResponse = getGyroscopeResponse();
 			boolean expected = isExpected(orientationRequest, gyroscopeResponse);
@@ -152,7 +159,11 @@ public class OrientationComponent extends DefaultComponent {
 	}
 
 	private GyroscopeResponse getGyroscopeResponse() throws FailedToSendMessageException {
-		return (GyroscopeResponse) sendSyncRequest(gyroscopeValueRequest, syncRequestTimeout);
+		return (GyroscopeResponse) sendSyncRequest(gyroscopeValueRequest, orientationConfiguration.getSyncRequestTimeout());
 	}
 
+	@Override
+	public OrientationConfiguration getComponentConfiguration() {
+		return this.orientationConfiguration;
+	}
 }

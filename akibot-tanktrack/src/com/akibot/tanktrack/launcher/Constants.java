@@ -1,7 +1,5 @@
 package com.akibot.tanktrack.launcher;
 
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CBus;
 
 public class Constants {
@@ -22,13 +20,13 @@ public class Constants {
 	public static final int BACK_DISTANCE_ECHO_PIN = 14;
 	public static final int BACK_DISTANCE_TIMEOUT = 50000;
 
-	public static final Pin TANK_TRACK_RIGHT_IA = RaspiPin.GPIO_24;
-	public static final Pin TANK_TRACK_RIGHT_IB = RaspiPin.GPIO_25;
-	public static final Pin TANK_TRACK_LEFT_IA = RaspiPin.GPIO_28;
-	public static final Pin TANK_TRACK_LEFT_IB = RaspiPin.GPIO_27;
+	public static final int TANK_TRACK_RIGHT_IA = 24;
+	public static final int TANK_TRACK_RIGHT_IB = 25;
+	public static final int TANK_TRACK_LEFT_IA = 28;
+	public static final int TANK_TRACK_LEFT_IB = 27;
 
-	public static final Pin TANK_TRACK_RIGHT_SPEED = RaspiPin.GPIO_23;
-	public static final Pin TANK_TRACK_LEFT_SPEED = RaspiPin.GPIO_29;
+	public static final int TANK_TRACK_RIGHT_SPEED = 23;
+	public static final int TANK_TRACK_LEFT_SPEED = 29;
 
 	public static final int GYROSCOPE_BUS_NUMBER = I2CBus.BUS_1;
 	public static final int GYROSCOPE_DEVICE_ADDRESS = 0x1e;

@@ -1,8 +1,12 @@
 package com.akibot.tanktrack.component.tanktrack;
 
+import java.io.Serializable;
+
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
-import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -13,19 +17,15 @@ import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinPullResistance;
 import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 public class TankTrackComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(TankTrackComponent.class);
 	private GpioController gpio;
-	// Pins
-	private Pin rightIApin;
-	private Pin rightIBpin;
-	private Pin leftIApin;
-	private Pin leftIBpin;
-	private Pin leftSpeedPin;
-	private Pin rightSpeedPin;
+	private TankTrackConfiguration componentConfiguration;
+
 	// GPIO Input and Output
 	private GpioPinDigitalOutput leftBackwardPinOutput;
 	private GpioPinDigitalOutput leftForwardPinOutput;
@@ -37,16 +37,66 @@ public class TankTrackComponent extends DefaultComponent {
 	private long rightDistanceCounterTotal;
 	private long leftDistanceCounterTotal;
 
-	private long rightDistanceCounterInteration;
-	private long leftDistanceCounterInteration;
+	@Override
+	public ComponentConfiguration getComponentConfiguration() {
+		return this.componentConfiguration;
+	}
 
-	public TankTrackComponent(Pin rightIApin, Pin rightIBpin, Pin rightSpeedPin, Pin leftIApin, Pin leftIBpin, Pin leftSpeedPin) {
-		this.rightIApin = rightIApin;
-		this.rightIBpin = rightIBpin;
-		this.rightSpeedPin = rightSpeedPin;
-		this.leftIApin = leftIApin;
-		this.leftIBpin = leftIBpin;
-		this.leftSpeedPin = leftSpeedPin;
+	@Override
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
+		Serializable responseValue = getConfigurationResponse.getComponentConfiguration();
+		if (responseValue instanceof TankTrackConfiguration) {
+			setComponentConfiguration((TankTrackConfiguration) responseValue);
+		} else {
+			throw new FailedToConfigureException(responseValue.toString());
+		}
+	}
+
+	public void setComponentConfiguration(TankTrackConfiguration componentConfiguration) throws FailedToConfigureException {
+		this.componentConfiguration = componentConfiguration;
+		init();
+	}
+
+	private Pin getPin(int pinAddress) {
+		return RaspiPin.getPinByName("GPIO " + pinAddress);
+	}
+
+	private void init() throws FailedToConfigureException {
+		try {
+			log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
+			gpio = GpioFactory.getInstance();
+
+			rightBackwardPinOutput = gpio.provisionDigitalOutputPin(getPin(componentConfiguration.getRightIApin()), "rightIA", PinState.LOW);
+			rightForwardPinOutput = gpio.provisionDigitalOutputPin(getPin(componentConfiguration.getRightIBpin()), "rightIB", PinState.LOW);
+			rightSpeedPinInput = gpio.provisionDigitalInputPin(getPin(componentConfiguration.getRightSpeedPin()), PinPullResistance.PULL_DOWN);
+
+			leftBackwardPinOutput = gpio.provisionDigitalOutputPin(getPin(componentConfiguration.getLeftIApin()), "leftIA", PinState.LOW);
+			leftForwardPinOutput = gpio.provisionDigitalOutputPin(getPin(componentConfiguration.getLeftIBpin()), "leftIB", PinState.LOW);
+			leftSpeedPinInput = gpio.provisionDigitalInputPin(getPin(componentConfiguration.getLeftSpeedPin()), PinPullResistance.PULL_DOWN); // TODO: Not
+																																				// working!!!
+
+			rightSpeedPinInput.addListener(new GpioPinListenerDigital() {
+				@Override
+				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+					// System.out.println(" --> RIGHT GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
+					rightDistanceCounterTotal++;
+				}
+			});
+			leftSpeedPinInput.addListener(new GpioPinListenerDigital() {
+				@Override
+				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
+					// System.out.println(" --> LEFT GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
+					leftDistanceCounterTotal++;
+				}
+			});
+
+			resetDistanceCounters();
+			defaultState();
+
+			log.debug(this.getAkibotClient() + ": TankTrack GPIOs initialized successfully");
+		} catch (Exception e) {
+			throw new FailedToConfigureException(e);
+		}
 	}
 
 	private void resetDistanceCounters() {
@@ -141,44 +191,6 @@ public class TankTrackComponent extends DefaultComponent {
 			resetDistanceCounters();
 		}
 		broadcastResponse(response, motionDistanceCounterRequest);
-	}
-
-	@Override
-	public void startComponent() throws FailedToStartException {
-		try {
-			log.debug(this.getAkibotClient() + ": Initializing Tanktrack GPIOs");
-			gpio = GpioFactory.getInstance();
-
-			rightBackwardPinOutput = gpio.provisionDigitalOutputPin(rightIApin, "rightIA", PinState.LOW);
-			rightForwardPinOutput = gpio.provisionDigitalOutputPin(rightIBpin, "rightIB", PinState.LOW);
-			rightSpeedPinInput = gpio.provisionDigitalInputPin(rightSpeedPin, PinPullResistance.PULL_DOWN);
-
-			leftBackwardPinOutput = gpio.provisionDigitalOutputPin(leftIApin, "leftIA", PinState.LOW);
-			leftForwardPinOutput = gpio.provisionDigitalOutputPin(leftIBpin, "leftIB", PinState.LOW);
-			leftSpeedPinInput = gpio.provisionDigitalInputPin(leftSpeedPin, PinPullResistance.PULL_DOWN); // TODO: Not working!!!
-
-			rightSpeedPinInput.addListener(new GpioPinListenerDigital() {
-				@Override
-				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-					// System.out.println(" --> RIGHT GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
-					rightDistanceCounterTotal++;
-				}
-			});
-			leftSpeedPinInput.addListener(new GpioPinListenerDigital() {
-				@Override
-				public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-					// System.out.println(" --> LEFT GPIO PIN STATE CHANGE: " + event.getPin() + " = " + event.getState());
-					leftDistanceCounterTotal++;
-				}
-			});
-
-			resetDistanceCounters();
-			defaultState();
-
-			log.debug(this.getAkibotClient() + ": TankTrack GPIOs initialized successfully");
-		} catch (Exception e) {
-			throw new FailedToStartException(e);
-		}
 	}
 
 	@Override

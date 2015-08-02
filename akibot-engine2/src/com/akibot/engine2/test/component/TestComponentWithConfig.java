@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.exception.FailedToConfigureException;
-import com.akibot.engine2.exception.FailedToStartException;
 
 public class TestComponentWithConfig extends TestComponent {
 
