@@ -19,11 +19,22 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.BevelBorder;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.event.ActionListener;
+import java.awt.Rectangle;
+import javax.swing.ButtonGroup;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class Controller {
 
 	private JFrame mainFrame;
 	private final Action exitAction = new SwingExitAction();
+	private final Action cmdForward = new SwingAction_4();
+	private final Action cmdBackward = new SwingAction_5();
+	private final Action cmdLeft = new SwingAction_6();
+	private final Action cmdRight = new SwingAction_7();
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -53,9 +64,9 @@ public class Controller {
 	 */
 	private void initialize() {
 		mainFrame = new JFrame();
-		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		mainFrame.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
 		mainFrame.setTitle("TankTrack Controller");
-		mainFrame.setBounds(100, 100, 890, 590);
+		mainFrame.setBounds(100, 100, 964, 713);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -68,44 +79,57 @@ public class Controller {
 		mntmExit.setAction(exitAction);
 		mnFile.add(mntmExit);
 		mainFrame.getContentPane().setLayout(new BorderLayout(0, 0));
-
-		JPanel panel = new JPanel();
-		mainFrame.getContentPane().add(panel, BorderLayout.WEST);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setAlignmentX(Component.LEFT_ALIGNMENT);
-		panel_1.setAlignmentY(10.0f);
-		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.add(panel_1);
-		panel_1.setLayout(new GridLayout(0, 3, 0, 0));
-
-		JLabel lblNewLabel = new JLabel("");
-		panel_1.add(lblNewLabel);
-
-		JButton btnNewButton = new JButton("New button");
-		panel_1.add(btnNewButton);
-
-		JLabel lblNewLabel_1 = new JLabel("");
-		panel_1.add(lblNewLabel_1);
-
-		JButton btnNewButton_1 = new JButton("New button");
-		panel_1.add(btnNewButton_1);
-
-		JButton btnNewButton_2 = new JButton("New button");
-		panel_1.add(btnNewButton_2);
-
-		JButton btnNewButton_3 = new JButton("New button");
-		panel_1.add(btnNewButton_3);
+		
+				JPanel panelCommands = new JPanel();
+				mainFrame.getContentPane().add(panelCommands, BorderLayout.EAST);
+				panelCommands.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+				
+						JPanel panelMovement = new JPanel();
+						panelCommands.add(panelMovement);
+						panelMovement.setAlignmentX(Component.LEFT_ALIGNMENT);
+						panelMovement.setAlignmentY(10.0f);
+						panelMovement.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+						panelMovement.setLayout(new GridLayout(0, 3, 1, 1));
+						
+								JLabel lblSpaceLabel1 = new JLabel("");
+								panelMovement.add(lblSpaceLabel1);
+								
+										JButton btnForward = new JButton("");
+										btnForward.addChangeListener(new ChangeListener() {
+											public void stateChanged(ChangeEvent e) {
+												
+											}
+										});
+										buttonGroup.add(btnForward);
+										btnForward.setAction(cmdForward);
+										panelMovement.add(btnForward);
+										
+												JLabel lblSpaceLabel2 = new JLabel("");
+												panelMovement.add(lblSpaceLabel2);
+												
+														JButton btnLeft = new JButton("");
+														buttonGroup.add(btnLeft);
+														btnLeft.setAction(cmdLeft);
+														panelMovement.add(btnLeft);
+														
+																JButton btnBackward = new JButton("");
+																buttonGroup.add(btnBackward);
+																btnBackward.setAction(cmdBackward);
+																panelMovement.add(btnBackward);
+																
+																		JButton btnRight = new JButton("");
+																		buttonGroup.add(btnRight);
+																		btnRight.setAction(cmdRight);
+																		panelMovement.add(btnRight);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		mainFrame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("Log", null, panel_2, null);
+		JPanel panelLog = new JPanel();
+		tabbedPane.addTab("Log", null, panelLog, null);
 
-		JPanel panel_3 = new JPanel();
-		tabbedPane.addTab("Clients", null, panel_3, null);
+		JPanel panelClient = new JPanel();
+		tabbedPane.addTab("Clients", null, panelClient, null);
 	}
 
 	private class SwingExitAction extends AbstractAction {
@@ -116,6 +140,70 @@ public class Controller {
 
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
+		}
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_1 extends AbstractAction {
+		public SwingAction_1() {
+			putValue(NAME, "SwingAction_1");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_2 extends AbstractAction {
+		public SwingAction_2() {
+			putValue(NAME, "SwingAction_2");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_3 extends AbstractAction {
+		public SwingAction_3() {
+			putValue(NAME, "SwingAction_3");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_4 extends AbstractAction {
+		public SwingAction_4() {
+			putValue(NAME, "Forward");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_5 extends AbstractAction {
+		public SwingAction_5() {
+			putValue(NAME, "Backward");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_6 extends AbstractAction {
+		public SwingAction_6() {
+			putValue(NAME, "Left");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_7 extends AbstractAction {
+		public SwingAction_7() {
+			putValue(NAME, "Right");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
 		}
 	}
 }
