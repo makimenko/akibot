@@ -74,7 +74,7 @@ function createWorkDay() {
 		var jsonDataStr = JSON.stringify(myObject);
 		console.log('jsonDataStr' + jsonDataStr);
 
-		var myURL = "http://localhost:8080/akibot-web-sandbox/webapi/services/timesheet/create";
+		var myURL = "webapi/services/timesheet/create";
 		$.ajax({
 			type : "PUT",
 			url : myURL,
@@ -102,7 +102,7 @@ function getWorkDays() {
 
 	// Perform GET request
 	$.getJSON(
-					'http://localhost:8080/akibot-web-sandbox/webapi/services/timesheet',
+					'webapi/services/timesheet',
 					function(data) {
 
 						// Empty old table entries, select all child rows of
@@ -155,7 +155,7 @@ function deleteWorkDay() {
 
 	// Determine ID of current selected table row
 	var workDayId = $(this).parent().parent().find("td[name='id']").html();
-	var myURL = "http://localhost:8080/akibot-web-sandbox/webapi/services/timesheet/delete/"
+	var myURL = "webapi/services/timesheet/delete/"
 			+ workDayId;
 
 	// Perform DELETE request
@@ -236,7 +236,7 @@ function getMyBeanList() {
 
 	// Perform GET request
 	$.getJSON(
-					'http://localhost:8080/akibot-web-sandbox/webapi/services/mybean',
+					'webapi/services/mybean',
 					function(data) {
 
 						// Empty old table entries, select all child rows of
