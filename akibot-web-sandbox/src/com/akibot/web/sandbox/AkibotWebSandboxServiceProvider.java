@@ -28,6 +28,7 @@ public class AkibotWebSandboxServiceProvider {
 		List<MyBean> myBeanList = new ArrayList<MyBean>();
 		myBeanList.add(new MyBean(1, "Michael"));
 		myBeanList.add(new MyBean(2, "Jimmy"));
+		myBeanList.add(new MyBean(3, "Nick"));
 		System.out.println("finished.");
 		return myBeanList;
 

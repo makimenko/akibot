@@ -1,15 +1,8 @@
 package com.akibot.web.sandbox;
 
-import javax.persistence.Column;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class MyBean {
 
-	@Column(name = "ID")
 	private long id;
-
-	@Column(name = "NAME")
 	private String name;
 
 	public MyBean() {
