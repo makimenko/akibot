@@ -5,6 +5,10 @@ import com.pi4j.io.i2c.I2CBus;
 public class Constants {
 	public static final String DNS_HOST = "raspberrypi";
 	public static final int DNS_PORT = 2000;
+	
+	public static final String DNS_WEBTEST_HOST = "localhost";
+	public static final int DNS_WEBTEST_PORT = 2010;
+	
 
 	public static final int FRONT_SERVO_BASE_PIN = 0;
 	public static final int FRONT_SERVO_HEAD_PIN = 7;
