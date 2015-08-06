@@ -97,6 +97,11 @@ public class ClientDescriptionUtils {
 		return clientDescriptionA.getStartupTime() > clientDescriptionB.getStartupTime() || clientDescriptionB.getName() != null;
 	}
 
+	public static boolean isNameSettled(ClientDescription clientDescriptionA, ClientDescription clientDescriptionB) {
+		return clientDescriptionA.getName() != null && (clientDescriptionB.getName() == null || clientDescriptionB.getName().length() == 0)
+				&& clientDescriptionA.getName().length() > 0;
+	}
+
 	public static List<ClientDescription> mergeClientDescription(AkibotClient akibotClient, ClientDescription clientDescription, List<ClientDescription> mergeTo) {
 		if (clientDescription == null) {
 			return mergeTo;
@@ -119,12 +124,15 @@ public class ClientDescriptionUtils {
 				// new client
 				log.trace(akibotClient + ": Add client: " + clientDescription);
 				mergeTo.add(clientDescription);
-			} else if (addressIndex > 0 && nameIndex < 0 && isNew(clientDescription, mergeTo.get(addressIndex))) {
+			} else if (addressIndex >= 0 && nameIndex < 0
+			// && (isNew(clientDescription, mergeTo.get(addressIndex)) || isNameSettled(clientDescription, mergeTo.get(addressIndex)))
+			) {
 				// Change name
 				log.trace(akibotClient + ": Change client name: " + clientDescription);
 				mergeTo.remove(addressIndex);
 				mergeTo.add(clientDescription);
-			} else if (addressIndex < 0 && nameIndex > 0 && isNew(clientDescription, mergeTo.get(nameIndex))) {
+			} else if (addressIndex < 0 && nameIndex >= 0 // && isNew(clientDescription, mergeTo.get(nameIndex))
+			) {
 				// Change address
 				log.trace(akibotClient + ": Change client address: " + clientDescription);
 				mergeTo.remove(nameIndex);

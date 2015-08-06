@@ -10,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.DefaultDNSComponent;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
 import com.akibot.engine2.component.configuration.GetConfigurationRequest;
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
@@ -55,7 +56,7 @@ public class EngineTest {
 		clientB.getMyClientDescription().getTopicList().add(new TestSleepRequest());
 		clientB.start();
 
-		Thread.sleep(1000);
+		Thread.sleep(100);
 
 	}
 
@@ -215,7 +216,7 @@ public class EngineTest {
 		} catch (NooneInterestedException e) {
 		}
 
-		Thread.sleep(1000);
+		Thread.sleep(100);
 		request.setX(2);
 		response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
 
@@ -281,7 +282,7 @@ public class EngineTest {
 		AkibotClient clientD = new AkibotClient(clientName, new TestComponentWithConfig(), dnsAddress);
 		clientD.getMyClientDescription().getTopicList().add(new TestRequest());
 		clientD.start();
-		Thread.sleep(500);
+		Thread.sleep(100);
 
 		TestRequest testRequest = new TestRequest();
 		testRequest.setTo(clientName);
@@ -302,7 +303,7 @@ public class EngineTest {
 		getConfigurationResponse.setComponentConfiguration(testConfiguration);
 		getConfigurationResponse.setTo(clientName);
 		clientA.getOutgoingMessageManager().broadcastMessage(getConfigurationResponse);
-		Thread.sleep(500);
+		Thread.sleep(100);
 
 		failed = false;
 		try {
@@ -313,6 +314,50 @@ public class EngineTest {
 		}
 		assertEquals("Not expecting to fail (after configuration)", false, failed);
 
+	}
+
+	@Test
+	public void testParentClientDescription() throws Exception {
+		System.out.println("=============================");
+		int tempDnsPort = 2050;
+		InetSocketAddress tempDnsAddress = new InetSocketAddress("192.168.0.106", tempDnsPort);
+
+		String tmpDnsName = "akibot.tmp.dns";
+		AkibotClient tmpDnsClient = new AkibotClient(tmpDnsName, new DefaultDNSComponent(), tempDnsPort);
+		tmpDnsClient.start();
+
+		AkibotClient tmpClient1 = new AkibotClient("akibot.tmp.client1", new DefaultComponent(), tempDnsAddress);
+		tmpClient1.start();
+
+		Thread.sleep(100);
+
+		assertEquals("Check count", 1, tmpClient1.getClientDescriptionList().size());
+		ClientDescription clientDescription = tmpClient1.getClientDescriptionList().get(0);
+		System.out.println("** tmpDnsClient = " + tmpDnsClient.getMyClientDescription());
+		System.out.println("** " + tmpClient1.getClientDescriptionList());
+		System.out.println("** result = " + clientDescription);
+
+		assertEquals("Check name", tmpDnsName, clientDescription.getName());
+		assertEquals("Check class name", "com.akibot.engine2.component.DefaultDNSComponent", clientDescription.getComponentClassName());
+
+	}
+
+	@Test
+	public void testClientDescriptionUtils() {
+		ClientDescription dns_before = new ClientDescription(null, null, new InetSocketAddress("localhost", 1000));
+		ClientDescription dns = new ClientDescription("dns", "Component1", new InetSocketAddress("localhost", 1000));
+
+		List<ClientDescription> clientDescriptionList = new ArrayList<ClientDescription>();
+		clientDescriptionList.add(dns_before);
+
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(clientA, dns, clientDescriptionList);
+
+		assertEquals("Client count", (Integer) 1, (Integer) clientDescriptionList.size());
+
+		ClientDescription result = clientDescriptionList.get(0);
+
+		assertEquals("Client name", "dns", result.getName());
+		assertEquals("Client class name", "Component1", result.getComponentClassName());
 	}
 
 }

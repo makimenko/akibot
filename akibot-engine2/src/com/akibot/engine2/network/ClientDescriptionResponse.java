@@ -12,6 +12,7 @@ public class ClientDescriptionResponse extends SystemResponse {
 	private static final long serialVersionUID = 1L;
 
 	private List<ClientDescription> clientDescriptionList;
+	private ClientDescription senderClientDescription;
 
 	public List<ClientDescription> getClientDescriptionList() {
 		return clientDescriptionList;
@@ -25,6 +26,14 @@ public class ClientDescriptionResponse extends SystemResponse {
 	public String toString() {
 		return "ClientDescriptionResponse [" + (clientDescriptionList == null ? 0 : clientDescriptionList.size()) + "]";
 
+	}
+
+	public ClientDescription getSenderClientDescription() {
+		return senderClientDescription;
+	}
+
+	public void setSenderClientDescription(ClientDescription senderClientDescription) {
+		this.senderClientDescription = senderClientDescription;
 	}
 
 }

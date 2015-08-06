@@ -9,6 +9,7 @@ public class TestComponentWithConfig extends TestComponent {
 
 	private TestConfiguration componentConfiguration;
 
+	@Override
 	public TestConfiguration getComponentConfiguration() {
 		return componentConfiguration;
 	}

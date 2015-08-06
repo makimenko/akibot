@@ -140,11 +140,14 @@ public class AkibotClient extends Thread {
 		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(this, clientDescriptionRequest.getClientDescription(), clientDescriptionList);
 		ClientDescriptionResponse response = new ClientDescriptionResponse();
 		response.setClientDescriptionList(clientDescriptionList);
+		response.setSenderClientDescription(myClientDescription);
 		outgoingMessageManager.broadcastMessage(response);
 	}
 
 	private void onClientDescriptionResponse(ClientDescriptionResponse clientDescriptionResponse) throws FailedToConfigureException {
 		clientDescriptionList = ClientDescriptionUtils.mergeList(this, clientDescriptionResponse.getClientDescriptionList(), clientDescriptionList);
+		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(this, clientDescriptionResponse.getSenderClientDescription(),
+				clientDescriptionList);
 		if (!executedOnConfigurationClientAvailable && ClientDescriptionUtils.hasTopic(clientDescriptionList, new GetConfigurationRequest(), true)) {
 			onConfigurationClientAvailable();
 			executedOnConfigurationClientAvailable = true;

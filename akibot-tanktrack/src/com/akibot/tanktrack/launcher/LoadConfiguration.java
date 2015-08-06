@@ -29,7 +29,7 @@ public class LoadConfiguration {
 
 	public static void main(String[] args) throws Exception {
 		LoadConfiguration loadConfiguration = new LoadConfiguration();
-		
+
 		System.out.println("Upload default configuration:");
 		loadConfiguration.saveAkibotGyroscope();
 		loadConfiguration.saveAkibotFrontDistance();
@@ -46,7 +46,7 @@ public class LoadConfiguration {
 	}
 
 	public LoadConfiguration() throws Exception {
-		System.out.println("*** "+this.getClass().getName());
+		System.out.println("*** " + this.getClass().getName());
 		String dnsHost = Constants.DNS_HOST;
 		int dnsPort = Constants.DNS_PORT + 1;
 		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
