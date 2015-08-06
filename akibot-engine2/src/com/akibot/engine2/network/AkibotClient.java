@@ -78,10 +78,10 @@ public class AkibotClient extends Thread {
 		this.clientDescriptionList = new ArrayList<ClientDescription>();
 		this.component.setAkibotClient(this);
 
-		myClientDescription = new ClientDescription(name, getMyInetSocketAddress());
+		myClientDescription = new ClientDescription(name, component.getClass().getName(), getMyInetSocketAddress());
 
 		if (getParentSocketAddress() != null) {
-			ClientDescription parentClientDescription = new ClientDescription(null, getParentSocketAddress());
+			ClientDescription parentClientDescription = new ClientDescription(null, null, getParentSocketAddress());
 			clientDescriptionList.add(parentClientDescription);
 		}
 		log.info(this + ": initialized.");

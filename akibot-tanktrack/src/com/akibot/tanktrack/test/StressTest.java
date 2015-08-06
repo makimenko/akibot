@@ -90,7 +90,7 @@ public class StressTest {
 			for (int i = 1; i <= totalClients; i++) {
 				String name = "akibot.client." + i;
 				if (!name.equals(client.getName())) {
-					ClientDescription clientDescription = new ClientDescription(name, null);
+					ClientDescription clientDescription = new ClientDescription(name, null, null);
 					assertEquals(client + " has " + name, true, ClientDescriptionUtils.findByName(client.getClientDescriptionList(), clientDescription) > 0);
 				}
 

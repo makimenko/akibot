@@ -91,10 +91,10 @@ public class EngineTest {
 
 	@Test
 	public void testClientSimpleMerge() {
-		ClientDescription me = new ClientDescription("one", new InetSocketAddress("localhost", 1000));
-		ClientDescription client2a = new ClientDescription("two", new InetSocketAddress("localhost", 1001));
-		ClientDescription client2b = new ClientDescription("two", new InetSocketAddress("localhost", 1002));
-		ClientDescription client2c = new ClientDescription("two_new", new InetSocketAddress("localhost", 1002));
+		ClientDescription me = new ClientDescription("one", null, new InetSocketAddress("localhost", 1000));
+		ClientDescription client2a = new ClientDescription("two", null, new InetSocketAddress("localhost", 1001));
+		ClientDescription client2b = new ClientDescription("two", null, new InetSocketAddress("localhost", 1002));
+		ClientDescription client2c = new ClientDescription("two_new", null, new InetSocketAddress("localhost", 1002));
 
 		List<ClientDescription> clientDescriptionList = new ArrayList<ClientDescription>();
 		clientDescriptionList.add(me);
@@ -119,10 +119,10 @@ public class EngineTest {
 
 	@Test
 	public void testClientListMerge() {
-		ClientDescription me = new ClientDescription("one", new InetSocketAddress("localhost", 1000));
-		ClientDescription client2a = new ClientDescription("two", new InetSocketAddress("localhost", 1001));
-		ClientDescription client2b = new ClientDescription("two", new InetSocketAddress("localhost", 1002));
-		ClientDescription client2c = new ClientDescription("two_new", new InetSocketAddress("localhost", 1002));
+		ClientDescription me = new ClientDescription("one", null, new InetSocketAddress("localhost", 1000));
+		ClientDescription client2a = new ClientDescription("two", null, new InetSocketAddress("localhost", 1001));
+		ClientDescription client2b = new ClientDescription("two", null, new InetSocketAddress("localhost", 1002));
+		ClientDescription client2c = new ClientDescription("two_new", null, new InetSocketAddress("localhost", 1002));
 
 		List<ClientDescription> clientDescriptionList = new ArrayList<ClientDescription>();
 		clientDescriptionList.add(me);

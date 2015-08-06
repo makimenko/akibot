@@ -11,19 +11,23 @@ $(document).ready(function() {
 
 function init() {
 	refreshClientMonitoringTable();
+
+	$('#clientMonitoringRefreshButton').click(refreshClientMonitoringTable);
 }
 
 function refreshClientMonitoringTable() {
-	$.getJSON('../webapi/services/ClientMonitoring',
-			function(data) {
-				$('#clientMonitoringTable tbody > tr').remove();
-				var l = data.length;
-				var jsonData;
-				for (i = 0; i < l; i++) {
-					jsonData = data[i];
-					$('#clientMonitoringTable > tbody:last').append(
-							"<tr><td name='name'>" + jsonData.name + "</td>"
-									+ "</tr>");
-				}
-			});
+	$.getJSON('../webapi/services/clientmonitoring/list', function(data) {
+		$('#clientMonitoringTable tbody > tr').remove();
+		var l = data.length;
+		var jsonData;
+		for (i = 0; i < l; i++) {
+			jsonData = data[i];
+			$('#clientMonitoringTable > tbody:last').append(
+					"<tr>" + "<td name='name'>" + jsonData.name + "</td>"
+							+ "<td name='componentClassName'>"
+							+ jsonData.componentClassName + "</td>"
+							+ "<td name='address'>" + jsonData.address
+							+ "</td>" + "</tr>");
+		}
+	});
 }

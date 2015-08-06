@@ -16,12 +16,14 @@ public class ClientDescription implements Serializable {
 	private String name;
 	private ArrayList<Message> topicList;
 	private long startupTime;
+	private String componentClassName;
 
-	public ClientDescription(String name, InetSocketAddress address) {
+	public ClientDescription(String name, String componentClassName, InetSocketAddress address) {
 		setName(name);
 		setTopicList(new ArrayList<Message>());
 		setAddress(address);
 		setStartupTime(System.currentTimeMillis());
+		setComponentClassName(componentClassName);
 	}
 
 	public InetSocketAddress getAddress() {
@@ -61,7 +63,9 @@ public class ClientDescription implements Serializable {
 		StringBuffer sb = new StringBuffer();
 		sb.append("ClientDescription: ");
 		sb.append(name);
-		sb.append(" - ");
+		sb.append(" (");
+		sb.append(componentClassName);
+		sb.append(") - ");
 		if (address == null) {
 			sb.append("N/A");
 		} else {
@@ -79,6 +83,14 @@ public class ClientDescription implements Serializable {
 			sb.append(" (no topics)");
 		}
 		return sb.toString();
+	}
+
+	public String getComponentClassName() {
+		return componentClassName;
+	}
+
+	public void setComponentClassName(String componentClassName) {
+		this.componentClassName = componentClassName;
 	}
 
 }

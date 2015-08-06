@@ -1,5 +1,5 @@
 $(function() {
-/*
+
     Morris.Area({
         element: 'morris-area-chart',
         data: [{
@@ -75,7 +75,7 @@ $(function() {
         }],
         resize: true
     });
-*/
+
     Morris.Bar({
         element: 'morris-bar-chart',
         data: [{

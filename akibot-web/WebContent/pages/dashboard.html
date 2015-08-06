@@ -109,6 +109,8 @@
 
 			<!-- /.row -->
 			<div class="row">
+
+
 				<div class="col-lg-8">
 
 					<div class="panel panel-default">
@@ -116,42 +118,39 @@
 							<i class="fa fa-bar-chart-o fa-fw"></i> Component List
 							<div class="pull-right">
 								<div class="btn-group">
-									<button type="button"
+									<button id="clientMonitoringRefreshButton" type="button"
 										class="btn btn-default btn-xs dropdown-toggle"
 										data-toggle="dropdown">
 										Actions <span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu pull-right" role="menu">
-										<li><a href="#">Action</a></li>
+										<li><a href="#"> <i class="fa fa-refresh fa-fw"></i>
+												Refresh
+										</a></li>
+
 									</ul>
 								</div>
 							</div>
 						</div>
 						<!-- /.panel-heading -->
 						<div class="panel-body">
-							<div class="row">
-								<div class="col-lg-4">
-									<div class="table-responsive">
-										<table id="clientMonitoringTable" class="table table-bordered table-hover table-striped">
-											<thead>
-												<tr>
-													<th>Name</th>
-												</tr>
-											</thead>
-											<tbody>
-												<!-- JS -->
-											</tbody>
-										</table>
-									</div>
-									<!-- /.table-responsive -->
-								</div>
-								<!-- /.col-lg-4 (nested) -->
-								<div class="col-lg-8">
-									<div id="morris-bar-chart"></div>
-								</div>
-								<!-- /.col-lg-8 (nested) -->
+							<div class="table-responsive">
+								<table id="clientMonitoringTable"
+									class="table table-bordered table-hover table-striped">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Class</th>
+											<th>Address</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- JS -->
+									</tbody>
+								</table>
 							</div>
-							<!-- /.row -->
+							<!-- /.table-responsive -->
+
 						</div>
 						<!-- /.panel-body -->
 					</div>
@@ -228,7 +227,7 @@
 	<!-- Morris Charts JavaScript -->
 	<script src="../bower_components/raphael/raphael-min.js"></script>
 	<script src="../bower_components/morrisjs/morris.min.js"></script>
-	<script src="../js/morris-data.js"></script>
+	<!-- <script src="../js/morris-data.js"></script>  -->
 
 	<!-- Custom Theme JavaScript -->
 	<script src="../dist/js/sb-admin-2.js"></script>

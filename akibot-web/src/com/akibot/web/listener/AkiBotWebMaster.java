@@ -21,6 +21,8 @@ public class AkiBotWebMaster {
 			AkiBotWebMaster.akibotWebClient = new AkibotClient("akibot.web", new DefaultComponent(), dnsAddress);
 			AkiBotWebMaster.akibotWebClient.start();
 
+			System.out.println(AkiBotWebMaster.akibotWebClient.getClientDescriptionList());
+
 			initialized = true;
 			System.out.println("** AkibotWebListener: initialized");
 		} catch (FailedClientConstructorException e) {
