@@ -211,14 +211,14 @@ public class EngineTest {
 
 		TestResponse response = new TestResponse();
 		try {
-			response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
+			response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 200);
 			assertEquals("check (if possible)", 2, response.getResult());
 		} catch (NooneInterestedException e) {
 		}
 
 		Thread.sleep(100);
 		request.setX(2);
-		response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
+		response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 200);
 
 		assertEquals("check", 3, response.getResult());
 	}
@@ -320,7 +320,7 @@ public class EngineTest {
 	public void testParentClientDescription() throws Exception {
 		System.out.println("=============================");
 		int tempDnsPort = 2050;
-		InetSocketAddress tempDnsAddress = new InetSocketAddress("192.168.0.106", tempDnsPort);
+		InetSocketAddress tempDnsAddress = new InetSocketAddress("localhost", tempDnsPort);
 
 		String tmpDnsName = "akibot.tmp.dns";
 		AkibotClient tmpDnsClient = new AkibotClient(tmpDnsName, new DefaultDNSComponent(), tempDnsPort);
@@ -329,12 +329,14 @@ public class EngineTest {
 		AkibotClient tmpClient1 = new AkibotClient("akibot.tmp.client1", new DefaultComponent(), tempDnsAddress);
 		tmpClient1.start();
 
-		Thread.sleep(100);
+		Thread.sleep(200);
 
+		System.out.println("** tmpDnsClient = " + tmpDnsClient.getMyClientDescription());
+		System.out.println("** tmpClient1 list = " + tmpClient1.getClientDescriptionList());		
+		
 		assertEquals("Check count", 1, tmpClient1.getClientDescriptionList().size());
 		ClientDescription clientDescription = tmpClient1.getClientDescriptionList().get(0);
-		System.out.println("** tmpDnsClient = " + tmpDnsClient.getMyClientDescription());
-		System.out.println("** " + tmpClient1.getClientDescriptionList());
+
 		System.out.println("** result = " + clientDescription);
 
 		assertEquals("Check name", tmpDnsName, clientDescription.getName());

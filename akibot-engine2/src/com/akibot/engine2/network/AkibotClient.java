@@ -25,6 +25,7 @@ public class AkibotClient extends Thread {
 	private Component component;
 	private IncommingMessageManager incommingMessageManager;
 	private ClientDescription myClientDescription;
+	private ClientDescription dnsClientDescription;
 	private InetSocketAddress myInetSocketAddress;
 	private OutgoingMessageManager outgoingMessageManager;
 	private InetSocketAddress parentSocketAddress;
@@ -81,8 +82,7 @@ public class AkibotClient extends Thread {
 		myClientDescription = new ClientDescription(name, component.getClass().getName(), getMyInetSocketAddress());
 
 		if (getParentSocketAddress() != null) {
-			ClientDescription parentClientDescription = new ClientDescription(null, null, getParentSocketAddress());
-			clientDescriptionList.add(parentClientDescription);
+			dnsClientDescription = new ClientDescription(null, null, getParentSocketAddress());
 		}
 		log.info(this + ": initialized.");
 	}
@@ -189,7 +189,10 @@ public class AkibotClient extends Thread {
 		try {
 			ClientDescriptionRequest clientDescriptionRequest = new ClientDescriptionRequest();
 			clientDescriptionRequest.setClientDescription(myClientDescription);
-			outgoingMessageManager.broadcastMessage(clientDescriptionRequest);
+			if (dnsClientDescription != null) {
+				outgoingMessageManager.send(dnsClientDescription, clientDescriptionRequest);
+			}
+			// outgoingMessageManager.broadcastMessage(clientDescriptionRequest);
 		} catch (FailedToSendMessageException e) {
 			log.catching(this, e);
 		}
