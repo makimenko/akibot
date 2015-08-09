@@ -211,14 +211,14 @@ public class EngineTest {
 
 		TestResponse response = new TestResponse();
 		try {
-			response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 200);
+			response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
 			assertEquals("check (if possible)", 2, response.getResult());
 		} catch (NooneInterestedException e) {
 		}
 
 		Thread.sleep(100);
 		request.setX(2);
-		response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 200);
+		response = (TestResponse) clientC.getOutgoingMessageManager().sendSyncRequest(request, 100);
 
 		assertEquals("check", 3, response.getResult());
 	}
@@ -332,8 +332,8 @@ public class EngineTest {
 		Thread.sleep(200);
 
 		System.out.println("** tmpDnsClient = " + tmpDnsClient.getMyClientDescription());
-		System.out.println("** tmpClient1 list = " + tmpClient1.getClientDescriptionList());		
-		
+		System.out.println("** tmpClient1 list = " + tmpClient1.getClientDescriptionList());
+
 		assertEquals("Check count", 1, tmpClient1.getClientDescriptionList().size());
 		ClientDescription clientDescription = tmpClient1.getClientDescriptionList().get(0);
 

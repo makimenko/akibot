@@ -49,6 +49,7 @@ public class OutgoingMessageManager {
 				// DNS component without parent
 			} else {
 				log.warn(akibotClient + ": broadcastMessage: Skip broadcasting. No Clients!");
+				throw new NooneInterestedException();
 			}
 
 		}
