@@ -145,12 +145,12 @@ public class AkibotClient extends Thread {
 	}
 
 	private void onClientDescriptionResponse(ClientDescriptionResponse clientDescriptionResponse) throws FailedToConfigureException {
-		log.trace("** onClientDescriptionResponse BEFORE: " + this + ": " + this.clientDescriptionList);
+		// log.trace("** onClientDescriptionResponse BEFORE: " + this + ": " + this.clientDescriptionList);
 		clientDescriptionList = ClientDescriptionUtils.mergeList(this, clientDescriptionResponse.getClientDescriptionList(), clientDescriptionList);
-		log.trace("** onClientDescriptionResponse BEFORE2: " + this + ": " + this.clientDescriptionList);
+		// log.trace("** onClientDescriptionResponse BEFORE2: " + this + ": " + this.clientDescriptionList);
 		clientDescriptionList = ClientDescriptionUtils.mergeClientDescription(this, clientDescriptionResponse.getSenderClientDescription(),
 				clientDescriptionList);
-		log.trace("** onClientDescriptionResponse AFTER: " + this + ": " + this.clientDescriptionList);
+		// log.trace("** onClientDescriptionResponse AFTER: " + this + ": " + this.clientDescriptionList);
 		if (!executedOnConfigurationClientAvailable && ClientDescriptionUtils.hasTopic(clientDescriptionList, new GetConfigurationRequest(), true)) {
 			onConfigurationClientAvailable();
 			executedOnConfigurationClientAvailable = true;
@@ -171,10 +171,8 @@ public class AkibotClient extends Thread {
 
 	private void onStatusRequest(StatusRequest statusRequest) throws FailedToSendMessageException {
 		StatusResponse statusResponse = new StatusResponse();
-		statusResponse.setClientDescriptionList(clientDescriptionList);
-		statusResponse.setMyClientDescription(myClientDescription);
-		statusResponse.setCurrentTime(System.currentTimeMillis());
-		statusResponse.setStartupTime(startupTime);
+		statusResponse.setComponentStatus(this.getComponent().getComponentStatus());
+		statusResponse.copySyncId(statusRequest);
 		outgoingMessageManager.broadcastMessage(statusResponse);
 	}
 

@@ -27,6 +27,7 @@ function refreshClientMonitoringTable() {
 							+ "<td name='componentClassName'>"
 							+ jsonData.componentClassName + "</td>"
 							+ "<td name='address'>" + jsonData.address
+							+ "<td name='status'>" + jsonData.status
 							+ "</td>" + "</tr>");
 		}
 	});

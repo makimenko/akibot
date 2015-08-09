@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import com.akibot.web.bean.BeanUtils;
 import com.akibot.web.bean.SimplifiedClientDescription;
 import com.akibot.web.listener.AkiBotWebMaster;
 
@@ -26,6 +25,7 @@ public class ClientMonitoringServiceProvider {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<SimplifiedClientDescription> getList() {
 		System.out.println("ClientMonitoringServiceProvider.getList");
-		return BeanUtils.simplifyClientDescriptionList(AkiBotWebMaster.getAkibotWebClient().getClientDescriptionList());
+		List<SimplifiedClientDescription> list = AkiBotWebMaster.getSimplifiedClientDescriptionList();
+		return list;
 	}
 }

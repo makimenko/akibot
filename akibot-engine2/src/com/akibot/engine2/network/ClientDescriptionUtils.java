@@ -103,9 +103,9 @@ public class ClientDescriptionUtils {
 	}
 
 	public static List<ClientDescription> mergeClientDescription(AkibotClient akibotClient, ClientDescription clientDescription, List<ClientDescription> mergeTo) {
-		log.trace("** mergeClientDescription MERGE: " + akibotClient + ": " + clientDescription + " / " + mergeTo);
-		log.trace("** mergeClientDescription EQ input: " + akibotClient + ": " + akibotClient.getMyClientDescription() + " / " + clientDescription);
-		log.trace("** mergeClientDescription EQ: " + equalAddress(akibotClient.getMyClientDescription(), clientDescription));
+		// log.trace("** mergeClientDescription MERGE: " + akibotClient + ": " + clientDescription + " / " + mergeTo);
+		// log.trace("** mergeClientDescription EQ input: " + akibotClient + ": " + akibotClient.getMyClientDescription() + " / " + clientDescription);
+		// log.trace("** mergeClientDescription EQ: " + equalAddress(akibotClient.getMyClientDescription(), clientDescription));
 		if (clientDescription == null) {
 			return mergeTo;
 		} else if (equalAddress(akibotClient.getMyClientDescription(), clientDescription)

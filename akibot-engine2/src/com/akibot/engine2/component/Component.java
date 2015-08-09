@@ -3,8 +3,11 @@ package com.akibot.engine2.component;
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.exception.FailedToConfigureException;
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.message.Message;
+import com.akibot.engine2.message.Request;
+import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 
 public interface Component {
@@ -24,5 +27,12 @@ public interface Component {
 
 	public ComponentStatus getComponentStatus();
 
+	public AkibotClient getAkibotClient();
+
 	public ComponentConfiguration getComponentConfiguration();
+
+	public Response sendSyncRequest(Request request, int timeout) throws FailedToSendMessageException;
+
+	public void broadcastResponse(Response response, Request request) throws FailedToSendMessageException;
+
 }
