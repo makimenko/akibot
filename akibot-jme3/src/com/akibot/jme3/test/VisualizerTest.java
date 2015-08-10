@@ -6,10 +6,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.akibot.engine2.component.test.TestComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.jme3.component.message.NodeRegistrationRequest;
 import com.akibot.jme3.component.message.NodeTransformationRequest;
 import com.akibot.jme3.component.visualizer.utils.AkiGeometry;

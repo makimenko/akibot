@@ -13,14 +13,14 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.akibot.engine2.component.test.TestComponent;
+import com.akibot.engine2.component.test.TestRequest;
+import com.akibot.engine2.component.test.TestResponse;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.engine2.network.ClientDescriptionUtils;
-import com.akibot.engine2.test.component.TestComponent;
-import com.akibot.engine2.test.component.TestRequest;
-import com.akibot.engine2.test.component.TestResponse;
 import com.akibot.tanktrack.launcher.Constants;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

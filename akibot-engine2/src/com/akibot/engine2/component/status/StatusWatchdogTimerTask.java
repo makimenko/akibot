@@ -1,4 +1,4 @@
-package com.akibot.tanktrack.component.status;
+package com.akibot.engine2.component.status;
 
 import java.util.HashMap;
 import java.util.TimerTask;
@@ -17,6 +17,7 @@ public class StatusWatchdogTimerTask extends TimerTask {
 		this.statusWatchdogComponent = statusWatchdogComponent;
 	}
 
+	@Override
 	public void run() {
 		log.trace("StatusWatchdogTimerTask.run()");
 		updateList();
@@ -29,9 +30,9 @@ public class StatusWatchdogTimerTask extends TimerTask {
 	}
 
 	private void updateList() {
-
+		// Update my status
 		statusWatchdogComponent.getStatusList().put(statusWatchdogComponent.getAkibotClient().getName(), statusWatchdogComponent.getComponentStatus());
-
+		// Update client list
 		for (ClientDescription descr : statusWatchdogComponent.getAkibotClient().getClientDescriptionList()) {
 			String name = descr.getName();
 			if (!statusWatchdogComponent.getStatusList().containsKey(name)) {

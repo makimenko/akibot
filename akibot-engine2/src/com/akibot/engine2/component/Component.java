@@ -31,6 +31,8 @@ public interface Component {
 
 	public ComponentConfiguration getComponentConfiguration();
 
+	public void addTopic(Message message);
+
 	public Response sendSyncRequest(Request request, int timeout) throws FailedToSendMessageException;
 
 	public void broadcastResponse(Response response, Request request) throws FailedToSendMessageException;

@@ -4,10 +4,10 @@ import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultDNSComponent;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
+import com.akibot.engine2.component.test.TestComponent;
+import com.akibot.engine2.component.test.TestRequest;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.engine2.test.component.TestComponent;
-import com.akibot.engine2.test.component.TestRequest;
 import com.akibot.tanktrack.component.audio.AudioComponent;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;

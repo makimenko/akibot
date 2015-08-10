@@ -18,6 +18,7 @@ public class DefaultComponent implements Component {
 	private AkibotClient akibotClient;
 	private ComponentStatus componentStatus = new ComponentStatus();
 
+	@Override
 	public AkibotClient getAkibotClient() {
 		return akibotClient;
 	}
@@ -41,15 +42,18 @@ public class DefaultComponent implements Component {
 		getAkibotClient().getOutgoingMessageManager().broadcastMessage(message);
 	}
 
+	@Override
 	public void broadcastResponse(Response response, Request request) throws FailedToSendMessageException {
 		response.copySyncId(request);
 		broadcastMessage(response);
 	}
 
+	@Override
 	public Response sendSyncRequest(Request request, int timeout) throws FailedToSendMessageException {
 		return getAkibotClient().getOutgoingMessageManager().sendSyncRequest(request, timeout);
 	}
 
+	@Override
 	public void addTopic(Message message) {
 		getAkibotClient().getMyClientDescription().getTopicList().add(message);
 	}

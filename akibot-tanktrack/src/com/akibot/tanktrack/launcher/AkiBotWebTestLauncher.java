@@ -4,9 +4,9 @@ import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultDNSComponent;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
+import com.akibot.engine2.component.status.StatusWatchdogComponent;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.tanktrack.component.status.StatusWatchdogComponent;
 
 public class AkiBotWebTestLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotWebTestLauncher.class);

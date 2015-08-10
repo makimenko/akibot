@@ -1,4 +1,4 @@
-package com.akibot.tanktrack.component.status;
+package com.akibot.engine2.component.status;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -32,8 +32,10 @@ public class StatusWatchdogComponent extends DefaultComponent {
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
-		if (message instanceof StatusWatchdogRequest) {
-			onStatusWatchdogRequest((StatusWatchdogRequest) message);
+		if (message instanceof StatusWatchdogIndividualRequest) {
+			onStatusWatchdogIndividualRequest((StatusWatchdogIndividualRequest) message);
+		} else if (message instanceof StatusWatchdogSummaryRequest) {
+			onStatusWatchdogSummaryRequest((StatusWatchdogSummaryRequest) message);
 		} else if (message instanceof StatusResponse) {
 			onStatusResponse((StatusResponse) message);
 		} else {
@@ -43,20 +45,29 @@ public class StatusWatchdogComponent extends DefaultComponent {
 
 	@Override
 	public void loadDefaults() {
-		addTopic(new StatusWatchdogRequest());
+		addTopic(new StatusWatchdogIndividualRequest());
+		addTopic(new StatusWatchdogSummaryRequest());
 		addTopic(new StatusResponse());
 		getComponentStatus().setReady(true);
 	}
 
-	private void onStatusWatchdogRequest(StatusWatchdogRequest statusWatchdogRequest) throws FailedToSendMessageException {
-		log.debug(this.getAkibotClient() + ": " + statusWatchdogRequest);
-		StatusWatchdogResponse response = new StatusWatchdogResponse();
+	private void onStatusWatchdogIndividualRequest(StatusWatchdogIndividualRequest statusWatchdogIndividualRequest) throws FailedToSendMessageException {
+		log.debug(this.getAkibotClient() + ": " + statusWatchdogIndividualRequest);
+		StatusWatchdogIndividualResponse response = new StatusWatchdogIndividualResponse();
 
 		ComponentStatus componentStatus = new ComponentStatus();
-		componentStatus = statusList.get(statusWatchdogRequest.getComponentName());
+		componentStatus = statusList.get(statusWatchdogIndividualRequest.getComponentName());
 		response.setComponentStatus(componentStatus);
 
-		broadcastResponse(response, statusWatchdogRequest);
+		broadcastResponse(response, statusWatchdogIndividualRequest);
+	}
+
+	private void onStatusWatchdogSummaryRequest(StatusWatchdogSummaryRequest statusWatchdogSummaryRequest) throws FailedToSendMessageException {
+		log.debug(this.getAkibotClient() + ": " + statusWatchdogSummaryRequest);
+		StatusWatchdogSummaryResponse response = new StatusWatchdogSummaryResponse();
+		response.setSummaryMap(getStatusList());
+
+		broadcastResponse(response, statusWatchdogSummaryRequest);
 	}
 
 	private void onStatusResponse(StatusResponse statusResponse) {

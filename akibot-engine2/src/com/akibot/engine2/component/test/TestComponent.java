@@ -1,4 +1,4 @@
-package com.akibot.engine2.test.component;
+package com.akibot.engine2.component.test;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
@@ -68,4 +68,7 @@ public class TestComponent extends DefaultComponent {
 		this.array = array;
 	}
 
+	public void setReady(boolean ready) {
+		super.getComponentStatus().setReady(ready);
+	}
 }

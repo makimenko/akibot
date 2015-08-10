@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
+import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.web.bean.SimplifiedClientDescription;
 import com.akibot.web.listener.AkiBotWebMaster;
 
@@ -23,7 +24,7 @@ public class ClientMonitoringServiceProvider {
 	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<SimplifiedClientDescription> getList() {
+	public List<SimplifiedClientDescription> getList() throws FailedToSendMessageException {
 		System.out.println("ClientMonitoringServiceProvider.getList");
 		List<SimplifiedClientDescription> list = AkiBotWebMaster.getSimplifiedClientDescriptionList();
 		return list;

@@ -7,10 +7,10 @@ import java.net.InetSocketAddress;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.akibot.engine2.component.test.TestComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.tanktrack.component.audio.AudioRequest;
 import com.akibot.tanktrack.component.audio.AudioResponse;
 import com.akibot.tanktrack.component.distance.DistanceRequest;

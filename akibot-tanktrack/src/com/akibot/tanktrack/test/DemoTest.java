@@ -8,12 +8,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.akibot.engine2.component.test.TestComponent;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.engine2.test.component.TestComponent;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;

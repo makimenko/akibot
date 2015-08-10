@@ -16,18 +16,23 @@ import com.akibot.engine2.component.configuration.GetConfigurationRequest;
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.component.configuration.PutConfigurationRequest;
 import com.akibot.engine2.component.configuration.PutConfigurationResponse;
+import com.akibot.engine2.component.status.StatusWatchdogComponent;
+import com.akibot.engine2.component.status.StatusWatchdogIndividualRequest;
+import com.akibot.engine2.component.status.StatusWatchdogIndividualResponse;
+import com.akibot.engine2.component.status.StatusWatchdogSummaryRequest;
+import com.akibot.engine2.component.status.StatusWatchdogSummaryResponse;
+import com.akibot.engine2.component.test.TestComponent;
+import com.akibot.engine2.component.test.TestComponentWithConfig;
+import com.akibot.engine2.component.test.TestConfiguration;
+import com.akibot.engine2.component.test.TestRequest;
+import com.akibot.engine2.component.test.TestResponse;
+import com.akibot.engine2.component.test.TestResponse2;
+import com.akibot.engine2.component.test.TestSleepRequest;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.NooneInterestedException;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.engine2.network.ClientDescriptionUtils;
-import com.akibot.engine2.test.component.TestComponent;
-import com.akibot.engine2.test.component.TestComponentWithConfig;
-import com.akibot.engine2.test.component.TestConfiguration;
-import com.akibot.engine2.test.component.TestRequest;
-import com.akibot.engine2.test.component.TestResponse;
-import com.akibot.engine2.test.component.TestResponse2;
-import com.akibot.engine2.test.component.TestSleepRequest;
 
 public class EngineTest {
 	private static AkibotClient clientA;
@@ -331,13 +336,8 @@ public class EngineTest {
 
 		Thread.sleep(200);
 
-		System.out.println("** tmpDnsClient = " + tmpDnsClient.getMyClientDescription());
-		System.out.println("** tmpClient1 list = " + tmpClient1.getClientDescriptionList());
-
 		assertEquals("Check count", 1, tmpClient1.getClientDescriptionList().size());
 		ClientDescription clientDescription = tmpClient1.getClientDescriptionList().get(0);
-
-		System.out.println("** result = " + clientDescription);
 
 		assertEquals("Check name", tmpDnsName, clientDescription.getName());
 		assertEquals("Check class name", "com.akibot.engine2.component.DefaultDNSComponent", clientDescription.getComponentClassName());
@@ -360,6 +360,57 @@ public class EngineTest {
 
 		assertEquals("Client name", "dns", result.getName());
 		assertEquals("Client class name", "Component1", result.getComponentClassName());
+	}
+
+	@Test
+	public void testComponentStatusWatchdog() throws Exception {
+		int tempDnsPort = 2060;
+		InetSocketAddress tempDnsAddress = new InetSocketAddress("localhost", tempDnsPort);
+
+		String tmpDnsName = "akibot.tmp.dns";
+		AkibotClient tmpDnsClient = new AkibotClient(tmpDnsName, new DefaultDNSComponent(), tempDnsPort);
+		tmpDnsClient.start();
+
+		AkibotClient tmpClient1 = new AkibotClient("akibot.tmp.client1", new DefaultComponent(), tempDnsAddress);
+		tmpClient1.getComponent().addTopic(new StatusWatchdogIndividualResponse());
+		tmpClient1.getComponent().addTopic(new StatusWatchdogSummaryResponse());
+		tmpClient1.start();
+
+		TestComponent testComponent = new TestComponent();
+		AkibotClient tmpClient2 = new AkibotClient("akibot.tmp.client2", testComponent, tempDnsAddress);
+		tmpClient2.start();
+
+		Thread.sleep(100);
+
+		AkibotClient tmpStatusWatchdog = new AkibotClient("akibot.tmp.status", new StatusWatchdogComponent(100, 100), tempDnsAddress);
+		tmpStatusWatchdog.start();
+
+		Thread.sleep(100);
+
+		assertEquals("Check count", 3, tmpClient1.getClientDescriptionList().size());
+
+		StatusWatchdogIndividualRequest statusWatchdogIndividualRequest = new StatusWatchdogIndividualRequest();
+		statusWatchdogIndividualRequest.setComponentName("akibot.tmp.client2");
+
+		StatusWatchdogIndividualResponse statusWatchdogIndividualResponse;
+		statusWatchdogIndividualResponse = (StatusWatchdogIndividualResponse) tmpClient1.getComponent().sendSyncRequest(statusWatchdogIndividualRequest, 100);
+
+		assertEquals("Check StatusWatchdogIndividualResponse: ready", true, statusWatchdogIndividualResponse.getComponentStatus().isReady());
+
+		testComponent.setReady(false);
+		Thread.sleep(100);
+		statusWatchdogIndividualResponse = (StatusWatchdogIndividualResponse) tmpClient1.getComponent().sendSyncRequest(statusWatchdogIndividualRequest, 100);
+		assertEquals("Check StatusWatchdogIndividualResponse: not ready", false, statusWatchdogIndividualResponse.getComponentStatus().isReady());
+
+		StatusWatchdogSummaryRequest statusWatchdogSummaryRequest = new StatusWatchdogSummaryRequest();
+		StatusWatchdogSummaryResponse statusWatchdogSummaryResponse;
+		statusWatchdogSummaryResponse = (StatusWatchdogSummaryResponse) tmpClient1.getComponent().sendSyncRequest(statusWatchdogSummaryRequest, 100);
+
+		assertEquals("Check StatusWatchdogSummaryResponse: akibot.tmp.dns", true, statusWatchdogSummaryResponse.getSummaryMap().get("akibot.tmp.dns").isReady());
+		assertEquals("Check StatusWatchdogSummaryResponse: akibot.tmp.status", true, statusWatchdogSummaryResponse.getSummaryMap().get("akibot.tmp.status")
+				.isReady());
+		assertEquals("Check StatusWatchdogSummaryResponse: akibot.tmp.client2", false, statusWatchdogSummaryResponse.getSummaryMap().get("akibot.tmp.client2")
+				.isReady());
 	}
 
 }

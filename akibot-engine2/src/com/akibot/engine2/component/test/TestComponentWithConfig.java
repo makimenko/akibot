@@ -1,4 +1,4 @@
-package com.akibot.engine2.test.component;
+package com.akibot.engine2.component.test;
 
 import java.io.Serializable;
 

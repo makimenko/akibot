@@ -21,11 +21,10 @@ public class IncommingMessageExecutor extends Thread {
 
 	@Override
 	public void run() {
-
 		while (!this.isInterrupted()) {
 			try {
 				Message message = messageQueue.take();
-				if (message instanceof SystemRequest || message instanceof SystemResponse) {
+				if (SystemRequest.class.isAssignableFrom(message.getClass()) || SystemResponse.class.isAssignableFrom(message.getClass())) {
 					akibotClient.onSystemMessageReceived(message);
 				} else if (!akibotClient.getComponent().getComponentStatus().isReady()) {
 					throw new ComponentNotReadyException();
