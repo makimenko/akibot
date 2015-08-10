@@ -60,6 +60,10 @@ public class AkiBotWebMaster {
 				statusWatchdogSummaryRequest, 100);
 
 		List<SimplifiedClientDescription> result = new ArrayList<SimplifiedClientDescription>();
+		// add myself:
+		result.add(BeanUtils.simplifyClientDescription(akibotWebComponent.getAkibotClient().getMyClientDescription(), statusWatchdogSummaryResponse
+				.getSummaryMap().get(akibotWebComponent.getAkibotClient().getName())));
+		// add my clients:
 		for (ClientDescription descr : list) {
 			result.add(BeanUtils.simplifyClientDescription(descr, statusWatchdogSummaryResponse.getSummaryMap().get(descr.getName())));
 		}
