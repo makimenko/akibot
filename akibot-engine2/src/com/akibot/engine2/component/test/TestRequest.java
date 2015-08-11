@@ -20,6 +20,6 @@ public class TestRequest extends Request {
 
 	@Override
 	public String toString() {
-		return super.toString() + " (from=" + getFrom() + ", to=" + getTo() + ", syncId=" + getSyncId() + ")";
+		return super.toString() + " (from=" + getFrom() + ", to=" + getTo() + ", syncId=" + getSyncId() + "): x=" + getX();
 	}
 }

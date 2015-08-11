@@ -4,9 +4,6 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.akibot.engine2.component.ComponentStatus;
-import com.akibot.engine2.component.status.StatusWatchdogIndividualRequest;
-import com.akibot.engine2.component.status.StatusWatchdogIndividualResponse;
 import com.akibot.engine2.component.status.StatusWatchdogSummaryRequest;
 import com.akibot.engine2.component.status.StatusWatchdogSummaryResponse;
 import com.akibot.engine2.exception.FailedClientConstructorException;
