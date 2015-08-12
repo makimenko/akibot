@@ -2,7 +2,6 @@ package com.akibot.websocket;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,39 +10,41 @@ import javax.websocket.Session;
 
 import org.json.JSONObject;
 
+import com.akibot.engine2.logger.AkiLogger;
+
 @ApplicationScoped
 public class MySessionHandler {
-	private int deviceId = 0;
+	static final AkiLogger log = AkiLogger.create(MySessionHandler.class);
+
 	private final HashSet<Session> sessions = new HashSet<Session>();
-	private final Set devices = new HashSet<>();
 	private Timer timer;
+	private int i = 0;
+
+	public MySessionHandler() {
+		log.debug("MySessionHandler constructor");
+	}
 
 	public void addSession(Session session) {
-		System.out.println("MySessionHandler.addSession");
+		log.debug("MySessionHandler.addSession: " + session);
 		sessions.add(session);
-		/*
-		 * for (Device device : devices) { JsonObject addMessage = createAddMessage(device); sendToSession(session, addMessage); }
-		 */
-
 		timer = new Timer();
 		timer.schedule(new MyTask(), 1 * 1000, 1 * 5000);
-
 	}
 
 	public void removeSession(Session session) {
-		System.out.println("MySessionHandler.removeSession");
+		log.debug("MySessionHandler.removeSession: " + session);
 		sessions.remove(session);
 	}
 
 	private void sendToAllConnectedSessions(JSONObject message) {
-		System.out.println("MySessionHandler.sendToAllConnectedSessions");
+		log.debug("MySessionHandler.sendToAllConnectedSessions: " + message);
 		for (Session session : sessions) {
 			sendToSession(session, message);
 		}
 	}
 
 	private void sendToSession(Session session, JSONObject message) {
-		System.out.println("MySessionHandler.sendToSession");
+		log.trace("MySessionHandler.sendToSession: " + session + ": " + message);
 		try {
 			session.getBasicRemote().sendText(message.toString());
 		} catch (IOException ex) {
@@ -53,18 +54,15 @@ public class MySessionHandler {
 	}
 
 	public class MyTask extends TimerTask {
-		public MyTask() {
-		}
-
+		@Override
 		public void run() {
-			System.out.println("MyTask.run");
-
+			log.trace("MyTask.run");
+			i++;
 			MyBean myBean = new MyBean();
-			myBean.setSomeText("HaHaHa");
+			myBean.setSomeText("HaHaHa: " + i);
 
 			try {
 				JSONObject message = new JSONObject(myBean);
-
 				sendToAllConnectedSessions(message);
 			} catch (Exception e) {
 				e.printStackTrace();

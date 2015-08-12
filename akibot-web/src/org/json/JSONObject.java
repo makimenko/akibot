@@ -110,6 +110,7 @@ public class JSONObject {
 		 *
 		 * @return The string "null".
 		 */
+		@Override
 		public String toString() {
 			return "null";
 		}
@@ -1460,6 +1461,7 @@ public class JSONObject {
 	 * @return a printable, displayable, portable, transmittable representation of the object, beginning with <code>{</code>&nbsp;<small>(left brace)</small>
 	 *         and ending with <code>}</code>&nbsp;<small>(right brace)</small>.
 	 */
+	@Override
 	public String toString() {
 		try {
 			return this.toString(0);

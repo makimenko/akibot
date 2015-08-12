@@ -5,11 +5,11 @@ $(document).ready(function() {
 function init() {
 	$('#testRequestButton').click(function() {
 		doTestRequest(1)
-	});	
-	
+	});
+
 	var socket = new WebSocket(wsurl("/../../actions"));
 	socket.onmessage = onMessage;
-	
+
 }
 
 function doTestRequest(x) {
@@ -38,9 +38,9 @@ function doTestRequest(x) {
 
 function onMessage(message) {
 	var jsonDataStr = JSON.stringify(message);
-	console.log("onMessage: jsonDataStr: "+jsonDataStr);
-	
+	console.log("onMessage: jsonDataStr: " + jsonDataStr);
 	var object = JSON.parse(message.data);
+	$("<p>" + object.someText + "</p>").insertBefore($("#logPanel p:first"));
 }
 
 function wsurl(s) {
@@ -49,4 +49,3 @@ function wsurl(s) {
 			+ (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "")
 			+ l.pathname + s;
 }
-

@@ -9,33 +9,40 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import com.akibot.engine2.logger.AkiLogger;
+
 @ApplicationScoped
 @ServerEndpoint("/actions")
 public class MySocketServer {
+	static final AkiLogger log = AkiLogger.create(MySocketServer.class);
 
+	public MySocketServer() {
+		log.debug("MySocketServer constructor");
+	}
+	
 	@Inject
-	private MySessionHandler sessionHandler = new MySessionHandler();
+	private MySessionHandler sessionHandler;
 
 	@OnOpen
 	public void open(Session session) {
-		System.out.println("MySocketServer.open");
+		log.debug("MySocketServer.open: " + session);
 		sessionHandler.addSession(session);
 	}
 
 	@OnClose
 	public void close(Session session) {
-		System.out.println("MySocketServer.close");
+		log.debug("MySocketServer.close: " + session);
 		sessionHandler.removeSession(session);
 	}
 
 	@OnError
 	public void onError(Throwable error) {
-		System.out.println("MySocketServer.onError");
+		log.debug("MySocketServer.onError: " + error);
 	}
 
 	@OnMessage
 	public void handleMessage(String message, Session session) {
-		System.out.println("MySocketServer.onMessage");
+		log.debug("MySocketServer.onMessage: " + message);
 
 		// JSONObject jsonObject = JSONObject.fromObject(message);
 
@@ -43,4 +50,7 @@ public class MySocketServer {
 		// sessionHandler.addDevice(device);
 
 	}
+	
+	
+	
 }
