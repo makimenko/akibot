@@ -28,7 +28,7 @@ public class CommandServiceProvider {
 	@Path("/testRequest")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response testRequest(JAXBElement<TestRequest> testRequest) {
-		log.debug("REST Service testRequest called with: " + testRequest.getValue());
+		log.debug("testRequest: " + testRequest.getValue());
 		try {
 			AkiBotWebMaster.getAkibotWebComponent().broadcastMessage(testRequest.getValue());
 		} catch (FailedToSendMessageException e) {
