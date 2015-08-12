@@ -28,16 +28,13 @@ public class CommandServiceProvider {
 	@Path("/testRequest")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response testRequest(JAXBElement<TestRequest> testRequest) {
-		System.out.println("REST Service testRequest called with (raw): " + testRequest);
-		System.out.println("REST Service testRequest called with (value): " + testRequest.getValue());
-
+		log.debug("REST Service testRequest called with: " + testRequest.getValue());
 		try {
 			AkiBotWebMaster.getAkibotWebComponent().broadcastMessage(testRequest.getValue());
 		} catch (FailedToSendMessageException e) {
 			log.catching(e);
 			return Response.serverError().build();
 		}
-
 		return Response.created(uriInfo.getAbsolutePath()).build();
 	}
 }
