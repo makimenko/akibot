@@ -8,16 +8,20 @@ import com.akibot.engine2.component.status.StatusWatchdogSummaryRequest;
 import com.akibot.engine2.component.status.StatusWatchdogSummaryResponse;
 import com.akibot.engine2.exception.FailedClientConstructorException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.tanktrack.launcher.Constants;
 import com.akibot.web.bean.BeanUtils;
 import com.akibot.web.bean.SimplifiedClientDescription;
 import com.akibot.web.component.AkibotWebComponent;
+import com.akibot.websocket.MySessionHandler;
 
 public class AkiBotWebMaster {
+	static final AkiLogger log = AkiLogger.create(AkiBotWebMaster.class);
 	private static AkibotWebComponent akibotWebComponent;
 	private static boolean initialized;
+	private static MySessionHandler mySessionHandler;
 
 	static {
 		initialized = false;
@@ -65,6 +69,15 @@ public class AkiBotWebMaster {
 			result.add(BeanUtils.simplifyClientDescription(descr, statusWatchdogSummaryResponse.getSummaryMap().get(descr.getName())));
 		}
 		return result;
+	}
+
+	public static MySessionHandler getMySessionHandler() {
+		return mySessionHandler;
+	}
+
+	public static void setMySessionHandler(MySessionHandler mySessionHandler) {
+		log.debug("** setMySessionHandler");
+		AkiBotWebMaster.mySessionHandler = mySessionHandler;
 	}
 
 }

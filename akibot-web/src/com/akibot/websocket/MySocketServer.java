@@ -16,12 +16,12 @@ import com.akibot.engine2.logger.AkiLogger;
 public class MySocketServer {
 	static final AkiLogger log = AkiLogger.create(MySocketServer.class);
 
+	@Inject
+	private static MySessionHandler sessionHandler = new MySessionHandler();
+
 	public MySocketServer() {
 		log.debug("MySocketServer constructor");
 	}
-	
-	@Inject
-	private MySessionHandler sessionHandler;
 
 	@OnOpen
 	public void open(Session session) {
@@ -50,7 +50,5 @@ public class MySocketServer {
 		// sessionHandler.addDevice(device);
 
 	}
-	
-	
-	
+
 }

@@ -17,7 +17,7 @@ function doTestRequest(x) {
 	testRequest.x = x;
 
 	var jsonDataStr = JSON.stringify(testRequest);
-	console.log('jsonDataStr' + jsonDataStr);
+	console.log('doTestRequest: jsonDataStr' + jsonDataStr);
 
 	var myURL = "../webapi/services/control/testRequest";
 	$.ajax({
@@ -26,7 +26,7 @@ function doTestRequest(x) {
 		contentType : "application/json",
 		data : jsonDataStr,
 		success : function(result) {
-			console.log('SUCCESS');
+			//console.log('SUCCESS');
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 			console.log("jqXHR statusCode" + jqXHR.statusCode());
@@ -39,8 +39,8 @@ function doTestRequest(x) {
 function onMessage(message) {
 	var jsonDataStr = JSON.stringify(message);
 	console.log("onMessage: jsonDataStr: " + jsonDataStr);
-	var object = JSON.parse(message.data);
-	$("<p>" + object.someText + "</p>").insertBefore($("#logPanel p:first"));
+	//var object = JSON.parse(message.data);
+	$("<p>" + jsonDataStr + "</p>").insertBefore($("#logPanel p:first"));
 }
 
 function wsurl(s) {
