@@ -4,19 +4,19 @@ import com.akibot.engine2.message.Response;
 
 public class OrientationResponse extends Response {
 	private static final long serialVersionUID = 1L;
-	private double northDegrreesXY;
+	private double northDegreesXY;
 	private boolean success;
 
-	public double getNorthDegrreesXY() {
-		return northDegrreesXY;
+	public double getNorthDegreesXY() {
+		return northDegreesXY;
 	}
 
 	public boolean isSuccess() {
 		return success;
 	}
 
-	public void setNorthDegrreesXY(double northDegrreesXY) {
-		this.northDegrreesXY = northDegrreesXY;
+	public void setNorthDegreesXY(double northDegreesXY) {
+		this.northDegreesXY = northDegreesXY;
 	}
 
 	public void setSuccess(boolean success) {
@@ -25,7 +25,7 @@ public class OrientationResponse extends Response {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + ": " + isSuccess() + " (" + northDegrreesXY + ")";
+		return this.getClass().getName() + ": " + isSuccess() + " (" + northDegreesXY + ")";
 	}
 
 }

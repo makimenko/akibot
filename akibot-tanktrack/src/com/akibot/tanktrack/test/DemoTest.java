@@ -126,7 +126,7 @@ public class DemoTest {
 		say(SAY7_GYROSCOPE);
 		Thread.sleep(1000);
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
-		messageOrientationRequest.setNorthDegrreesXY(270);
+		messageOrientationRequest.setNorthDegreesXY(270);
 		messageOrientationRequest.setPrecissionDegrees(1);
 		messageOrientationRequest.setTimeoutMillis(10000);
 		sendSync(messageOrientationRequest, 13000);

@@ -147,7 +147,7 @@ public class GyroscopeComponent extends DefaultComponent {
 		response.setX(x);
 		response.setY(y);
 		response.setZ(z);
-		response.setNorthDegrreesXY(northDegreesXY);
+		response.setNorthDegreesXY(northDegreesXY);
 
 		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 		broadcastResponse(response, gyroscopeValueRequest);

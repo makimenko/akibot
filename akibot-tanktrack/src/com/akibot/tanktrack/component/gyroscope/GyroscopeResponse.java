@@ -4,13 +4,13 @@ import com.akibot.engine2.message.Response;
 
 public class GyroscopeResponse extends Response {
 	private static final long serialVersionUID = 1L;
-	private double northDegrreesXY;
+	private double northDegreesXY;
 	private double x;
 	private double y;
 	private double z;
 
-	public double getNorthDegrreesXY() {
-		return northDegrreesXY;
+	public double getNorthDegreesXY() {
+		return northDegreesXY;
 	}
 
 	public double getX() {
@@ -25,8 +25,8 @@ public class GyroscopeResponse extends Response {
 		return z;
 	}
 
-	public void setNorthDegrreesXY(double northDegrreesXY) {
-		this.northDegrreesXY = northDegrreesXY;
+	public void setNorthDegreesXY(double northDegreesXY) {
+		this.northDegreesXY = northDegreesXY;
 	}
 
 	public void setX(double x) {
@@ -43,7 +43,7 @@ public class GyroscopeResponse extends Response {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + ": " + this.getNorthDegrreesXY();
+		return this.getClass().getName() + ": " + this.getNorthDegreesXY();
 	}
 
 }

@@ -73,8 +73,8 @@ public class OrientationComponent extends DefaultComponent {
 	}
 
 	public boolean isExpected(OrientationRequest orientationRequest, GyroscopeResponse gyroscopeResponse) {
-		double aXY = gyroscopeResponse.getNorthDegrreesXY();
-		double eXY = orientationRequest.getNorthDegrreesXY();
+		double aXY = gyroscopeResponse.getNorthDegreesXY();
+		double eXY = orientationRequest.getNorthDegreesXY();
 		double ePrecission = orientationRequest.getPrecissionDegrees();
 		return (robinUtils.leftDistance(aXY, eXY) <= ePrecission || robinUtils.rightDistance(aXY, eXY) <= ePrecission);
 	}
@@ -95,7 +95,7 @@ public class OrientationComponent extends DefaultComponent {
 	private void onOrientationRequest(OrientationRequest orientationRequest) throws FailedToSendMessageException, InterruptedException,
 			InvalidOrientationRequestException {
 
-		if (orientationRequest.getNorthDegrreesXY() >= 0 && orientationRequest.getNorthDegrreesXY() <= 360 && orientationRequest.getPrecissionDegrees() > 0
+		if (orientationRequest.getNorthDegreesXY() >= 0 && orientationRequest.getNorthDegreesXY() <= 360 && orientationRequest.getPrecissionDegrees() > 0
 				&& orientationRequest.getPrecissionDegrees() < 360 && orientationRequest.getTimeoutMillis() > 0
 				&& orientationRequest.getTimeoutMillis() <= 60000) {
 
@@ -114,8 +114,8 @@ public class OrientationComponent extends DefaultComponent {
 				if (isExpected(orientationRequest, gyroscopeResponse)) {
 					break;
 				} else {
-					double aXY = gyroscopeResponse.getNorthDegrreesXY();
-					double eXY = orientationRequest.getNorthDegrreesXY();
+					double aXY = gyroscopeResponse.getNorthDegreesXY();
+					double eXY = orientationRequest.getNorthDegreesXY();
 					double rightDistance = robinUtils.rightDistance(aXY, eXY);
 					double leftDistance = robinUtils.leftDistance(aXY, eXY);
 
@@ -150,7 +150,7 @@ public class OrientationComponent extends DefaultComponent {
 			orientationResponse.setSuccess(expected);
 			log.debug(this.getAkibotClient() + ": Orientation: " + expected);
 
-			orientationResponse.setNorthDegrreesXY(gyroscopeResponse.getNorthDegrreesXY());
+			orientationResponse.setNorthDegreesXY(gyroscopeResponse.getNorthDegreesXY());
 			broadcastResponse(orientationResponse, orientationRequest);
 
 		} else {

@@ -66,7 +66,7 @@ public class TankTrackTest {
 	public void testGyroscope() throws FailedToSendMessageException, InterruptedException {
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		GyroscopeResponse gyroscopeResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
-		assertEquals("Check value", true, gyroscopeResponse.getNorthDegrreesXY() > 0 && gyroscopeResponse.getNorthDegrreesXY() < 360);
+		assertEquals("Check value", true, gyroscopeResponse.getNorthDegreesXY() > 0 && gyroscopeResponse.getNorthDegreesXY() < 360);
 	}
 
 	@Test
@@ -82,14 +82,14 @@ public class TankTrackTest {
 		Thread.sleep(2000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		GyroscopeResponse middlePosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
-		double diffAfterMoveToTheRight = roundRobinUtils.rightDistance(startPosition.getNorthDegrreesXY(), middlePosition.getNorthDegrreesXY());
+		double diffAfterMoveToTheRight = roundRobinUtils.rightDistance(startPosition.getNorthDegreesXY(), middlePosition.getNorthDegreesXY());
 		assertEquals("Check value diffAfterMoveToTheRight " + diffAfterMoveToTheRight, true, diffAfterMoveToTheRight > 2);
 
 		testClient.getOutgoingMessageManager().broadcastMessage(leftRequest);
 		Thread.sleep(2000);
 		testClient.getOutgoingMessageManager().broadcastMessage(stopRequest);
 		GyroscopeResponse endPosition = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 2000);
-		double diffAfterMoveToTheLeft = roundRobinUtils.leftDistance(middlePosition.getNorthDegrreesXY(), endPosition.getNorthDegrreesXY());
+		double diffAfterMoveToTheLeft = roundRobinUtils.leftDistance(middlePosition.getNorthDegreesXY(), endPosition.getNorthDegreesXY());
 		assertEquals("Check value diffAfterMoveToTheLeft " + diffAfterMoveToTheLeft, true, diffAfterMoveToTheLeft > 2);
 
 	}
@@ -233,7 +233,7 @@ public class TankTrackTest {
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() - startTime <= 15000) {
 			GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
-			double value = gyroscopeValueResponse.getNorthDegrreesXY();
+			double value = gyroscopeValueResponse.getNorthDegreesXY();
 
 			sample++;
 			if (sample == 1) {
@@ -274,7 +274,7 @@ public class TankTrackTest {
 	@Test
 	public void testOrientation() throws FailedToSendMessageException, InterruptedException {
 		OrientationRequest orientationRequest = new OrientationRequest();
-		orientationRequest.setNorthDegrreesXY(90);
+		orientationRequest.setNorthDegreesXY(90);
 		orientationRequest.setPrecissionDegrees(5);
 		orientationRequest.setTimeoutMillis(10000);
 		OrientationResponse orientationResponse = (OrientationResponse) testClient.getOutgoingMessageManager().sendSyncRequest(orientationRequest, 13000);
@@ -283,7 +283,7 @@ public class TankTrackTest {
 
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		GyroscopeResponse gyroscopeValueResponse = (GyroscopeResponse) testClient.getOutgoingMessageManager().sendSyncRequest(gyroscopeValueRequest, 1000);
-		assertEquals("Orientation value", true, roundRobinUtils.modularDistance(gyroscopeValueResponse.getNorthDegrreesXY(), 90) < 20);
+		assertEquals("Orientation value", true, roundRobinUtils.modularDistance(gyroscopeValueResponse.getNorthDegreesXY(), 90) < 20);
 	}
 
 	@Test

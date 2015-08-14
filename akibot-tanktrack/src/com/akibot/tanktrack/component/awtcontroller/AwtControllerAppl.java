@@ -75,7 +75,7 @@ public class AwtControllerAppl {
 		Message messageObstacleRequest = new ObstacleRequest();
 
 		OrientationRequest messageOrientationRequest = new OrientationRequest();
-		messageOrientationRequest.setNorthDegrreesXY(90);
+		messageOrientationRequest.setNorthDegreesXY(90);
 		messageOrientationRequest.setPrecissionDegrees(1);
 		messageOrientationRequest.setTimeoutMillis(10000);
 

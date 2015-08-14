@@ -5,12 +5,12 @@ import com.akibot.engine2.message.Request;
 public class OrientationRequest extends Request {
 	private static final long serialVersionUID = 1L;
 
-	private double northDegrreesXY;
+	private double northDegreesXY;
 	private double precissionDegrees;
 	private double timeoutMillis;
 
-	public double getNorthDegrreesXY() {
-		return northDegrreesXY;
+	public double getNorthDegreesXY() {
+		return northDegreesXY;
 	}
 
 	public double getPrecissionDegrees() {
@@ -21,8 +21,8 @@ public class OrientationRequest extends Request {
 		return timeoutMillis;
 	}
 
-	public void setNorthDegrreesXY(double northDegrreesXY) {
-		this.northDegrreesXY = northDegrreesXY;
+	public void setNorthDegreesXY(double northDegreesXY) {
+		this.northDegreesXY = northDegreesXY;
 	}
 
 	public void setPrecissionDegrees(double precissionDegrees) {
@@ -35,7 +35,7 @@ public class OrientationRequest extends Request {
 
 	@Override
 	public String toString() {
-		return this.getClass().getName() + ": " + this.getNorthDegrreesXY() + " / " + this.getPrecissionDegrees();
+		return this.getClass().getName() + ": " + this.getNorthDegreesXY() + " / " + this.getPrecissionDegrees();
 	}
 
 }
