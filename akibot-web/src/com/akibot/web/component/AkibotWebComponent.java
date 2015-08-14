@@ -9,6 +9,7 @@ import com.akibot.engine2.component.test.TestResponse;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.orientation.OrientationResponse;
 import com.akibot.web.listener.AkiBotWebMaster;
 
 public class AkibotWebComponent extends DefaultComponent {
@@ -24,10 +25,15 @@ public class AkibotWebComponent extends DefaultComponent {
 		if (message instanceof StatusWatchdogIndividualResponse || message instanceof StatusWatchdogSummaryResponse) {
 			log.trace("AkibotWebComponent.onMessageReceived: " + message);
 		} else if (message instanceof TestResponse) {
+			log.debug("Response is: " + message);
 			JSONObject objectMessage = new JSONObject(message);
 			// JSONObject objectMessage = new JSONObject();
 			// objectMessage.put("value", message.toString());
-			AkiBotWebMaster.getMySessionHandler().sendToAllConnectedSessions(objectMessage);
+
+			// If at least one client exists, then inform him:
+			if (AkiBotWebMaster.getMySessionHandler() != null) {
+				AkiBotWebMaster.getMySessionHandler().sendToAllConnectedSessions(objectMessage);
+			}
 		} else {
 			throw new UnsupportedMessageException(message.toString());
 		}
@@ -38,6 +44,7 @@ public class AkibotWebComponent extends DefaultComponent {
 		addTopic(new StatusWatchdogIndividualResponse());
 		addTopic(new StatusWatchdogSummaryResponse());
 		addTopic(new TestResponse());
+		addTopic(new OrientationResponse());
 		getComponentStatus().setReady(true);
 	}
 
