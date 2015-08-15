@@ -18,6 +18,7 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
@@ -96,6 +97,13 @@ public class CommandServiceProvider {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response gyroscopeValueRequest() {
 		return broadcastMessage(new GyroscopeValueRequest());
+	}
+
+	@PUT
+	@Path("/gyroscopeCalibrationRequest")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response gyroscopeCalibrationRequest() {
+		return broadcastMessage(new GyroscopeCalibrationRequest(30000, 50, false));
 	}
 
 	@PUT

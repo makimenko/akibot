@@ -35,15 +35,15 @@ function init() {
 	});
 
 	$('#distanceButton').click(function() {
-		doDistanceRequest();
+		doSimpleRequest("distanceRequest");
 	});
 
 	$('#gyroscopeValueButton').click(function() {
-		doGyroscopeValueRequest();
+		doSimpleRequest("gyroscopeValueRequest");
 	});
 
 	$('#servoCenterButton').click(function() {
-		doServoCenterRequest();
+		doSimpleRequest("servoCenterRequest");
 	});
 
 	$('#speechSynthesisButton').click(
@@ -52,7 +52,13 @@ function init() {
 						$('#speechSynthesisVoiceInput').val());
 			});
 
+	$('#gyroscopeCalibrationButton').click(function() {
+		doSimpleRequest("gyroscopeCalibrationRequest");
+	});
+
+	
 }
+
 
 function doSpeechSynthesisRequest(speechText, voice) {
 	var speechSynthesisRequest = new Object();
@@ -63,17 +69,6 @@ function doSpeechSynthesisRequest(speechText, voice) {
 			.stringify(speechSynthesisRequest));
 }
 
-function doServoCenterRequest() {
-	callService2("servoCenterRequest");
-}
-
-function doDistanceRequest() {
-	callService2("distanceRequest");
-}
-
-function doGyroscopeValueRequest() {
-	callService2("gyroscopeValueRequest");
-}
 
 function doMotionRequest(direction, milliseconds) {
 	var timedMotionMillisecondsInput = $('#timedMotionMillisecondsInput').val();

@@ -13,6 +13,7 @@ import com.akibot.tanktrack.component.audio.AudioComponent;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeComponent;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
 import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
@@ -59,13 +60,17 @@ public class AkiBotLauncher {
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
 
 		AkibotClient audioComponent = new AkibotClient("akibot.audio", new AudioComponent(), dnsAddress);
+
 		AkibotClient echoLocatorFront = new AkibotClient("akibot.echolocator.front", new EchoLocatorComponent(), dnsAddress);
+
 		AkibotClient echoLocatorBack = new AkibotClient("akibot.echolocator.back", new EchoLocatorComponent(), dnsAddress);
 
 		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent(), dnsAddress);
 
+		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), dnsAddress);
+
 		AkibotClient statusWatchdogClient = new AkibotClient("akibot.status.watchdog", new StatusWatchdogComponent(1 * 1000, 5 * 1000), dnsAddress);
-		
+
 		// Start all
 		configClient.start();
 		Thread.sleep(1000);
@@ -84,6 +89,7 @@ public class AkiBotLauncher {
 		echoLocatorBack.start();
 		audioComponent.start();
 		orientation.start();
+		gyroscopeCalibration.start();
 		statusWatchdogClient.start();
 
 		System.out.println("AkiBotLauncher: Started");

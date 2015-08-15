@@ -17,10 +17,9 @@ public class AwtControllerLauncher {
 		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
 		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), dnsAddress);
-		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), dnsAddress);
 
 		awtController.start();
-		gyroscopeCalibration.start();
+
 
 		System.out.println("AwtControllerLauncher: Started");
 		// LOOP forever:

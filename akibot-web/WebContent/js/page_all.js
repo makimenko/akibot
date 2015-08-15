@@ -45,3 +45,7 @@ function callService2(subUrl) {
 		error : logError
 	});
 }
+
+function doSimpleRequest(name) {
+	callService2(name);
+}

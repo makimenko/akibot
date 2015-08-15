@@ -11,6 +11,7 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
+import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse;
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.MotionResponse;
@@ -45,6 +46,7 @@ public class AkibotWebComponent extends DefaultComponent {
 		addTopic(new DistanceResponse());
 		addTopic(new GyroscopeResponse());
 		addTopic(new SpeechSynthesisResponse());
+		addTopic(new GyroscopeCalibrationResponse());
 
 		getComponentStatus().setReady(true);
 	}
