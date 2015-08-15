@@ -1,5 +1,5 @@
 var CONTROL_URL = "../webapi/services/control";
-var CONTENT_TYPE = "application/json";
+var CONTENT_TYPE = "application/json; charset=utf-8";
 
 $(function() {
 	$("#navigationDiv").load("include/navigation.html", highlightNavigation);
@@ -30,6 +30,17 @@ function callService(subUrl, jsonDataStr) {
 		url : CONTROL_URL + "/" + subUrl,
 		contentType : CONTENT_TYPE,
 		data : jsonDataStr,
+		success : logSuccess,
+		error : logError
+	});
+}
+
+function callService2(subUrl) {
+	console.log('callService: ' + subUrl);
+	$.ajax({
+		type : "PUT",
+		url : CONTROL_URL + "/" + subUrl,
+		contentType : CONTENT_TYPE,
 		success : logSuccess,
 		error : logError
 	});

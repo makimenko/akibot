@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 
 import com.akibot.engine2.component.DefaultDNSComponent;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
+import com.akibot.engine2.component.status.StatusWatchdogComponent;
 import com.akibot.engine2.component.test.TestComponent;
 import com.akibot.engine2.component.test.TestRequest;
 import com.akibot.engine2.logger.AkiLogger;
@@ -63,6 +64,8 @@ public class AkiBotLauncher {
 
 		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent(), dnsAddress);
 
+		AkibotClient statusWatchdogClient = new AkibotClient("akibot.status.watchdog", new StatusWatchdogComponent(1 * 1000, 5 * 1000), dnsAddress);
+		
 		// Start all
 		configClient.start();
 		Thread.sleep(1000);
@@ -81,6 +84,7 @@ public class AkiBotLauncher {
 		echoLocatorBack.start();
 		audioComponent.start();
 		orientation.start();
+		statusWatchdogClient.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

@@ -16,7 +16,6 @@ public class MySessionHandler {
 	static final AkiLogger log = AkiLogger.create(MySessionHandler.class);
 
 	private final HashSet<Session> sessions = new HashSet<Session>();
-	private int i = 0;
 
 	public MySessionHandler() {
 		log.debug("MySessionHandler constructor");

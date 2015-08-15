@@ -33,6 +33,46 @@ function init() {
 	$('#backwardButton').click(function() {
 		doMotionRequest("BACKWARD");
 	});
+
+	$('#distanceButton').click(function() {
+		doDistanceRequest();
+	});
+
+	$('#gyroscopeValueButton').click(function() {
+		doGyroscopeValueRequest();
+	});
+
+	$('#servoCenterButton').click(function() {
+		doServoCenterRequest();
+	});
+
+	$('#speechSynthesisButton').click(
+			function() {
+				doSpeechSynthesisRequest($('#speechSynthesisTextInput').val(),
+						$('#speechSynthesisVoiceInput').val());
+			});
+
+}
+
+function doSpeechSynthesisRequest(speechText, voice) {
+	var speechSynthesisRequest = new Object();
+	speechSynthesisRequest.speechText = speechText;
+	speechSynthesisRequest.voice = voice;
+
+	callService("speechSynthesisRequest", JSON
+			.stringify(speechSynthesisRequest));
+}
+
+function doServoCenterRequest() {
+	callService2("servoCenterRequest");
+}
+
+function doDistanceRequest() {
+	callService2("distanceRequest");
+}
+
+function doGyroscopeValueRequest() {
+	callService2("gyroscopeValueRequest");
 }
 
 function doMotionRequest(direction, milliseconds) {

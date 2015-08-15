@@ -9,7 +9,11 @@ import com.akibot.engine2.component.test.TestResponse;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.distance.DistanceResponse;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
+import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
+import com.akibot.tanktrack.component.tanktrack.MotionResponse;
 import com.akibot.web.listener.AkiBotWebMaster;
 
 public class AkibotWebComponent extends DefaultComponent {
@@ -22,21 +26,13 @@ public class AkibotWebComponent extends DefaultComponent {
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
-		if (message instanceof StatusWatchdogIndividualResponse || message instanceof StatusWatchdogSummaryResponse) {
-			log.trace("AkibotWebComponent.onMessageReceived: " + message);
-		} else if (message instanceof TestResponse) {
-			log.debug("Response is: " + message);
-			JSONObject objectMessage = new JSONObject(message);
-			// JSONObject objectMessage = new JSONObject();
-			// objectMessage.put("value", message.toString());
+		log.debug("Response is: " + message);
+		JSONObject objectMessage = new JSONObject(message);
+		// JSONObject objectMessage = new JSONObject();
+		// objectMessage.put("value", message.toString());
 
-			// If at least one client exists, then inform him:
-			if (AkiBotWebMaster.getMySessionHandler() != null) {
-				AkiBotWebMaster.getMySessionHandler().sendToAllConnectedSessions(objectMessage);
-			}
-		} else {
-			throw new UnsupportedMessageException(message.toString());
-		}
+		// If at least one client exists, then inform him:
+		AkiBotWebMaster.sendToAllConnectedSessions(objectMessage);
 	}
 
 	@Override
@@ -45,6 +41,11 @@ public class AkibotWebComponent extends DefaultComponent {
 		addTopic(new StatusWatchdogSummaryResponse());
 		addTopic(new TestResponse());
 		addTopic(new OrientationResponse());
+		addTopic(new MotionResponse());
+		addTopic(new DistanceResponse());
+		addTopic(new GyroscopeResponse());
+		addTopic(new SpeechSynthesisResponse());
+
 		getComponentStatus().setReady(true);
 	}
 

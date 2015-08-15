@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,12 +12,10 @@
 <title>AkiBot Web Portal</title>
 
 <!-- Bootstrap Core CSS -->
-<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+<link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- MetisMenu CSS -->
-<link href="../bower_components/metisMenu/dist/metisMenu.min.css"
-	rel="stylesheet">
+<link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
 <!-- Timeline CSS -->
 <link href="../dist/css/timeline.css" rel="stylesheet">
@@ -28,13 +26,10 @@
 <!-- Morris Charts CSS -->
 <link href="../bower_components/morrisjs/morris.css" rel="stylesheet">
 
-<link
-	href="../bower_components/datatables-responsive/css/dataTables.responsive.css"
-	rel="stylesheet">
+<link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
 
 <!-- Custom Fonts -->
-<link href="../bower_components/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
+<link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,7 +48,7 @@
 
 		<div id="page-wrapper">
 			<div class="row">
-				<div class="col-md-15">
+				<div class="col-lg-12">
 					<h1 class="page-header">Control</h1>
 				</div>
 				<!-- /.col-lg-12 -->
@@ -61,7 +56,7 @@
 			<!-- /.row -->
 
 			<div class="row">
-				<div class="col-md-5">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<i class="fa fa-random fa-fw"></i> Movement
@@ -69,16 +64,14 @@
 						<div class="panel-body">
 							<form role="form-group">
 								<div class="form-group">
-									<div class="btn-group btn-group-justified" role="group"
-										aria-label="...">
+									<div class="btn-group btn-group-justified" role="group" aria-label="...">
 										<div class="btn-group" role="group"></div>
 										<div class="btn-group" role="group">
 											<button id="forwardButton" type="button" class="btn btn-default">Forward</button>
 										</div>
 										<div class="btn-group" role="group"></div>
 									</div>
-									<div class="btn-group btn-group-justified" role="group"
-										aria-label="...">
+									<div class="btn-group btn-group-justified" role="group" aria-label="...">
 										<div class="btn-group" role="group">
 											<button id="leftButton" type="button" class="btn btn-default">Left</button>
 										</div>
@@ -89,8 +82,7 @@
 											<button id="rightButton" type="button" class="btn btn-default">Right</button>
 										</div>
 									</div>
-									<div class="btn-group btn-group-justified" role="group"
-										aria-label="...">
+									<div class="btn-group btn-group-justified" role="group" aria-label="...">
 										<div class="btn-group" role="group"></div>
 										<div class="btn-group" role="group">
 											<button id="backwardButton" type="button" class="btn btn-default">Backward</button>
@@ -100,8 +92,7 @@
 								</div>
 
 								<div class="form-group input-group">
-									<label>Timed motion (milliseconds)</label> <input id="timedMotionMillisecondsInput" type="text"
-										class="form-control">
+									<label>Timed motion (milliseconds)</label> <input id="timedMotionMillisecondsInput" type="text" class="form-control">
 								</div>
 							</form>
 
@@ -113,29 +104,24 @@
 							<i class="fa fa-arrow-left fa-fw"></i> Simple Demo Commands
 						</div>
 						<div class="panel-body">
-							<div class="btn-group btn-group-justified" role="group"
-								aria-label="...">
+							<div class="btn-group btn-group-justified" role="group" aria-label="...">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">Distance</button>
+									<button id="distanceButton" type="button" class="btn btn-default">Distance</button>
 								</div>
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">Gyroscope</button>
+									<button id="gyroscopeValueButton" type="button" class="btn btn-default">Gyroscope</button>
 								</div>
 								<div class="btn-group" role="group">
-									<button id="testRequestButton" type="button"
-										class="btn btn-default">Test</button>
+									<button id="testRequestButton" type="button" class="btn btn-default">Test</button>
 								</div>
 							</div>
 
-							<div class="btn-group btn-group-justified" role="group"
-								aria-label="...">
+							<div class="btn-group btn-group-justified" role="group" aria-label="...">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">Servo
-										Center</button>
+									<button id="servoCenterButton" type="button" class="btn btn-default">Servo Center</button>
 								</div>
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">Gyro
-										Calibration</button>
+									<button type="button" class="btn btn-default">Gyro Calibration</button>
 								</div>
 							</div>
 						</div>
@@ -143,7 +129,7 @@
 
 				</div>
 
-				<div class="col-md-5">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<i class="fa fa-repeat fa-fw"></i> Orientation
@@ -151,12 +137,10 @@
 						<div class="panel-body">
 							<form role="form">
 								<div class="form-group">
-									<label>Target degrees:</label> <input id="northDegreesXYInput" class="form-control"
-										value="90">
+									<label>Target degrees:</label> <input id="northDegreesXYInput" class="form-control" value="90">
 								</div>
 								<div class="form-group">
-									<label>Precission degrees:</label> <input id="precissionDegreesInput" class="form-control"
-										value="20">
+									<label>Precission degrees:</label> <input id="precissionDegreesInput" class="form-control" value="20">
 								</div>
 								<div class="form-group">
 									<label>Max Time:</label> <input id="timeoutMillisInput" class="form-control" value="15000">
@@ -167,7 +151,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-5">
+				<div class="col-lg-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<i class="fa fa-bullhorn fa-fw"></i> Speech Synthesis
@@ -175,17 +159,15 @@
 						<div class="panel-body">
 							<form role="form">
 								<div class="form-group">
-									<label>Text to speech:</label> <input class="form-control"
-										value="Привет!">
+									<label>Text to speech:</label> <input id="speechSynthesisTextInput" class="form-control" value="Привет!">
 								</div>
 								<div class="form-group">
-									<label>Voice</label> <select class="form-control">
+									<label>Voice</label> <select id="speechSynthesisVoiceInput" class="form-control">
 										<option>voxforge-ru-nsh</option>
 										<option>cmu-slt-hsmm</option>
 									</select>
 								</div>
-								<button type="button" class="btn btn-default">Speech
-									Synhesis</button>
+								<button id="speechSynthesisButton" type="button" class="btn btn-default">Speech Synhesis</button>
 							</form>
 						</div>
 					</div>

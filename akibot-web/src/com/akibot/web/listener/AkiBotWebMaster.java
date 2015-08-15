@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.akibot.engine2.component.status.StatusWatchdogSummaryRequest;
 import com.akibot.engine2.component.status.StatusWatchdogSummaryResponse;
 import com.akibot.engine2.exception.FailedClientConstructorException;
@@ -25,8 +27,8 @@ public class AkiBotWebMaster {
 
 	static {
 		initialized = false;
-		String dnsHost = Constants.DNS_WEBTEST_HOST;
-		int dnsPort = Constants.DNS_WEBTEST_PORT;
+		String dnsHost = Constants.DNS_HOST;
+		int dnsPort = Constants.DNS_PORT;
 
 		try {
 			InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
@@ -76,8 +78,13 @@ public class AkiBotWebMaster {
 	}
 
 	public static void setMySessionHandler(MySessionHandler mySessionHandler) {
-		log.debug("** setMySessionHandler");
 		AkiBotWebMaster.mySessionHandler = mySessionHandler;
+	}
+	
+	public static void sendToAllConnectedSessions(JSONObject objectMessage) {
+		if (AkiBotWebMaster.getMySessionHandler() != null) {
+			AkiBotWebMaster.getMySessionHandler().sendToAllConnectedSessions(objectMessage);
+		}
 	}
 
 }
