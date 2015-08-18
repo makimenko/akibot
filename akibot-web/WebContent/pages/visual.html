@@ -43,43 +43,27 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
+
 </head>
 
 <body>
+	<script src="../js/webgl/three.min.js"></script>
+	<script src="../js/webgl/TrackballControls.js"></script>
+	<script src="../js/webgl/Detector.js"></script>
+	<script src="../js/webgl/stats.min.js"></script>
 
 	<div id="wrapper">
 
 		<div id="navigationDiv"></div>
 
 		<div id="page-wrapper">
-			<div class="row">
-				<div class="col-md-12">
-					<h1 class="page-header">Logs</h1>
-				</div>
-				<!-- /.col-lg-12 -->
-			</div>
-			<!-- /.row -->
+
 
 			<div class="panel-body">
-				<ul class="nav nav-pills">
-					<li class="active"><a href="#incomingLogPanel"
-						data-toggle="tab" aria-expanded="true">Incoming</a></li>
-					<li class=""><a href="#outgoingLogPanel" data-toggle="tab"
-						aria-expanded="false">Outgoing</a></li>
-				</ul>
-				<br />
-				<div class="tab-content">
-					<div class="tab-pane fade active in" id="incomingLogPanel">
-						<p>Incomming messages</p>
-					</div>
-					<div class="tab-pane fade" id="outgoingLogPanel">
-						<p>Outgoing messages</p>
-					</div>
-				</div>
-
+				<div id="container" class="col-md-12"></div>
 			</div>
 		</div>
-
 
 	</div>
 	<!-- /#wrapper -->
@@ -107,8 +91,7 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 
 	<script src="../js/page_all.js"></script>
-	<script src="../js/page_log.js" type="text/javascript"></script>
-	<script src="../js/date.js" type="text/javascript"></script>
+	<script src="../js/page_visual.js" type="text/javascript"></script>
 </body>
 
 </html>
