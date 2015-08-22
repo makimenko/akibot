@@ -1,4 +1,4 @@
-package com.akibot.web.component;
+package com.akibot.web.component.web;
 
 import org.json.JSONObject;
 
@@ -6,7 +6,6 @@ import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.component.status.StatusWatchdogIndividualResponse;
 import com.akibot.engine2.component.status.StatusWatchdogSummaryResponse;
 import com.akibot.engine2.component.test.TestResponse;
-import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceResponse;

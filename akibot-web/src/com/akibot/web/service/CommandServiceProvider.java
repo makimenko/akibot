@@ -42,7 +42,7 @@ public class CommandServiceProvider {
 	private Response broadcastMessage(Message requestMessage) {
 		log.debug("broadcastRequestMessage: " + requestMessage);
 		try {
-			AkiBotWebMaster.getAkibotWebComponent().broadcastMessage((Message) requestMessage);
+			AkiBotWebMaster.getAkibotWebComponent().broadcastMessage(requestMessage);
 		} catch (FailedToSendMessageException e) {
 			log.catching(e);
 			return Response.serverError().build();

@@ -16,7 +16,7 @@ import com.akibot.engine2.network.ClientDescription;
 import com.akibot.tanktrack.launcher.Constants;
 import com.akibot.web.bean.BeanUtils;
 import com.akibot.web.bean.SimplifiedClientDescription;
-import com.akibot.web.component.AkibotWebComponent;
+import com.akibot.web.component.web.AkibotWebComponent;
 import com.akibot.websocket.MySessionHandler;
 
 public class AkiBotWebMaster {
@@ -80,7 +80,7 @@ public class AkiBotWebMaster {
 	public static void setMySessionHandler(MySessionHandler mySessionHandler) {
 		AkiBotWebMaster.mySessionHandler = mySessionHandler;
 	}
-	
+
 	public static void sendToAllConnectedSessions(JSONObject objectMessage) {
 		if (AkiBotWebMaster.getMySessionHandler() != null) {
 			AkiBotWebMaster.getMySessionHandler().sendToAllConnectedSessions(objectMessage);
