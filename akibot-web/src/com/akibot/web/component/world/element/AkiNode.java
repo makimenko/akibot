@@ -1,6 +1,7 @@
 package com.akibot.web.component.world.element;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AkiNode implements Serializable {
@@ -55,6 +56,14 @@ public class AkiNode implements Serializable {
 
 	public void setTransformation(AkiNodeTransformation transformation) {
 		this.transformation = transformation;
+	}
+
+	public void attachChild(AkiNode akiNode) {
+		if (childs == null) {
+			childs = new ArrayList<AkiNode>();
+		}
+		childs.add(akiNode);
+
 	}
 
 }
