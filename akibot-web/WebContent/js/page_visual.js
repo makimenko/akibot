@@ -28,23 +28,24 @@ function onWsMessage(message) {
 
 	if (object.className == "WorldContentResponse") {
 		console.log("WorldContentResponse:");
-
 		addNodeRecursion(object.worldNode);
-
 		render();
-
+	} else if (object.className == "NodeTransformationMessage") {
+		console.log("NodeTransformationResponse:");
+		
+		var object = this.scene.getObjectByName("robotMesh", true);
+		
 	}
+	
+	
+	
 }
 
 function addNodeRecursion(node) {
-	console.log("recursion: " + node.name)
+	console.log("addNodeRecursion: " + node.name)
 	addNode(node);
-
 	if (node.childs != null) {
-		console.log("node.childs=" + node.childs);
-		console.log("node.childs=" + node.childs.length);
 		for (i = 0; i < node.childs.length; i++) {
-			console.log("for")
 			addNodeRecursion(node.childs[i]);
 		}
 	}
@@ -58,98 +59,38 @@ function addNode(node) {
 		transparent : true
 	});
 
-	var mesh = new THREE.Mesh(new THREE.BoxGeometry(node.geometry.dimension.x,
-			node.geometry.dimension.y, node.geometry.dimension.z), matDummy);
+	var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
+	var mesh = new THREE.Mesh(geometry, matDummy);
+	applyTransformation(mesh, node.transformation);
+
 	mesh.name = node.name;
 	mesh.updateMatrix();
 	scene.add(mesh);
 }
 
-function tmp_TO_BE_DELETED() {
-	var x = {
-		"className" : "WorldContentResponse",
-		"from" : "akibot.world",
-		"to" : "akibot.web",
-		"worldNode" : {
-			"name" : "worldNode",
-			"geometry" : {
-				"dimension" : {
-					"x" : 500,
-					"y" : 500,
-					"z" : 10
-				}
-			},
-			"childs" : [ {
-				"name" : "robotNode",
-				"geometry" : {
-					"dimension" : {
-						"x" : 50,
-						"y" : 50,
-						"z" : 50
-					}
-				}
-			} ]
+function applyTransformation(object3d, transformation) {
+	if (transformation != null) {
+		// Translation (move):
+		if (transformation.translationChanged == true) {
+			object3d.translateX(transformation.translation.x);
+			object3d.translateY(transformation.translation.y);
+			object3d.translateZ(transformation.translation.z);
+		}
+		// Rotation:
+		if (transformation.rotationChanged == true) {
+			object3d.rotation.x = transformation.rotation.x;
+			object3d.rotation.y = transformation.rotation.y;
+			object3d.rotation.z = transformation.rotation.z;
+		}
+		// Scale:
+		if (transformation.scaleChanged == true) {
+			object3d.scale.set(transformation.scale.x, transformation.scale.y, transformation.scale.z);
 		}
 	}
-
-	var matWorld = new THREE.MeshLambertMaterial({
-		color : 0x0f0f0f,
-		shading : THREE.FlatShading,
-		opacity : 0.5,
-		transparent : true
-	});
-
-	var matLocation = new THREE.MeshLambertMaterial({
-		color : 0xffffff,
-		shading : THREE.FlatShading,
-		opacity : 0.5,
-		transparent : true
-	});
-
-	var matRobot = new THREE.MeshLambertMaterial({
-		color : 0xff0000,
-		shading : THREE.FlatShading,
-		opacity : 0.5,
-		transparent : true
-	});
-
-	var worldMesh = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1),
-			matWorld);
-	worldMesh.updateMatrix();
-	worldMesh.matrixAutoUpdate = false;
-	scene.add(worldMesh);
-
-	var carMesh = new THREE.Mesh(new THREE.BoxGeometry(50, 30, 1), matLocation);
-	carMesh.position.x = 70;
-	carMesh.position.y = 50;
-	carMesh.position.z = 1;
-	carMesh.rotation.z = 0.1;
-	carMesh.updateMatrix();
-	carMesh.matrixAutoUpdate = false;
-	worldMesh.add(carMesh);
-
-	var homeMesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 1),
-			matLocation);
-	homeMesh.position.x = -50;
-	homeMesh.position.y = 0;
-	homeMesh.position.z = 1;
-	homeMesh.updateMatrix();
-	homeMesh.matrixAutoUpdate = false;
-	worldMesh.add(homeMesh);
-
-	var robotMesh = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), matRobot);
-	robotMesh.name = "robotMesh";
-	robotMesh.position.x = 0;
-	robotMesh.position.y = 0;
-	robotMesh.position.z = 5;
-	robotMesh.updateMatrix();
-	robotMesh.matrixAutoUpdate = false;
-	homeMesh.add(robotMesh);
-
 }
 
-function drawScene() {
 
+function drawScene() {
 	drawGridHelper();
 	drawAxisHelper();
 	// drawArrowHelper();
@@ -180,21 +121,18 @@ function drawAxisHelper() {
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
-			0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
-			"robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
 function init() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
 	camera.position.y = -200;
 	camera.position.z = 200;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));

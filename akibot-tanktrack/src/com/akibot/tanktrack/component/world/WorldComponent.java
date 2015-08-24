@@ -7,6 +7,7 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.world.element.AkiGeometry;
 import com.akibot.tanktrack.component.world.element.AkiNode;
+import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
 import com.akibot.tanktrack.component.world.element.AkiPoint;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
@@ -19,17 +20,27 @@ public class WorldComponent extends DefaultComponent {
 
 	public WorldComponent() {
 
+		// World Node:
 		worldNode = new AkiNode("worldNode");
 		AkiGeometry baseNodeGeometry = new AkiGeometry();
-		baseNodeGeometry.setDimension(new AkiPoint(500, 500, 10));
+		baseNodeGeometry.setDimension(new AkiPoint(500, 500, 5));
 		worldNode.setGeometry(baseNodeGeometry);
 		monitorNode(worldNode);
 
+		// Robot Node:
 		AkiGeometry robotNodeGeometry = new AkiGeometry();
-		robotNodeGeometry.setDimension(new AkiPoint(50, 50, 50));
+		robotNodeGeometry.setDimension(new AkiPoint(20, 20, 20));
 		AkiNode robotNode = new AkiNode("robotNode");
 		robotNode.setGeometry(robotNodeGeometry);
+
+		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
+		robotTransformation.setTranslation(new AkiPoint(0, 0, 15));
+		robotTransformation.setRotation(new AkiPoint(1, 1, 1));
+		robotTransformation.setScale(new AkiPoint(1, 1, 1));
+		robotNode.setTransformation(robotTransformation);
+
 		worldNode.attachChild(robotNode);
+
 		monitorNode(robotNode);
 
 	}
