@@ -13,10 +13,3 @@ function onMessage(message) {
 	//var object = JSON.parse(message.data);
 	$("<p>" + jsonDataStr + "</p>").insertBefore($("#incomingLogPanel p:first"));
 }
-
-function wsurl(s) {
-	var l = window.location;
-	return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname
-			+ (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "")
-			+ l.pathname + s;
-}

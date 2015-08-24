@@ -18,6 +18,7 @@ import com.akibot.tanktrack.component.orientation.OrientationComponent;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
 import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
+import com.akibot.tanktrack.component.world.WorldComponent;
 
 public class AkiBotLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotLauncher.class);
@@ -69,6 +70,8 @@ public class AkiBotLauncher {
 
 		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), dnsAddress);
 
+		AkibotClient worldClient = new AkibotClient("akibot.world", new WorldComponent(), dnsAddress);
+
 		AkibotClient statusWatchdogClient = new AkibotClient("akibot.status.watchdog", new StatusWatchdogComponent(1 * 1000, 5 * 1000), dnsAddress);
 
 		// Start all
@@ -90,6 +93,8 @@ public class AkiBotLauncher {
 		audioComponent.start();
 		orientation.start();
 		gyroscopeCalibration.start();
+		worldClient.start();
+
 		statusWatchdogClient.start();
 
 		System.out.println("AkiBotLauncher: Started");

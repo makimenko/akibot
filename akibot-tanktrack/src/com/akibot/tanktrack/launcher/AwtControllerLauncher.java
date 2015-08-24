@@ -5,7 +5,6 @@ import java.net.InetSocketAddress;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.awtcontroller.AwtControllerComponent;
-import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
 
 public class AwtControllerLauncher {
 	static final AkiLogger log = AkiLogger.create(AwtControllerLauncher.class);
@@ -19,7 +18,6 @@ public class AwtControllerLauncher {
 		AkibotClient awtController = new AkibotClient("akibot.awtcontroller", new AwtControllerComponent(), dnsAddress);
 
 		awtController.start();
-
 
 		System.out.println("AwtControllerLauncher: Started");
 		// LOOP forever:

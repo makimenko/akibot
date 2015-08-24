@@ -14,6 +14,7 @@ import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibration
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.MotionResponse;
+import com.akibot.tanktrack.component.world.message.WorldResponse;
 import com.akibot.web.listener.AkiBotWebMaster;
 
 public class AkibotWebComponent extends DefaultComponent {
@@ -32,7 +33,7 @@ public class AkibotWebComponent extends DefaultComponent {
 		// objectMessage.put("value", message.toString());
 
 		// If at least one client exists, then inform him:
-		AkiBotWebMaster.sendToAllConnectedSessions(objectMessage);
+		AkiBotWebMaster.sendToAllWebSocketSessions(objectMessage);
 	}
 
 	@Override
@@ -46,6 +47,7 @@ public class AkibotWebComponent extends DefaultComponent {
 		addTopic(new GyroscopeResponse());
 		addTopic(new SpeechSynthesisResponse());
 		addTopic(new GyroscopeCalibrationResponse());
+		addTopic(new WorldResponse());
 
 		getComponentStatus().setReady(true);
 	}

@@ -1,4 +1,4 @@
-package com.akibot.web.component.world.message;
+package com.akibot.tanktrack.component.world.message;
 
 import com.akibot.engine2.message.Request;
 

@@ -6,14 +6,92 @@ if (!Detector.webgl)
 var container, stats;
 var camera, controls, scene, renderer;
 var cross;
+var ws;
 
 $(document).ready(function() {
+	initWs();
 	init();
 });
 
-animate();
+function initWs() {
+	ws = new WebSocket(wsurl("/../../actions"));
+	ws.onopen = onWsOpen;
+	ws.onmessage = onWsMessage;
+}
 
-function drawScene() {
+function onWsMessage(message) {
+	var jsonDataStr = JSON.stringify(message);
+	console.log("onMessage: jsonDataStr: " + jsonDataStr);
+	var object = JSON.parse(message.data);
+	// $("<p>" + jsonDataStr + "</p>").insertBefore($("#incomingLogPanel
+	// p:first"));
+
+	if (object.className == "WorldContentResponse") {
+		console.log("WorldContentResponse:");
+
+		addNodeRecursion(object.worldNode);
+
+		render();
+
+	}
+}
+
+function addNodeRecursion(node) {
+	console.log("recursion: " + node.name)
+	addNode(node);
+
+	if (node.childs != null) {
+		console.log("node.childs=" + node.childs);
+		console.log("node.childs=" + node.childs.length);
+		for (i = 0; i < node.childs.length; i++) {
+			console.log("for")
+			addNodeRecursion(node.childs[i]);
+		}
+	}
+}
+
+function addNode(node) {
+	var matDummy = new THREE.MeshLambertMaterial({
+		color : 0x0f0f0f,
+		shading : THREE.FlatShading,
+		opacity : 0.5,
+		transparent : true
+	});
+
+	var mesh = new THREE.Mesh(new THREE.BoxGeometry(node.geometry.dimension.x,
+			node.geometry.dimension.y, node.geometry.dimension.z), matDummy);
+	mesh.name = node.name;
+	mesh.updateMatrix();
+	scene.add(mesh);
+}
+
+function tmp_TO_BE_DELETED() {
+	var x = {
+		"className" : "WorldContentResponse",
+		"from" : "akibot.world",
+		"to" : "akibot.web",
+		"worldNode" : {
+			"name" : "worldNode",
+			"geometry" : {
+				"dimension" : {
+					"x" : 500,
+					"y" : 500,
+					"z" : 10
+				}
+			},
+			"childs" : [ {
+				"name" : "robotNode",
+				"geometry" : {
+					"dimension" : {
+						"x" : 50,
+						"y" : 50,
+						"z" : 50
+					}
+				}
+			} ]
+		}
+	}
+
 	var matWorld = new THREE.MeshLambertMaterial({
 		color : 0x0f0f0f,
 		shading : THREE.FlatShading,
@@ -35,7 +113,8 @@ function drawScene() {
 		transparent : true
 	});
 
-	var worldMesh = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1), matWorld);
+	var worldMesh = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1),
+			matWorld);
 	worldMesh.updateMatrix();
 	worldMesh.matrixAutoUpdate = false;
 	scene.add(worldMesh);
@@ -49,7 +128,8 @@ function drawScene() {
 	carMesh.matrixAutoUpdate = false;
 	worldMesh.add(carMesh);
 
-	var homeMesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 1), matLocation);
+	var homeMesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 1),
+			matLocation);
 	homeMesh.position.x = -50;
 	homeMesh.position.y = 0;
 	homeMesh.position.z = 1;
@@ -66,9 +146,13 @@ function drawScene() {
 	robotMesh.matrixAutoUpdate = false;
 	homeMesh.add(robotMesh);
 
+}
+
+function drawScene() {
+
 	drawGridHelper();
 	drawAxisHelper();
-	drawArrowHelper();
+	// drawArrowHelper();
 	// drawBoundingBoxHelper();
 }
 
@@ -96,18 +180,21 @@ function drawAxisHelper() {
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
+			0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
+			"robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
 function init() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth
+			/ window.innerHeight, 1, 1000);
 	camera.position.y = -200;
 	camera.position.z = 200;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -160,6 +247,7 @@ function init() {
 
 	render();
 	onWindowResize();
+	// onSceneReady();
 }
 
 function onWindowResize() {
@@ -183,3 +271,13 @@ function render() {
 	renderer.render(scene, camera);
 	stats.update();
 }
+
+function onWsOpen() {
+	sendWsRequest(new WebSocketMessage("WorldContentRequest"));
+}
+
+function sendWsRequest(requestObject) {
+	ws.send(JSON.stringify(requestObject));
+}
+
+animate();

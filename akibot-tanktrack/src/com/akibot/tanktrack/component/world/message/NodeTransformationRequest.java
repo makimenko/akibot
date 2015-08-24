@@ -1,6 +1,6 @@
-package com.akibot.web.component.world.message;
+package com.akibot.tanktrack.component.world.message;
 
-import com.akibot.web.component.world.element.AkiNode;
+import com.akibot.tanktrack.component.world.element.AkiNode;
 
 public class NodeTransformationRequest extends WorldRequest {
 

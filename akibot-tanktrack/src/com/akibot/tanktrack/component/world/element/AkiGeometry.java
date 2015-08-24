@@ -1,4 +1,4 @@
-package com.akibot.web.component.world.element;
+package com.akibot.tanktrack.component.world.element;
 
 import java.io.Serializable;
 

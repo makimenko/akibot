@@ -17,13 +17,13 @@ import com.akibot.tanktrack.launcher.Constants;
 import com.akibot.web.bean.BeanUtils;
 import com.akibot.web.bean.SimplifiedClientDescription;
 import com.akibot.web.component.web.AkibotWebComponent;
-import com.akibot.websocket.MySessionHandler;
+import com.akibot.websocket.WebSocketSessionHandler;
 
 public class AkiBotWebMaster {
 	static final AkiLogger log = AkiLogger.create(AkiBotWebMaster.class);
 	private static AkibotWebComponent akibotWebComponent;
 	private static boolean initialized;
-	private static MySessionHandler mySessionHandler;
+	private static WebSocketSessionHandler webSocketSessionHandler;
 
 	static {
 		initialized = false;
@@ -73,17 +73,17 @@ public class AkiBotWebMaster {
 		return result;
 	}
 
-	public static MySessionHandler getMySessionHandler() {
-		return mySessionHandler;
+	public static WebSocketSessionHandler getWebSocketSessionHandler() {
+		return webSocketSessionHandler;
 	}
 
-	public static void setMySessionHandler(MySessionHandler mySessionHandler) {
-		AkiBotWebMaster.mySessionHandler = mySessionHandler;
+	public static void setWebSocketSessionHandler(WebSocketSessionHandler webSocketSessionHandler) {
+		AkiBotWebMaster.webSocketSessionHandler = webSocketSessionHandler;
 	}
 
-	public static void sendToAllConnectedSessions(JSONObject objectMessage) {
-		if (AkiBotWebMaster.getMySessionHandler() != null) {
-			AkiBotWebMaster.getMySessionHandler().sendToAllConnectedSessions(objectMessage);
+	public static void sendToAllWebSocketSessions(JSONObject objectMessage) {
+		if (AkiBotWebMaster.getWebSocketSessionHandler() != null) {
+			AkiBotWebMaster.getWebSocketSessionHandler().sendToAllWebSocketSessions(objectMessage);
 		}
 	}
 

@@ -12,35 +12,35 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.web.listener.AkiBotWebMaster;
 
 @ApplicationScoped
-public class MySessionHandler {
-	static final AkiLogger log = AkiLogger.create(MySessionHandler.class);
+public class WebSocketSessionHandler {
+	static final AkiLogger log = AkiLogger.create(WebSocketSessionHandler.class);
 
 	private final HashSet<Session> sessions = new HashSet<Session>();
 
-	public MySessionHandler() {
-		log.debug("MySessionHandler constructor");
-		AkiBotWebMaster.setMySessionHandler(this);
+	public WebSocketSessionHandler() {
+		log.debug("constructor");
+		AkiBotWebMaster.setWebSocketSessionHandler(this);
 	}
 
 	public void addSession(Session session) {
-		log.debug("MySessionHandler.addSession: " + session);
+		log.debug("addSession: " + session);
 		sessions.add(session);
 	}
 
 	public void removeSession(Session session) {
-		log.debug("MySessionHandler.removeSession: " + session);
+		log.debug("removeSession: " + session);
 		sessions.remove(session);
 	}
 
-	public void sendToAllConnectedSessions(JSONObject message) {
-		log.debug("MySessionHandler.sendToAllConnectedSessions: " + message);
+	public void sendToAllWebSocketSessions(JSONObject message) {
+		log.debug("sendToAllConnectedSessions: " + message);
 		for (Session session : sessions) {
-			sendToSession(session, message);
+			sendToWebSocketSession(session, message);
 		}
 	}
 
-	public void sendToSession(Session session, JSONObject message) {
-		log.trace("MySessionHandler.sendToSession: " + session + ": " + message);
+	public void sendToWebSocketSession(Session session, JSONObject message) {
+		log.trace("sendToSession: " + session + ": " + message);
 		try {
 			session.getBasicRemote().sendText(message.toString());
 		} catch (IOException ex) {

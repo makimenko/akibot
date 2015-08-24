@@ -9,6 +9,7 @@ import com.akibot.engine2.component.test.TestComponent;
 import com.akibot.engine2.component.test.TestRequest;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
+import com.akibot.tanktrack.component.world.WorldComponent;
 
 public class AkiBotWebTestLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotWebTestLauncher.class);
@@ -29,10 +30,13 @@ public class AkiBotWebTestLauncher {
 		AkibotClient testClient = new AkibotClient("akibot.test", new TestComponent(), dnsAddress);
 		testClient.getComponent().addTopic(new TestRequest());
 
+		AkibotClient worldClient = new AkibotClient("akibot.world", new WorldComponent(), dnsAddress);
+
 		// Start all
 		configClient.start();
 		statusWatchdogClient.start();
 		testClient.start();
+		worldClient.start();
 		Thread.sleep(500);
 
 		System.out.println("AkiBotLauncher: Started");
