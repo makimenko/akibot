@@ -1,5 +1,3 @@
-$.getScript('../js/page_visual_classes.js');
-
 if (!Detector.webgl)
 	Detector.addGetWebGLMessage();
 
@@ -58,8 +56,7 @@ function getMaterial(material) {
 }
 
 function addNode(node) {
-	var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
-			node.geometry.dimension.y, node.geometry.dimension.z);
+	var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
 	var mesh = new THREE.Mesh(geometry, getMaterial(node.material));
 	mesh.name = node.name;
 	mesh.castShadow = node.castShadow;
@@ -76,8 +73,7 @@ function applyTransformation(object3d, transformation) {
 	if (transformation != null) {
 		// Translation (move):
 		if (transformation.position != null) {
-			object3d.position.set(transformation.position.x,
-					transformation.position.y, transformation.position.z);
+			object3d.position.set(transformation.position.x, transformation.position.y, transformation.position.z);
 		}
 		// Rotation:
 		if (transformation.rotation != null) {
@@ -87,17 +83,53 @@ function applyTransformation(object3d, transformation) {
 		}
 		// Scale:
 		if (transformation.scale != null) {
-			object3d.scale.set(transformation.scale.x, transformation.scale.y,
-					transformation.scale.z);
+			object3d.scale.set(transformation.scale.x, transformation.scale.y, transformation.scale.z);
 		}
 	}
 }
 
-function drawScene() {
+function drawScene() {	
 	drawGridHelper();
 	drawAxisHelper();
 	// drawArrowHelper();
 	// drawBoundingBoxHelper();
+	
+	loadCollada();
+}
+
+function loadCollada() {
+	var loader = new THREE.ColladaLoader();
+	loader.load('../js/loader/MadRobot.dae', function(collada) {
+		dae = collada.scene;
+		/*
+		 * dae.traverse(function(child) { if (child instanceof
+		 * THREE.SkinnedMesh) { var animation = new THREE.Animation(child,
+		 * child.geometry.animation); animation.play(); } });
+		 */
+		dae.updateMatrix();
+		dae.position.x = -20;
+		dae.position.y = -20;
+		dae.position.z = 5;	
+		
+		dae.scale.set(5,5,5);
+		
+		dae.castShadows=true;
+		dae.reflectShadows=true;
+		scene.add(dae);
+	});
+}
+
+function loadJson() {
+	var jsonLoader = new THREE.JSONLoader();
+	jsonLoader.load('../js/loader/Sandbox_obj_mat.json', addModelToScene2);
+}
+
+function addModelToScene2(geometry, materials) {
+	console.log('addModelToScene2')
+	var material = new THREE.MeshFaceMaterial(materials);
+	var jsonModel = new THREE.Mesh(geometry, material);
+	// jsonModel.scale.set(1, 1, 1);
+	scene.add(jsonModel);
 }
 
 function drawLights() {
@@ -141,21 +173,18 @@ function drawAxisHelper() {
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
-			0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
-			"robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
 function initScene() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
 	camera.position.y = -200;
 	camera.position.z = 200;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -252,5 +281,9 @@ function getChar(event) {
 		return null // special key
 	}
 }
+
+function WebSocketMessage(messageClass) {
+	this.messageClass = messageClass;
+};
 
 animate();

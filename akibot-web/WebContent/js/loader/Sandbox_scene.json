@@ -1,0 +1,139 @@
+{
+    "geometries": [{
+        "materials": [{
+            "colorEmissive": [0,0,0],
+            "transparent": false,
+            "specularCoef": 50,
+            "blending": "NormalBlending",
+            "depthTest": true,
+            "DbgIndex": 0,
+            "wireframe": false,
+            "colorSpecular": [0.5,0.5,0.5],
+            "visible": true,
+            "colorAmbient": [0.041593,0.055842,0.64],
+            "DbgName": "BlueMaterial",
+            "shading": "phong",
+            "colorDiffuse": [0.041593,0.055842,0.64],
+            "DbgColor": 15658734,
+            "opacity": 1,
+            "depthWrite": true
+        }],
+        "uuid": "73B0D849-BE21-38C8-BA64-A3ABCE12CB5E",
+        "data": {
+            "metadata": {
+                "version": 3,
+                "faces": 6,
+                "materials": 1,
+                "vertices": 8,
+                "uvs": 0,
+                "generator": "io_three",
+                "normals": 8
+            },
+            "faces": [35,0,1,2,3,0,0,1,2,3,35,4,7,6,5,0,4,5,6,7,35,0,4,5,1,0,0,4,7,1,35,1,5,6,2,0,1,7,6,2,35,2,6,7,3,0,2,6,5,3,35,4,0,3,7,0,4,0,3,5],
+            "uvs": [],
+            "name": "BlueCubeGeometryGeometry.10",
+            "vertices": [1,1,-1,1,-1,-1,-1,-1,-1,-1,1,-1,1,1,1,0.999999,-1,1,-1,-1,1,-1,1,1],
+            "normals": [0.577349,0.577349,-0.577349,0.577349,-0.577349,-0.577349,-0.577349,-0.577349,-0.577349,-0.577349,0.577349,-0.577349,0.577349,0.577349,0.577349,-0.577349,0.577349,0.577349,-0.577349,-0.577349,0.577349,0.577349,-0.577349,0.577349]
+        },
+        "type": "Geometry"
+    },{
+        "materials": [{
+            "colorEmissive": [0,0,0],
+            "transparent": false,
+            "specularCoef": 50,
+            "blending": "NormalBlending",
+            "depthTest": true,
+            "DbgIndex": 0,
+            "wireframe": false,
+            "colorSpecular": [0.5,0.5,0.5],
+            "visible": true,
+            "colorAmbient": [0.017005,0.64,0.011935],
+            "DbgName": "GreenMaterial",
+            "shading": "phong",
+            "colorDiffuse": [0.017005,0.64,0.011935],
+            "DbgColor": 15658734,
+            "opacity": 1,
+            "depthWrite": true
+        }],
+        "uuid": "0B90A7CC-0C63-39BB-BEF3-88477EAAB475",
+        "data": {
+            "metadata": {
+                "version": 3,
+                "faces": 6,
+                "materials": 1,
+                "vertices": 8,
+                "uvs": 0,
+                "generator": "io_three",
+                "normals": 8
+            },
+            "faces": [35,2,0,1,3,0,0,1,2,3,35,3,7,6,2,0,3,4,5,0,35,7,5,4,6,0,4,6,7,5,35,0,4,5,1,0,1,7,6,2,35,0,2,6,4,0,1,0,5,7,35,5,7,3,1,0,6,4,3,2],
+            "uvs": [],
+            "name": "GreenCubeGeometryGeometry.9",
+            "vertices": [-10,-10,-1.06739,-10,-10,-0.736525,-10,10,-1.06739,-10,10,-0.736525,10,-10,-1.06739,10,-10,-0.736525,10,10,-1.06739,10,10,-0.736525],
+            "normals": [-0.577349,0.577349,-0.577349,-0.577349,-0.577349,-0.577349,-0.577349,-0.577349,0.577349,-0.577349,0.577349,0.577349,0.577349,0.577349,0.577349,0.577349,0.577349,-0.577349,0.577349,-0.577349,0.577349,0.577349,-0.577349,-0.577349]
+        },
+        "type": "Geometry"
+    }],
+    "metadata": {
+        "version": 4.3,
+        "sourceFile": "Sandbox.blend",
+        "generator": "io_three",
+        "type": "Object"
+    },
+    "textures": [],
+    "images": [],
+    "materials": [{
+        "blending": "NormalBlending",
+        "depthTest": true,
+        "ambient": 659107,
+        "type": "MeshPhongMaterial",
+        "emissive": 0,
+        "name": "BlueMaterial",
+        "shininess": 50,
+        "color": 659107,
+        "vertexColors": false,
+        "specular": 8355711,
+        "uuid": "850C4F60-27E4-361D-A608-D924C2D177D6",
+        "depthWrite": true
+    },{
+        "blending": "NormalBlending",
+        "depthTest": true,
+        "ambient": 303875,
+        "type": "MeshPhongMaterial",
+        "emissive": 0,
+        "name": "GreenMaterial",
+        "shininess": 50,
+        "color": 303875,
+        "vertexColors": false,
+        "specular": 8355711,
+        "uuid": "A347CF02-D29D-355E-8A0E-6C8A9A6AFBDA",
+        "depthWrite": true
+    }],
+    "object": {
+        "children": [{
+            "type": "Mesh",
+            "name": "GreenCube",
+            "uuid": "5CFA8D10-1ED1-3D6D-8E81-CCD4CB1BA322",
+            "matrix": [-1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1],
+            "visible": true,
+            "material": "A347CF02-D29D-355E-8A0E-6C8A9A6AFBDA",
+            "castShadow": true,
+            "receiveShadow": true,
+            "geometry": "0B90A7CC-0C63-39BB-BEF3-88477EAAB475",
+            "children": [{
+                "type": "Mesh",
+                "name": "BlueCube",
+                "uuid": "1C4711F0-3788-3FB2-BE40-6AE496E95BB7",
+                "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+                "visible": true,
+                "material": "850C4F60-27E4-361D-A608-D924C2D177D6",
+                "castShadow": true,
+                "receiveShadow": true,
+                "geometry": "73B0D849-BE21-38C8-BA64-A3ABCE12CB5E"
+            }]
+        }],
+        "matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+        "uuid": "C9719B65-50C5-4FC1-959A-26AFC56B435A",
+        "type": "Scene"
+    }
+}
