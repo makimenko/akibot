@@ -1,8 +1,8 @@
 package com.akibot.tanktrack.component.world.message;
 
-import com.akibot.jme3.component.visualizer.utils.AkiNodeTransformation;
+import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
 
-public class NodeTransformationMessage extends WorldContentResponse {
+public class NodeTransformationMessage extends WorldResponse {
 	private static final long serialVersionUID = 1L;
 	private String nodeName;
 	private AkiNodeTransformation transformation;

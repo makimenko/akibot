@@ -14,6 +14,5 @@ public class WorldResponse extends Response {
 	public void setClassName(String className) {
 		this.className = className;
 	}
-	
-	
+
 }

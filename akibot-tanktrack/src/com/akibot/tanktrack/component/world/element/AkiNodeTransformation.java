@@ -6,21 +6,16 @@ public class AkiNodeTransformation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private AkiPoint translation;
+	private AkiPoint position;
 	private AkiPoint scale;
 	private AkiPoint rotation;
 
-	private boolean translationChanged = false;
-	private boolean scaleChanged = false;
-	private boolean rotationChanged = false;
-
-	public AkiPoint getTranslation() {
-		return translation;
+	public AkiPoint getPosition() {
+		return position;
 	}
 
-	public void setTranslation(AkiPoint translation) {
-		this.translation = translation;
-		translationChanged = true;
+	public void setPosition(AkiPoint position) {
+		this.position = position;
 	}
 
 	public AkiPoint getScale() {
@@ -29,7 +24,6 @@ public class AkiNodeTransformation implements Serializable {
 
 	public void setScale(AkiPoint scale) {
 		this.scale = scale;
-		scaleChanged = true;
 	}
 
 	public AkiPoint getRotation() {
@@ -38,23 +32,6 @@ public class AkiNodeTransformation implements Serializable {
 
 	public void setRotation(AkiPoint rotation) {
 		this.rotation = rotation;
-		rotationChanged = true;
-	}
-
-	public boolean isTranslationChanged() {
-		return translationChanged;
-	}
-
-	public boolean isScaleChanged() {
-		return scaleChanged;
-	}
-
-	public boolean isRotationChanged() {
-		return rotationChanged;
-	}
-
-	public boolean isChanged() {
-		return rotationChanged || scaleChanged || translationChanged;
 	}
 
 }

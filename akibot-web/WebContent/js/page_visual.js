@@ -3,15 +3,20 @@ $.getScript('../js/page_visual_classes.js');
 if (!Detector.webgl)
 	Detector.addGetWebGLMessage();
 
+$(document).ready(init);
+
 var container, stats;
 var camera, controls, scene, renderer;
 var cross;
 var ws;
+var gridHelper;
+var axisHelper;
 
-$(document).ready(function() {
+function init() {
 	initWs();
-	init();
-});
+	initScene();
+	window.addEventListener('keypress', onKeyPress, false);
+}
 
 function initWs() {
 	ws = new WebSocket(wsurl("/../../actions"));
@@ -22,23 +27,18 @@ function initWs() {
 function onWsMessage(message) {
 	var jsonDataStr = JSON.stringify(message);
 	console.log("onMessage: jsonDataStr: " + jsonDataStr);
-	var object = JSON.parse(message.data);
-	// $("<p>" + jsonDataStr + "</p>").insertBefore($("#incomingLogPanel
-	// p:first"));
+	var messageObject = JSON.parse(message.data);
 
-	if (object.className == "WorldContentResponse") {
+	if (messageObject.className == "WorldContentResponse") {
 		console.log("WorldContentResponse:");
-		addNodeRecursion(object.worldNode);
+		addNodeRecursion(messageObject.worldNode);
 		render();
-	} else if (object.className == "NodeTransformationMessage") {
+	} else if (messageObject.className == "NodeTransformationMessage") {
 		console.log("NodeTransformationResponse:");
-		
-		var object = this.scene.getObjectByName("robotMesh", true);
-		
+		var object3d = scene.getObjectByName(messageObject.nodeName, true);
+		applyTransformation(object3d, messageObject.transformation);
+		render();
 	}
-	
-	
-	
 }
 
 function addNodeRecursion(node) {
@@ -51,44 +51,47 @@ function addNodeRecursion(node) {
 	}
 }
 
-function addNode(node) {
-	var matDummy = new THREE.MeshLambertMaterial({
-		color : 0x0f0f0f,
-		shading : THREE.FlatShading,
-		opacity : 0.5,
-		transparent : true
-	});
+function getMaterial(material) {
+	var mat = new THREE.MeshLambertMaterial(material);
+	// mat.color = new THREE.Color(0x00ff00);
+	return mat;
+}
 
-	var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
-	var mesh = new THREE.Mesh(geometry, matDummy);
+function addNode(node) {
+	var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
+			node.geometry.dimension.y, node.geometry.dimension.z);
+	var mesh = new THREE.Mesh(geometry, getMaterial(node.material));
+	mesh.name = node.name;
+	mesh.castShadow = node.castShadow;
+	mesh.receiveShadow = node.receiveShadow;
+
 	applyTransformation(mesh, node.transformation);
 
-	mesh.name = node.name;
 	mesh.updateMatrix();
 	scene.add(mesh);
 }
 
 function applyTransformation(object3d, transformation) {
+	// console.log("applyTransformation: "+object3d+" = "+transformation)
 	if (transformation != null) {
 		// Translation (move):
-		if (transformation.translationChanged == true) {
-			object3d.translateX(transformation.translation.x);
-			object3d.translateY(transformation.translation.y);
-			object3d.translateZ(transformation.translation.z);
+		if (transformation.position != null) {
+			object3d.position.set(transformation.position.x,
+					transformation.position.y, transformation.position.z);
 		}
 		// Rotation:
-		if (transformation.rotationChanged == true) {
+		if (transformation.rotation != null) {
 			object3d.rotation.x = transformation.rotation.x;
 			object3d.rotation.y = transformation.rotation.y;
 			object3d.rotation.z = transformation.rotation.z;
 		}
 		// Scale:
-		if (transformation.scaleChanged == true) {
-			object3d.scale.set(transformation.scale.x, transformation.scale.y, transformation.scale.z);
+		if (transformation.scale != null) {
+			object3d.scale.set(transformation.scale.x, transformation.scale.y,
+					transformation.scale.z);
 		}
 	}
 }
-
 
 function drawScene() {
 	drawGridHelper();
@@ -97,42 +100,62 @@ function drawScene() {
 	// drawBoundingBoxHelper();
 }
 
+function drawLights() {
+	var directionalLight = new THREE.DirectionalLight(0xffffff);
+	directionalLight.position.set(-500, -500, 1000);
+	directionalLight.shadowCameraNear = 50;
+	directionalLight.shadowCameraFar = 5000;
+	directionalLight.shadowCameraFov = 50;
+	directionalLight.intensity = 0.9;
+	directionalLight.castShadow = true;
+	directionalLight.shadowDarkness = 0.4;
+	// directionalLight.shadowCameraVisible = true;
+	scene.add(directionalLight);
+}
+
 function drawGridHelper() {
 	// reference: https://www.script-tutorials.com/webgl-with-three-js-lesson-3
-	var gridHelper = new THREE.GridHelper(300, 100);
-	gridHelper.position = new THREE.Vector3(0, 0, 0);
-	gridHelper.rotation = new THREE.Euler(0, 0, 0);
-	this.scene.add(gridHelper);
+	gridHelper = new THREE.Object3D();// create an empty container
 
-	var gridHelper2 = gridHelper.clone();
+	var gridHelper1 = new THREE.GridHelper(300, 100);
+	gridHelper1.position = new THREE.Vector3(0, 0, 0);
+	gridHelper1.rotation = new THREE.Euler(0, 0, 0);
+	gridHelper.add(gridHelper1);
+
+	var gridHelper2 = gridHelper1.clone();
 	gridHelper2.rotation.set(Math.PI / 2, 0, 0);
-	this.scene.add(gridHelper2);
+	gridHelper.add(gridHelper2);
 
-	var gridHelper3 = gridHelper.clone();
+	var gridHelper3 = gridHelper1.clone();
 	gridHelper3.rotation.set(Math.PI / 2, 0, Math.PI / 2);
-	this.scene.add(gridHelper3);
+	gridHelper.add(gridHelper3);
+
+	this.scene.add(gridHelper);
 }
 
 function drawAxisHelper() {
-	var axisHelper = new THREE.AxisHelper(800); // 500 is size
+	axisHelper = new THREE.AxisHelper(800); // 500 is size
 	this.scene.add(axisHelper);
 }
 
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
+			0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
+			"robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
-function init() {
+function initScene() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth
+			/ window.innerHeight, 1, 1000);
 	camera.position.y = -200;
 	camera.position.z = 200;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -148,27 +171,18 @@ function init() {
 	controls.keys = [ 65, 83, 68 ];
 	controls.addEventListener('change', render);
 
-	// world
 	scene = new THREE.Scene();
-
 	drawScene();
+	drawLights();
 
-	// lights
-	light = new THREE.DirectionalLight(0xffffff);
-	light.position.set(1, 1, 1);
-	scene.add(light);
-
-	light = new THREE.DirectionalLight(0x002288);
-	light.position.set(-1, -1, -1);
-	scene.add(light);
-
-	light = new THREE.AmbientLight(0x222222);
-	scene.add(light);
-
-	// renderer
 	renderer = new THREE.WebGLRenderer({
 		antialias : false
 	});
+
+	renderer.shadowMapEnabled = true;
+	renderer.shadowMapType = THREE.PCFSoftShadowMap;
+	renderer.shadowMapSoft = true;
+
 	renderer.setClearColor(0xffffff, 1);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -185,7 +199,6 @@ function init() {
 
 	render();
 	onWindowResize();
-	// onSceneReady();
 }
 
 function onWindowResize() {
@@ -216,6 +229,28 @@ function onWsOpen() {
 
 function sendWsRequest(requestObject) {
 	ws.send(JSON.stringify(requestObject));
+}
+
+function onKeyPress(event) {
+	var char = getChar(event);
+	console.log('onKeyPress: ' + char);
+	if (char == "g") {
+		gridHelper.visible = !gridHelper.visible;
+		render();
+	} else if (char == "a") {
+		axisHelper.visible = !axisHelper.visible;
+		render();
+	}
+}
+
+function getChar(event) {
+	if (event.which == null) {
+		return String.fromCharCode(event.keyCode) // IE
+	} else if (event.which != 0 && event.charCode != 0) {
+		return String.fromCharCode(event.which) // the rest
+	} else {
+		return null // special key
+	}
 }
 
 animate();
