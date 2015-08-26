@@ -4,11 +4,13 @@ if (!Detector.webgl)
 $(document).ready(init);
 
 var container, stats;
-var camera, controls, scene, renderer;
+var camera, cameraTop, cameraFront;
+var controls, scene, renderer;
 var cross;
 var ws;
 var gridHelper;
 var axisHelper;
+var currentCamera = "1";
 
 function init() {
 	initWs();
@@ -40,7 +42,6 @@ function onWsMessage(message) {
 }
 
 function addNodeRecursion(node) {
-	console.log("addNodeRecursion: " + node.name)
 	addNode(node);
 	if (node.childs != null) {
 		for (i = 0; i < node.childs.length; i++) {
@@ -51,26 +52,36 @@ function addNodeRecursion(node) {
 
 function getMaterial(material) {
 	var mat = new THREE.MeshPhongMaterial(material);
-	// mat.color = new THREE.Color(0x00ff00);
-	
 	return mat;
 }
 
 function addNode(node) {
-	var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
-	var mesh = new THREE.Mesh(geometry, getMaterial(node.material));
-	mesh.name = node.name;
-	mesh.castShadow = node.castShadow;
-	mesh.receiveShadow = node.receiveShadow;
+	var object3d;
+	if (node.geometry.className == "AkiBoxGeometry") {
+		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
+		object3d = new THREE.Mesh(geometry, getMaterial(node.geometry.material));
+		addNodeFinalisation(object3d, node);
+	} else if (node.geometry.className == "AkiColladaGeometry") {
+		var loader = new THREE.ColladaLoader();
+		loader.load(node.geometry.fileName, function(collada) {
+			object3d = collada.scene;
+			addNodeFinalisation(object3d, node);
+		});
+	}
+}
 
-	applyTransformation(mesh, node.transformation);
+function addNodeFinalisation(object3d, node) {
+	object3d.name = node.name;
+	object3d.castShadow = node.castShadow;
+	object3d.receiveShadow = node.receiveShadow;
 
-	mesh.updateMatrix();
-	scene.add(mesh);
+	applyTransformation(object3d, node.transformation);
+	object3d.updateMatrix();
+	scene.add(object3d);
+	render();
 }
 
 function applyTransformation(object3d, transformation) {
-	// console.log("applyTransformation: "+object3d+" = "+transformation)
 	if (transformation != null) {
 		// Translation (move):
 		if (transformation.position != null) {
@@ -89,48 +100,11 @@ function applyTransformation(object3d, transformation) {
 	}
 }
 
-function drawScene() {	
+function drawScene() {
 	drawGridHelper();
 	drawAxisHelper();
 	// drawArrowHelper();
 	// drawBoundingBoxHelper();
-	
-	loadCollada();
-}
-
-function loadCollada() {
-	var loader = new THREE.ColladaLoader();
-	loader.load('../js/loader/AkiBot.dae', function(collada) {
-		dae = collada.scene;
-		/*
-		 * dae.traverse(function(child) { if (child instanceof
-		 * THREE.SkinnedMesh) { var animation = new THREE.Animation(child,
-		 * child.geometry.animation); animation.play(); } });
-		 */
-		dae.updateMatrix();
-		dae.position.x = -20;
-		dae.position.y = -20;
-		dae.position.z = 5;	
-		
-		dae.scale.set(100,100,100);
-		
-		dae.castShadows=true;
-		dae.reflectShadows=true;
-		scene.add(dae);
-	});
-}
-
-function loadJson() {
-	var jsonLoader = new THREE.JSONLoader();
-	jsonLoader.load('../js/loader/Sandbox_obj_mat.json', addModelToScene2);
-}
-
-function addModelToScene2(geometry, materials) {
-	console.log('addModelToScene2')
-	var material = new THREE.MeshFaceMaterial(materials);
-	var jsonModel = new THREE.Mesh(geometry, material);
-	// jsonModel.scale.set(1, 1, 1);
-	scene.add(jsonModel);
 }
 
 function drawLights() {
@@ -183,12 +157,45 @@ function drawBoundingBoxHelper() {
 	this.scene.add(bboxHelper);
 }
 
+function resetCameraPosition() {
+	camera.position.x = -50;
+	camera.position.y = -200;
+	camera.position.z = 200;
+	camera.up = new THREE.Vector3(0, 0, 1);
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+	if (scene != null && this.scene.getObjectByName("robotNode", true) != null) {
+		// only is scene is initialized
+		var robot = this.scene.getObjectByName("robotNode", true);
+		var relativeCameraOffset = new THREE.Vector3(0, 0, 500);
+		var cameraOffset = relativeCameraOffset.applyMatrix4(robot.matrixWorld);
+		cameraTop.position.x = cameraOffset.x;
+		cameraTop.position.y = cameraOffset.y;
+		cameraTop.position.z = cameraOffset.z;
+		cameraTop.up = new THREE.Vector3(0, 1, 0);
+		cameraTop.lookAt(robot.position);
+	} else {
+		cameraTop.position.x = 0;
+		cameraTop.position.y = 0;
+		cameraTop.position.z = 500;
+		cameraTop.up = new THREE.Vector3(0, 1, 0);
+		cameraTop.lookAt(new THREE.Vector3(0, 0, 0));
+	}
+
+	cameraFront.position.x = 50;
+	cameraFront.position.y = 200;
+	cameraFront.position.z = 200;
+	cameraFront.up = new THREE.Vector3(0, 0, 1);
+	cameraFront.lookAt(new THREE.Vector3(0, 0, 0));
+
+}
+
 function initScene() {
 
 	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-	camera.position.y = -200;
-	camera.position.z = 200;
-	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	resetCameraPosition();
 
 	controls = new THREE.TrackballControls(camera);
 	controls.rotateSpeed = 1.0;
@@ -236,6 +243,10 @@ function onWindowResize() {
 	height = window.innerHeight * 0.85;
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
+
+	cameraTop.aspect = width / height;
+	cameraTop.updateProjectionMatrix();
+
 	renderer.setSize(width, height);
 	controls.handleResize();
 	render();
@@ -249,7 +260,13 @@ function animate() {
 }
 
 function render() {
-	renderer.render(scene, camera);
+	if (currentCamera == '2') {
+		renderer.render(scene, cameraTop);
+	} else if (currentCamera == '3') {
+		renderer.render(scene, cameraFront);
+	} else {
+		renderer.render(scene, camera);
+	}
 	stats.update();
 }
 
@@ -263,12 +280,26 @@ function sendWsRequest(requestObject) {
 
 function onKeyPress(event) {
 	var char = getChar(event);
-	console.log('onKeyPress: ' + char);
 	if (char == "g") {
 		gridHelper.visible = !gridHelper.visible;
 		render();
 	} else if (char == "a") {
 		axisHelper.visible = !axisHelper.visible;
+		render();
+	} else if (char == "1") {
+		currentCamera = "1";
+		controls.object = camera;
+		resetCameraPosition();
+		render();
+	} else if (char == "2") {
+		currentCamera = "2";
+		controls.object = cameraTop;
+		resetCameraPosition();
+		render();
+	} else if (char == "3") {
+		currentCamera = "3";
+		controls.object = cameraFront;
+		resetCameraPosition();
 		render();
 	}
 }

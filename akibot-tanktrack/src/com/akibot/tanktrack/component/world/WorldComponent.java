@@ -5,7 +5,8 @@ import java.util.HashMap;
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
-import com.akibot.tanktrack.component.world.element.AkiGeometry;
+import com.akibot.tanktrack.component.world.element.AkiColladaGeometry;
+import com.akibot.tanktrack.component.world.element.AkiBoxGeometry;
 import com.akibot.tanktrack.component.world.element.AkiMaterial;
 import com.akibot.tanktrack.component.world.element.AkiNode;
 import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
@@ -23,35 +24,29 @@ public class WorldComponent extends DefaultComponent {
 
 		// ======================== World Node:
 		worldNode = new AkiNode("worldNode");
-		AkiGeometry worldGeometry = new AkiGeometry();
-		worldGeometry.setDimension(new AkiPoint(500, 500, 5));
-		worldNode.setGeometry(worldGeometry);
+		AkiBoxGeometry worldGeometry = new AkiBoxGeometry();
+		worldGeometry.setDimension(new AkiPoint(500, 500, 2));
 
 		AkiMaterial worldMaterial = new AkiMaterial();
 		worldMaterial.setColor(0x00ffff);
 		worldMaterial.setOpacity(0.5f);
 		worldMaterial.setTransparent(true);
-		worldNode.setMaterial(worldMaterial);
+		worldGeometry.setMaterial(worldMaterial);
+		worldNode.setGeometry(worldGeometry);
 
 		index(worldNode);
 
 		// ======================== Robot Node:
-		AkiGeometry robotGeometry = new AkiGeometry();
-		robotGeometry.setDimension(new AkiPoint(10, 10, 10));
+		AkiColladaGeometry robotGeometry = new AkiColladaGeometry();
+		robotGeometry.setFileName("../js/loader/AkiBot.dae");
 		AkiNode robotNode = new AkiNode("robotNode");
 		robotNode.setGeometry(robotGeometry);
 
 		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
-		robotTransformation.setPosition(new AkiPoint(0, 0, 15));
+		robotTransformation.setPosition(new AkiPoint(0, 0, 1));
 		// robotTransformation.setRotation(new AkiPoint(1, 1, 1));
-		robotTransformation.setScale(new AkiPoint(1, 1, 1));
+		// robotTransformation.setScale(new AkiPoint(100, 100, 100));
 		robotNode.setTransformation(robotTransformation);
-
-		AkiMaterial robotMaterial = new AkiMaterial();
-		robotMaterial.setColor(0xff0000);
-		robotMaterial.setOpacity(0.8f);
-		robotMaterial.setTransparent(true);		
-		robotNode.setMaterial(robotMaterial);
 
 		worldNode.attachChild(robotNode);
 

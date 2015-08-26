@@ -13,7 +13,7 @@ public class AkiNode implements Serializable {
 
 	private AkiGeometry geometry;
 	private AkiNodeTransformation transformation;
-	private AkiMaterial material;
+
 	private boolean castShadow = true;
 	private boolean receiveShadow = true;
 
@@ -59,14 +59,6 @@ public class AkiNode implements Serializable {
 
 	public void setTransformation(AkiNodeTransformation transformation) {
 		this.transformation = transformation;
-	}
-
-	public AkiMaterial getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(AkiMaterial material) {
-		this.material = material;
 	}
 
 	public void attachChild(AkiNode akiNode) {
