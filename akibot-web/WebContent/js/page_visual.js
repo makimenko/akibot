@@ -50,8 +50,9 @@ function addNodeRecursion(node) {
 }
 
 function getMaterial(material) {
-	var mat = new THREE.MeshLambertMaterial(material);
+	var mat = new THREE.MeshPhongMaterial(material);
 	// mat.color = new THREE.Color(0x00ff00);
+	
 	return mat;
 }
 
@@ -99,7 +100,7 @@ function drawScene() {
 
 function loadCollada() {
 	var loader = new THREE.ColladaLoader();
-	loader.load('../js/loader/MadRobot.dae', function(collada) {
+	loader.load('../js/loader/AkiBot.dae', function(collada) {
 		dae = collada.scene;
 		/*
 		 * dae.traverse(function(child) { if (child instanceof
@@ -111,7 +112,7 @@ function loadCollada() {
 		dae.position.y = -20;
 		dae.position.z = 5;	
 		
-		dae.scale.set(5,5,5);
+		dae.scale.set(100,100,100);
 		
 		dae.castShadows=true;
 		dae.reflectShadows=true;
