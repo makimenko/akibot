@@ -78,9 +78,10 @@ public class LoadConfiguration {
 
 	private void saveAkibotGyroscope() throws FailedToSendMessageException {
 		GyroscopeOffsetConfiguration gyroscopeOffsetConfiguration = new GyroscopeOffsetConfiguration();
-		gyroscopeOffsetConfiguration.setOffsetX(466.5);
-		gyroscopeOffsetConfiguration.setOffsetY(-256.5);
-		gyroscopeOffsetConfiguration.setOffsetZ(-1091.0);
+		// {"data":"{\"from\":\"akibot.gyroscope.calibration\",\"to\":\"akibot.web\",\"newOffsetX\":389,\"newOffsetY\":-173,\"newOffsetZ\":-1117.5}"}
+		gyroscopeOffsetConfiguration.setOffsetX(389);
+		gyroscopeOffsetConfiguration.setOffsetY(-173);
+		gyroscopeOffsetConfiguration.setOffsetZ(-1117.5);
 
 		GyroscopeConfiguration gyroscopeConfiguration = new GyroscopeConfiguration();
 		gyroscopeConfiguration.setGyroscopeOffsetConfiguration(gyroscopeOffsetConfiguration);

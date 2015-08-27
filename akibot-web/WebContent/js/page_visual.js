@@ -30,11 +30,9 @@ function onWsMessage(message) {
 	var messageObject = JSON.parse(message.data);
 
 	if (messageObject.className == "WorldContentResponse") {
-		console.log("WorldContentResponse:");
 		addNodeRecursion(messageObject.worldNode);
 		render();
 	} else if (messageObject.className == "NodeTransformationMessage") {
-		console.log("NodeTransformationResponse:");
 		var object3d = scene.getObjectByName(messageObject.nodeName, true);
 		applyTransformation(object3d, messageObject.transformation);
 		render();

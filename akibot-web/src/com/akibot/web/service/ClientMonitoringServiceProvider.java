@@ -27,7 +27,6 @@ public class ClientMonitoringServiceProvider {
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<SimplifiedClientDescription> getList() throws FailedToSendMessageException {
-		System.out.println("ClientMonitoringServiceProvider.getList");
 		List<SimplifiedClientDescription> list = AkiBotWebMaster.getSimplifiedClientDescriptionList();
 		return list;
 	}

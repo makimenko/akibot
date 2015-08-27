@@ -33,7 +33,7 @@ public class WebSocketSessionHandler {
 	}
 
 	public void sendToAllWebSocketSessions(JSONObject message) {
-		log.debug("sendToAllConnectedSessions: " + message);
+		log.trace("sendToAllConnectedSessions: " + message);
 		for (Session session : sessions) {
 			sendToWebSocketSession(session, message);
 		}
