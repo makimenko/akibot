@@ -106,6 +106,32 @@ function drawScene() {
 	drawAxisHelper();
 	// drawArrowHelper();
 	// drawBoundingBoxHelper();
+
+	var spritey = makeTextSprite(" robotNode ", {
+		fontsize : 12,
+		borderThickness : 1,
+		fontColor : {
+			r : 0,
+			g : 100,
+			b : 0,
+			a : 0.8
+		},
+		borderColor : {
+			r : 0,
+			g : 100,
+			b : 0,
+			a : 0.2
+		},
+		backgroundColor : {
+			r : 0,
+			g : 100,
+			b : 0,
+			a : 0.1
+		}
+	});
+	spritey.position.set(0, 0, 0);
+	scene.add(spritey);
+
 }
 
 function drawLights() {
@@ -246,7 +272,7 @@ function initScene() {
 
 function onWindowResize() {
 	width = $('#container').width();
-	height = window.innerHeight * 0.85;
+	height = window.innerHeight * 0.90;
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 
@@ -331,5 +357,100 @@ function getChar(event) {
 function WebSocketMessage(messageClass) {
 	this.messageClass = messageClass;
 };
+
+function makeTextSprite(message, parameters) {
+	if (parameters === undefined)
+		parameters = {};
+
+	var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"]
+			: "Arial";
+
+	var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"]
+			: 18;
+	var fontColor = parameters.hasOwnProperty("fontColor") ? parameters["fontColor"]
+			: {
+				r : 0,
+				g : 0,
+				b : 0,
+				a : 1.0
+			};
+
+	var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"]
+			: 4;
+
+	var borderColor = parameters.hasOwnProperty("borderColor") ? parameters["borderColor"]
+			: {
+				r : 0,
+				g : 0,
+				b : 0,
+				a : 1.0
+			};
+
+	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ? parameters["backgroundColor"]
+			: {
+				r : 255,
+				g : 255,
+				b : 255,
+				a : 1.0
+			};
+
+	// var spriteAlignment = THREE.SpriteAlignment.topLeft;
+
+	var canvas = document.createElement('canvas');
+	var context = canvas.getContext('2d');
+	context.font = "Bold " + fontsize + "px " + fontface;
+
+	// get size data (height depends only on font size)
+	var metrics = context.measureText(message);
+	var textWidth = metrics.width;
+
+	// background color
+	context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g
+			+ "," + backgroundColor.b + "," + backgroundColor.a + ")";
+	// border color
+	context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
+			+ borderColor.b + "," + borderColor.a + ")";
+
+	context.lineWidth = borderThickness;
+	roundRect(context, borderThickness / 2, borderThickness / 2, textWidth
+			+ borderThickness, fontsize * 1.4 + borderThickness, 6);
+	// 1.4 is extra height factor for text below baseline: g,j,p,q.
+
+	// text color
+	context.fillStyle = "rgba(" + fontColor.r + "," + fontColor.g + ","
+			+ fontColor.b + "," + fontColor.a + ")";
+
+	context.fillText(message, borderThickness, fontsize + borderThickness);
+
+	// canvas contents will be used for a texture
+	var texture = new THREE.Texture(canvas)
+	texture.needsUpdate = true;
+
+	var spriteMaterial = new THREE.SpriteMaterial({
+		map : texture,
+		useScreenCoordinates : false
+	// ,alignment : spriteAlignment
+	});
+	var sprite = new THREE.Sprite(spriteMaterial);
+	sprite.scale.set(100, 50, 1.0);
+	return sprite;
+}
+
+// function for drawing rounded rectangles
+function roundRect(ctx, x, y, w, h, r) {
+	ctx.beginPath();
+	ctx.moveTo(x + r, y);
+	ctx.lineTo(x + w - r, y);
+	ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+	ctx.lineTo(x + w, y + h - r);
+	ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+	ctx.lineTo(x + r, y + h);
+	ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+	ctx.lineTo(x, y + r);
+	ctx.quadraticCurveTo(x, y, x + r, y);
+	ctx.closePath();
+	ctx.fill();
+	ctx.stroke();
+}
 
 animate();
