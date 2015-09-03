@@ -56,7 +56,8 @@ function getMaterial(material) {
 function addNode(node) {
 	var object3d;
 	if (node.geometry.className == "AkiBoxGeometry") {
-		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
+		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
+				node.geometry.dimension.y, node.geometry.dimension.z);
 		object3d = new THREE.Mesh(geometry, getMaterial(node.geometry.material));
 		addNodeFinalisation(object3d, node);
 	} else if (node.geometry.className == "AkiColladaGeometry") {
@@ -83,7 +84,8 @@ function applyTransformation(object3d, transformation) {
 	if (transformation != null) {
 		// Translation (move):
 		if (transformation.position != null) {
-			object3d.position.set(transformation.position.x, transformation.position.y, transformation.position.z);
+			object3d.position.set(transformation.position.x,
+					transformation.position.y, transformation.position.z);
 		}
 		// Rotation:
 		if (transformation.rotation != null) {
@@ -93,7 +95,8 @@ function applyTransformation(object3d, transformation) {
 		}
 		// Scale:
 		if (transformation.scale != null) {
-			object3d.scale.set(transformation.scale.x, transformation.scale.y, transformation.scale.z);
+			object3d.scale.set(transformation.scale.x, transformation.scale.y,
+					transformation.scale.z);
 		}
 	}
 }
@@ -146,12 +149,14 @@ function drawAxisHelper() {
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
+			0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
+			"robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
@@ -190,9 +195,12 @@ function resetCameraPosition() {
 
 function initScene() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth
+			/ window.innerHeight, 1, 1000);
+	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth
+			/ window.innerHeight, 1, 1000);
+	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth
+			/ window.innerHeight, 1, 1000);
 	resetCameraPosition();
 
 	controls = new THREE.TrackballControls(camera);
@@ -298,6 +306,14 @@ function onKeyPress(event) {
 		currentCamera = "3";
 		controls.object = cameraFront;
 		resetCameraPosition();
+		render();
+	} else if (char == "f") {
+
+		if (isTHREExFullScreen) {
+			THREEx.FullScreen.cancel();
+		} else {
+			THREEx.FullScreen.request(container);
+		}
 		render();
 	}
 }
