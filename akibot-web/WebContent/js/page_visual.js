@@ -56,8 +56,7 @@ function getMaterial(material) {
 function addNode(node) {
 	var object3d;
 	if (node.geometry.className == "AkiBoxGeometry") {
-		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
-				node.geometry.dimension.y, node.geometry.dimension.z);
+		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
 		object3d = new THREE.Mesh(geometry, getMaterial(node.geometry.material));
 		addNodeFinalisation(object3d, node);
 	} else if (node.geometry.className == "AkiColladaGeometry") {
@@ -76,6 +75,7 @@ function addNodeFinalisation(object3d, node) {
 
 	applyTransformation(object3d, node.transformation);
 	object3d.updateMatrix();
+	drawLabel(object3d, node.name);
 	scene.add(object3d);
 	render();
 }
@@ -84,8 +84,7 @@ function applyTransformation(object3d, transformation) {
 	if (transformation != null) {
 		// Translation (move):
 		if (transformation.position != null) {
-			object3d.position.set(transformation.position.x,
-					transformation.position.y, transformation.position.z);
+			object3d.position.set(transformation.position.x, transformation.position.y, transformation.position.z);
 		}
 		// Rotation:
 		if (transformation.rotation != null) {
@@ -95,8 +94,7 @@ function applyTransformation(object3d, transformation) {
 		}
 		// Scale:
 		if (transformation.scale != null) {
-			object3d.scale.set(transformation.scale.x, transformation.scale.y,
-					transformation.scale.z);
+			object3d.scale.set(transformation.scale.x, transformation.scale.y, transformation.scale.z);
 		}
 	}
 }
@@ -106,8 +104,11 @@ function drawScene() {
 	drawAxisHelper();
 	// drawArrowHelper();
 	// drawBoundingBoxHelper();
+}
 
-	var spritey = makeTextSprite(" robotNode ", {
+function drawLabel(node, text) {
+
+	var spritey = makeTextSprite(text, {
 		fontsize : 12,
 		borderThickness : 1,
 		fontColor : {
@@ -126,12 +127,11 @@ function drawScene() {
 			r : 0,
 			g : 100,
 			b : 0,
-			a : 0.1
+			a : 0.05
 		}
 	});
-	spritey.position.set(0, 0, 0);
-	scene.add(spritey);
-
+	// spritey.position.set(15, 0, 0);
+	node.add(spritey);
 }
 
 function drawLights() {
@@ -175,14 +175,12 @@ function drawAxisHelper() {
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
-			0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
-			"robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
@@ -221,12 +219,9 @@ function resetCameraPosition() {
 
 function initScene() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
-	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
-	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
 	resetCameraPosition();
 
 	controls = new THREE.TrackballControls(camera);
@@ -334,7 +329,13 @@ function onKeyPress(event) {
 		resetCameraPosition();
 		render();
 	} else if (char == "f") {
-
+		if (isTHREExFullScreen) {
+			THREEx.FullScreen.cancel();
+		} else {
+			THREEx.FullScreen.request(container);
+		}
+		render();
+	} else if (char == "l") {
 		if (isTHREExFullScreen) {
 			THREEx.FullScreen.cancel();
 		} else {
@@ -362,37 +363,31 @@ function makeTextSprite(message, parameters) {
 	if (parameters === undefined)
 		parameters = {};
 
-	var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"]
-			: "Arial";
+	var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"] : "Arial";
 
-	var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"]
-			: 18;
-	var fontColor = parameters.hasOwnProperty("fontColor") ? parameters["fontColor"]
-			: {
-				r : 0,
-				g : 0,
-				b : 0,
-				a : 1.0
-			};
+	var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"] : 18;
+	var fontColor = parameters.hasOwnProperty("fontColor") ? parameters["fontColor"] : {
+		r : 0,
+		g : 0,
+		b : 0,
+		a : 1.0
+	};
 
-	var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"]
-			: 4;
+	var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"] : 4;
 
-	var borderColor = parameters.hasOwnProperty("borderColor") ? parameters["borderColor"]
-			: {
-				r : 0,
-				g : 0,
-				b : 0,
-				a : 1.0
-			};
+	var borderColor = parameters.hasOwnProperty("borderColor") ? parameters["borderColor"] : {
+		r : 0,
+		g : 0,
+		b : 0,
+		a : 1.0
+	};
 
-	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ? parameters["backgroundColor"]
-			: {
-				r : 255,
-				g : 255,
-				b : 255,
-				a : 1.0
-			};
+	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ? parameters["backgroundColor"] : {
+		r : 255,
+		g : 255,
+		b : 255,
+		a : 1.0
+	};
 
 	// var spriteAlignment = THREE.SpriteAlignment.topLeft;
 
@@ -405,20 +400,16 @@ function makeTextSprite(message, parameters) {
 	var textWidth = metrics.width;
 
 	// background color
-	context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g
-			+ "," + backgroundColor.b + "," + backgroundColor.a + ")";
+	context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
 	// border color
-	context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
-			+ borderColor.b + "," + borderColor.a + ")";
+	context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
 
 	context.lineWidth = borderThickness;
-	roundRect(context, borderThickness / 2, borderThickness / 2, textWidth
-			+ borderThickness, fontsize * 1.4 + borderThickness, 6);
+	roundRect(context, borderThickness / 2, borderThickness / 2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
 	// 1.4 is extra height factor for text below baseline: g,j,p,q.
 
 	// text color
-	context.fillStyle = "rgba(" + fontColor.r + "," + fontColor.g + ","
-			+ fontColor.b + "," + fontColor.a + ")";
+	context.fillStyle = "rgba(" + fontColor.r + "," + fontColor.g + "," + fontColor.b + "," + fontColor.a + ")";
 
 	context.fillText(message, borderThickness, fontsize + borderThickness);
 
@@ -432,7 +423,8 @@ function makeTextSprite(message, parameters) {
 	// ,alignment : spriteAlignment
 	});
 	var sprite = new THREE.Sprite(spriteMaterial);
-	sprite.scale.set(100, 50, 1.0);
+	sprite.scale.set(100, 50, 1);
+	sprite.name = "label: " + message;
 	return sprite;
 }
 
