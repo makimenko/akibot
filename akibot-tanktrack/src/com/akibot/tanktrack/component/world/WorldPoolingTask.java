@@ -17,6 +17,7 @@ public class WorldPoolingTask extends TimerTask {
 		log.debug("WorldPoolingTask initialized");
 	}
 
+	@Override
 	public void run() {
 		log.debug(worldComponent.getAkibotClient() + ": WorldPoolingTask.run()");
 		try {
