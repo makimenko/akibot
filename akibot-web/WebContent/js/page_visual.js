@@ -11,7 +11,11 @@ var ws;
 var gridHelper;
 var axisHelper;
 var currentCamera = "1";
-var gridGroup, grid;
+var gridGroup, grid, cellObjectTemplate, cellSize;
+var matEmpty, matOccupied;
+var gridInitialVisibility = false;
+var axisInitialVisibility = false;
+var labelInitialVisibility = false;
 
 function init() {
 	initWs();
@@ -55,8 +59,7 @@ function getMaterial(material) {
 }
 
 function addNode(node) {
-	var object3d;
-	if (node.geometry == null ) {
+	if (node.geometry == null) {
 		emptyObject = new THREE.Object3D();
 		addNodeFinalisation(emptyObject, node);
 	} else if (node.geometry.className == "AkiBoxGeometry") {
@@ -72,76 +75,64 @@ function addNode(node) {
 		});
 	} else if (node.geometry.className == "AkiGridGeometry") {
 		console.log("AkiGridGeometry");
+		addLocationAreaGrid(node);
+	}
+}
 
-		gridGroup = new THREE.Object3D();
-		applyTransformation(gridGroup, node.transformation);
+function addLocationAreaGrid(node) {
+	gridGroup = new THREE.Object3D();
+	applyTransformation(gridGroup, node.transformation);
 
-		grid = node.geometry.grid;
-		console.log("grid=" + grid.length);
-		console.log("grid[0][0]=" + grid[0][0]);
-		console.log("grid[0][49]=" + grid[0][49]);
-		console.log("grid[49][49]=" + grid[49][49]);
+	grid = node.geometry.grid;
 
-		var matUnknown = new THREE.MeshPhongMaterial({
-			color : 0x0000ff,
-			//specular : 0x009900,
-			// shininess : 30,
-			// shading : THREE.FlatShading,
-			opacity : 0.3,
-			transparent : true
-		});
+	matEmpty = new THREE.MeshPhongMaterial({
+		color : 0x00ff00,
+		// specular : 0x009900,
+		// shininess : 30,
+		// shading : THREE.FlatShading,
+		opacity : 0.2,
+		transparent : true
+	});
 
-		var matOccupied = new THREE.MeshPhongMaterial({
-			color : 0xff0000,
-			//specular : 0x009900,
-			// shininess : 30,
-			// shading : THREE.FlatShading,
-			opacity : 1
-		// transparent : true
-		});
+	matOccupied = new THREE.MeshPhongMaterial({
+		color : 0xff0000,
+		// specular : 0x009900,
+		// shininess : 30,
+		// shading : THREE.FlatShading,
+		opacity : 1
+	// transparent : true
+	});
 
-		var matEmpty = new THREE.MeshPhongMaterial({
-			color : 0x00ff00,
-			//specular : 0x009900,
-			// shininess : 30,
-			// shading : THREE.FlatShading,
-			opacity : 0.2,
-		 transparent : true
-		});
+	cellSize = node.geometry.akiGridConfiguration.cellSize;
+	var geometry = new THREE.BoxGeometry(cellSize - 0.1, cellSize - 0.1, 0.5);
+	cellObjectTemplate = new THREE.Mesh(geometry, matEmpty);
 
-		var cellSize = node.geometry.akiGridConfiguration.cellSize;
-		var geometry = new THREE.BoxGeometry(cellSize - 0.1, cellSize - 0.1, 0.5);
-		cellObjectTemplate = new THREE.Mesh(geometry, matUnknown);
-
-		for (x = 0; x < grid.length; x++) {
-			for (y = 0; y < grid[0].length; y++) {
-				cellObject = cellObjectTemplate.clone();
-				cellObject.name = node.name + "_" + x + "_" + y;
-				cellObject.position.x = x * cellSize + (cellSize / 2);
-				cellObject.position.y = y * cellSize + (cellSize / 2);
-				if (grid[x][y] == 0) {
-					cellObject.material = matEmpty;
-				} else if (grid[x][y] > 0) {
-					cellObject.scale.z = grid[x][y]*3;
-					cellObject.material = matOccupied;
-				} else {
-					cellObject.material = matUnknown;
-				}
-				gridGroup.add(cellObject);
+	for (x = 0; x < grid.length; x++) {
+		for (y = 0; y < grid[0].length; y++) {
+			if (grid[x][y] >= 0) {
+				addGridCell(node, x, y, grid[x][y]);
 			}
 		}
-
-		scene.add(gridGroup);
-		render();
-
-		// var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
-		// node.geometry.dimension.y, node.geometry.dimension.z);
-		// object3d = new THREE.Mesh(geometry,
-		// getMaterial(node.geometry.material));
-
-		// addNodeFinalisation(object3d, node);
-
 	}
+
+	scene.add(gridGroup);
+	render();
+}
+
+function addGridCell(node, x, y, value) {
+
+	cellObject = cellObjectTemplate.clone();
+	cellObject.name = node.name + "_" + x + "_" + y;
+	cellObject.position.x = x * cellSize + (cellSize / 2);
+	cellObject.position.y = y * cellSize + (cellSize / 2);
+
+	if (value == 0) {
+		cellObject.material = matEmpty;
+	} else if (value > 0) {
+		cellObject.scale.z = grid[x][y] * 3;
+		cellObject.material = matOccupied;
+	}
+	gridGroup.add(cellObject);
 }
 
 function addNodeFinalisation(object3d, node) {
@@ -185,7 +176,6 @@ function drawScene() {
 }
 
 function drawLabel(node, text) {
-
 	var spritey = makeTextSprite(text, {
 		fontsize : 12,
 		borderThickness : 1,
@@ -209,6 +199,7 @@ function drawLabel(node, text) {
 		}
 	});
 	// spritey.position.set(15, 0, 0);
+	spritey.visible = labelInitialVisibility;
 	node.add(spritey);
 }
 
@@ -221,6 +212,10 @@ function drawLights() {
 	directionalLight.intensity = 0.9;
 	directionalLight.castShadow = true;
 	directionalLight.shadowDarkness = 0.4;
+
+	directionalLight.shadowMapWidth = 1024; // default is 512
+	directionalLight.shadowMapHeight = 1024; // default is 512
+
 	// directionalLight.shadowCameraVisible = true;
 	scene.add(directionalLight);
 }
@@ -228,6 +223,7 @@ function drawLights() {
 function drawGridHelper() {
 	// reference: https://www.script-tutorials.com/webgl-with-three-js-lesson-3
 	gridHelper = new THREE.Object3D();// create an empty container
+	gridHelper.visible = gridInitialVisibility;
 
 	var gridHelper1 = new THREE.GridHelper(300, 100);
 	gridHelper1.position = new THREE.Vector3(0, 0, 0);
@@ -247,6 +243,8 @@ function drawGridHelper() {
 
 function drawAxisHelper() {
 	axisHelper = new THREE.AxisHelper(800); // 500 is size
+	axisHelper.renderOrder = 999;
+	axisHelper.visible = axisInitialVisibility;
 	this.scene.add(axisHelper);
 }
 
@@ -294,7 +292,6 @@ function resetCameraPosition() {
 	cameraFront.position.z = 200;
 	cameraFront.up = new THREE.Vector3(0, 0, 1);
 	cameraFront.lookAt(new THREE.Vector3(0, 0, 0));
-
 }
 
 function initScene() {
@@ -323,7 +320,7 @@ function initScene() {
 	drawLights();
 
 	renderer = new THREE.WebGLRenderer({
-		antialias : false
+		antialias : true
 	});
 
 	renderer.shadowMapEnabled = true;
@@ -332,6 +329,7 @@ function initScene() {
 
 	renderer.setClearColor(0xffffff, 1);
 	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.autoClear = true;
 
 	container = document.getElementById('container');
 	container.appendChild(renderer.domElement);
@@ -419,12 +417,27 @@ function onKeyPress(event) {
 		}
 		render();
 	} else if (char == "l") {
-		if (isTHREExFullScreen) {
-			THREEx.FullScreen.cancel();
-		} else {
-			THREEx.FullScreen.request(container);
-		}
-		render();
+		toggleLabels();
+	}
+}
+
+function toggleLabels() {
+	console.log("toggleLabels");
+	var searchResult = [];
+	findObjectArray(searchResult, scene, "label");
+	for (var i = 0; i < searchResult.length; i++) {
+		searchResult[i].visible = !searchResult[i].visible;
+	}
+	render();
+}
+
+function findObjectArray(result, startNode, pattern) {
+	// console.log(startNode.id+": findObjectArray: " + startNode.name);
+	if (startNode.name.match(pattern)) {
+		result.push(startNode);
+	}
+	for (var i = 0; i < startNode.children.length; i++) {
+		findObjectArray(result, startNode.children[i], pattern);
 	}
 }
 
@@ -509,6 +522,7 @@ function makeTextSprite(message, parameters) {
 	// canvas contents will be used for a texture
 	var texture = new THREE.Texture(canvas)
 	texture.needsUpdate = true;
+	texture.minFilter = THREE.NearestFilter;
 
 	var spriteMaterial = new THREE.SpriteMaterial({
 		map : texture,
@@ -517,7 +531,7 @@ function makeTextSprite(message, parameters) {
 	});
 	var sprite = new THREE.Sprite(spriteMaterial);
 	sprite.scale.set(100, 50, 1);
-	sprite.name = "label: " + message;
+	sprite.name = "label(" + message + ")";
 	return sprite;
 }
 
