@@ -15,6 +15,7 @@ import com.akibot.tanktrack.component.world.element.ArrayUtils;
 public class UtilityFunctionTest {
 
 	private RoundRobinUtils robinUtils = new RoundRobinUtils(360);
+	private final double ANGLE_PRECISSION = 0.0000000001;
 
 	@Test
 	public void roundRobinAdd() {
@@ -139,7 +140,7 @@ public class UtilityFunctionTest {
 
 	@Test
 	public void gridAddLineNarrowAngle() {
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(2, 3, 10, 2));
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(2, 3, 10, 1));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
@@ -185,14 +186,14 @@ public class UtilityFunctionTest {
 	}
 
 	@Test
-	public void gridAddDistance() {
+	public void gridAddDistance0Angle() {
 		// TODO: Implement
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(3, 3, 10, 2));
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(3, 3, 10, 1));
 
 		AkiPoint positionOffset = new AkiPoint(15, 15, 0);
 		AkiAngle northAngle = new AkiAngle();
-		northAngle.setDegrees(90);
+		northAngle.setDegrees(-90);
 
 		AkiAngle errorAngle = new AkiAngle();
 		errorAngle.setDegrees(1);
@@ -204,15 +205,125 @@ public class UtilityFunctionTest {
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(1, akiGrid.getGrid()[1][2]);
-		assertEquals(1, akiGrid.getGrid()[2][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
+		assertEquals(1, akiGrid.getGrid()[2][1]);
+
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][0]);
+
+		assertEquals(2, akiGrid.getChangeSequence());
+	}
+
+	@Test
+	public void gridAddDistance45Angle() {
+		// TODO: Implement
+
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(3, 3, 10, 1));
+
+		AkiPoint positionOffset = new AkiPoint(15, 15, 0);
+		AkiAngle northAngle = new AkiAngle();
+		northAngle.setDegrees(180);
+
+		AkiAngle errorAngle = new AkiAngle();
+		errorAngle.setDegrees(45);
+
+		akiGrid.addDistance(positionOffset, northAngle, errorAngle, 10, true);
+		ArrayUtils.printArray(akiGrid.getGrid());
 
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
 
-		assertEquals(2, akiGrid.getChangeSequence());
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
+
+		assertEquals(1, akiGrid.getGrid()[0][0]);
+		assertEquals(1, akiGrid.getGrid()[1][0]);
+		assertEquals(1, akiGrid.getGrid()[2][0]);
+
+		assertEquals(4, akiGrid.getChangeSequence());
+	}
+
+	@Test
+	public void gridRotateVector() {
+		float ix0 = 3;
+		float iy0 = 2;
+
+		float ix1 = 7;
+		float iy1 = 6;
+
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(1, 1, 1, 1));
+		AkiLine line = new AkiLine();
+		line.setFrom(new AkiPoint(ix0, iy0, 0));
+		line.setTo(new AkiPoint(ix1, iy1, 0));
+
+		AkiPoint result;
+
+		// Same line
+		AkiAngle angle0 = new AkiAngle();
+		angle0.setDegrees(0);
+		result = akiGrid.rotateVector(line, angle0);
+		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
+		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
+
+		// 90 degrees to the left
+		AkiAngle angleLeft90 = new AkiAngle();
+		angleLeft90.setDegrees(90);
+		result = akiGrid.rotateVector(line, angleLeft90);
+		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
+		assertEquals(true, result.getX() < 0);
+
+		// 90 degrees to the right
+		AkiAngle angleRight90 = new AkiAngle();
+		angleRight90.setDegrees(-90);
+		result = akiGrid.rotateVector(line, angleRight90);
+		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
+		assertEquals(true, result.getY() < 0);
+
+		// same, 90 degrees to the right (but via negative angle)
+		result = akiGrid.rotateVector(line, angleLeft90.getNegativeAngle());
+		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
+		assertEquals(true, result.getY() < 0);
+
+	}
+
+	@Test
+	public void gridCalculateLine() {
+
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(1, 1, 1, 1));
+		double x0 = 1;
+		double y0 = 2;
+		double distanceCm = 10;
+		AkiPoint positionOffset = new AkiPoint(x0, y0, 0);
+
+		AkiLine result;
+
+		// Same line
+		AkiAngle angle0 = new AkiAngle();
+		angle0.setDegrees(0);
+		result = akiGrid.calculateNorthLine(positionOffset, angle0, distanceCm);
+		assertEquals(x0, result.getFrom().getX(), ANGLE_PRECISSION);
+		assertEquals(y0, result.getFrom().getY(), ANGLE_PRECISSION);
+		assertEquals(x0, result.getTo().getX(), ANGLE_PRECISSION);
+		assertEquals(y0 + distanceCm, result.getTo().getY(), ANGLE_PRECISSION);
+
+		// Opposite direction (180 degrees)
+		AkiAngle angle180 = new AkiAngle();
+		angle180.setDegrees(180);
+		result = akiGrid.calculateNorthLine(positionOffset, angle180, distanceCm);
+		assertEquals(x0, result.getTo().getX(), ANGLE_PRECISSION);
+		assertEquals(y0 - distanceCm, result.getTo().getY(), ANGLE_PRECISSION);
+
+		// 90 Degrees
+		AkiAngle angle90 = new AkiAngle();
+		angle90.setDegrees(90);
+		result = akiGrid.calculateNorthLine(positionOffset, angle90, distanceCm);
+		assertEquals(x0 - distanceCm, result.getTo().getX(), ANGLE_PRECISSION);
+		assertEquals(y0, result.getTo().getY(), ANGLE_PRECISSION);
+
 	}
 
 }

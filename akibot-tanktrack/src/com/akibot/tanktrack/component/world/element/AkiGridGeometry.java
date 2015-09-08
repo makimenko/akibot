@@ -122,19 +122,50 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		// 1. get end line, rasterize it
 		// 2. loop across end raster
 		// 3. add / remove obstacle once?
+
+		AkiLine lineLeft = rotateLine(line, errorAngle);
+		AkiLine lineRight = rotateLine(line, errorAngle.getNegativeAngle());
+
 		addLine(line, endIsObstacle);
+		addLine(lineLeft, endIsObstacle);
+		addLine(lineRight, endIsObstacle);
 	}
 
-	public void addDistance(AkiPoint positionOffset, AkiAngle northAngle, AkiAngle errorAngle, float distanceCm, boolean endIsObstacle) {
-		AkiLine line = calculateLine(positionOffset, northAngle, distanceCm);
+	public AkiPoint rotateVector(AkiLine line, AkiAngle angle) {
+
+		double ix0 = line.getFrom().getX();
+		double iy0 = line.getFrom().getY();
+
+		double ix1 = line.getTo().getX();
+		double iy1 = line.getTo().getY();
+
+		double angleRadians = angle.getRadians();
+
+		double x1 = ix1 - ix0;
+		double y1 = iy1 - iy0;
+
+		double x2 = (x1 * Math.cos(angleRadians)) - (y1 * Math.sin(angleRadians)) + ix0;
+		double y2 = (y1 * Math.cos(angleRadians)) + (x1 * Math.sin(angleRadians)) + iy0;
+
+		return new AkiPoint(x2, y2, 0); // TODO: Make double everywhere
+	}
+
+	public AkiLine rotateLine(AkiLine line, AkiAngle angle) {
+		return new AkiLine(line.getFrom(), rotateVector(line, angle));
+	}
+
+	public void addDistance(AkiPoint positionOffset, AkiAngle northAngle, AkiAngle errorAngle, double distanceCm, boolean endIsObstacle) {
+		AkiLine line = calculateNorthLine(positionOffset, northAngle, distanceCm);
 		addLineWithAngle(line, errorAngle, endIsObstacle);
 	}
 
-	public AkiLine calculateLine(AkiPoint positionOffset, AkiAngle northAngle, float distanceCm) {
-		// TODO: Implement
+	public AkiLine calculateNorthLine(AkiPoint positionOffset, AkiAngle northAngle, double distanceCm) {
 		AkiLine line = new AkiLine();
-		line.setFrom(new AkiPoint(0, 0, 0)); // replace
-		line.setTo(new AkiPoint(0, 0, 0)); // replace
+		line.setFrom(positionOffset);
+
+		double a = distanceCm * Math.cos(northAngle.getRadians() + Math.toRadians(90));
+		double b = distanceCm * Math.sin(northAngle.getRadians() + Math.toRadians(90));
+		line.setTo(new AkiPoint(positionOffset.getX() + a, positionOffset.getY() + b, 0)); // TODO: calculate
 		return line;
 	}
 

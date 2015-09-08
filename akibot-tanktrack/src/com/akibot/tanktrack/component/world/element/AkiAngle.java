@@ -5,23 +5,34 @@ import java.io.Serializable;
 public class AkiAngle implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private float radians;
-	private float degrees;
+	private double radians;
 
-	public float getRadians() {
-		return radians;
+	public AkiAngle() {
+
 	}
 
-	public void setRadians(float radians) {
+	public AkiAngle(double radians) {
 		this.radians = radians;
 	}
 
-	public float getDegrees() {
-		return degrees;
+	public double getRadians() {
+		return radians;
 	}
 
-	public void setDegrees(float degrees) {
-		this.degrees = degrees;
+	public void setRadians(double radians) {
+		this.radians = radians;
+	}
+
+	public double getDegrees() {
+		return Math.toDegrees(radians);
+	}
+
+	public void setDegrees(double degrees) {
+		this.radians = Math.toRadians(degrees);
+	}
+
+	public AkiAngle getNegativeAngle() {
+		return new AkiAngle(-radians);
 	}
 
 }
