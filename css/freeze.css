@@ -1084,7 +1084,8 @@ section#screens .filter a.active {
 }
 /* demo video Section */
 section#demo {
-	background: #ffffff;
+	//background: #ffffff;
+	background: url("../img/LocationAreaGrid.png");
 }
 
 section#demo header h1:after {

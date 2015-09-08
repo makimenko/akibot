@@ -84,6 +84,7 @@
 			<div class="tp-banner">
 				<ul>
 
+
 					<!-- SLIDE  -->
 					<li data-transition="fade" data-slotamount="7"
 						data-masterspeed="1500">
@@ -128,8 +129,20 @@
 						</div>
 
 					</li>
-
-					<!-- SLIDE 2 -->
+					
+					<li data-transition="fade" data-slotamount="7"
+						data-masterspeed="1500">
+						<!-- MAIN IMAGE --> <img src="img/transparent.png" alt="slidebg1"
+						data-bgfit="cover" data-bgposition="left top"
+						data-bgrepeat="no-repeat"> <!-- LAYERS --> <!-- LAYER NR. 1 -->
+						<div class="tp-caption lfl fadeout hidden-xs" data-x="center"
+							data-y="center" 
+							data-speed="4000" data-start="100" data-easing="Power4.easeOut">
+							<img src="img/LocationAreaGrid.png" alt="">
+						</div>
+					</li>
+					
+			
 					<li data-transition="zoomout" data-slotamount="7"
 						data-masterspeed="1000">
 						<!-- MAIN IMAGE --> <img src="img/transparent.png" alt="slidebg1"
@@ -220,19 +233,23 @@
 				<div class="section-heading scrollpoint sp-effect3">
 					<h1>About</h1>
 					<div class="divider"></div>
-					<p>
-						The AkiBot is a name of mini-robot with a set of sensors
-						controlled by microprocessor <a
-							href="https://www.raspberrypi.org/">Raspberry Pi</a>.<br>
-						Device-level code is written on C++, main business logic is
-						written on Java and monitoring tool on <a
-							href="https://en.wikipedia.org/wiki/HTML5">HTML5</a> including 3D
-						Engine <a href="https://en.wikipedia.org/wiki/WebGL">WebGL</a>
-					</p>
-					<p>
-						The open-source AkiBot project is hosted on <a
-							href="https://github.com/makimenko/akibot">GitHub</a>
-					</p>
+					
+<p>
+Some time ago I was tried to find out a hobby without computer. Unfortunately no luck and progress in this area :-)
+In a meantime started to look into the educational micro-controllers like  <a href="http://www.arduino.cc/">Arduino</a> and micro-processors like <a href="https://www.raspberrypi.org/">Raspberry Pi</a>.
+<br/>
+I was very surprised how easy it is to assemble and control robot via application code. Having full control of GPIO and I2C protocol allows to design and implement an incredible things. 
+In addition, most of sensors with a high variety are available on <a href="http://www.aliexpress.com/">AliExpress</a> shop for a reasonable price (e.g. <a href="http://www.aliexpress.com/wholesale?catId=0&initiative_id=SB_20150908123314&SearchText=Triple+Axis+Compass+Magnetometer">Triple Axis Compass Magnetometer</a> Sensor Module only for 2 EUR). 
+<br/>
+The most impressive article which inspired me to this hobby was published on Udacity: <a href="https://www.udacity.com/course/artificial-intelligence-for-robotics--cs373">"AI for Robotics: Programming a Robotic Car"</a>.
+<br/>
+Having lack of time, still was able to implement a Proof of Concept: a self-mafe mini-robot "AkiBot" with a set of sensors controlled by microprocessor <a href="https://www.raspberrypi.org/">Raspberry Pi</a>. Device-level code is written on C++, main business logic is written on Java and monitoring tool on HTML5 / <a href="https://en.wikipedia.org/wiki/WebGL">WebGL</a>. 
+Such technology stack allows to control and monitor robot on any device including phone.
+<br/>
+Will try to continue to work on it as a hobby until enthusiasm is not dissolved in a daily duties ;-)
+<br/>
+The open-source AkiBot project is hosted on <a href="https://github.com/makimenko/akibot">GitHub</a>.					
+</p>
 				</div>
 
 				<div class="row">
@@ -273,7 +290,12 @@
 							<p>In case of questions, please contact me on LinkedIn</p>
 						</div>
 					</div>
+					
+					
+						
 				</div>
+				
+						
 			</div>
 		</section>
 
@@ -287,7 +309,7 @@
 				<div class="row">
 					<div class="col-md-4 col-sm-4 scrollpoint sp-effect1">
 						<div class="media media-left feature">
-							<a class="pull-right" href="#"> <i class="fa fa-cogs fa-2x"></i>
+							<a class="pull-right" > <i class="fa fa-cogs fa-2x"></i>
 							</a>
 							<div class="media-body">
 								<h3 class="media-heading">AkiBot Engine</h3>
@@ -295,16 +317,26 @@
 								architecture
 							</div>
 						</div>
+						
 						<div class="media media-left feature">
-							<a class="pull-right" href="#"> <i class="fa fa-eye fa-2x"></i>
+							<a class="pull-right" > <i class="fa fa-wrench fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Sensors</h3>
+								All sensors are vendor-independent. Continuously ordered via online shops.
+							</div>
+						</div>
+						
+						<div class="media media-left feature">
+							<a class="pull-right" > <i class="fa fa-eye fa-2x"></i>
 							</a>
 							<div class="media-body">
 								<h3 class="media-heading">Monitoring</h3>
-								Web based visualization and control
+								Web based monitoring, visualization and control.
 							</div>
 						</div>
 						<div class="media media-left feature">
-							<a class="pull-right" href="#"> <i
+							<a class="pull-right" > <i
 								class="fa fa-dashboard fa-2x"></i>
 							</a>
 							<div class="media-body">
@@ -314,7 +346,7 @@
 							</div>
 						</div>
 						<div class="media media-left feature">
-							<a class="pull-right" href="#"> <i
+							<a class="pull-right" > <i
 								class="fa fa-compass fa-2x"></i>
 							</a>
 							<div class="media-body">
@@ -323,7 +355,7 @@
 							</div>
 						</div>
 						<div class="media media-left feature">
-							<a class="pull-right" href="#"> <i class="fa fa-sun-o fa-2x"></i>
+							<a class="pull-right" > <i class="fa fa-sun-o fa-2x"></i>
 							</a>
 							<div class="media-body">
 								<h3 class="media-heading">Temperature</h3>
@@ -337,7 +369,7 @@
 					</div>
 					<div class="col-md-4 col-sm-4 scrollpoint sp-effect2">
 						<div class="media feature">
-							<a class="pull-left" href="#"> <i
+							<a class="pull-left" > <i
 								class="fa fa-volume-up fa-2x"></i>
 							</a>
 							<div class="media-body">
@@ -347,7 +379,7 @@
 							</div>
 						</div>
 						<div class="media feature">
-							<a class="pull-left" href="#"> <i class="fa fa-signal fa-2x"></i>
+							<a class="pull-left" > <i class="fa fa-signal fa-2x"></i>
 							</a>
 							<div class="media-body">
 								<h3 class="media-heading">Network</h3>
@@ -356,7 +388,7 @@
 							</div>
 						</div>
 						<div class="media feature">
-							<a class="pull-left" href="#"> <i
+							<a class="pull-left" > <i
 								class="fa fa-map-marker fa-2x"></i>
 							</a>
 							<div class="media-body">
@@ -366,27 +398,38 @@
 							</div>
 						</div>
 						<div class="media feature">
-							<a class="pull-left" href="#"> <i class="fa fa-arrows fa-2x"></i>
+							<a class="pull-left" > <i class="fa fa-arrows fa-2x"></i>
 							</a>
 							<div class="media-body">
 								<h3 class="media-heading">Movement</h3>
-								TankTrack DD1-1
+								The TankTrack DD1-1 component allows to move and rotate a heavy parts.
 							</div>
 						</div>
-						<div class="media active feature">
-							<a class="pull-left" href="#"> <i class="fa fa-plus fa-2x"></i>
+						<div class="media feature">
+							<a class="pull-left" > <i class="fa fa-plus fa-2x"></i>
 							</a>
 							<div class="media-body">
 								<h3 class="media-heading">Power Supply</h3>
-								NCR18650A 3.7V Batteries in External Power Bank (5/8/12V)
+								6xNCR18650A 3.7V 3.1Ah Batteries in External Power Bank (68 Wh in Total)
 							</div>
 						</div>
+						
+						<div class="media feature">
+							<a class="pull-left" > <i class="fa fa-tablet fa-2x"></i>
+							</a>
+							<div class="media-body">
+								<h3 class="media-heading">Mobile / iPad</h3>
+								Control robot via PC, Phone, iPad, Tablet (via standard Web Browser)
+							</div>
+						</div>		
+						
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<section id="demo">
+		
 			<div class="container">
 				<div class="section-heading scrollpoint sp-effect3">
 					<h1>Demo</h1>
@@ -404,10 +447,9 @@
 
 
 				</div>
-
 			</div>
 		</section>
-
+		
 		<section id="getApp">
 			<div class="container-fluid">
 				<div class="section-heading inverse scrollpoint sp-effect3">
@@ -472,6 +514,7 @@
 		});
 	</script>
 
+	<!--
 	<script>
 		(function(i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r;
@@ -488,7 +531,7 @@
 		ga('create', 'UA-9276199-2', 'auto');
 		ga('send', 'pageview');
 	</script>
-
+-->
 </body>
 
 </html>
