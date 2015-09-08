@@ -1,6 +1,7 @@
 package com.akibot.tanktrack.component.world.element;
 
-public class AkiGrid {
+public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
+	private static final long serialVersionUID = 1L;
 	private AkiGridConfiguration akiGridConfiguration;
 	private int[][] grid;
 	private long changeSequence = 0;
@@ -8,7 +9,7 @@ public class AkiGrid {
 	public static final int UNKNOWN_VALUE = -1;
 	public static final int EMPTY_VALUE = 0;
 
-	public AkiGrid(AkiGridConfiguration akiGridConfiguration) {
+	public AkiGridGeometry(AkiGridConfiguration akiGridConfiguration) {
 		this.akiGridConfiguration = akiGridConfiguration;
 		init();
 	}

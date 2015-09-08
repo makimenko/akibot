@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.world.element.AkiAngle;
-import com.akibot.tanktrack.component.world.element.AkiGrid;
 import com.akibot.tanktrack.component.world.element.AkiGridConfiguration;
+import com.akibot.tanktrack.component.world.element.AkiGridGeometry;
 import com.akibot.tanktrack.component.world.element.AkiLine;
 import com.akibot.tanktrack.component.world.element.AkiPoint;
 import com.akibot.tanktrack.component.world.element.ArrayUtils;
@@ -68,8 +68,8 @@ public class UtilityFunctionTest {
 	@Test
 	public void gridAddPoint() {
 		int maxObstacle = 2;
-		AkiGrid akiGrid = new AkiGrid(new AkiGridConfiguration(6, 5, 10, maxObstacle));
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(6, 5, 10, maxObstacle));
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
 
 		akiGrid.addPoint(new AkiPoint(0, 0, 0));
 		assertEquals(1, akiGrid.getGrid()[0][0]);
@@ -89,11 +89,11 @@ public class UtilityFunctionTest {
 
 	@Test
 	public void gridAddLine() {
-		AkiGrid akiGrid = new AkiGrid(new AkiGridConfiguration(6, 5, 10, 2));
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(6, 5, 10, 2));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[5][4]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[5][4]);
 		assertEquals(0, akiGrid.getChangeSequence());
 
 		akiGrid.addLine(new AkiLine(new AkiPoint(0, 0, 0), new AkiPoint(0, 0, 0)), true);
@@ -102,8 +102,8 @@ public class UtilityFunctionTest {
 
 		akiGrid.addLine(new AkiLine(new AkiPoint(21, 21, 0), new AkiPoint(29, 49, 0)), true);
 
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
 		assertEquals(1, akiGrid.getGrid()[2][4]);
 		assertEquals(4, akiGrid.getChangeSequence());
 
@@ -112,8 +112,8 @@ public class UtilityFunctionTest {
 		// System.out.println("After");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
 		assertEquals(2, akiGrid.getGrid()[2][4]);
 		assertEquals(5, akiGrid.getChangeSequence());
 
@@ -122,24 +122,24 @@ public class UtilityFunctionTest {
 		// System.out.println("After 2");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[4][0]);
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[5][0]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[4][0]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[5][0]);
 		assertEquals(7, akiGrid.getChangeSequence());
 
 		// Make sure that other Cells are not affected
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][3]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][4]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[3][3]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[3][4]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][3]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][4]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][3]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][4]);
 
 	}
 
 	@Test
 	public void gridAddLineNarrowAngle() {
-		AkiGrid akiGrid = new AkiGrid(new AkiGridConfiguration(2, 3, 10, 2));
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(2, 3, 10, 2));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
@@ -148,14 +148,14 @@ public class UtilityFunctionTest {
 		AkiLine line = new AkiLine(new AkiPoint(5, 15, 0), new AkiPoint(15, 15, 0));
 		akiGrid.addLineWithAngle(line, angle, true);
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
 
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
 		assertEquals(1, akiGrid.getGrid()[1][1]);
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
 		assertEquals(2, akiGrid.getChangeSequence());
 	}
 
@@ -163,7 +163,7 @@ public class UtilityFunctionTest {
 	public void gridAddLineWideAngle() {
 		// TODO: Implement
 
-		AkiGrid akiGrid = new AkiGrid(new AkiGridConfiguration(2, 3, 10, 2));
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(2, 3, 10, 2));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
@@ -173,13 +173,13 @@ public class UtilityFunctionTest {
 		akiGrid.addLineWithAngle(line, angle, true);
 		ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
 		assertEquals(1, akiGrid.getGrid()[1][2]);
 
-		assertEquals(AkiGrid.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
 		assertEquals(1, akiGrid.getGrid()[1][1]);
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
 		assertEquals(1, akiGrid.getGrid()[1][0]);
 		assertEquals(4, akiGrid.getChangeSequence());
 	}
@@ -188,7 +188,7 @@ public class UtilityFunctionTest {
 	public void gridAddDistance() {
 		// TODO: Implement
 
-		AkiGrid akiGrid = new AkiGrid(new AkiGridConfiguration(3, 3, 10, 2));
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(3, 3, 10, 2));
 
 		AkiPoint positionOffset = new AkiPoint(15, 15, 0);
 		AkiAngle northAngle = new AkiAngle();
@@ -200,17 +200,17 @@ public class UtilityFunctionTest {
 		akiGrid.addDistance(positionOffset, northAngle, errorAngle, 10, true);
 		ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
 		assertEquals(1, akiGrid.getGrid()[1][2]);
 		assertEquals(1, akiGrid.getGrid()[2][2]);
 
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGrid.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
 
 		assertEquals(2, akiGrid.getChangeSequence());
 	}

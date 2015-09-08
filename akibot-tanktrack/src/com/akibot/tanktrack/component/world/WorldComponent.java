@@ -8,8 +8,10 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
-import com.akibot.tanktrack.component.world.element.AkiBoxGeometry;
 import com.akibot.tanktrack.component.world.element.AkiColladaGeometry;
+import com.akibot.tanktrack.component.world.element.AkiGridConfiguration;
+import com.akibot.tanktrack.component.world.element.AkiGridGeometry;
+import com.akibot.tanktrack.component.world.element.AkiLine;
 import com.akibot.tanktrack.component.world.element.AkiMaterial;
 import com.akibot.tanktrack.component.world.element.AkiNode;
 import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
@@ -38,15 +40,15 @@ public class WorldComponent extends DefaultComponent {
 	private void initWorld() {
 		// ======================== World Node:
 		worldNode = new AkiNode("worldNode");
-		AkiBoxGeometry worldGeometry = new AkiBoxGeometry();
-		worldGeometry.setDimension(new AkiPoint(500, 500, 2));
+		// AkiBoxGeometry worldGeometry = new AkiBoxGeometry();
+		// worldGeometry.setDimension(new AkiPoint(500, 500, 2));
 
 		AkiMaterial worldMaterial = new AkiMaterial();
 		worldMaterial.setColor(0x00ffff);
 		worldMaterial.setOpacity(0.5f);
 		worldMaterial.setTransparent(true);
-		worldGeometry.setMaterial(worldMaterial);
-		worldNode.setGeometry(worldGeometry);
+		// worldGeometry.setMaterial(worldMaterial);
+		// worldNode.setGeometry(worldGeometry);
 
 		index(worldNode);
 
@@ -57,7 +59,7 @@ public class WorldComponent extends DefaultComponent {
 		robotNode.setGeometry(robotGeometry);
 
 		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
-		robotTransformation.setPosition(new AkiPoint(0, 0, 1));
+		robotTransformation.setPosition(new AkiPoint(0, 0, 1.5f));
 		// robotTransformation.setRotation(new AkiPoint(1, 1, 1));
 		// robotTransformation.setScale(new AkiPoint(100, 100, 100));
 		robotNode.setTransformation(robotTransformation);
@@ -65,6 +67,27 @@ public class WorldComponent extends DefaultComponent {
 		worldNode.attachChild(robotNode);
 
 		index(robotNode);
+
+		// ======================== Grid Node:
+		int cellCount = 50;
+		int cellSizeCm = 10;
+		int positionOffset = -cellCount * cellSizeCm / 2;
+		AkiGridConfiguration gridConfiguration = new AkiGridConfiguration(cellCount, cellCount, cellSizeCm, 2);
+		AkiGridGeometry gridGeometry = new AkiGridGeometry(gridConfiguration);
+		AkiNode gridNode = new AkiNode("gridNode");
+		gridNode.setGeometry(gridGeometry);
+
+		AkiNodeTransformation gridTransformation = new AkiNodeTransformation();
+		gridTransformation.setPosition(new AkiPoint(positionOffset, positionOffset, 1));
+		gridNode.setTransformation(gridTransformation);
+
+		gridGeometry.addLine(new AkiLine(new AkiPoint(250, 250, 0), new AkiPoint(250, 300, 0)), true);
+
+		gridGeometry.addLine(new AkiLine(new AkiPoint(250, 250, 0), new AkiPoint(400, 400, 0)), true);
+
+		worldNode.attachChild(gridNode);
+
+		index(gridNode);
 	}
 
 	public void index(AkiNode node) {

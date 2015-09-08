@@ -1,6 +1,9 @@
 package com.akibot.tanktrack.component.world.element;
 
-public class AkiGridConfiguration {
+import java.io.Serializable;
+
+public class AkiGridConfiguration implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int cellCountX;
 	private int cellCountY;
 	private float cellSize;
