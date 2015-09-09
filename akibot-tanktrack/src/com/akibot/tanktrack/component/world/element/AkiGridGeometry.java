@@ -64,11 +64,32 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 	}
 
 	public void addLine(AkiLine line, boolean endIsObstacle) {
+		int[][] raster = rasterize(line, endIsObstacle);
+		for (int i = 0; i < raster.length; i++) {
+			int x = raster[i][0];
+			int y = raster[i][1];
+			int status = raster[i][2];
+
+			if (status == -1) {
+				remove(x, y);
+			} else if (status == 1) {
+				add(x, y);
+			}
+		}
+	}
+
+	public int[][] rasterize(AkiLine line, boolean endIsObstacle) {
+
 		int x = getAddressX(line.getFrom());
 		int y = getAddressY(line.getFrom());
 
 		int x2 = getAddressX(line.getTo());
 		int y2 = getAddressY(line.getTo());
+
+		int distance = 1 + (int) Math.sqrt(Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2));
+
+		int[][] res = new int[distance][3];
+		int index = 0;
 
 		// Bresenham's line algorithm
 		int w = x2 - x;
@@ -97,11 +118,20 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 				dy2 = 1;
 			dx2 = 0;
 		}
+		
 		int numerator = longest >> 1;
 		for (int i = 0; i <= longest; i++) {
-			if (!endIsObstacle || x != x2 || y != y2) {
-				remove(x, y);
+			res[index][0] = x;
+			res[index][1] = y;
+			if (endIsObstacle && x == x2 && y == y2) {
+				res[index][2] = 1;
+			} else if (!endIsObstacle || x != x2 || y != y2) {
+				res[index][2] = -1;
+			} else {
+				res[index][2] = 0;
 			}
+			index++;
+
 			numerator += shortest;
 			if (!(numerator < longest)) {
 				numerator -= longest;
@@ -112,23 +142,29 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 				y += dy2;
 			}
 		}
-		if (endIsObstacle) {
-			add(x2, y2);
-		}
+		return res;
 	}
 
 	public void addLineWithAngle(AkiLine line, AkiAngle errorAngle, boolean endIsObstacle) {
-		// TODO: implement angle:
-		// 1. get end line, rasterize it
-		// 2. loop across end raster
-		// 3. add / remove obstacle once?
-
 		AkiLine lineLeft = rotateLine(line, errorAngle);
 		AkiLine lineRight = rotateLine(line, errorAngle.getNegativeAngle());
 
 		addLine(line, endIsObstacle);
 		addLine(lineLeft, endIsObstacle);
 		addLine(lineRight, endIsObstacle);
+
+		iterateEndOfLine(line, lineLeft, endIsObstacle);
+		iterateEndOfLine(line, lineRight, endIsObstacle);
+	}
+
+	private void iterateEndOfLine(AkiLine line, AkiLine line2, boolean endIsObstacle) {
+		int[][] arrLeft = rasterize(new AkiLine(line2.getTo(), line.getTo()), endIsObstacle);
+		if (arrLeft.length > 2) {
+			for (int i = 1; i < arrLeft.length - 1; i++) {
+				addLine(new AkiLine(line.getFrom(), new AkiPoint(arrLeft[i][0] * akiGridConfiguration.getCellSize(), arrLeft[i][1]
+						* akiGridConfiguration.getCellSize(), 0)), endIsObstacle);
+			}
+		}
 	}
 
 	public AkiPoint rotateVector(AkiLine line, AkiAngle angle) {

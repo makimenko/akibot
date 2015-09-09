@@ -6,7 +6,7 @@ public class AkiGridConfiguration implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int cellCountX;
 	private int cellCountY;
-	private float cellSize;
+	private double cellSize;
 	private int maxObstacleCount;
 
 	public AkiGridConfiguration() {
@@ -36,11 +36,11 @@ public class AkiGridConfiguration implements Serializable {
 		this.cellCountY = cellCountY;
 	}
 
-	public float getCellSize() {
+	public double getCellSize() {
 		return cellSize;
 	}
 
-	public void setCellSize(float cellSize) {
+	public void setCellSize(double cellSize) {
 		this.cellSize = cellSize;
 	}
 

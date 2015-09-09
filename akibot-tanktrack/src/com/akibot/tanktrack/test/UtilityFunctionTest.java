@@ -326,4 +326,51 @@ public class UtilityFunctionTest {
 
 	}
 
+	@Test
+	public void gridDistanceErrorAngle() {
+
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(5, 3, 10, 1));
+
+		akiGrid.addDistance(new AkiPoint(25, 25, 0), new AkiAngle(Math.toRadians(180)), new AkiAngle(Math.toRadians(45)), 25, true);
+		ArrayUtils.printArray(akiGrid.getGrid());
+
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[4][2]);
+
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][1]);
+		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[3][1]);
+		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[4][1]);
+
+		assertEquals(1, akiGrid.getGrid()[0][0]);
+		assertEquals(1, akiGrid.getGrid()[1][0]); // test goal
+		assertEquals(1, akiGrid.getGrid()[2][0]);
+		assertEquals(1, akiGrid.getGrid()[3][0]); // test goal
+		assertEquals(1, akiGrid.getGrid()[4][0]);
+	}
+
+	@Test
+	public void gridRasterize() {
+
+		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(1, 1, 1, 1));
+
+		int[][] res = akiGrid.rasterize(new AkiLine(new AkiPoint(3, 3, 0), new AkiPoint(1, 1, 0)), true);
+
+		ArrayUtils.printArray(res);
+
+		assertEquals(3, res[0][0]);
+		assertEquals(3, res[0][1]);
+
+		assertEquals(2, res[1][0]);
+		assertEquals(2, res[1][1]);
+
+		assertEquals(1, res[2][0]);
+		assertEquals(1, res[2][1]);
+
+	}
+
 }
