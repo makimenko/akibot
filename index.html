@@ -26,7 +26,11 @@
 <link rel="stylesheet" href="css/font-awesome.min.css">
 <link rel="stylesheet" href="css/slick.css">
 <link rel="stylesheet" href="js/rs-plugin/css/settings.css">
-<link rel="stylesheet" href="css/freeze.css">
+<link rel="stylesheet" href="css/akibot.css">
+
+<link rel="stylesheet" href="css/blueimp-gallery.css">
+<link rel="stylesheet" href="css/blueimp-gallery-indicator.css">
+<!--<link rel="stylesheet" href="css/blueimp-gallery-video.css">-->
 
 <script type="text/javascript" src="js/modernizr.custom.32033.js"></script>
 
@@ -71,7 +75,8 @@
 						<li><a href="#about">about</a></li>
 						<li><a href="#features">features</a></li>
 						<li><a href="#demo">demo</a></li>
-						<li><a class="getApp" href="#getApp">get source</a></li>
+						<li><a href="#images">images</a></li>
+						<li><a class="getApp" href="#getApp">get source</a></li>						
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -189,7 +194,7 @@
 								<b>Design:</b> Enterprise Architect, Zenit PCB<br> <b>IDE:</b>
 								C++ in NetBeans, the rest in Eclipse<br> 
 								<b>UI:</b> HTML5, Bootstrap, WebGL, Three.js, JavaScript, WebSockets, REST, JSON, AJAX, jQuery<br>
-								<b>Application:</b>	Java, Tomcat, MarryTTS<br> 
+								<b>Application:</b>	Java, Pi4J, WiringPi, Jersey, Tomcat, MarryTTS<br> 
 								<b>Peer-to-peer:</b> UDP Datagram packets, WebSockets<br> 
 								<b>Driver-level:</b> Linux (NOOBS Raspbian), C++, JNI, WiringPi, Pi4J<br>
 								<b>Device-level:</b> Raspberry Pi 2 Model B and sensors
@@ -428,7 +433,8 @@ The open-source AkiBot project is hosted on <a href="https://github.com/makimenk
 				</div>
 			</div>
 		</section>
-
+	
+		
 		<section id="demo">
 		
 			<div class="container">
@@ -451,12 +457,37 @@ The open-source AkiBot project is hosted on <a href="https://github.com/makimenk
 			</div>
 		</section>
 		
+		<section id="images">
+			<div class="container">
+				<div class="section-heading scrollpoint sp-effect3">
+					<h1>Images</h1>
+					<div class="divider"></div>
+					<p>Sample Images, Assembling History and Application Screenshots</p>
+				</div>
+				
+				<!-- The container for the list of example images -->
+				<div id="image-links" class="links"></div>
+				<!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+				<div id="blueimp-gallery" class="blueimp-gallery">
+					<div class="slides"></div>
+					<h3 class="title"></h3>
+					<a class="prev"><span class="fa fa-arrow-left" style="font-size: 42px"/></a>
+					<a class="next"><span class="fa fa-arrow-right" style="font-size: 42px"/></a>
+					<a class="close"><span class="fa fa-times" style="font-size: 42px"/></a>
+					<a class="play-pause"></a>
+					<ol class="indicator"></ol>
+				</div>
+
+			</div>
+		</section>
+
+		
 		<section id="getApp">
 			<div class="container-fluid">
 				<div class="section-heading inverse scrollpoint sp-effect3">
 					<h1>Get Source Code</h1>
 					<div class="divider"></div>
-					<p>Choose suitable format!</p>
+					<p>Click below to download a source code!</p>
 				</div>
 
 				<div class="row">
@@ -495,9 +526,11 @@ The open-source AkiBot project is hosted on <a href="https://github.com/makimenk
 					<a href="https://lv.linkedin.com/in/mihailsakimenko"
 						class="scrollpoint sp-effect3"><i class="fa fa-linkedin fa-lg"></i></a>
 				</div>
+				<div class="rights">
+                    <p>Copyright (C) 2015<br>Mihails Akimenko</p>
+                </div>
 			</div>
 		</footer>
-
 	</div>
 
 	<script src="js/jquery-1.11.1.min.js"></script>
@@ -515,7 +548,18 @@ The open-source AkiBot project is hosted on <a href="https://github.com/makimenk
 		});
 	</script>
 
+
+<!--<script src="js/blueimp-helper.js"></script>-->
+<script src="js/blueimp-gallery.js"></script>
+<script src="js/blueimp-gallery-fullscreen.js"></script>
+<script src="js/blueimp-gallery-indicator.js"></script>
+<!--<script src="js/blueimp-gallery-video.js"></script>-->
+<!--<script src="js/blueimp-gallery-vimeo.js"></script>-->
+<!--<script src="js/blueimp-gallery-youtube.js"></script>-->
+<script src="js/jquery.blueimp-gallery.js"></script>
+<script src="js/blueimp-demo.js"></script>
 	
+	<!-- HANG TOO FREQUENTLY:
 	<script>
 		(function(i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r;
@@ -532,8 +576,8 @@ The open-source AkiBot project is hosted on <a href="https://github.com/makimenk
 		ga('create', 'UA-9276199-2', 'auto');
 		ga('send', 'pageview');
 	</script>
+	-->
 	
-
 </body>
 
 </html>

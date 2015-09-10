@@ -1084,8 +1084,8 @@ section#screens .filter a.active {
 }
 /* demo video Section */
 section#demo {
-	//background: #ffffff;
-	background: url("../img/LocationAreaGrid.png");
+	background: #ffffff;
+	//background: url("../img/LocationAreaGrid.png");
 }
 
 section#demo header h1:after {
@@ -1094,6 +1094,10 @@ section#demo header h1:after {
 /* Get app Section */
 section#getApp {
 	background: url("../img/bk-freeze-ga.jpg");
+}
+
+section#images {
+	background: #f6f6f6;
 }
 
 section#getApp header {
