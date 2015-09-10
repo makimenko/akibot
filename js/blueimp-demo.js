@@ -78,4 +78,16 @@ $(function () {
 		.appendTo(linksContainer);		
 		
 
+		blueimp.Gallery([
+        {
+            title: 'AkiBot Demo 1 (eng)',
+            type: 'text/html',
+            youtube: 'ldJn0d0cMRI'
+        }
+    ], {
+        container: '#blueimp-video-carousel',
+        carousel: true
+    });
+	
+
 });
