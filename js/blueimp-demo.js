@@ -43,8 +43,8 @@ $(function () {
 	$('<a/>')
 		.append($('<img>').prop('src', 'img/images/T-20150602-2.JPG').prop('class','img-thumbnail'))
 		.prop('href', 'img/images/20150602-2.JPG')
-		.prop('title', 'AAAA')
-		.attr('data-gallery', '2015.06.02: PCB Drilling')
+		.prop('title', '2015.06.02: PCB Drilling')
+		.attr('data-gallery', '')
 		.appendTo(linksContainer);
 	$('<a/>')
 		.append($('<img>').prop('src', 'img/images/T-20150602-3.JPG').prop('class','img-thumbnail'))
