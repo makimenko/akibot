@@ -17,14 +17,14 @@ $(function () {
 	var linksContainer = $('#image-links');
 
 	$('<a/>')
-		.append($('<img>').prop('src', 'img/images/T-20150215.JPG').prop('class','img-thumbnail'))
-		.prop('href', 'img/images/20150215.JPG')
+		.append($('<img>').prop('src', 'img/images/T-20150215.jpg').prop('class','img-thumbnail'))
+		.prop('href', 'img/images/20150215.jpg')
 		.prop('title', '2015.02.15: Initial assembling of delivered parts. Proof Of Concept. The decision: to go forward.')
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);
 	$('<a/>')
-		.append($('<img>').prop('src', 'img/images/T-20150316.JPG').prop('class','img-thumbnail'))
-		.prop('href', 'img/images/20150316.JPG')
+		.append($('<img>').prop('src', 'img/images/T-20150316.jpg').prop('class','img-thumbnail'))
+		.prop('href', 'img/images/20150316.jpg')
 		.prop('title', '2015.03.16: Most of components delivered from China. Initial wireless prototype with battery')
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);
@@ -35,26 +35,26 @@ $(function () {
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);		
 	$('<a/>')
-		.append($('<img>').prop('src', 'img/images/T-20150602-1.JPG').prop('class','img-thumbnail'))
-		.prop('href', 'img/images/20150602-1.JPG')
+		.append($('<img>').prop('src', 'img/images/T-20150602-1.jpg').prop('class','img-thumbnail'))
+		.prop('href', 'img/images/20150602-1.jpg')
 		.prop('title', '2015.06.02: Copper Printed Circuit Board Etching')
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);
 	$('<a/>')
-		.append($('<img>').prop('src', 'img/images/T-20150602-2.JPG').prop('class','img-thumbnail'))
-		.prop('href', 'img/images/20150602-2.JPG')
+		.append($('<img>').prop('src', 'img/images/T-20150602-2.jpg').prop('class','img-thumbnail'))
+		.prop('href', 'img/images/20150602-2.jpg')
 		.prop('title', '2015.06.02: PCB Drilling')
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);
 	$('<a/>')
-		.append($('<img>').prop('src', 'img/images/T-20150602-3.JPG').prop('class','img-thumbnail'))
-		.prop('href', 'img/images/20150602-3.JPG')
+		.append($('<img>').prop('src', 'img/images/T-20150602-3.jpg').prop('class','img-thumbnail'))
+		.prop('href', 'img/images/20150602-3.jpg')
 		.prop('title', '2015.06.02: Printed Circuit Board (PCB) for AkiBot 0.1')
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);
 	$('<a/>')
-		.append($('<img>').prop('src', 'img/images/T-20150625-1.JPG').prop('class','img-thumbnail'))
-		.prop('href', 'img/images/20150625-1.JPG')
+		.append($('<img>').prop('src', 'img/images/T-20150625-1.jpg').prop('class','img-thumbnail'))
+		.prop('href', 'img/images/20150625-1.jpg')
 		.prop('title', '2015.06.25: AkiBot v0.1 and YouTube demo')
 		.attr('data-gallery', '')
 		.appendTo(linksContainer);
