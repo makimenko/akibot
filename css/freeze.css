@@ -1006,7 +1006,7 @@ section#features .media.active .media-heading {
 }
 
 section#reviews {
-	background: url("../img/freeze/bk-freeze.jpg");
+	background: url("../img/bk-freeze.jpg");
 }
 
 section#reviews header {
@@ -1093,7 +1093,7 @@ section#demo header h1:after {
 }
 /* Get app Section */
 section#getApp {
-	background: url("../img/freeze/bk-freeze-ga.jpg");
+	background: url("../img/bk-freeze-ga.jpg");
 }
 
 section#getApp header {
