@@ -81,6 +81,7 @@ function addNode(node) {
 
 function addLocationAreaGrid(node) {
 	gridGroup = new THREE.Object3D();
+	gridGroup.name = node.name;
 	applyTransformation(gridGroup, node.transformation);
 
 	grid = node.geometry.grid;

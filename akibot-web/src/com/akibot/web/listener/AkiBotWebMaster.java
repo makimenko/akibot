@@ -27,8 +27,8 @@ public class AkiBotWebMaster {
 
 	static {
 		initialized = false;
-		String dnsHost = Constants.DNS_WEBTEST_HOST;
-		int dnsPort = Constants.DNS_WEBTEST_PORT;
+		String dnsHost = Constants.DNS_HOST;
+		int dnsPort = Constants.DNS_PORT;
 
 		try {
 			InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
@@ -60,7 +60,7 @@ public class AkiBotWebMaster {
 
 		StatusWatchdogSummaryRequest statusWatchdogSummaryRequest = new StatusWatchdogSummaryRequest();
 		StatusWatchdogSummaryResponse statusWatchdogSummaryResponse = (StatusWatchdogSummaryResponse) akibotWebComponent.sendSyncRequest(
-				statusWatchdogSummaryRequest, 100);
+				statusWatchdogSummaryRequest, 500);
 
 		List<SimplifiedClientDescription> result = new ArrayList<SimplifiedClientDescription>();
 		// add myself:

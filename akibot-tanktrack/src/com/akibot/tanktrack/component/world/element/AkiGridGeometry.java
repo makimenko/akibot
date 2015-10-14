@@ -118,7 +118,7 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 				dy2 = 1;
 			dx2 = 0;
 		}
-		
+
 		int numerator = longest >> 1;
 		for (int i = 0; i <= longest; i++) {
 			res[index][0] = x;
@@ -146,8 +146,8 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 	}
 
 	public void addLineWithAngle(AkiLine line, AkiAngle errorAngle, boolean endIsObstacle) {
-		AkiLine lineLeft = rotateLine(line, errorAngle);
-		AkiLine lineRight = rotateLine(line, errorAngle.getNegativeAngle());
+		AkiLine lineLeft = AkiVectorUtils.rotateLine(line, errorAngle);
+		AkiLine lineRight = AkiVectorUtils.rotateLine(line, errorAngle.getNegativeAngle());
 
 		addLine(line, endIsObstacle);
 		addLine(lineLeft, endIsObstacle);
@@ -167,32 +167,10 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		}
 	}
 
-	public AkiPoint rotateVector(AkiLine line, AkiAngle angle) {
 
-		double ix0 = line.getFrom().getX();
-		double iy0 = line.getFrom().getY();
-
-		double ix1 = line.getTo().getX();
-		double iy1 = line.getTo().getY();
-
-		double angleRadians = angle.getRadians();
-
-		double x1 = ix1 - ix0;
-		double y1 = iy1 - iy0;
-
-		double x2 = (x1 * Math.cos(angleRadians)) - (y1 * Math.sin(angleRadians)) + ix0;
-		double y2 = (y1 * Math.cos(angleRadians)) + (x1 * Math.sin(angleRadians)) + iy0;
-
-		return new AkiPoint(x2, y2, 0); // TODO: Make double everywhere
-	}
-
-	public AkiLine rotateLine(AkiLine line, AkiAngle angle) {
-		return new AkiLine(line.getFrom(), rotateVector(line, angle));
-	}
-
-	public void addDistance(AkiPoint positionOffset, AkiAngle northAngle, AkiAngle errorAngle, double distanceCm, boolean endIsObstacle) {
-		AkiLine line = calculateNorthLine(positionOffset, northAngle, distanceCm);
-		addLineWithAngle(line, errorAngle, endIsObstacle);
+	public void addDistance(DistanceDetails distanceDetails) {
+		AkiLine line = calculateNorthLine(distanceDetails.getPositionOffset(), distanceDetails.getNorthAngle(), distanceDetails.getDistanceCm());
+		addLineWithAngle(line, distanceDetails.getErrorAngle(), distanceDetails.isEndObstacle());
 	}
 
 	public AkiLine calculateNorthLine(AkiPoint positionOffset, AkiAngle northAngle, double distanceCm) {

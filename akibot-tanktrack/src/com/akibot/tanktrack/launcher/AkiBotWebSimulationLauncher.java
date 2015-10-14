@@ -7,7 +7,7 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
 import com.akibot.tanktrack.component.world.element.AkiPoint;
-import com.akibot.tanktrack.component.world.message.NodeTransformationMessage;
+import com.akibot.tanktrack.component.world.message.___DEL___NodeTransformationMessage;
 
 public class AkiBotWebSimulationLauncher {
 	static final AkiLogger log = AkiLogger.create(AkiBotWebSimulationLauncher.class);
@@ -35,7 +35,7 @@ public class AkiBotWebSimulationLauncher {
 		int step = 10;
 
 		int posX = minPosX;
-		NodeTransformationMessage nodeTransformationMessage = new NodeTransformationMessage();
+		___DEL___NodeTransformationMessage nodeTransformationMessage = new ___DEL___NodeTransformationMessage();
 		nodeTransformationMessage.setNodeName("robotNode");
 		while (true) {
 			posX += step;

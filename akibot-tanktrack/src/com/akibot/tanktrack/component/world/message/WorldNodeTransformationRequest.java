@@ -2,14 +2,11 @@ package com.akibot.tanktrack.component.world.message;
 
 import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
 
-public class NodeTransformationMessage extends WorldResponse {
+public class WorldNodeTransformationRequest extends WorldUpdateRequest {
 	private static final long serialVersionUID = 1L;
+
 	private String nodeName;
 	private AkiNodeTransformation transformation;
-
-	public NodeTransformationMessage() {
-		this.setClassName(NodeTransformationMessage.class.getSimpleName());
-	}
 
 	public String getNodeName() {
 		return nodeName;

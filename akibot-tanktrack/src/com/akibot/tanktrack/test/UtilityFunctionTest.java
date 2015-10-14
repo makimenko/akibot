@@ -9,8 +9,12 @@ import com.akibot.tanktrack.component.world.element.AkiAngle;
 import com.akibot.tanktrack.component.world.element.AkiGridConfiguration;
 import com.akibot.tanktrack.component.world.element.AkiGridGeometry;
 import com.akibot.tanktrack.component.world.element.AkiLine;
+import com.akibot.tanktrack.component.world.element.AkiNode;
+import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
 import com.akibot.tanktrack.component.world.element.AkiPoint;
+import com.akibot.tanktrack.component.world.element.AkiVectorUtils;
 import com.akibot.tanktrack.component.world.element.ArrayUtils;
+import com.akibot.tanktrack.component.world.element.DistanceDetails;
 
 public class UtilityFunctionTest {
 
@@ -198,7 +202,7 @@ public class UtilityFunctionTest {
 		AkiAngle errorAngle = new AkiAngle();
 		errorAngle.setDegrees(1);
 
-		akiGrid.addDistance(positionOffset, northAngle, errorAngle, 10, true);
+		akiGrid.addDistance(new DistanceDetails(positionOffset, northAngle, errorAngle, 10, true));
 		ArrayUtils.printArray(akiGrid.getGrid());
 
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
@@ -229,7 +233,7 @@ public class UtilityFunctionTest {
 		AkiAngle errorAngle = new AkiAngle();
 		errorAngle.setDegrees(45);
 
-		akiGrid.addDistance(positionOffset, northAngle, errorAngle, 10, true);
+		akiGrid.addDistance(new DistanceDetails(positionOffset, northAngle, errorAngle, 10, true));
 		ArrayUtils.printArray(akiGrid.getGrid());
 
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
@@ -265,26 +269,26 @@ public class UtilityFunctionTest {
 		// Same line
 		AkiAngle angle0 = new AkiAngle();
 		angle0.setDegrees(0);
-		result = akiGrid.rotateVector(line, angle0);
+		result = AkiVectorUtils.rotateVector(line, angle0);
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
 
 		// 90 degrees to the left
 		AkiAngle angleLeft90 = new AkiAngle();
 		angleLeft90.setDegrees(90);
-		result = akiGrid.rotateVector(line, angleLeft90);
+		result = AkiVectorUtils.rotateVector(line, angleLeft90);
 		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
 		assertEquals(true, result.getX() < 0);
 
 		// 90 degrees to the right
 		AkiAngle angleRight90 = new AkiAngle();
 		angleRight90.setDegrees(-90);
-		result = akiGrid.rotateVector(line, angleRight90);
+		result = AkiVectorUtils.rotateVector(line, angleRight90);
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
 		// same, 90 degrees to the right (but via negative angle)
-		result = akiGrid.rotateVector(line, angleLeft90.getNegativeAngle());
+		result = AkiVectorUtils.rotateVector(line, angleLeft90.getNegativeAngle());
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
@@ -331,7 +335,7 @@ public class UtilityFunctionTest {
 
 		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(5, 3, 10, 1));
 
-		akiGrid.addDistance(new AkiPoint(25, 25, 0), new AkiAngle(Math.toRadians(180)), new AkiAngle(Math.toRadians(45)), 25, true);
+		akiGrid.addDistance(new DistanceDetails(new AkiPoint(25, 25, 0), new AkiAngle(Math.toRadians(180)), new AkiAngle(Math.toRadians(45)), 25, true));
 		ArrayUtils.printArray(akiGrid.getGrid());
 
 		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
@@ -370,6 +374,54 @@ public class UtilityFunctionTest {
 
 		assertEquals(1, res[2][0]);
 		assertEquals(1, res[2][1]);
+
+	}
+
+	@Test
+	public void relativeTransformation() {
+
+		AkiNode worldNode = new AkiNode("worldNode");
+
+		AkiNode gridNode = new AkiNode("gridNode");
+		// int maxObstacle = 1;
+		// AkiGridGeometry gridGeometry = new AkiGridGeometry(new AkiGridConfiguration(5, 5, 1, maxObstacle));
+		// gridNode.setGeometry(gridGeometry);
+		worldNode.attachChild(worldNode);
+
+		AkiNode robotNode = new AkiNode("robotNode");
+		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
+		robotTransformation.setPosition(new AkiPoint(3, 2, 0));
+		robotTransformation.setRotation(new AkiPoint(0, 0, AkiVectorUtils.gradToRad(45)));
+		gridNode.attachChild(robotNode);
+
+		AkiNode distanceNode = new AkiNode("distanceNode");
+		AkiNodeTransformation distanceTransformation = new AkiNodeTransformation();
+		distanceTransformation.setPosition(new AkiPoint(0, -2, 0));
+		robotNode.attachChild(distanceNode);
+
+		// TEST DISTANCE:
+		// DistanceDetails distanceDetails = new DistanceDetails();
+		// distanceDetails.setDistanceCm(2);
+		// distanceDetails.setEndObstacle(true);
+		// AkiAngle errorAngle = new AkiAngle();
+		// errorAngle.setDegrees(1);
+		// distanceDetails.setErrorAngle(errorAngle);
+		// AkiAngle northAngle = new AkiAngle();
+		// northAngle.setDegrees(0);
+		// distanceDetails.setNorthAngle(northAngle);
+		// distanceDetails.setPositionOffset(new AkiPoint(0, 0, 0));
+
+		AkiNodeTransformation relativeTransformation = AkiVectorUtils.calculateRelativeTransformation(gridNode, distanceNode);
+
+		AkiPoint relativePosition = relativeTransformation.getPosition();
+		AkiPoint relativeRotation = relativeTransformation.getRotation();
+
+		assertEquals(1, relativePosition.getX(), ANGLE_PRECISSION);
+		assertEquals(4, relativePosition.getY(), ANGLE_PRECISSION);
+
+		assertEquals(0, relativeRotation.getX(), ANGLE_PRECISSION);
+		assertEquals(0, relativeRotation.getY(), ANGLE_PRECISSION);
+		assertEquals(AkiVectorUtils.gradToRad(45), relativeRotation.getZ(), ANGLE_PRECISSION);
 
 	}
 

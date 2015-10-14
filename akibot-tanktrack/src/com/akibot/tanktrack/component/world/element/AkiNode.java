@@ -10,6 +10,7 @@ public class AkiNode implements Serializable {
 	private String name;
 	private AkiNode parentNode;
 	private List<AkiNode> childs;
+	private boolean stickToParent;
 
 	private AkiGeometry geometry;
 	private AkiNodeTransformation transformation;
@@ -85,4 +86,13 @@ public class AkiNode implements Serializable {
 		this.receiveShadow = receiveShadow;
 	}
 
+	public boolean isStickToParent() {
+		return stickToParent;
+	}
+
+	public void setStickToParent(boolean stickToParent) {
+		this.stickToParent = stickToParent;
+	}
+
+	
 }

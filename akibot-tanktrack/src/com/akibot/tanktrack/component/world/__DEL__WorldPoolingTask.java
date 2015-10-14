@@ -6,12 +6,12 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 
-public class WorldPoolingTask extends TimerTask {
-	static final AkiLogger log = AkiLogger.create(WorldPoolingTask.class);
+public class __DEL__WorldPoolingTask extends TimerTask {
+	static final AkiLogger log = AkiLogger.create(__DEL__WorldPoolingTask.class);
 	private WorldComponent worldComponent;
 	private GyroscopeValueRequest gyroscopeValueRequest;
 
-	public WorldPoolingTask(WorldComponent worldComponent) {
+	public __DEL__WorldPoolingTask(WorldComponent worldComponent) {
 		this.worldComponent = worldComponent;
 		this.gyroscopeValueRequest = new GyroscopeValueRequest();
 		log.debug("WorldPoolingTask initialized");
