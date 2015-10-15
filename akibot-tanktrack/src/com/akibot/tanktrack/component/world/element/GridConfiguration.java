@@ -15,9 +15,9 @@ public class GridConfiguration implements Serializable {
 	}
 
 	public GridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount) {
-		this(cellCountX, cellCountY, cellSize,maxObstacleCount,new Point(0, 0, 0));
+		this(cellCountX, cellCountY, cellSize, maxObstacleCount, new Point(0, 0, 0));
 	}
-	
+
 	public GridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount, Point offset) {
 		this.cellCountX = cellCountX;
 		this.cellCountY = cellCountY;
@@ -66,5 +66,4 @@ public class GridConfiguration implements Serializable {
 		this.offset = offset;
 	}
 
-	
 }

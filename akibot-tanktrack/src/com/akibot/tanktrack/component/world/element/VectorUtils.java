@@ -31,24 +31,25 @@ public class VectorUtils {
 		return (float) (rad * Math.PI / 180);
 	}
 
-	// public static void updateGridDistance(AkiNode gridNode, AkiNode distanceNode, DistanceDetails distanceDetails) {
-	// AkiPoint totalPosition = new AkiPoint(0, 0, 0); // TODO: Total Position
-	// AkiAngle totalAngle = new AkiAngle(); // TODO: Total Angle
-	//
-	// DistanceDetails totalDistanceDetail = new DistanceDetails();
-	// totalDistanceDetail.setDistanceCm(distanceDetails.getDistanceCm());
-	// totalDistanceDetail.setEndObstacle(distanceDetails.isEndObstacle());
-	// totalDistanceDetail.setErrorAngle(distanceDetails.getErrorAngle());
-	// totalDistanceDetail.setNorthAngle(totalAngle);
-	// totalDistanceDetail.setPositionOffset(totalPosition);
-	//
-	// AkiGridGeometry gridGeometry = (AkiGridGeometry) gridNode.getGeometry();
-	// gridGeometry.addDistance(totalDistanceDetail);
-	//
-	// }
+	public static void updateGridDistance(Node gridNode, Node distanceNode, DistanceDetails distanceDetails) throws Exception {
+		NodeTransformation relativeTransformation = VectorUtils.calculateRelativeTransformation(gridNode, distanceNode);
 
-	public static NodeTransformation calculateRelativeTransformation(Node nodeA, Node nodeB)
-			throws Exception {
+		double angle = relativeTransformation.getRotation().getZ();
+		angle += distanceDetails.getNorthAngle().getRadians();
+		Angle relativeAngle = new Angle(angle);
+
+		DistanceDetails relativeDistanceDetail = new DistanceDetails();
+		relativeDistanceDetail.setDistanceCm(distanceDetails.getDistanceCm());
+		relativeDistanceDetail.setEndObstacle(distanceDetails.isEndObstacle());
+		relativeDistanceDetail.setErrorAngle(distanceDetails.getErrorAngle());
+		relativeDistanceDetail.setNorthAngle(relativeAngle);
+		relativeDistanceDetail.setPositionOffset(relativeTransformation.getPosition());
+
+		GridGeometry gridGeometry = (GridGeometry) gridNode.getGeometry();
+		gridGeometry.addDistance(relativeDistanceDetail);
+	}
+
+	public static NodeTransformation calculateRelativeTransformation(Node nodeA, Node nodeB) throws Exception {
 
 		if (nodeA == null || nodeB == null) {
 			throw new Exception();

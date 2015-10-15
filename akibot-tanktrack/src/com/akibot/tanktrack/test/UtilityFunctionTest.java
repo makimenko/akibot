@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.world.element.Angle;
+import com.akibot.tanktrack.component.world.element.ArrayUtils;
+import com.akibot.tanktrack.component.world.element.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.GridConfiguration;
 import com.akibot.tanktrack.component.world.element.GridGeometry;
 import com.akibot.tanktrack.component.world.element.Line;
@@ -13,8 +15,6 @@ import com.akibot.tanktrack.component.world.element.Node;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
 import com.akibot.tanktrack.component.world.element.VectorUtils;
-import com.akibot.tanktrack.component.world.element.ArrayUtils;
-import com.akibot.tanktrack.component.world.element.DistanceDetails;
 import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
 
 public class UtilityFunctionTest {
@@ -260,7 +260,6 @@ public class UtilityFunctionTest {
 		float ix1 = 7;
 		float iy1 = 6;
 
-		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(1, 1, 1, 1));
 		Line line = new Line();
 		line.setFrom(new Point(ix0, iy0, 0));
 		line.setTo(new Point(ix1, iy1, 0));
@@ -426,48 +425,72 @@ public class UtilityFunctionTest {
 		int maxObstacle = 1;
 		GridGeometry gridGeometry = new GridGeometry(new GridConfiguration(10, 10, 1, maxObstacle, new Point(-5, -5, 0)));
 		gridNode.setGeometry(gridGeometry);
-		System.out.println("==========");
 
-		gridGeometry.addLine(new Line(new Point(0, 0, 0), new Point(4, 0, 0)), true);
+		gridGeometry.addLine(new Line(new Point(0, 0, 0), new Point(0, 0, 0)), true);
 
 		// TODO: Test Distance!
-		ArrayUtils.printArray(gridGeometry.getGrid());
+		DistanceDetails distanceDetails = new DistanceDetails();
+		distanceDetails.setDistanceCm(2);
+		distanceDetails.setEndObstacle(true);
+		distanceDetails.setErrorAngle(new Angle(VectorUtils.gradToRad(0)));
+		distanceDetails.setNorthAngle(new Angle(VectorUtils.gradToRad(0)));
+		distanceDetails.setPositionOffset(new Point(0, 0, 0));
+
+		VectorUtils.updateGridDistance(gridNode, distanceNode, distanceDetails);
+		// ArrayUtils.printArray(gridGeometry.getGrid());
+
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[4][9]);
+		assertEquals(maxObstacle, gridGeometry.getGrid()[5][9]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[6][9]);
+
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[5][8]);
+		assertEquals(GridGeometry.EMPTY_VALUE, gridGeometry.getGrid()[6][8]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[7][8]);
+
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[6][7]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[7][7]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, gridGeometry.getGrid()[8][7]);
 
 	}
 
 	@Test
 	public void gridOffset() throws OutsideWorldException {
 		GridGeometry gridOffset = new GridGeometry(new GridConfiguration(2, 2, 10, 1, new Point(-10, -10, 0)));
-
 		assertEquals(1, gridOffset.getAddressX(new Point(5, 4, 0)));
 		assertEquals(1, gridOffset.getAddressY(new Point(5, 4, 0)));
-
 		assertEquals(0, gridOffset.getAddressX(new Point(-5, -4, 0)));
 		assertEquals(0, gridOffset.getAddressY(new Point(-5, -4, 0)));
-
 		gridOffset.addPoint(new Point(5, 5, 0));
 		assertEquals(1, gridOffset.getGrid()[1][1]);
 	}
 
 	@Test
-	public void gridOutsideWorld() throws OutsideWorldException {
-		GridGeometry gridOffset = new GridGeometry(new GridConfiguration(2, 2, 10, 1));
-
-		gridOffset.addPoint(new Point(0, 0, 0));
-		gridOffset.addPoint(new Point(19, 19, 0));
-
+	public void gridOutsideWorld1() throws OutsideWorldException {
+		GridGeometry grid = new GridGeometry(new GridConfiguration(1, 1, 1, 1));
+		grid.addPoint(new Point(0, 0, 0));
+		assertEquals(1, grid.getGrid()[0][0]);
 		try {
-			gridOffset.addPoint(new Point(20, 20, 0));
+			grid.addPoint(new Point(1, 1, 0));
 			assertEquals(false, true);
 		} catch (OutsideWorldException e) {
 		}
+	}
 
+	@Test
+	public void gridOutsideWorld2() throws OutsideWorldException {
+		GridGeometry grid = new GridGeometry(new GridConfiguration(2, 2, 10, 1));
+		grid.addPoint(new Point(0, 0, 0));
+		grid.addPoint(new Point(19, 19, 0));
 		try {
-			gridOffset.addPoint(new Point(-1, -1, 0));
+			grid.addPoint(new Point(20, 20, 0));
 			assertEquals(false, true);
 		} catch (OutsideWorldException e) {
 		}
-
+		try {
+			grid.addPoint(new Point(-1, -1, 0));
+			assertEquals(false, true);
+		} catch (OutsideWorldException e) {
+		}
 	}
 
 }
