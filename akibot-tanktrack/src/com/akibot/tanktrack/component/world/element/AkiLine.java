@@ -32,4 +32,10 @@ public class AkiLine implements Serializable {
 		this.to = to;
 	}
 
+	public AkiPoint getVector() {
+		double x = getTo().getX() - getFrom().getX();
+		double y = getTo().getY() - getFrom().getY();
+		double z = getTo().getZ() - getFrom().getZ();
+		return new AkiPoint(x, y, z);
+	}
 }

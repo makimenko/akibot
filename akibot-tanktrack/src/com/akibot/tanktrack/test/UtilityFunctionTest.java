@@ -269,26 +269,26 @@ public class UtilityFunctionTest {
 		// Same line
 		AkiAngle angle0 = new AkiAngle();
 		angle0.setDegrees(0);
-		result = AkiVectorUtils.rotateVector(line, angle0);
+		result = AkiVectorUtils.rotateEndOfLine(line, angle0);
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
 
 		// 90 degrees to the left
 		AkiAngle angleLeft90 = new AkiAngle();
 		angleLeft90.setDegrees(90);
-		result = AkiVectorUtils.rotateVector(line, angleLeft90);
+		result = AkiVectorUtils.rotateEndOfLine(line, angleLeft90);
 		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
 		assertEquals(true, result.getX() < 0);
 
 		// 90 degrees to the right
 		AkiAngle angleRight90 = new AkiAngle();
 		angleRight90.setDegrees(-90);
-		result = AkiVectorUtils.rotateVector(line, angleRight90);
+		result = AkiVectorUtils.rotateEndOfLine(line, angleRight90);
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
 		// same, 90 degrees to the right (but via negative angle)
-		result = AkiVectorUtils.rotateVector(line, angleLeft90.getNegativeAngle());
+		result = AkiVectorUtils.rotateEndOfLine(line, angleLeft90.getNegativeAngle());
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
@@ -378,7 +378,7 @@ public class UtilityFunctionTest {
 	}
 
 	@Test
-	public void relativeTransformation() {
+	public void relativeTransformation() throws Exception {
 
 		AkiNode worldNode = new AkiNode("worldNode");
 
@@ -392,37 +392,36 @@ public class UtilityFunctionTest {
 		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
 		robotTransformation.setPosition(new AkiPoint(3, 2, 0));
 		robotTransformation.setRotation(new AkiPoint(0, 0, AkiVectorUtils.gradToRad(45)));
+		robotNode.setTransformation(robotTransformation);
 		gridNode.attachChild(robotNode);
 
 		AkiNode distanceNode = new AkiNode("distanceNode");
 		AkiNodeTransformation distanceTransformation = new AkiNodeTransformation();
-		distanceTransformation.setPosition(new AkiPoint(0, -2, 0));
+		distanceTransformation.setPosition(new AkiPoint(0, 2, 0));
+		distanceTransformation.setRotation(new AkiPoint(0, 0, AkiVectorUtils.gradToRad(5)));
+		distanceNode.setTransformation(distanceTransformation);
 		robotNode.attachChild(distanceNode);
-
-		// TEST DISTANCE:
-		// DistanceDetails distanceDetails = new DistanceDetails();
-		// distanceDetails.setDistanceCm(2);
-		// distanceDetails.setEndObstacle(true);
-		// AkiAngle errorAngle = new AkiAngle();
-		// errorAngle.setDegrees(1);
-		// distanceDetails.setErrorAngle(errorAngle);
-		// AkiAngle northAngle = new AkiAngle();
-		// northAngle.setDegrees(0);
-		// distanceDetails.setNorthAngle(northAngle);
-		// distanceDetails.setPositionOffset(new AkiPoint(0, 0, 0));
 
 		AkiNodeTransformation relativeTransformation = AkiVectorUtils.calculateRelativeTransformation(gridNode, distanceNode);
 
+		double COORD_PRECISSION = 0.01;
+		double ROTATION_PRECISSION = 0.0000001;
+		
 		AkiPoint relativePosition = relativeTransformation.getPosition();
 		AkiPoint relativeRotation = relativeTransformation.getRotation();
+		AkiPoint relativeScale = relativeTransformation.getScale();
+		
+		assertEquals(1.58, relativePosition.getX(), COORD_PRECISSION);
+		assertEquals(3.41, relativePosition.getY(), COORD_PRECISSION);
+		assertEquals(0, relativePosition.getZ(), 0);
 
-		assertEquals(1, relativePosition.getX(), ANGLE_PRECISSION);
-		assertEquals(4, relativePosition.getY(), ANGLE_PRECISSION);
+		assertEquals(0, relativeRotation.getX(), 0);
+		assertEquals(0, relativeRotation.getY(), 0);
+		assertEquals(AkiVectorUtils.gradToRad(50), relativeRotation.getZ(), ROTATION_PRECISSION);
 
-		assertEquals(0, relativeRotation.getX(), ANGLE_PRECISSION);
-		assertEquals(0, relativeRotation.getY(), ANGLE_PRECISSION);
-		assertEquals(AkiVectorUtils.gradToRad(45), relativeRotation.getZ(), ANGLE_PRECISSION);
-
+		assertEquals(1, relativeScale.getX(), 0);
+		assertEquals(1, relativeScale.getY(), 0);
+		assertEquals(1, relativeScale.getZ(), 0);
 	}
 
 }

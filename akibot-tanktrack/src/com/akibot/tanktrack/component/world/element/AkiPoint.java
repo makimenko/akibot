@@ -39,4 +39,9 @@ public class AkiPoint implements Serializable {
 		this.setZ(z);
 	}
 
+	public void add(AkiPoint addPoint) {
+		setX(getX() + addPoint.getX());
+		setY(getY() + addPoint.getY());
+		setZ(getZ() + addPoint.getZ());
+	}
 }

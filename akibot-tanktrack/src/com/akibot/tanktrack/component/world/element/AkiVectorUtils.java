@@ -2,31 +2,33 @@ package com.akibot.tanktrack.component.world.element;
 
 public class AkiVectorUtils {
 
-	public static AkiPoint rotateVector(AkiLine line, AkiAngle angle) {
-
-		double ix0 = line.getFrom().getX();
-		double iy0 = line.getFrom().getY();
-
-		double ix1 = line.getTo().getX();
-		double iy1 = line.getTo().getY();
-
+	public static AkiPoint rotate2DVector(AkiPoint vector, AkiAngle angle) {
+		double x1 = vector.getX();
+		double y1 = vector.getY();
 		double angleRadians = angle.getRadians();
 
-		double x1 = ix1 - ix0;
-		double y1 = iy1 - iy0;
+		double x2 = (x1 * Math.cos(angleRadians)) - (y1 * Math.sin(angleRadians));
+		double y2 = (y1 * Math.cos(angleRadians)) + (x1 * Math.sin(angleRadians));
 
-		double x2 = (x1 * Math.cos(angleRadians)) - (y1 * Math.sin(angleRadians)) + ix0;
-		double y2 = (y1 * Math.cos(angleRadians)) + (x1 * Math.sin(angleRadians)) + iy0;
+		return new AkiPoint(x2, y2, 0);
+	}
 
-		return new AkiPoint(x2, y2, 0); // TODO: Make double everywhere
+	public static AkiPoint rotateEndOfLine(AkiLine line, AkiAngle angle) {
+
+		AkiPoint vector = rotate2DVector(line.getVector(), angle);
+		vector.setX(vector.getX() + line.getFrom().getX());
+		vector.setY(vector.getY() + line.getFrom().getY());
+		// TODO: Support Z axis
+
+		return vector;
 	}
 
 	public static AkiLine rotateLine(AkiLine line, AkiAngle angle) {
-		return new AkiLine(line.getFrom(), rotateVector(line, angle));
+		return new AkiLine(line.getFrom(), rotateEndOfLine(line, angle));
 	}
 
 	public static float gradToRad(double rad) {
-		return (float) (-rad * Math.PI / 180);
+		return (float) (rad * Math.PI / 180);
 	}
 
 	// public static void updateGridDistance(AkiNode gridNode, AkiNode distanceNode, DistanceDetails distanceDetails) {
@@ -45,8 +47,29 @@ public class AkiVectorUtils {
 	//
 	// }
 
-	public static AkiNodeTransformation calculateRelativeTransformation(AkiNode nodeA, AkiNode nodeB) {
-		return new AkiNodeTransformation(); // TODO: implement calculateRelativeTransformation
+	public static AkiNodeTransformation calculateRelativeTransformation(AkiNode nodeA, AkiNode nodeB)
+			throws Exception {
+
+		if (nodeA == null || nodeB == null) {
+			throw new Exception();
+		}
+		AkiNodeTransformation cumulativeTransformation;
+		if (nodeB.equals(nodeA)) {
+			cumulativeTransformation = new AkiNodeTransformation();
+			cumulativeTransformation.resetToDefaults();
+		} else {
+			cumulativeTransformation = calculateRelativeTransformation(nodeA, nodeB.getParentNode());
+			if (nodeB.getTransformation() != null) {
+				AkiPoint posVector = nodeB.getTransformation().getPosition();
+				if (cumulativeTransformation.getRotation().getZ() != 0) {
+					AkiAngle angle = new AkiAngle(cumulativeTransformation.getRotation().getZ());
+					posVector = AkiVectorUtils.rotate2DVector(posVector, angle);
+				}
+				cumulativeTransformation.getPosition().add(posVector);
+				cumulativeTransformation.getRotation().add(nodeB.getTransformation().getRotation());
+			}
+		}
+		return cumulativeTransformation;
 	}
 
 }

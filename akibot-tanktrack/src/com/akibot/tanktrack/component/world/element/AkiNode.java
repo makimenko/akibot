@@ -67,6 +67,7 @@ public class AkiNode implements Serializable {
 			childs = new ArrayList<AkiNode>();
 		}
 		childs.add(akiNode);
+		akiNode.setParentNode(this);
 
 	}
 
@@ -94,5 +95,7 @@ public class AkiNode implements Serializable {
 		this.stickToParent = stickToParent;
 	}
 
-	
+	public boolean equals(AkiNode node) {
+		return (node == this || node.getName().equals(this.name));
+	}
 }

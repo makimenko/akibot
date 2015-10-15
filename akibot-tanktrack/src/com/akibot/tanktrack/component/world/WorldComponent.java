@@ -11,17 +11,15 @@ import com.akibot.tanktrack.component.world.element.AkiAngle;
 import com.akibot.tanktrack.component.world.element.AkiColladaGeometry;
 import com.akibot.tanktrack.component.world.element.AkiGridConfiguration;
 import com.akibot.tanktrack.component.world.element.AkiGridGeometry;
-import com.akibot.tanktrack.component.world.element.AkiMaterial;
 import com.akibot.tanktrack.component.world.element.AkiNode;
 import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
 import com.akibot.tanktrack.component.world.element.AkiPoint;
 import com.akibot.tanktrack.component.world.element.DistanceDetails;
+import com.akibot.tanktrack.component.world.message.WorldContentRequest;
+import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.component.world.message.WorldUpdateRequest;
-import com.akibot.tanktrack.component.world.message.___DEL___NodeTransformationMessage;
-import com.akibot.tanktrack.component.world.message.WorldContentRequest;
-import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 
 public class WorldComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(WorldComponent.class);

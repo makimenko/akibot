@@ -34,4 +34,9 @@ public class AkiNodeTransformation implements Serializable {
 		this.rotation = rotation;
 	}
 
+	public void resetToDefaults() {
+		setPosition(new AkiPoint(0, 0, 0));
+		setRotation(new AkiPoint(0, 0, 0));
+		setScale(new AkiPoint(1, 1, 1));
+	}
 }

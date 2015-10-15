@@ -167,7 +167,6 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		}
 	}
 
-
 	public void addDistance(DistanceDetails distanceDetails) {
 		AkiLine line = calculateNorthLine(distanceDetails.getPositionOffset(), distanceDetails.getNorthAngle(), distanceDetails.getDistanceCm());
 		addLineWithAngle(line, distanceDetails.getErrorAngle(), distanceDetails.isEndObstacle());
