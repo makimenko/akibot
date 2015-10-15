@@ -1,25 +1,28 @@
 package com.akibot.tanktrack.component.world;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import com.akibot.engine2.component.DefaultComponent;
+import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.engine2.component.configuration.GetConfigurationResponse;
+import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
-import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.world.element.Angle;
-import com.akibot.tanktrack.component.world.element.ColladaGeometry;
 import com.akibot.tanktrack.component.world.element.DistanceDetails;
-import com.akibot.tanktrack.component.world.element.GridConfiguration;
-import com.akibot.tanktrack.component.world.element.GridGeometry;
 import com.akibot.tanktrack.component.world.element.Node;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
 import com.akibot.tanktrack.component.world.element.VectorUtils;
+import com.akibot.tanktrack.component.world.message.WorldConfiguration;
+import com.akibot.tanktrack.component.world.message.WorldContent;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
+import com.akibot.tanktrack.component.world.message.WorldRequest;
 import com.akibot.tanktrack.component.world.message.WorldUpdateRequest;
 import com.akibot.tanktrack.launcher.Constants;
 
@@ -27,66 +30,37 @@ public class WorldComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(WorldComponent.class);
 	private Node worldNode;
 	private HashMap<String, Node> nodeList = new HashMap<String, Node>();
+	private WorldConfiguration componentConfiguration;
 
 	public WorldComponent() {
+
+	}
+
+	@Override
+	public ComponentConfiguration getComponentConfiguration() {
+		return this.componentConfiguration;
+	}
+
+	@Override
+	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
+		Serializable responseValue = getConfigurationResponse.getComponentConfiguration();
+		if (responseValue instanceof WorldConfiguration) {
+			setComponentConfiguration((WorldConfiguration) responseValue);
+		} else {
+			throw new FailedToConfigureException(responseValue.toString());
+		}
+	}
+
+	public void setComponentConfiguration(WorldConfiguration componentConfiguration) throws FailedToConfigureException {
+		this.componentConfiguration = componentConfiguration;
 		initWorld();
 	}
 
 	private void initWorld() {
-		// ======================== World Node:
-		worldNode = new Node("worldNode");
-		index(worldNode);
+		worldNode = componentConfiguration.getWorldContent().getWorldNode();
+		indexAll(worldNode);
 
-		// ======================== Grid Node:
-		int cellCount = 50;
-		int cellSizeCm = 10;
-		int positionOffset = cellCount * cellSizeCm / 2;
-		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeCm, 2, new Point(-positionOffset, -positionOffset, 0));
-		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
-		Node gridNode = new Node(Constants.NODE_NAME_GRID);
-		gridNode.setGeometry(gridGeometry);
-		worldNode.attachChild(gridNode);
-		index(gridNode);
-
-		// ======================== Robot Node:
-		ColladaGeometry robotGeometry = new ColladaGeometry();
-		robotGeometry.setFileName("../js/loader/AkiBot.dae");
-		Node robotNode = new Node(Constants.NODE_NAME_ROBOT);
-		robotNode.setGeometry(robotGeometry);
-
-		// NodeTransformation robotTransformation = new NodeTransformation();
-		// robotTransformation.setPosition(new Point(10, 0, 1.5f));
-		// robotTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(45)));
-		// robotNode.setTransformation(robotTransformation);
-
-		gridNode.attachChild(robotNode);
-		index(robotNode);
-
-		// ======================== Gyroscope
-		Node gyroscopeNode = new Node(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE);
-		gyroscopeNode.setStickToParent(true);
-		robotNode.attachChild(gyroscopeNode);
-		index(gyroscopeNode);
-
-		// ======================== frontDistanceNode
-		Node frontDistanceNode = new Node(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
-		NodeTransformation frontDistanceTransformation = new NodeTransformation();
-		frontDistanceTransformation.setPosition(new Point(0, 8f, 5f));
-		frontDistanceNode.setTransformation(frontDistanceTransformation);
-		frontDistanceNode.setStickToParent(true);
-		robotNode.attachChild(frontDistanceNode);
-		index(frontDistanceNode);
-
-		// ======================== backDistanceNode
-		Node backDistanceNode = new Node(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
-		NodeTransformation backDistanceTransformation = new NodeTransformation();
-		backDistanceTransformation.setPosition(new Point(0, -8f, 5f));
-		backDistanceTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(180)));
-		backDistanceNode.setTransformation(backDistanceTransformation);
-		backDistanceNode.setStickToParent(true);
-		robotNode.attachChild(backDistanceNode);
-		index(backDistanceNode);
-
+		getComponentStatus().setReady(true);
 		// TODO: Remove simulation:
 		simulateMessages();
 	}
@@ -131,6 +105,15 @@ public class WorldComponent extends DefaultComponent {
 		nodeList.put(node.getName(), node);
 	}
 
+	public void indexAll(Node node) {
+		index(node);
+		if (node.getChilds() != null) {
+			for (Node i : node.getChilds()) {
+				indexAll(i);
+			}
+		}
+	}
+
 	public Node findNode(String name) {
 		return nodeList.get(name);
 	}
@@ -146,7 +129,9 @@ public class WorldComponent extends DefaultComponent {
 
 	private void onWorldContentRequest(WorldContentRequest worldContentRequest) throws FailedToSendMessageException {
 		WorldContentResponse worldContentResponse = new WorldContentResponse();
-		worldContentResponse.setWorldNode(worldNode);
+		WorldContent worldContent = new WorldContent();
+		worldContent.setWorldNode(worldNode);
+		worldContentResponse.setWorldContent(worldContent);
 		this.broadcastResponse(worldContentResponse, worldContentRequest);
 	}
 
@@ -202,29 +187,9 @@ public class WorldComponent extends DefaultComponent {
 		}
 	}
 
-	//
-	// private void onGyroscopeResponse(GyroscopeResponse gyroscopeResponse) throws FailedToSendMessageException {
-	// AkiNode robotNode = nodeList.get(robotNodeName);
-	//
-	// AkiPoint rotation = new AkiPoint(0f, 0f, gradToRad(gyroscopeResponse.getNorthDegreesXY()));
-	// robotNode.getTransformation().setRotation(rotation);
-	//
-	// AkiNodeTransformation transformation = new AkiNodeTransformation();
-	// ___DEL___NodeTransformationMessage nodeTransformationMessage = new ___DEL___NodeTransformationMessage();
-	// nodeTransformationMessage.setNodeName(robotNodeName);
-	// nodeTransformationMessage.setTransformation(transformation);
-	// transformation.setRotation(rotation);
-	//
-	// this.broadcastMessage(nodeTransformationMessage);
-	// }
-	//
-	//
-
 	@Override
 	public void loadDefaults() {
-		addTopic(new WorldContentRequest());
-		addTopic(new GyroscopeResponse());
-		getComponentStatus().setReady(true);
+		addTopic(new WorldRequest());
 	}
 
 	public Node getWorldNode() {

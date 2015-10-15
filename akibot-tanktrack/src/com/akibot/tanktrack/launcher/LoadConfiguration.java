@@ -21,6 +21,15 @@ import com.akibot.tanktrack.component.orientation.OrientationConfiguration;
 import com.akibot.tanktrack.component.servo.ServoConfiguration;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisConfiguration;
 import com.akibot.tanktrack.component.tanktrack.TankTrackConfiguration;
+import com.akibot.tanktrack.component.world.element.ColladaGeometry;
+import com.akibot.tanktrack.component.world.element.GridConfiguration;
+import com.akibot.tanktrack.component.world.element.GridGeometry;
+import com.akibot.tanktrack.component.world.element.Node;
+import com.akibot.tanktrack.component.world.element.NodeTransformation;
+import com.akibot.tanktrack.component.world.element.Point;
+import com.akibot.tanktrack.component.world.element.VectorUtils;
+import com.akibot.tanktrack.component.world.message.WorldConfiguration;
+import com.akibot.tanktrack.component.world.message.WorldContent;
 
 public class LoadConfiguration {
 	static final AkiLogger log = AkiLogger.create(LoadConfiguration.class);
@@ -28,8 +37,7 @@ public class LoadConfiguration {
 	private int TIMEOUT = 1000;
 
 	public static void main(String[] args) throws Exception {
-		LoadConfiguration loadConfiguration = new LoadConfiguration();
-
+		LoadConfiguration loadConfiguration = new LoadConfiguration("localhost", 7122);
 		System.out.println("Upload default configuration:");
 		loadConfiguration.saveAkibotGyroscope();
 		loadConfiguration.saveAkibotFrontDistance();
@@ -42,13 +50,12 @@ public class LoadConfiguration {
 		loadConfiguration.saveAkibotServoBackBase();
 		loadConfiguration.saveAkibotServoBackHead();
 		loadConfiguration.saveAkibotTankTrack();
+		loadConfiguration.saveAkibotWorld();
 		System.out.println("Done");
 	}
 
-	public LoadConfiguration() throws Exception {
+	public LoadConfiguration(String dnsHost, int dnsPort) throws Exception {
 		System.out.println("*** " + this.getClass().getName());
-		String dnsHost = Constants.DNS_HOST;
-		int dnsPort = Constants.DNS_PORT + 1;
 		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
 
 		AkibotClient dns = new AkibotClient("LoadConfiguration.dns", new DefaultDNSComponent(), dnsPort);
@@ -201,7 +208,55 @@ public class LoadConfiguration {
 		save("akibot.tanktrack", tankTrackConfiguration);
 	}
 
-	// (Pin rightIApin, Pin rightIBpin, Pin rightSpeedPin, Pin leftIApin, Pin leftIBpin, Pin leftSpeedPin) {
-	// AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(Constants.TANK_TRACK_RIGHT_IA, Constants.TANK_TRACK_RIGHT_IB,
-	// Constants.TANK_TRACK_RIGHT_SPEED, Constants.TANK_TRACK_LEFT_IA, Constants.TANK_TRACK_LEFT_IB, Constants.TANK_TRACK_LEFT_SPEED), dnsAddress);
+	private void saveAkibotWorld() throws FailedToSendMessageException {
+		String name = "akibot.world";
+
+		Node worldNode = new Node(name);
+
+		// ======================== Grid Node:
+		int cellCount = 50;
+		int cellSizeCm = 10;
+		int positionOffset = cellCount * cellSizeCm / 2;
+		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeCm, 2, new Point(-positionOffset, -positionOffset, 0));
+		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
+		Node gridNode = new Node(Constants.NODE_NAME_GRID);
+		gridNode.setGeometry(gridGeometry);
+		worldNode.attachChild(gridNode);
+
+		// ======================== Robot Node:
+		ColladaGeometry robotGeometry = new ColladaGeometry();
+		robotGeometry.setFileName("../js/loader/AkiBot.dae");
+		Node robotNode = new Node(Constants.NODE_NAME_ROBOT);
+		robotNode.setGeometry(robotGeometry);
+
+		gridNode.attachChild(robotNode);
+
+		// ======================== Gyroscope
+		Node gyroscopeNode = new Node(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE);
+		gyroscopeNode.setStickToParent(true);
+		robotNode.attachChild(gyroscopeNode);
+
+		// ======================== frontDistanceNode
+		Node frontDistanceNode = new Node(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
+		NodeTransformation frontDistanceTransformation = new NodeTransformation();
+		frontDistanceTransformation.setPosition(new Point(0, 8f, 5f));
+		frontDistanceNode.setTransformation(frontDistanceTransformation);
+		frontDistanceNode.setStickToParent(true);
+		robotNode.attachChild(frontDistanceNode);
+
+		// ======================== backDistanceNode
+		Node backDistanceNode = new Node(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+		NodeTransformation backDistanceTransformation = new NodeTransformation();
+		backDistanceTransformation.setPosition(new Point(0, -8f, 5f));
+		backDistanceTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(180)));
+		backDistanceNode.setTransformation(backDistanceTransformation);
+		backDistanceNode.setStickToParent(true);
+		robotNode.attachChild(backDistanceNode);
+
+		WorldConfiguration worldConfiguration = new WorldConfiguration();
+		WorldContent worldContent = new WorldContent();
+		worldContent.setWorldNode(worldNode);
+		worldConfiguration.setWorldContent(worldContent);
+		save(name, worldConfiguration);
+	}
 }
