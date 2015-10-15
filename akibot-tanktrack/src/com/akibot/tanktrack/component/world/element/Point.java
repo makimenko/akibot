@@ -2,7 +2,7 @@ package com.akibot.tanktrack.component.world.element;
 
 import java.io.Serializable;
 
-public class AkiPoint implements Serializable {
+public class Point implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private double x;
@@ -33,13 +33,13 @@ public class AkiPoint implements Serializable {
 		this.z = z;
 	}
 
-	public AkiPoint(double x, double y, double z) {
+	public Point(double x, double y, double z) {
 		this.setX(x);
 		this.setY(y);
 		this.setZ(z);
 	}
 
-	public void add(AkiPoint addPoint) {
+	public void add(Point addPoint) {
 		setX(getX() + addPoint.getX());
 		setY(getY() + addPoint.getY());
 		setZ(getZ() + addPoint.getZ());

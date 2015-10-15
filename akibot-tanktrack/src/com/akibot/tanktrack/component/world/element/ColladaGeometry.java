@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.component.world.element;
 
-public class AkiColladaGeometry extends AkiNamedClass implements AkiGeometry {
+public class ColladaGeometry extends NamedClass implements Geometry {
 	private static final long serialVersionUID = 1L;
 
 	private String fileName;

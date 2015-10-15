@@ -2,16 +2,16 @@ package com.akibot.tanktrack.component.world.element;
 
 import java.io.Serializable;
 
-public class AkiAngle implements Serializable {
+public class Angle implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private double radians;
 
-	public AkiAngle() {
+	public Angle() {
 
 	}
 
-	public AkiAngle(double radians) {
+	public Angle(double radians) {
 		this.radians = radians;
 	}
 
@@ -31,8 +31,8 @@ public class AkiAngle implements Serializable {
 		this.radians = Math.toRadians(degrees);
 	}
 
-	public AkiAngle getNegativeAngle() {
-		return new AkiAngle(-radians);
+	public Angle getNegativeAngle() {
+		return new Angle(-radians);
 	}
 
 }

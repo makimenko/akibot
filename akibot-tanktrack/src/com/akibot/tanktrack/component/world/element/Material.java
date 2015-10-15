@@ -2,7 +2,7 @@ package com.akibot.tanktrack.component.world.element;
 
 import java.io.Serializable;
 
-public class AkiMaterial implements Serializable {
+public class Material implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int color = 0x0F0F0F;

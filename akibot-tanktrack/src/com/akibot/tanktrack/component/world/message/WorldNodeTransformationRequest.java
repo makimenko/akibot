@@ -1,12 +1,12 @@
 package com.akibot.tanktrack.component.world.message;
 
-import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
+import com.akibot.tanktrack.component.world.element.NodeTransformation;
 
 public class WorldNodeTransformationRequest extends WorldUpdateRequest {
 	private static final long serialVersionUID = 1L;
 
 	private String nodeName;
-	private AkiNodeTransformation transformation;
+	private NodeTransformation transformation;
 
 	public String getNodeName() {
 		return nodeName;
@@ -16,11 +16,11 @@ public class WorldNodeTransformationRequest extends WorldUpdateRequest {
 		this.nodeName = nodeName;
 	}
 
-	public AkiNodeTransformation getTransformation() {
+	public NodeTransformation getTransformation() {
 		return transformation;
 	}
 
-	public void setTransformation(AkiNodeTransformation transformation) {
+	public void setTransformation(NodeTransformation transformation) {
 		this.transformation = transformation;
 	}
 

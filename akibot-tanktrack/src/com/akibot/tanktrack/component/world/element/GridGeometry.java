@@ -1,15 +1,17 @@
 package com.akibot.tanktrack.component.world.element;
 
-public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
+import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
+
+public class GridGeometry extends NamedClass implements Geometry {
 	private static final long serialVersionUID = 1L;
-	private AkiGridConfiguration akiGridConfiguration;
+	private GridConfiguration akiGridConfiguration;
 	private int[][] grid;
 	private long changeSequence = 0;
 
 	public static final int UNKNOWN_VALUE = -1;
 	public static final int EMPTY_VALUE = 0;
 
-	public AkiGridGeometry(AkiGridConfiguration akiGridConfiguration) {
+	public GridGeometry(GridConfiguration akiGridConfiguration) {
 		this.akiGridConfiguration = akiGridConfiguration;
 		init();
 	}
@@ -19,7 +21,7 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		ArrayUtils.updateValue(grid, UNKNOWN_VALUE);
 	}
 
-	public AkiGridConfiguration getAkiGridConfiguration() {
+	public GridConfiguration getAkiGridConfiguration() {
 		return akiGridConfiguration;
 	}
 
@@ -27,20 +29,33 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		return grid;
 	}
 
-	public int getAddressX(AkiPoint point) {
-		return (int) Math.floor(point.getX() / akiGridConfiguration.getCellSize());
+	public Point getPointWithOffset(Point point) throws OutsideWorldException {
+		Point offsetPoint = new Point(0, 0, 0);
+		offsetPoint.setX(point.getX() - akiGridConfiguration.getOffset().getX());
+		offsetPoint.setY(point.getY() - akiGridConfiguration.getOffset().getY());
+		offsetPoint.setZ(point.getZ() - akiGridConfiguration.getOffset().getZ());
+
+		if (offsetPoint.getX() >= akiGridConfiguration.getCellCountX() * akiGridConfiguration.getCellSize() || offsetPoint.getX() < 0
+				|| offsetPoint.getY() >= akiGridConfiguration.getCellCountY() * akiGridConfiguration.getCellSize() || offsetPoint.getY() < 0) {
+			throw new OutsideWorldException();
+		}
+		return offsetPoint;
 	}
 
-	public int getAddressY(AkiPoint point) {
-		return (int) Math.floor(point.getY() / akiGridConfiguration.getCellSize());
+	public int getAddressX(Point point) throws OutsideWorldException {
+		return (int) Math.floor(getPointWithOffset(point).getX() / akiGridConfiguration.getCellSize());
 	}
 
-	public void addPoint(AkiPoint point) {
+	public int getAddressY(Point point) throws OutsideWorldException {
+		return (int) Math.floor(getPointWithOffset(point).getY() / akiGridConfiguration.getCellSize());
+	}
+
+	public void addPoint(Point point) throws OutsideWorldException {
 		add(getAddressX(point), getAddressY(point));
 	}
 
 	public void add(int addressX, int addressY) {
-		// System.out.println("add(" + x + ", " + y + ")");
+		// System.out.println("add(" + addressX + ", " + addressY + ")");
 		if (grid[addressX][addressY] == UNKNOWN_VALUE) {
 			grid[addressX][addressY] = 1;
 			changeSequence++;
@@ -63,7 +78,7 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		}
 	}
 
-	public void addLine(AkiLine line, boolean endIsObstacle) {
+	public void addLine(Line line, boolean endIsObstacle) throws OutsideWorldException {
 		int[][] raster = rasterize(line, endIsObstacle);
 		for (int i = 0; i < raster.length; i++) {
 			int x = raster[i][0];
@@ -78,7 +93,7 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		}
 	}
 
-	public int[][] rasterize(AkiLine line, boolean endIsObstacle) {
+	public int[][] rasterize(Line line, boolean endIsObstacle) throws OutsideWorldException {
 
 		int x = getAddressX(line.getFrom());
 		int y = getAddressY(line.getFrom());
@@ -145,9 +160,9 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		return res;
 	}
 
-	public void addLineWithAngle(AkiLine line, AkiAngle errorAngle, boolean endIsObstacle) {
-		AkiLine lineLeft = AkiVectorUtils.rotateLine(line, errorAngle);
-		AkiLine lineRight = AkiVectorUtils.rotateLine(line, errorAngle.getNegativeAngle());
+	public void addLineWithAngle(Line line, Angle errorAngle, boolean endIsObstacle) throws OutsideWorldException {
+		Line lineLeft = VectorUtils.rotateLine(line, errorAngle);
+		Line lineRight = VectorUtils.rotateLine(line, errorAngle.getNegativeAngle());
 
 		addLine(line, endIsObstacle);
 		addLine(lineLeft, endIsObstacle);
@@ -157,28 +172,28 @@ public class AkiGridGeometry extends AkiNamedClass implements AkiGeometry {
 		iterateEndOfLine(line, lineRight, endIsObstacle);
 	}
 
-	private void iterateEndOfLine(AkiLine line, AkiLine line2, boolean endIsObstacle) {
-		int[][] arrLeft = rasterize(new AkiLine(line2.getTo(), line.getTo()), endIsObstacle);
+	private void iterateEndOfLine(Line line, Line line2, boolean endIsObstacle) throws OutsideWorldException {
+		int[][] arrLeft = rasterize(new Line(line2.getTo(), line.getTo()), endIsObstacle);
 		if (arrLeft.length > 2) {
 			for (int i = 1; i < arrLeft.length - 1; i++) {
-				addLine(new AkiLine(line.getFrom(), new AkiPoint(arrLeft[i][0] * akiGridConfiguration.getCellSize(), arrLeft[i][1]
+				addLine(new Line(line.getFrom(), new Point(arrLeft[i][0] * akiGridConfiguration.getCellSize(), arrLeft[i][1]
 						* akiGridConfiguration.getCellSize(), 0)), endIsObstacle);
 			}
 		}
 	}
 
-	public void addDistance(DistanceDetails distanceDetails) {
-		AkiLine line = calculateNorthLine(distanceDetails.getPositionOffset(), distanceDetails.getNorthAngle(), distanceDetails.getDistanceCm());
+	public void addDistance(DistanceDetails distanceDetails) throws OutsideWorldException {
+		Line line = calculateNorthLine(distanceDetails.getPositionOffset(), distanceDetails.getNorthAngle(), distanceDetails.getDistanceCm());
 		addLineWithAngle(line, distanceDetails.getErrorAngle(), distanceDetails.isEndObstacle());
 	}
 
-	public AkiLine calculateNorthLine(AkiPoint positionOffset, AkiAngle northAngle, double distanceCm) {
-		AkiLine line = new AkiLine();
+	public Line calculateNorthLine(Point positionOffset, Angle northAngle, double distanceCm) {
+		Line line = new Line();
 		line.setFrom(positionOffset);
 
 		double a = distanceCm * Math.cos(northAngle.getRadians() + Math.toRadians(90));
 		double b = distanceCm * Math.sin(northAngle.getRadians() + Math.toRadians(90));
-		line.setTo(new AkiPoint(positionOffset.getX() + a, positionOffset.getY() + b, 0)); // TODO: calculate
+		line.setTo(new Point(positionOffset.getX() + a, positionOffset.getY() + b, 0)); // TODO: calculate
 		return line;
 	}
 

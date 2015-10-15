@@ -62,19 +62,19 @@ function addNode(node) {
 	if (node.geometry == null) {
 		emptyObject = new THREE.Object3D();
 		addNodeFinalisation(emptyObject, node);
-	} else if (node.geometry.className == "AkiBoxGeometry") {
+	} else if (node.geometry.className == "BoxGeometry") {
 		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
 				node.geometry.dimension.y, node.geometry.dimension.z);
 		object3d = new THREE.Mesh(geometry, getMaterial(node.geometry.material));
 		addNodeFinalisation(object3d, node);
-	} else if (node.geometry.className == "AkiColladaGeometry") {
+	} else if (node.geometry.className == "ColladaGeometry") {
 		var loader = new THREE.ColladaLoader();
 		loader.load(node.geometry.fileName, function(collada) {
 			object3d = collada.scene;
 			addNodeFinalisation(object3d, node);
 		});
-	} else if (node.geometry.className == "AkiGridGeometry") {
-		console.log("AkiGridGeometry");
+	} else if (node.geometry.className == "GridGeometry") {
+		console.log("GridGeometry");
 		addLocationAreaGrid(node);
 	}
 }

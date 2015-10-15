@@ -5,16 +5,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
-import com.akibot.tanktrack.component.world.element.AkiAngle;
-import com.akibot.tanktrack.component.world.element.AkiGridConfiguration;
-import com.akibot.tanktrack.component.world.element.AkiGridGeometry;
-import com.akibot.tanktrack.component.world.element.AkiLine;
-import com.akibot.tanktrack.component.world.element.AkiNode;
-import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
-import com.akibot.tanktrack.component.world.element.AkiPoint;
-import com.akibot.tanktrack.component.world.element.AkiVectorUtils;
+import com.akibot.tanktrack.component.world.element.Angle;
+import com.akibot.tanktrack.component.world.element.GridConfiguration;
+import com.akibot.tanktrack.component.world.element.GridGeometry;
+import com.akibot.tanktrack.component.world.element.Line;
+import com.akibot.tanktrack.component.world.element.Node;
+import com.akibot.tanktrack.component.world.element.NodeTransformation;
+import com.akibot.tanktrack.component.world.element.Point;
+import com.akibot.tanktrack.component.world.element.VectorUtils;
 import com.akibot.tanktrack.component.world.element.ArrayUtils;
 import com.akibot.tanktrack.component.world.element.DistanceDetails;
+import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
 
 public class UtilityFunctionTest {
 
@@ -71,178 +72,178 @@ public class UtilityFunctionTest {
 	}
 
 	@Test
-	public void gridAddPoint() {
+	public void gridAddPoint() throws OutsideWorldException {
 		int maxObstacle = 2;
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(6, 5, 10, maxObstacle));
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(6, 5, 10, maxObstacle));
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
 
-		akiGrid.addPoint(new AkiPoint(0, 0, 0));
+		akiGrid.addPoint(new Point(0, 0, 0));
 		assertEquals(1, akiGrid.getGrid()[0][0]);
 
-		akiGrid.addPoint(new AkiPoint(10, 9, 0));
+		akiGrid.addPoint(new Point(10, 9, 0));
 		assertEquals(1, akiGrid.getGrid()[1][0]);
-		akiGrid.addPoint(new AkiPoint(11, 9, 0));
+		akiGrid.addPoint(new Point(11, 9, 0));
 		assertEquals(2, akiGrid.getGrid()[1][0]);
 
 		assertEquals(3, akiGrid.getChangeSequence());
 
-		akiGrid.addPoint(new AkiPoint(11, 9, 0));
+		akiGrid.addPoint(new Point(11, 9, 0));
 		assertEquals(maxObstacle, akiGrid.getGrid()[1][0]);
 		assertEquals(3, akiGrid.getChangeSequence());
 
 	}
 
 	@Test
-	public void gridAddLine() {
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(6, 5, 10, 2));
+	public void gridAddLine() throws OutsideWorldException {
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(6, 5, 10, 2));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[5][4]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[5][4]);
 		assertEquals(0, akiGrid.getChangeSequence());
 
-		akiGrid.addLine(new AkiLine(new AkiPoint(0, 0, 0), new AkiPoint(0, 0, 0)), true);
+		akiGrid.addLine(new Line(new Point(0, 0, 0), new Point(0, 0, 0)), true);
 		assertEquals(1, akiGrid.getGrid()[0][0]);
 		assertEquals(1, akiGrid.getChangeSequence());
 
-		akiGrid.addLine(new AkiLine(new AkiPoint(21, 21, 0), new AkiPoint(29, 49, 0)), true);
+		akiGrid.addLine(new Line(new Point(21, 21, 0), new Point(29, 49, 0)), true);
 
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
 		assertEquals(1, akiGrid.getGrid()[2][4]);
 		assertEquals(4, akiGrid.getChangeSequence());
 
-		akiGrid.addLine(new AkiLine(new AkiPoint(21, 21, 0), new AkiPoint(29, 49, 0)), true);
+		akiGrid.addLine(new Line(new Point(21, 21, 0), new Point(29, 49, 0)), true);
 
 		// System.out.println("After");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][3]);
 		assertEquals(2, akiGrid.getGrid()[2][4]);
 		assertEquals(5, akiGrid.getChangeSequence());
 
-		akiGrid.addLine(new AkiLine(new AkiPoint(45, 5, 0), new AkiPoint(55, 5, 0)), false);
+		akiGrid.addLine(new Line(new Point(45, 5, 0), new Point(55, 5, 0)), false);
 
 		// System.out.println("After 2");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[4][0]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[5][0]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[4][0]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[5][0]);
 		assertEquals(7, akiGrid.getChangeSequence());
 
 		// Make sure that other Cells are not affected
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][3]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][4]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][3]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][4]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][3]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][4]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][3]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][4]);
 
 	}
 
 	@Test
-	public void gridAddLineNarrowAngle() {
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(2, 3, 10, 1));
+	public void gridAddLineNarrowAngle() throws OutsideWorldException {
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(2, 3, 10, 1));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		AkiAngle angle = new AkiAngle();
+		Angle angle = new Angle();
 		angle.setDegrees(5);
-		AkiLine line = new AkiLine(new AkiPoint(5, 15, 0), new AkiPoint(15, 15, 0));
+		Line line = new Line(new Point(5, 15, 0), new Point(15, 15, 0));
 		akiGrid.addLineWithAngle(line, angle, true);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
 
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
 		assertEquals(1, akiGrid.getGrid()[1][1]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
 		assertEquals(2, akiGrid.getChangeSequence());
 	}
 
 	@Test
-	public void gridAddLineWideAngle() {
+	public void gridAddLineWideAngle() throws OutsideWorldException {
 		// TODO: Implement
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(2, 3, 10, 2));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(2, 3, 10, 2));
 		// System.out.println("Before");
 		// ArrayUtils.printArray(akiGrid.getGrid());
 
-		AkiAngle angle = new AkiAngle();
+		Angle angle = new Angle();
 		angle.setDegrees(45);
-		AkiLine line = new AkiLine(new AkiPoint(5, 15, 0), new AkiPoint(15, 15, 0));
+		Line line = new Line(new Point(5, 15, 0), new Point(15, 15, 0));
 		akiGrid.addLineWithAngle(line, angle, true);
 		ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
 		assertEquals(1, akiGrid.getGrid()[1][2]);
 
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[0][1]);
 		assertEquals(1, akiGrid.getGrid()[1][1]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
 		assertEquals(1, akiGrid.getGrid()[1][0]);
 		assertEquals(4, akiGrid.getChangeSequence());
 	}
 
 	@Test
-	public void gridAddDistance0Angle() {
+	public void gridAddDistance0Angle() throws OutsideWorldException {
 		// TODO: Implement
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(3, 3, 10, 1));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(3, 3, 10, 1));
 
-		AkiPoint positionOffset = new AkiPoint(15, 15, 0);
-		AkiAngle northAngle = new AkiAngle();
+		Point positionOffset = new Point(15, 15, 0);
+		Angle northAngle = new Angle();
 		northAngle.setDegrees(-90);
 
-		AkiAngle errorAngle = new AkiAngle();
+		Angle errorAngle = new Angle();
 		errorAngle.setDegrees(1);
 
 		akiGrid.addDistance(new DistanceDetails(positionOffset, northAngle, errorAngle, 10, true));
 		ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
 		assertEquals(1, akiGrid.getGrid()[2][1]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][0]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][0]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][0]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][0]);
 
 		assertEquals(2, akiGrid.getChangeSequence());
 	}
 
 	@Test
-	public void gridAddDistance45Angle() {
+	public void gridAddDistance45Angle() throws OutsideWorldException {
 		// TODO: Implement
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(3, 3, 10, 1));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(3, 3, 10, 1));
 
-		AkiPoint positionOffset = new AkiPoint(15, 15, 0);
-		AkiAngle northAngle = new AkiAngle();
+		Point positionOffset = new Point(15, 15, 0);
+		Angle northAngle = new Angle();
 		northAngle.setDegrees(180);
 
-		AkiAngle errorAngle = new AkiAngle();
+		Angle errorAngle = new Angle();
 		errorAngle.setDegrees(45);
 
 		akiGrid.addDistance(new DistanceDetails(positionOffset, northAngle, errorAngle, 10, true));
 		ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][2]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[2][1]);
 
 		assertEquals(1, akiGrid.getGrid()[0][0]);
 		assertEquals(1, akiGrid.getGrid()[1][0]);
@@ -259,36 +260,36 @@ public class UtilityFunctionTest {
 		float ix1 = 7;
 		float iy1 = 6;
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(1, 1, 1, 1));
-		AkiLine line = new AkiLine();
-		line.setFrom(new AkiPoint(ix0, iy0, 0));
-		line.setTo(new AkiPoint(ix1, iy1, 0));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(1, 1, 1, 1));
+		Line line = new Line();
+		line.setFrom(new Point(ix0, iy0, 0));
+		line.setTo(new Point(ix1, iy1, 0));
 
-		AkiPoint result;
+		Point result;
 
 		// Same line
-		AkiAngle angle0 = new AkiAngle();
+		Angle angle0 = new Angle();
 		angle0.setDegrees(0);
-		result = AkiVectorUtils.rotateEndOfLine(line, angle0);
+		result = VectorUtils.rotateEndOfLine(line, angle0);
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
 
 		// 90 degrees to the left
-		AkiAngle angleLeft90 = new AkiAngle();
+		Angle angleLeft90 = new Angle();
 		angleLeft90.setDegrees(90);
-		result = AkiVectorUtils.rotateEndOfLine(line, angleLeft90);
+		result = VectorUtils.rotateEndOfLine(line, angleLeft90);
 		assertEquals(iy1, result.getY(), ANGLE_PRECISSION);
 		assertEquals(true, result.getX() < 0);
 
 		// 90 degrees to the right
-		AkiAngle angleRight90 = new AkiAngle();
+		Angle angleRight90 = new Angle();
 		angleRight90.setDegrees(-90);
-		result = AkiVectorUtils.rotateEndOfLine(line, angleRight90);
+		result = VectorUtils.rotateEndOfLine(line, angleRight90);
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
 		// same, 90 degrees to the right (but via negative angle)
-		result = AkiVectorUtils.rotateEndOfLine(line, angleLeft90.getNegativeAngle());
+		result = VectorUtils.rotateEndOfLine(line, angleLeft90.getNegativeAngle());
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
@@ -297,16 +298,16 @@ public class UtilityFunctionTest {
 	@Test
 	public void gridCalculateLine() {
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(1, 1, 1, 1));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(1, 1, 1, 1));
 		double x0 = 1;
 		double y0 = 2;
 		double distanceCm = 10;
-		AkiPoint positionOffset = new AkiPoint(x0, y0, 0);
+		Point positionOffset = new Point(x0, y0, 0);
 
-		AkiLine result;
+		Line result;
 
 		// Same line
-		AkiAngle angle0 = new AkiAngle();
+		Angle angle0 = new Angle();
 		angle0.setDegrees(0);
 		result = akiGrid.calculateNorthLine(positionOffset, angle0, distanceCm);
 		assertEquals(x0, result.getFrom().getX(), ANGLE_PRECISSION);
@@ -315,14 +316,14 @@ public class UtilityFunctionTest {
 		assertEquals(y0 + distanceCm, result.getTo().getY(), ANGLE_PRECISSION);
 
 		// Opposite direction (180 degrees)
-		AkiAngle angle180 = new AkiAngle();
+		Angle angle180 = new Angle();
 		angle180.setDegrees(180);
 		result = akiGrid.calculateNorthLine(positionOffset, angle180, distanceCm);
 		assertEquals(x0, result.getTo().getX(), ANGLE_PRECISSION);
 		assertEquals(y0 - distanceCm, result.getTo().getY(), ANGLE_PRECISSION);
 
 		// 90 Degrees
-		AkiAngle angle90 = new AkiAngle();
+		Angle angle90 = new Angle();
 		angle90.setDegrees(90);
 		result = akiGrid.calculateNorthLine(positionOffset, angle90, distanceCm);
 		assertEquals(x0 - distanceCm, result.getTo().getX(), ANGLE_PRECISSION);
@@ -331,24 +332,24 @@ public class UtilityFunctionTest {
 	}
 
 	@Test
-	public void gridDistanceErrorAngle() {
+	public void gridDistanceErrorAngle() throws OutsideWorldException {
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(5, 3, 10, 1));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(5, 3, 10, 1));
 
-		akiGrid.addDistance(new DistanceDetails(new AkiPoint(25, 25, 0), new AkiAngle(Math.toRadians(180)), new AkiAngle(Math.toRadians(45)), 25, true));
+		akiGrid.addDistance(new DistanceDetails(new Point(25, 25, 0), new Angle(Math.toRadians(180)), new Angle(Math.toRadians(45)), 25, true));
 		ArrayUtils.printArray(akiGrid.getGrid());
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[4][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[1][2]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[3][2]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[4][2]);
 
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][1]);
-		assertEquals(AkiGridGeometry.EMPTY_VALUE, akiGrid.getGrid()[3][1]);
-		assertEquals(AkiGridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[4][1]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[0][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[1][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[2][1]);
+		assertEquals(GridGeometry.EMPTY_VALUE, akiGrid.getGrid()[3][1]);
+		assertEquals(GridGeometry.UNKNOWN_VALUE, akiGrid.getGrid()[4][1]);
 
 		assertEquals(1, akiGrid.getGrid()[0][0]);
 		assertEquals(1, akiGrid.getGrid()[1][0]); // test goal
@@ -358,11 +359,11 @@ public class UtilityFunctionTest {
 	}
 
 	@Test
-	public void gridRasterize() {
+	public void gridRasterize() throws OutsideWorldException {
 
-		AkiGridGeometry akiGrid = new AkiGridGeometry(new AkiGridConfiguration(1, 1, 1, 1));
+		GridGeometry akiGrid = new GridGeometry(new GridConfiguration(4, 4, 1, 1));
 
-		int[][] res = akiGrid.rasterize(new AkiLine(new AkiPoint(3, 3, 0), new AkiPoint(1, 1, 0)), true);
+		int[][] res = akiGrid.rasterize(new Line(new Point(3, 3, 0), new Point(1, 1, 0)), true);
 
 		ArrayUtils.printArray(res);
 
@@ -380,48 +381,93 @@ public class UtilityFunctionTest {
 	@Test
 	public void relativeTransformation() throws Exception {
 
-		AkiNode worldNode = new AkiNode("worldNode");
+		Node worldNode = new Node("worldNode");
 
-		AkiNode gridNode = new AkiNode("gridNode");
-		// int maxObstacle = 1;
-		// AkiGridGeometry gridGeometry = new AkiGridGeometry(new AkiGridConfiguration(5, 5, 1, maxObstacle));
-		// gridNode.setGeometry(gridGeometry);
+		Node gridNode = new Node("gridNode");
+
 		worldNode.attachChild(worldNode);
 
-		AkiNode robotNode = new AkiNode("robotNode");
-		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
-		robotTransformation.setPosition(new AkiPoint(3, 2, 0));
-		robotTransformation.setRotation(new AkiPoint(0, 0, AkiVectorUtils.gradToRad(45)));
+		Node robotNode = new Node("robotNode");
+		NodeTransformation robotTransformation = new NodeTransformation();
+		robotTransformation.setPosition(new Point(3, 2, 0));
+		robotTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(45)));
 		robotNode.setTransformation(robotTransformation);
 		gridNode.attachChild(robotNode);
 
-		AkiNode distanceNode = new AkiNode("distanceNode");
-		AkiNodeTransformation distanceTransformation = new AkiNodeTransformation();
-		distanceTransformation.setPosition(new AkiPoint(0, 2, 0));
-		distanceTransformation.setRotation(new AkiPoint(0, 0, AkiVectorUtils.gradToRad(5)));
+		Node distanceNode = new Node("distanceNode");
+		NodeTransformation distanceTransformation = new NodeTransformation();
+		distanceTransformation.setPosition(new Point(0, 2, 0));
+		distanceTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(5)));
 		distanceNode.setTransformation(distanceTransformation);
 		robotNode.attachChild(distanceNode);
 
-		AkiNodeTransformation relativeTransformation = AkiVectorUtils.calculateRelativeTransformation(gridNode, distanceNode);
+		NodeTransformation relativeTransformation = VectorUtils.calculateRelativeTransformation(gridNode, distanceNode);
 
 		double COORD_PRECISSION = 0.01;
 		double ROTATION_PRECISSION = 0.0000001;
-		
-		AkiPoint relativePosition = relativeTransformation.getPosition();
-		AkiPoint relativeRotation = relativeTransformation.getRotation();
-		AkiPoint relativeScale = relativeTransformation.getScale();
-		
+
+		Point relativePosition = relativeTransformation.getPosition();
+		Point relativeRotation = relativeTransformation.getRotation();
+		Point relativeScale = relativeTransformation.getScale();
+
 		assertEquals(1.58, relativePosition.getX(), COORD_PRECISSION);
 		assertEquals(3.41, relativePosition.getY(), COORD_PRECISSION);
 		assertEquals(0, relativePosition.getZ(), 0);
 
 		assertEquals(0, relativeRotation.getX(), 0);
 		assertEquals(0, relativeRotation.getY(), 0);
-		assertEquals(AkiVectorUtils.gradToRad(50), relativeRotation.getZ(), ROTATION_PRECISSION);
+		assertEquals(VectorUtils.gradToRad(50), relativeRotation.getZ(), ROTATION_PRECISSION);
 
 		assertEquals(1, relativeScale.getX(), 0);
 		assertEquals(1, relativeScale.getY(), 0);
 		assertEquals(1, relativeScale.getZ(), 0);
+
+		// ------- TEST: Grid + Distance
+		int maxObstacle = 1;
+		GridGeometry gridGeometry = new GridGeometry(new GridConfiguration(10, 10, 1, maxObstacle, new Point(-5, -5, 0)));
+		gridNode.setGeometry(gridGeometry);
+		System.out.println("==========");
+
+		gridGeometry.addLine(new Line(new Point(0, 0, 0), new Point(4, 0, 0)), true);
+
+		// TODO: Test Distance!
+		ArrayUtils.printArray(gridGeometry.getGrid());
+
+	}
+
+	@Test
+	public void gridOffset() throws OutsideWorldException {
+		GridGeometry gridOffset = new GridGeometry(new GridConfiguration(2, 2, 10, 1, new Point(-10, -10, 0)));
+
+		assertEquals(1, gridOffset.getAddressX(new Point(5, 4, 0)));
+		assertEquals(1, gridOffset.getAddressY(new Point(5, 4, 0)));
+
+		assertEquals(0, gridOffset.getAddressX(new Point(-5, -4, 0)));
+		assertEquals(0, gridOffset.getAddressY(new Point(-5, -4, 0)));
+
+		gridOffset.addPoint(new Point(5, 5, 0));
+		assertEquals(1, gridOffset.getGrid()[1][1]);
+	}
+
+	@Test
+	public void gridOutsideWorld() throws OutsideWorldException {
+		GridGeometry gridOffset = new GridGeometry(new GridConfiguration(2, 2, 10, 1));
+
+		gridOffset.addPoint(new Point(0, 0, 0));
+		gridOffset.addPoint(new Point(19, 19, 0));
+
+		try {
+			gridOffset.addPoint(new Point(20, 20, 0));
+			assertEquals(false, true);
+		} catch (OutsideWorldException e) {
+		}
+
+		try {
+			gridOffset.addPoint(new Point(-1, -1, 0));
+			assertEquals(false, true);
+		} catch (OutsideWorldException e) {
+		}
+
 	}
 
 }

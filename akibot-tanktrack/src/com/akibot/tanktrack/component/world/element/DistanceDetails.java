@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class DistanceDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private AkiPoint positionOffset;
-	private AkiAngle northAngle;
-	private AkiAngle errorAngle;
+	private Point positionOffset;
+	private Angle northAngle;
+	private Angle errorAngle;
 	private double distanceCm;
 	private boolean endObstacle;
 
-	public DistanceDetails(AkiPoint positionOffset, AkiAngle northAngle, AkiAngle errorAngle, double distanceCm, boolean endObstacle) {
+	public DistanceDetails(Point positionOffset, Angle northAngle, Angle errorAngle, double distanceCm, boolean endObstacle) {
 		this.positionOffset = positionOffset;
 		this.northAngle = northAngle;
 		this.errorAngle = errorAngle;
@@ -22,19 +22,19 @@ public class DistanceDetails implements Serializable {
 
 	}
 
-	public AkiAngle getNorthAngle() {
+	public Angle getNorthAngle() {
 		return northAngle;
 	}
 
-	public void setNorthAngle(AkiAngle northAngle) {
+	public void setNorthAngle(Angle northAngle) {
 		this.northAngle = northAngle;
 	}
 
-	public AkiAngle getErrorAngle() {
+	public Angle getErrorAngle() {
 		return errorAngle;
 	}
 
-	public void setErrorAngle(AkiAngle errorAngle) {
+	public void setErrorAngle(Angle errorAngle) {
 		this.errorAngle = errorAngle;
 	}
 
@@ -54,11 +54,11 @@ public class DistanceDetails implements Serializable {
 		this.endObstacle = endObstacle;
 	}
 
-	public AkiPoint getPositionOffset() {
+	public Point getPositionOffset() {
 		return positionOffset;
 	}
 
-	public void setPositionOffset(AkiPoint positionOffset) {
+	public void setPositionOffset(Point positionOffset) {
 		this.positionOffset = positionOffset;
 	}
 

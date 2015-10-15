@@ -2,22 +2,28 @@ package com.akibot.tanktrack.component.world.element;
 
 import java.io.Serializable;
 
-public class AkiGridConfiguration implements Serializable {
+public class GridConfiguration implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int cellCountX;
 	private int cellCountY;
 	private double cellSize;
 	private int maxObstacleCount;
+	private Point offset;
 
-	public AkiGridConfiguration() {
+	public GridConfiguration() {
 
 	}
 
-	public AkiGridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount) {
+	public GridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount) {
+		this(cellCountX, cellCountY, cellSize,maxObstacleCount,new Point(0, 0, 0));
+	}
+	
+	public GridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount, Point offset) {
 		this.cellCountX = cellCountX;
 		this.cellCountY = cellCountY;
 		this.cellSize = cellSize;
 		this.maxObstacleCount = maxObstacleCount;
+		this.offset = offset;
 	}
 
 	public int getCellCountX() {
@@ -52,4 +58,13 @@ public class AkiGridConfiguration implements Serializable {
 		this.maxObstacleCount = maxObstacleCount;
 	}
 
+	public Point getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Point offset) {
+		this.offset = offset;
+	}
+
+	
 }

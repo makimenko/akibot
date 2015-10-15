@@ -5,8 +5,8 @@ import java.net.InetSocketAddress;
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
-import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
-import com.akibot.tanktrack.component.world.element.AkiPoint;
+import com.akibot.tanktrack.component.world.element.NodeTransformation;
+import com.akibot.tanktrack.component.world.element.Point;
 import com.akibot.tanktrack.component.world.message.___DEL___NodeTransformationMessage;
 
 public class AkiBotWebSimulationLauncher {
@@ -42,8 +42,8 @@ public class AkiBotWebSimulationLauncher {
 			if (posX > maxPosX) {
 				posX = minPosX;
 			}
-			AkiNodeTransformation transformation = new AkiNodeTransformation();
-			transformation.setPosition(new AkiPoint(posX, 0, 15));
+			NodeTransformation transformation = new NodeTransformation();
+			transformation.setPosition(new Point(posX, 0, 15));
 			nodeTransformationMessage.setTransformation(transformation);
 			simulationClient.getOutgoingMessageManager().broadcastMessage(nodeTransformationMessage);
 			Thread.sleep(1000);

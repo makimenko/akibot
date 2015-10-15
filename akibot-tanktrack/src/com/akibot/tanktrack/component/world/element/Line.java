@@ -2,40 +2,40 @@ package com.akibot.tanktrack.component.world.element;
 
 import java.io.Serializable;
 
-public class AkiLine implements Serializable {
+public class Line implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private AkiPoint from;
-	private AkiPoint to;
+	private Point from;
+	private Point to;
 
-	public AkiLine() {
+	public Line() {
 
 	}
 
-	public AkiLine(AkiPoint from, AkiPoint to) {
+	public Line(Point from, Point to) {
 		this.from = from;
 		this.to = to;
 	}
 
-	public AkiPoint getFrom() {
+	public Point getFrom() {
 		return from;
 	}
 
-	public void setFrom(AkiPoint from) {
+	public void setFrom(Point from) {
 		this.from = from;
 	}
 
-	public AkiPoint getTo() {
+	public Point getTo() {
 		return to;
 	}
 
-	public void setTo(AkiPoint to) {
+	public void setTo(Point to) {
 		this.to = to;
 	}
 
-	public AkiPoint getVector() {
+	public Point getVector() {
 		double x = getTo().getX() - getFrom().getX();
 		double y = getTo().getY() - getFrom().getY();
 		double z = getTo().getZ() - getFrom().getZ();
-		return new AkiPoint(x, y, z);
+		return new Point(x, y, z);
 	}
 }

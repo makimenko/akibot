@@ -7,14 +7,15 @@ import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
-import com.akibot.tanktrack.component.world.element.AkiAngle;
-import com.akibot.tanktrack.component.world.element.AkiColladaGeometry;
-import com.akibot.tanktrack.component.world.element.AkiGridConfiguration;
-import com.akibot.tanktrack.component.world.element.AkiGridGeometry;
-import com.akibot.tanktrack.component.world.element.AkiNode;
-import com.akibot.tanktrack.component.world.element.AkiNodeTransformation;
-import com.akibot.tanktrack.component.world.element.AkiPoint;
+import com.akibot.tanktrack.component.world.element.Angle;
+import com.akibot.tanktrack.component.world.element.ColladaGeometry;
+import com.akibot.tanktrack.component.world.element.GridConfiguration;
+import com.akibot.tanktrack.component.world.element.GridGeometry;
+import com.akibot.tanktrack.component.world.element.Node;
+import com.akibot.tanktrack.component.world.element.NodeTransformation;
+import com.akibot.tanktrack.component.world.element.Point;
 import com.akibot.tanktrack.component.world.element.DistanceDetails;
+import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
@@ -23,8 +24,8 @@ import com.akibot.tanktrack.component.world.message.WorldUpdateRequest;
 
 public class WorldComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(WorldComponent.class);
-	private AkiNode worldNode;
-	private HashMap<String, AkiNode> nodeList = new HashMap<String, AkiNode>();
+	private Node worldNode;
+	private HashMap<String, Node> nodeList = new HashMap<String, Node>();
 
 	String robotNodeName = "robotNode";
 
@@ -34,7 +35,7 @@ public class WorldComponent extends DefaultComponent {
 
 	private void initWorld() {
 		// ======================== World Node:
-		worldNode = new AkiNode("worldNode");
+		worldNode = new Node("worldNode");
 		// AkiBoxGeometry worldGeometry = new AkiBoxGeometry();
 		// worldGeometry.setDimension(new AkiPoint(500, 500, 2));
 
@@ -51,57 +52,56 @@ public class WorldComponent extends DefaultComponent {
 		int cellCount = 50;
 		int cellSizeCm = 10;
 		int positionOffset = cellCount * cellSizeCm / 2;
-		AkiGridConfiguration gridConfiguration = new AkiGridConfiguration(cellCount, cellCount, cellSizeCm, 2);
-		AkiGridGeometry gridGeometry = new AkiGridGeometry(gridConfiguration);
-		AkiNode gridNode = new AkiNode("gridNode");
+		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeCm, 2, new Point(-positionOffset, -positionOffset, 0));
+		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
+		Node gridNode = new Node("gridNode");
 		gridNode.setGeometry(gridGeometry);
 
-		AkiNodeTransformation gridTransformation = new AkiNodeTransformation();
-		gridTransformation.setPosition(new AkiPoint(-positionOffset, -positionOffset, 1));
-		gridNode.setTransformation(gridTransformation);
-
-		AkiAngle errorAngle = new AkiAngle();
+		Angle errorAngle = new Angle();
 		errorAngle.setDegrees(15);
 
-		gridGeometry.addDistance(new DistanceDetails(new AkiPoint(positionOffset, positionOffset, 0), new AkiAngle(0), errorAngle, 100, true));
-		gridGeometry.addDistance(new DistanceDetails(new AkiPoint(positionOffset, positionOffset, 0), new AkiAngle(Math.toRadians(30)), errorAngle, 100, true));
-		gridGeometry
-				.addDistance(new DistanceDetails(new AkiPoint(positionOffset, positionOffset, 0), new AkiAngle(Math.toRadians(180)), errorAngle, 200, true));
+		try {
+			gridGeometry.addDistance(new DistanceDetails(new Point(positionOffset, positionOffset, 0), new Angle(0), errorAngle, 100, true));
+			gridGeometry.addDistance(new DistanceDetails(new Point(positionOffset, positionOffset, 0), new Angle(Math.toRadians(30)), errorAngle, 100, true));
+			gridGeometry.addDistance(new DistanceDetails(new Point(positionOffset, positionOffset, 0), new Angle(Math.toRadians(180)), errorAngle, 200, true));
+		} catch (OutsideWorldException e) {
+			log.catching(this.getAkibotClient(), e);
+		}
 
 		worldNode.attachChild(gridNode);
 
 		index(gridNode);
 
 		// ======================== Robot Node:
-		AkiColladaGeometry robotGeometry = new AkiColladaGeometry();
+		ColladaGeometry robotGeometry = new ColladaGeometry();
 		robotGeometry.setFileName("../js/loader/AkiBot.dae");
-		AkiNode robotNode = new AkiNode(robotNodeName);
+		Node robotNode = new Node(robotNodeName);
 		robotNode.setGeometry(robotGeometry);
 
-		AkiNodeTransformation robotTransformation = new AkiNodeTransformation();
-		robotTransformation.setPosition(new AkiPoint(0, 0, 1.5f));
+		NodeTransformation robotTransformation = new NodeTransformation();
+		robotTransformation.setPosition(new Point(0, 0, 1.5f));
 		robotNode.setTransformation(robotTransformation);
 
 		gridNode.attachChild(robotNode);
 		index(robotNode);
 
 		// ======================== Gyroscope
-		AkiNode gyroscopeNode = new AkiNode("gyroscopeNode");
+		Node gyroscopeNode = new Node("gyroscopeNode");
 		gyroscopeNode.setStickToParent(true);
 		index(gyroscopeNode);
 
 		// ======================== Distance
-		AkiNode frontDistanceNode = new AkiNode("frontDistanceNode");
+		Node frontDistanceNode = new Node("frontDistanceNode");
 
-		AkiNodeTransformation frontDistanceTransformation = new AkiNodeTransformation();
-		frontDistanceTransformation.setPosition(new AkiPoint(0, -8f, 5f));
+		NodeTransformation frontDistanceTransformation = new NodeTransformation();
+		frontDistanceTransformation.setPosition(new Point(0, -8f, 5f));
 		frontDistanceNode.setTransformation(frontDistanceTransformation);
 		frontDistanceNode.setStickToParent(true);
 		index(frontDistanceNode);
 
 	}
 
-	public void index(AkiNode node) {
+	public void index(Node node) {
 		nodeList.put(node.getName(), node);
 	}
 
@@ -129,14 +129,14 @@ public class WorldComponent extends DefaultComponent {
 	}
 
 	private void onWorldNodeTransformationRequest(WorldNodeTransformationRequest worldNodeTransformationRequest) {
-		AkiNode node = nodeList.get(worldNodeTransformationRequest.getNodeName());
-		AkiNodeTransformation transformation = worldNodeTransformationRequest.getTransformation();
-		AkiNode masterNode = findMasterNode(node);
+		Node node = nodeList.get(worldNodeTransformationRequest.getNodeName());
+		NodeTransformation transformation = worldNodeTransformationRequest.getTransformation();
+		Node masterNode = findMasterNode(node);
 		applyTransformation(masterNode, transformation);
 	}
 
-	private AkiNode findMasterNode(AkiNode node) {
-		AkiNode parentNode = node.getParentNode();
+	private Node findMasterNode(Node node) {
+		Node parentNode = node.getParentNode();
 		if (node.isStickToParent() == false || parentNode == null) {
 			return node;
 		} else {
@@ -145,7 +145,7 @@ public class WorldComponent extends DefaultComponent {
 
 	}
 
-	private void applyTransformation(AkiNode node, AkiNodeTransformation transformation) {
+	private void applyTransformation(Node node, NodeTransformation transformation) {
 		if (transformation.getPosition() != null) {
 			node.getTransformation().setPosition(transformation.getPosition());
 		}
@@ -186,7 +186,7 @@ public class WorldComponent extends DefaultComponent {
 		getComponentStatus().setReady(true);
 	}
 
-	public AkiNode getWorldNode() {
+	public Node getWorldNode() {
 		return worldNode;
 	}
 
