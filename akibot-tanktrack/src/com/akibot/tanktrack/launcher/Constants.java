@@ -1,5 +1,7 @@
 package com.akibot.tanktrack.launcher;
 
+import com.akibot.tanktrack.component.world.element.Angle;
+import com.akibot.tanktrack.component.world.element.VectorUtils;
 import com.pi4j.io.i2c.I2CBus;
 
 public class Constants {
@@ -63,4 +65,13 @@ public class Constants {
 	public static final String SPEECH_HOST = "192.168.0.106";
 	public static final int SPEECH_PORT = 59125;
 	public static final String SPEECH_VOICE = "cmu-slt-hsmm";
+
+	public static final String COMPONENT_NAME_AKIBOT_GYROSCOPE = "akibot.gyroscope";
+	public static final String COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT = "akibot.echolocator.front";
+	public static final String COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK = "akibot.echolocator.back";
+	public static final Angle DISTANCE_ERRROR_ANGLE = new Angle(VectorUtils.gradToRad(15));
+
+	public static final String NODE_NAME_GRID = "gridNode";
+	public static final String NODE_NAME_ROBOT = "robotNode";
+
 }

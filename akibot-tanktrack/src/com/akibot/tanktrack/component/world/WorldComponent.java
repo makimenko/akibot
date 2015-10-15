@@ -21,13 +21,12 @@ import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.component.world.message.WorldUpdateRequest;
+import com.akibot.tanktrack.launcher.Constants;
 
 public class WorldComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(WorldComponent.class);
 	private Node worldNode;
 	private HashMap<String, Node> nodeList = new HashMap<String, Node>();
-
-	String robotNodeName = "robotNode";
 
 	public WorldComponent() {
 		initWorld();
@@ -44,7 +43,7 @@ public class WorldComponent extends DefaultComponent {
 		int positionOffset = cellCount * cellSizeCm / 2;
 		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeCm, 2, new Point(-positionOffset, -positionOffset, 0));
 		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
-		Node gridNode = new Node("gridNode");
+		Node gridNode = new Node(Constants.NODE_NAME_GRID);
 		gridNode.setGeometry(gridGeometry);
 		worldNode.attachChild(gridNode);
 		index(gridNode);
@@ -52,24 +51,25 @@ public class WorldComponent extends DefaultComponent {
 		// ======================== Robot Node:
 		ColladaGeometry robotGeometry = new ColladaGeometry();
 		robotGeometry.setFileName("../js/loader/AkiBot.dae");
-		Node robotNode = new Node(robotNodeName);
+		Node robotNode = new Node(Constants.NODE_NAME_ROBOT);
 		robotNode.setGeometry(robotGeometry);
 
-		NodeTransformation robotTransformation = new NodeTransformation();
-		robotTransformation.setPosition(new Point(10, 0, 1.5f));
-		robotTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(45)));
-		robotNode.setTransformation(robotTransformation);
+		// NodeTransformation robotTransformation = new NodeTransformation();
+		// robotTransformation.setPosition(new Point(10, 0, 1.5f));
+		// robotTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(45)));
+		// robotNode.setTransformation(robotTransformation);
 
 		gridNode.attachChild(robotNode);
 		index(robotNode);
 
 		// ======================== Gyroscope
-		Node gyroscopeNode = new Node("gyroscopeNode");
+		Node gyroscopeNode = new Node(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE);
 		gyroscopeNode.setStickToParent(true);
+		robotNode.attachChild(gyroscopeNode);
 		index(gyroscopeNode);
 
 		// ======================== frontDistanceNode
-		Node frontDistanceNode = new Node("frontDistanceNode");
+		Node frontDistanceNode = new Node(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
 		NodeTransformation frontDistanceTransformation = new NodeTransformation();
 		frontDistanceTransformation.setPosition(new Point(0, 8f, 5f));
 		frontDistanceNode.setTransformation(frontDistanceTransformation);
@@ -78,7 +78,7 @@ public class WorldComponent extends DefaultComponent {
 		index(frontDistanceNode);
 
 		// ======================== backDistanceNode
-		Node backDistanceNode = new Node("backDistanceNode");
+		Node backDistanceNode = new Node(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
 		NodeTransformation backDistanceTransformation = new NodeTransformation();
 		backDistanceTransformation.setPosition(new Point(0, -8f, 5f));
 		backDistanceTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(180)));
@@ -87,28 +87,52 @@ public class WorldComponent extends DefaultComponent {
 		robotNode.attachChild(backDistanceNode);
 		index(backDistanceNode);
 
-		// ========================
-		// TODO: Remove simulation
-		Angle errorAngle = new Angle();
-		errorAngle.setDegrees(15);
-		try {
-			DistanceDetails distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), errorAngle, 100, true);
-			VectorUtils.updateGridDistance(gridNode, frontDistanceNode, distance);
-		} catch (Exception e) {
-			log.catching(this.getAkibotClient(), e);
-		}
+		// TODO: Remove simulation:
+		simulateMessages();
+	}
 
-		try {
-			DistanceDetails distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), errorAngle, 50, true);
-			VectorUtils.updateGridDistance(gridNode, backDistanceNode, distance);
-		} catch (Exception e) {
-			log.catching(this.getAkibotClient(), e);
-		}
+	private void simulateMessages() {
 
+		// Update Gyroscope Rotation:
+		WorldNodeTransformationRequest gyroUpdateRequest = new WorldNodeTransformationRequest();
+		gyroUpdateRequest.setNodeName(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE);
+		NodeTransformation gyroTransformation = new NodeTransformation();
+		gyroTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(45)));
+		gyroUpdateRequest.setTransformation(gyroTransformation);
+		onWorldUpdateRequest(gyroUpdateRequest);
+
+		// Update Robot Position:
+		WorldNodeTransformationRequest robotMoveRequest = new WorldNodeTransformationRequest();
+		robotMoveRequest.setNodeName(Constants.NODE_NAME_ROBOT);
+		NodeTransformation robotMoveTransformation = new NodeTransformation();
+		robotMoveTransformation.setPosition(new Point(10, 0, 1.5f));
+		robotMoveRequest.setTransformation(robotMoveTransformation);
+		onWorldUpdateRequest(robotMoveRequest);
+
+		// Update Distance:
+		WorldDistanceUpdateRequest worldDistanceUpdateRequest = new WorldDistanceUpdateRequest();
+		worldDistanceUpdateRequest.setGridNodeName(Constants.NODE_NAME_GRID);
+		DistanceDetails distance;
+
+		// front:
+		worldDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
+		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 100, true);
+		worldDistanceUpdateRequest.setDistanceDetails(distance);
+		onWorldUpdateRequest(worldDistanceUpdateRequest);
+
+		// back:
+		worldDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 50, true);
+		worldDistanceUpdateRequest.setDistanceDetails(distance);
+		onWorldUpdateRequest(worldDistanceUpdateRequest);
 	}
 
 	public void index(Node node) {
 		nodeList.put(node.getName(), node);
+	}
+
+	public Node findNode(String name) {
+		return nodeList.get(name);
 	}
 
 	@Override
@@ -148,10 +172,14 @@ public class WorldComponent extends DefaultComponent {
 		} else {
 			return findMasterNode(parentNode);
 		}
-
 	}
 
 	private void applyTransformation(Node node, NodeTransformation transformation) {
+		if (node.getTransformation() == null) {
+			NodeTransformation defaultTransformation = new NodeTransformation();
+			defaultTransformation.resetToDefaults();
+			node.setTransformation(defaultTransformation);
+		}
 		if (transformation.getPosition() != null) {
 			node.getTransformation().setPosition(transformation.getPosition());
 		}
@@ -164,7 +192,14 @@ public class WorldComponent extends DefaultComponent {
 	}
 
 	private void onWorldDistanceUpdateRequest(WorldDistanceUpdateRequest worldDistanceUpdateRequest) {
-		// TODO: Relative distance: Grid->Distance(front/back)
+		try {
+			Node distanceNode = findNode(worldDistanceUpdateRequest.getDistanceNodeName());
+			Node gridNode = findNode(worldDistanceUpdateRequest.getGridNodeName());
+			DistanceDetails distanceDetails = worldDistanceUpdateRequest.getDistanceDetails();
+			VectorUtils.updateGridDistance(gridNode, distanceNode, distanceDetails);
+		} catch (Exception e) {
+			log.catching(this.getAkibotClient(), e);
+		}
 	}
 
 	//

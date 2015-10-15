@@ -40,7 +40,7 @@ public class AkiBotLauncher {
 		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(), dnsAddress);
 
 		// Gyroscope:
-		AkibotClient gyroscope = new AkibotClient("akibot.gyroscope", new GyroscopeComponent(), dnsAddress);
+		AkibotClient gyroscope = new AkibotClient(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE, new GyroscopeComponent(), dnsAddress);
 
 		// SpeechSynthesis:
 		AkibotClient speechSynthesisClient = new AkibotClient("akibot.speech", new SpeechSynthesisComponent(), dnsAddress);
@@ -62,7 +62,7 @@ public class AkiBotLauncher {
 
 		AkibotClient audioComponent = new AkibotClient("akibot.audio", new AudioComponent(), dnsAddress);
 
-		AkibotClient echoLocatorFront = new AkibotClient("akibot.echolocator.front", new EchoLocatorComponent(), dnsAddress);
+		AkibotClient echoLocatorFront = new AkibotClient(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT, new EchoLocatorComponent(), dnsAddress);
 
 		AkibotClient echoLocatorBack = new AkibotClient("akibot.echolocator.back", new EchoLocatorComponent(), dnsAddress);
 
