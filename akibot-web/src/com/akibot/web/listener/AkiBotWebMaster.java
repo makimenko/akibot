@@ -27,8 +27,8 @@ public class AkiBotWebMaster {
 
 	static {
 		initialized = false;
-		String dnsHost = Constants.DNS_HOST;
-		int dnsPort = Constants.DNS_PORT;
+		String dnsHost = Constants.DNS_WEBTEST_HOST;
+		int dnsPort = Constants.DNS_WEBTEST_PORT;
 
 		try {
 			InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);

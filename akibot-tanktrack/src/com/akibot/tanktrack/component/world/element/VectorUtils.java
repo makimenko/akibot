@@ -34,6 +34,8 @@ public class VectorUtils {
 	public static void updateGridDistance(Node gridNode, Node distanceNode, DistanceDetails distanceDetails) throws Exception {
 		NodeTransformation relativeTransformation = VectorUtils.calculateRelativeTransformation(gridNode, distanceNode);
 
+		GridGeometry gridGeometry = (GridGeometry) gridNode.getGeometry();
+
 		double angle = relativeTransformation.getRotation().getZ();
 		angle += distanceDetails.getNorthAngle().getRadians();
 		Angle relativeAngle = new Angle(angle);
@@ -45,7 +47,6 @@ public class VectorUtils {
 		relativeDistanceDetail.setNorthAngle(relativeAngle);
 		relativeDistanceDetail.setPositionOffset(relativeTransformation.getPosition());
 
-		GridGeometry gridGeometry = (GridGeometry) gridNode.getGeometry();
 		gridGeometry.addDistance(relativeDistanceDetail);
 	}
 
@@ -59,7 +60,7 @@ public class VectorUtils {
 			cumulativeTransformation = new NodeTransformation();
 			cumulativeTransformation.resetToDefaults();
 		} else {
-			cumulativeTransformation = calculateRelativeTransformation(nodeA, nodeB.getParentNode());
+			cumulativeTransformation = calculateRelativeTransformation(nodeA, nodeB.findParentNode());
 			if (nodeB.getTransformation() != null) {
 				Point posVector = nodeB.getTransformation().getPosition();
 				if (cumulativeTransformation.getRotation().getZ() != 0) {

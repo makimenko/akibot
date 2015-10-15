@@ -63,8 +63,7 @@ function addNode(node) {
 		emptyObject = new THREE.Object3D();
 		addNodeFinalisation(emptyObject, node);
 	} else if (node.geometry.className == "BoxGeometry") {
-		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x,
-				node.geometry.dimension.y, node.geometry.dimension.z);
+		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
 		object3d = new THREE.Mesh(geometry, getMaterial(node.geometry.material));
 		addNodeFinalisation(object3d, node);
 	} else if (node.geometry.className == "ColladaGeometry") {
@@ -82,7 +81,21 @@ function addNode(node) {
 function addLocationAreaGrid(node) {
 	gridGroup = new THREE.Object3D();
 	gridGroup.name = node.name;
-	applyTransformation(gridGroup, node.transformation);
+
+	offset = node.geometry.gridConfiguration.offset;
+	console.log("offset = " + offset.x);
+
+	transformation = node.transformation;
+	
+	if (transformation == null) {
+		transformation = {
+				position: offset
+		}
+	} else {
+		transformation.position.x += offset.x;
+		transformation.position.y += offset.y;
+	}
+	applyTransformation(gridGroup, transformation);
 
 	grid = node.geometry.grid;
 
@@ -104,7 +117,7 @@ function addLocationAreaGrid(node) {
 	// transparent : true
 	});
 
-	cellSize = node.geometry.akiGridConfiguration.cellSize;
+	cellSize = node.geometry.gridConfiguration.cellSize;
 	var geometry = new THREE.BoxGeometry(cellSize - 0.1, cellSize - 0.1, 0.5);
 	cellObjectTemplate = new THREE.Mesh(geometry, matEmpty);
 
@@ -152,8 +165,7 @@ function applyTransformation(object3d, transformation) {
 	if (transformation != null) {
 		// Translation (move):
 		if (transformation.position != null) {
-			object3d.position.set(transformation.position.x,
-					transformation.position.y, transformation.position.z);
+			object3d.position.set(transformation.position.x, transformation.position.y, transformation.position.z);
 		}
 		// Rotation:
 		if (transformation.rotation != null) {
@@ -163,8 +175,7 @@ function applyTransformation(object3d, transformation) {
 		}
 		// Scale:
 		if (transformation.scale != null) {
-			object3d.scale.set(transformation.scale.x, transformation.scale.y,
-					transformation.scale.z);
+			object3d.scale.set(transformation.scale.x, transformation.scale.y, transformation.scale.z);
 		}
 	}
 }
@@ -252,14 +263,12 @@ function drawAxisHelper() {
 function drawArrowHelper() {
 	var directionV3 = new THREE.Vector3(1, 0, 0);
 	var originV3 = new THREE.Vector3(0, 0, 0);
-	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50,
-			0xff0000, 10, 5);
+	var arrowHelper = new THREE.ArrowHelper(directionV3, originV3, 50, 0xff0000, 10, 5);
 	this.scene.getObjectByName("robotMesh", true).add(arrowHelper);
 }
 
 function drawBoundingBoxHelper() {
-	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName(
-			"robotMesh", true), 0x999999);
+	bboxHelper = new THREE.BoundingBoxHelper(this.scene.getObjectByName("robotMesh", true), 0x999999);
 	this.scene.add(bboxHelper);
 }
 
@@ -297,12 +306,9 @@ function resetCameraPosition() {
 
 function initScene() {
 
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
-	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
-	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth
-			/ window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	cameraTop = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+	cameraFront = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
 	resetCameraPosition();
 
 	controls = new THREE.TrackballControls(camera);
@@ -460,37 +466,31 @@ function makeTextSprite(message, parameters) {
 	if (parameters === undefined)
 		parameters = {};
 
-	var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"]
-			: "Arial";
+	var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"] : "Arial";
 
-	var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"]
-			: 18;
-	var fontColor = parameters.hasOwnProperty("fontColor") ? parameters["fontColor"]
-			: {
-				r : 0,
-				g : 0,
-				b : 0,
-				a : 1.0
-			};
+	var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"] : 18;
+	var fontColor = parameters.hasOwnProperty("fontColor") ? parameters["fontColor"] : {
+		r : 0,
+		g : 0,
+		b : 0,
+		a : 1.0
+	};
 
-	var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"]
-			: 4;
+	var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"] : 4;
 
-	var borderColor = parameters.hasOwnProperty("borderColor") ? parameters["borderColor"]
-			: {
-				r : 0,
-				g : 0,
-				b : 0,
-				a : 1.0
-			};
+	var borderColor = parameters.hasOwnProperty("borderColor") ? parameters["borderColor"] : {
+		r : 0,
+		g : 0,
+		b : 0,
+		a : 1.0
+	};
 
-	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ? parameters["backgroundColor"]
-			: {
-				r : 255,
-				g : 255,
-				b : 255,
-				a : 1.0
-			};
+	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ? parameters["backgroundColor"] : {
+		r : 255,
+		g : 255,
+		b : 255,
+		a : 1.0
+	};
 
 	// var spriteAlignment = THREE.SpriteAlignment.topLeft;
 
@@ -503,20 +503,16 @@ function makeTextSprite(message, parameters) {
 	var textWidth = metrics.width;
 
 	// background color
-	context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g
-			+ "," + backgroundColor.b + "," + backgroundColor.a + ")";
+	context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
 	// border color
-	context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
-			+ borderColor.b + "," + borderColor.a + ")";
+	context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
 
 	context.lineWidth = borderThickness;
-	roundRect(context, borderThickness / 2, borderThickness / 2, textWidth
-			+ borderThickness, fontsize * 1.4 + borderThickness, 6);
+	roundRect(context, borderThickness / 2, borderThickness / 2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
 	// 1.4 is extra height factor for text below baseline: g,j,p,q.
 
 	// text color
-	context.fillStyle = "rgba(" + fontColor.r + "," + fontColor.g + ","
-			+ fontColor.b + "," + fontColor.a + ")";
+	context.fillStyle = "rgba(" + fontColor.r + "," + fontColor.g + "," + fontColor.b + "," + fontColor.a + ")";
 
 	context.fillText(message, borderThickness, fontsize + borderThickness);
 

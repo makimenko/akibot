@@ -40,8 +40,15 @@ public class Point implements Serializable {
 	}
 
 	public void add(Point addPoint) {
-		setX(getX() + addPoint.getX());
-		setY(getY() + addPoint.getY());
-		setZ(getZ() + addPoint.getZ());
+		if (addPoint != null) {
+			setX(getX() + addPoint.getX());
+			setY(getY() + addPoint.getY());
+			setZ(getZ() + addPoint.getZ());
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Point(" + x + ", " + y + ", " + z + ")";
 	}
 }

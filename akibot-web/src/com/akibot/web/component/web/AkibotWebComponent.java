@@ -27,7 +27,7 @@ public class AkibotWebComponent extends DefaultComponent {
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
-		//log.debug("Response is: " + message);
+		log.warn("Response is: " + message);
 		JSONObject objectMessage = new JSONObject(message);
 		// JSONObject objectMessage = new JSONObject();
 		// objectMessage.put("value", message.toString());

@@ -15,7 +15,7 @@ import com.akibot.tanktrack.component.world.element.GridGeometry;
 import com.akibot.tanktrack.component.world.element.Node;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
-import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
+import com.akibot.tanktrack.component.world.element.VectorUtils;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
@@ -36,16 +36,6 @@ public class WorldComponent extends DefaultComponent {
 	private void initWorld() {
 		// ======================== World Node:
 		worldNode = new Node("worldNode");
-		// AkiBoxGeometry worldGeometry = new AkiBoxGeometry();
-		// worldGeometry.setDimension(new AkiPoint(500, 500, 2));
-
-		// AkiMaterial worldMaterial = new AkiMaterial();
-		// worldMaterial.setColor(0x00ffff);
-		// worldMaterial.setOpacity(0.5f);
-		// worldMaterial.setTransparent(true);
-		// worldGeometry.setMaterial(worldMaterial);
-		// worldNode.setGeometry(worldGeometry);
-
 		index(worldNode);
 
 		// ======================== Grid Node:
@@ -56,20 +46,7 @@ public class WorldComponent extends DefaultComponent {
 		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
 		Node gridNode = new Node("gridNode");
 		gridNode.setGeometry(gridGeometry);
-
-		Angle errorAngle = new Angle();
-		errorAngle.setDegrees(15);
-
-		try {
-			gridGeometry.addDistance(new DistanceDetails(new Point(positionOffset, positionOffset, 0), new Angle(0), errorAngle, 100, true));
-			gridGeometry.addDistance(new DistanceDetails(new Point(positionOffset, positionOffset, 0), new Angle(Math.toRadians(30)), errorAngle, 100, true));
-			gridGeometry.addDistance(new DistanceDetails(new Point(positionOffset, positionOffset, 0), new Angle(Math.toRadians(180)), errorAngle, 200, true));
-		} catch (OutsideWorldException e) {
-			log.catching(this.getAkibotClient(), e);
-		}
-
 		worldNode.attachChild(gridNode);
-
 		index(gridNode);
 
 		// ======================== Robot Node:
@@ -79,7 +56,8 @@ public class WorldComponent extends DefaultComponent {
 		robotNode.setGeometry(robotGeometry);
 
 		NodeTransformation robotTransformation = new NodeTransformation();
-		robotTransformation.setPosition(new Point(0, 0, 1.5f));
+		robotTransformation.setPosition(new Point(10, 0, 1.5f));
+		robotTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(45)));
 		robotNode.setTransformation(robotTransformation);
 
 		gridNode.attachChild(robotNode);
@@ -90,14 +68,42 @@ public class WorldComponent extends DefaultComponent {
 		gyroscopeNode.setStickToParent(true);
 		index(gyroscopeNode);
 
-		// ======================== Distance
+		// ======================== frontDistanceNode
 		Node frontDistanceNode = new Node("frontDistanceNode");
-
 		NodeTransformation frontDistanceTransformation = new NodeTransformation();
-		frontDistanceTransformation.setPosition(new Point(0, -8f, 5f));
+		frontDistanceTransformation.setPosition(new Point(0, 8f, 5f));
 		frontDistanceNode.setTransformation(frontDistanceTransformation);
 		frontDistanceNode.setStickToParent(true);
+		robotNode.attachChild(frontDistanceNode);
 		index(frontDistanceNode);
+
+		// ======================== backDistanceNode
+		Node backDistanceNode = new Node("backDistanceNode");
+		NodeTransformation backDistanceTransformation = new NodeTransformation();
+		backDistanceTransformation.setPosition(new Point(0, -8f, 5f));
+		backDistanceTransformation.setRotation(new Point(0, 0, VectorUtils.gradToRad(180)));
+		backDistanceNode.setTransformation(backDistanceTransformation);
+		backDistanceNode.setStickToParent(true);
+		robotNode.attachChild(backDistanceNode);
+		index(backDistanceNode);
+
+		// ========================
+		// TODO: Remove simulation
+		Angle errorAngle = new Angle();
+		errorAngle.setDegrees(15);
+		try {
+			DistanceDetails distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), errorAngle, 100, true);
+			VectorUtils.updateGridDistance(gridNode, frontDistanceNode, distance);
+		} catch (Exception e) {
+			log.catching(this.getAkibotClient(), e);
+		}
+
+		try {
+			DistanceDetails distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), errorAngle, 50, true);
+			VectorUtils.updateGridDistance(gridNode, backDistanceNode, distance);
+		} catch (Exception e) {
+			log.catching(this.getAkibotClient(), e);
+		}
 
 	}
 
@@ -136,7 +142,7 @@ public class WorldComponent extends DefaultComponent {
 	}
 
 	private Node findMasterNode(Node node) {
-		Node parentNode = node.getParentNode();
+		Node parentNode = node.findParentNode();
 		if (node.isStickToParent() == false || parentNode == null) {
 			return node;
 		} else {

@@ -22,11 +22,11 @@ public class Node implements Serializable {
 		this.name = name;
 	}
 
-	public Node getParentNode() {
+	public Node findParentNode() {
 		return parentNode;
 	}
 
-	public void setParentNode(Node parentNode) {
+	public void updateParentNode(Node parentNode) {
 		this.parentNode = parentNode;
 	}
 
@@ -67,7 +67,7 @@ public class Node implements Serializable {
 			childs = new ArrayList<Node>();
 		}
 		childs.add(akiNode);
-		akiNode.setParentNode(this);
+		akiNode.updateParentNode(this);
 
 	}
 

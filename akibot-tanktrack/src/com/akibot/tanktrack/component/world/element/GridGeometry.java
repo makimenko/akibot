@@ -4,25 +4,25 @@ import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
 
 public class GridGeometry extends NamedClass implements Geometry {
 	private static final long serialVersionUID = 1L;
-	private GridConfiguration akiGridConfiguration;
+	private GridConfiguration gridConfiguration;
 	private int[][] grid;
 	private long changeSequence = 0;
 
 	public static final int UNKNOWN_VALUE = -1;
 	public static final int EMPTY_VALUE = 0;
 
-	public GridGeometry(GridConfiguration akiGridConfiguration) {
-		this.akiGridConfiguration = akiGridConfiguration;
+	public GridGeometry(GridConfiguration gridConfiguration) {
+		this.gridConfiguration = gridConfiguration;
 		init();
 	}
 
 	private void init() {
-		this.grid = new int[akiGridConfiguration.getCellCountX()][akiGridConfiguration.getCellCountY()];
+		this.grid = new int[gridConfiguration.getCellCountX()][gridConfiguration.getCellCountY()];
 		ArrayUtils.updateValue(grid, UNKNOWN_VALUE);
 	}
 
-	public GridConfiguration getAkiGridConfiguration() {
-		return akiGridConfiguration;
+	public GridConfiguration getGridConfiguration() {
+		return gridConfiguration;
 	}
 
 	public int[][] getGrid() {
@@ -31,23 +31,23 @@ public class GridGeometry extends NamedClass implements Geometry {
 
 	public Point getPointWithOffset(Point point) throws OutsideWorldException {
 		Point offsetPoint = new Point(0, 0, 0);
-		offsetPoint.setX(point.getX() - akiGridConfiguration.getOffset().getX());
-		offsetPoint.setY(point.getY() - akiGridConfiguration.getOffset().getY());
-		offsetPoint.setZ(point.getZ() - akiGridConfiguration.getOffset().getZ());
+		offsetPoint.setX(point.getX() - gridConfiguration.getOffset().getX());
+		offsetPoint.setY(point.getY() - gridConfiguration.getOffset().getY());
+		offsetPoint.setZ(point.getZ() - gridConfiguration.getOffset().getZ());
 
-		if (offsetPoint.getX() >= akiGridConfiguration.getCellCountX() * akiGridConfiguration.getCellSize() || offsetPoint.getX() < 0
-				|| offsetPoint.getY() >= akiGridConfiguration.getCellCountY() * akiGridConfiguration.getCellSize() || offsetPoint.getY() < 0) {
-			throw new OutsideWorldException();
+		if (offsetPoint.getX() >= gridConfiguration.getCellCountX() * gridConfiguration.getCellSize() || offsetPoint.getX() < 0
+				|| offsetPoint.getY() >= gridConfiguration.getCellCountY() * gridConfiguration.getCellSize() || offsetPoint.getY() < 0) {
+			throw new OutsideWorldException("point=" + point + ", offsetPoint=" + offsetPoint);
 		}
 		return offsetPoint;
 	}
 
 	public int getAddressX(Point point) throws OutsideWorldException {
-		return (int) Math.floor(getPointWithOffset(point).getX() / akiGridConfiguration.getCellSize());
+		return (int) Math.floor(getPointWithOffset(point).getX() / gridConfiguration.getCellSize());
 	}
 
 	public int getAddressY(Point point) throws OutsideWorldException {
-		return (int) Math.floor(getPointWithOffset(point).getY() / akiGridConfiguration.getCellSize());
+		return (int) Math.floor(getPointWithOffset(point).getY() / gridConfiguration.getCellSize());
 	}
 
 	public void addPoint(Point point) throws OutsideWorldException {
@@ -59,7 +59,7 @@ public class GridGeometry extends NamedClass implements Geometry {
 		if (grid[addressX][addressY] == UNKNOWN_VALUE) {
 			grid[addressX][addressY] = 1;
 			changeSequence++;
-		} else if (grid[addressX][addressY] < akiGridConfiguration.getMaxObstacleCount()) {
+		} else if (grid[addressX][addressY] < gridConfiguration.getMaxObstacleCount()) {
 			grid[addressX][addressY]++;
 			changeSequence++;
 		}
@@ -170,14 +170,15 @@ public class GridGeometry extends NamedClass implements Geometry {
 
 		iterateEndOfLine(line, lineLeft, endIsObstacle);
 		iterateEndOfLine(line, lineRight, endIsObstacle);
+
 	}
 
 	private void iterateEndOfLine(Line line, Line line2, boolean endIsObstacle) throws OutsideWorldException {
 		int[][] arrLeft = rasterize(new Line(line2.getTo(), line.getTo()), endIsObstacle);
 		if (arrLeft.length > 2) {
 			for (int i = 1; i < arrLeft.length - 1; i++) {
-				addLine(new Line(line.getFrom(), new Point(arrLeft[i][0] * akiGridConfiguration.getCellSize(), arrLeft[i][1]
-						* akiGridConfiguration.getCellSize(), 0)), endIsObstacle);
+				addLine(new Line(line.getFrom(), new Point(arrLeft[i][0] * gridConfiguration.getCellSize() + gridConfiguration.getOffset().getX(),
+						arrLeft[i][1] * gridConfiguration.getCellSize() + gridConfiguration.getOffset().getY(), 0)), endIsObstacle);
 			}
 		}
 	}

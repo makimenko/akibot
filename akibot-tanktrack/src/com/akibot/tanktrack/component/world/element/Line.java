@@ -38,4 +38,9 @@ public class Line implements Serializable {
 		double z = getTo().getZ() - getFrom().getZ();
 		return new Point(x, y, z);
 	}
+
+	@Override
+	public String toString() {
+		return "Line(" + from + ", " + to + ")";
+	}
 }
