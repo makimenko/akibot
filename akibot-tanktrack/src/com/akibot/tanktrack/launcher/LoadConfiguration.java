@@ -27,7 +27,7 @@ public class LoadConfiguration {
 	private ConfigurationComponent config;
 
 	public static void main(String[] args) throws Exception {
-		LoadConfiguration loadConfiguration = new LoadConfiguration("localhost", 7122);
+		LoadConfiguration loadConfiguration = new LoadConfiguration();
 		System.out.println("Upload default configuration:");
 		loadConfiguration.saveAkibotGyroscope();
 		loadConfiguration.saveAkibotFrontDistance();
@@ -44,7 +44,7 @@ public class LoadConfiguration {
 		System.out.println("Done");
 	}
 
-	public LoadConfiguration(String dnsHost, int dnsPort) throws Exception {
+	public LoadConfiguration() throws Exception {
 		System.out.println("*** " + this.getClass().getName());
 		this.config = new ConfigurationComponent(".");
 	}
