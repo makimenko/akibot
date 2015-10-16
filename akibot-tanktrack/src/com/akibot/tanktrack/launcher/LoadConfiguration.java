@@ -1,18 +1,9 @@
 package com.akibot.tanktrack.launcher;
 
-import java.net.InetSocketAddress;
-
-import com.akibot.engine2.component.DefaultComponent;
-import com.akibot.engine2.component.DefaultDNSComponent;
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
-import com.akibot.engine2.component.configuration.GetConfigurationRequest;
-import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.component.configuration.PutConfigurationRequest;
-import com.akibot.engine2.component.configuration.PutConfigurationResponse;
-import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
-import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.distance.DistanceMeterConfiguration;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorConfiguration;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeConfiguration;
@@ -33,8 +24,7 @@ import com.akibot.tanktrack.component.world.message.WorldContent;
 
 public class LoadConfiguration {
 	static final AkiLogger log = AkiLogger.create(LoadConfiguration.class);
-	private AkibotClient client;
-	private int TIMEOUT = 1000;
+	private ConfigurationComponent config;
 
 	public static void main(String[] args) throws Exception {
 		LoadConfiguration loadConfiguration = new LoadConfiguration("localhost", 7122);
@@ -56,34 +46,18 @@ public class LoadConfiguration {
 
 	public LoadConfiguration(String dnsHost, int dnsPort) throws Exception {
 		System.out.println("*** " + this.getClass().getName());
-		InetSocketAddress dnsAddress = new InetSocketAddress(dnsHost, dnsPort);
-
-		AkibotClient dns = new AkibotClient("LoadConfiguration.dns", new DefaultDNSComponent(), dnsPort);
-
-		AkibotClient configClient = new AkibotClient("LoadConfiguration.config", new ConfigurationComponent("."), dnsAddress);
-		configClient.getMyClientDescription().getTopicList().add(new GetConfigurationRequest());
-		configClient.getMyClientDescription().getTopicList().add(new PutConfigurationRequest());
-
-		client = new AkibotClient("LoadConfiguration.client", new DefaultComponent(), dnsAddress);
-		client.getMyClientDescription().getTopicList().add(new GetConfigurationResponse());
-		client.getMyClientDescription().getTopicList().add(new PutConfigurationResponse());
-
-		dns.start();
-		configClient.start();
-		client.start();
-
-		Thread.sleep(100);
+		this.config = new ConfigurationComponent(".");
 	}
 
-	private void save(String name, ComponentConfiguration componentConfiguration) throws FailedToSendMessageException {
+	private void save(String name, ComponentConfiguration componentConfiguration) throws Exception {
 		System.out.println("  Save: " + name);
 		PutConfigurationRequest putConfigurationRequest = new PutConfigurationRequest();
 		putConfigurationRequest.setName(name);
 		putConfigurationRequest.setComponentConfiguration(componentConfiguration);
-		client.getOutgoingMessageManager().sendSyncRequest(putConfigurationRequest, TIMEOUT);
+		config.saveToFile(putConfigurationRequest);
 	}
 
-	private void saveAkibotGyroscope() throws FailedToSendMessageException {
+	private void saveAkibotGyroscope() throws Exception {
 		GyroscopeOffsetConfiguration gyroscopeOffsetConfiguration = new GyroscopeOffsetConfiguration();
 		// {"data":"{\"from\":\"akibot.gyroscope.calibration\",\"to\":\"akibot.web\",\"newOffsetX\":389,\"newOffsetY\":-173,\"newOffsetZ\":-1117.5}"}
 		gyroscopeOffsetConfiguration.setOffsetX(389);
@@ -98,7 +72,7 @@ public class LoadConfiguration {
 		save("akibot.gyroscope", gyroscopeConfiguration);
 	}
 
-	private void saveAkibotFrontDistance() throws FailedToSendMessageException {
+	private void saveAkibotFrontDistance() throws Exception {
 		DistanceMeterConfiguration distanceMeterConfiguration = new DistanceMeterConfiguration();
 		distanceMeterConfiguration.setTriggerPin(Constants.FRONT_DISTANCE_TRIGGER_PIN);
 		distanceMeterConfiguration.setEchoPin(Constants.FRONT_DISTANCE_ECHO_PIN);
@@ -106,7 +80,7 @@ public class LoadConfiguration {
 		save("akibot.front.distance", distanceMeterConfiguration);
 	}
 
-	private void saveAkibotFrontEcholocator() throws FailedToSendMessageException {
+	private void saveAkibotFrontEcholocator() throws Exception {
 		// EchoLocatorFront:
 		EchoLocatorConfiguration echoLocatorFrontConfig = new EchoLocatorConfiguration();
 		echoLocatorFrontConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_FRONT_DISTANCE_TRIGGER_PIN);
@@ -122,7 +96,7 @@ public class LoadConfiguration {
 		save("akibot.echolocator.front", echoLocatorFrontConfig);
 	}
 
-	private void saveAkibotBackEcholocator() throws FailedToSendMessageException {
+	private void saveAkibotBackEcholocator() throws Exception {
 		// EchoLocatorFront:
 		EchoLocatorConfiguration echoLocatorBackConfig = new EchoLocatorConfiguration();
 		echoLocatorBackConfig.setDistanceTriggerPin(Constants.ECHOLOCATOR_BACK_DISTANCE_TRIGGER_PIN);
@@ -138,7 +112,7 @@ public class LoadConfiguration {
 		save("akibot.echolocator.back", echoLocatorBackConfig);
 	}
 
-	private void saveAkibotSpeech() throws FailedToSendMessageException {
+	private void saveAkibotSpeech() throws Exception {
 		SpeechSynthesisConfiguration speechSynthesisConfiguration = new SpeechSynthesisConfiguration();
 		speechSynthesisConfiguration.setMaryttsHost(Constants.SPEECH_HOST);
 		speechSynthesisConfiguration.setMaryttsPort(Constants.SPEECH_PORT);
@@ -147,7 +121,7 @@ public class LoadConfiguration {
 		save("akibot.speech", speechSynthesisConfiguration);
 	}
 
-	private void saveAkibotOrientation() throws FailedToSendMessageException {
+	private void saveAkibotOrientation() throws Exception {
 		OrientationConfiguration orientationConfiguration = new OrientationConfiguration();
 		orientationConfiguration.setTankTrackName("akibot.tanktrack");
 		orientationConfiguration.setGyroscopeName("akibot.gyroscope");
@@ -158,7 +132,7 @@ public class LoadConfiguration {
 		save("akibot.orientation", orientationConfiguration);
 	}
 
-	private void saveAkibotServoFrontBase() throws FailedToSendMessageException {
+	private void saveAkibotServoFrontBase() throws Exception {
 		ServoConfiguration servoConfiguration = new ServoConfiguration();
 		servoConfiguration.setServoPin(Constants.FRONT_SERVO_BASE_PIN);
 		servoConfiguration.setInitialValue(0);
@@ -167,7 +141,7 @@ public class LoadConfiguration {
 		save("akibot.servo.front.base", servoConfiguration);
 	}
 
-	private void saveAkibotServoFrontHead() throws FailedToSendMessageException {
+	private void saveAkibotServoFrontHead() throws Exception {
 		ServoConfiguration servoConfiguration = new ServoConfiguration();
 		servoConfiguration.setServoPin(Constants.FRONT_SERVO_HEAD_PIN);
 		servoConfiguration.setInitialValue(0);
@@ -176,7 +150,7 @@ public class LoadConfiguration {
 		save("akibot.servo.front.head", servoConfiguration);
 	}
 
-	private void saveAkibotServoBackBase() throws FailedToSendMessageException {
+	private void saveAkibotServoBackBase() throws Exception {
 		ServoConfiguration servoConfiguration = new ServoConfiguration();
 		servoConfiguration.setServoPin(Constants.BACK_SERVO_BASE_PIN);
 		servoConfiguration.setInitialValue(0);
@@ -185,7 +159,7 @@ public class LoadConfiguration {
 		save("akibot.servo.back.base", servoConfiguration);
 	}
 
-	private void saveAkibotServoBackHead() throws FailedToSendMessageException {
+	private void saveAkibotServoBackHead() throws Exception {
 		ServoConfiguration servoConfiguration = new ServoConfiguration();
 		servoConfiguration.setServoPin(Constants.BACK_SERVO_HEAD_PIN);
 		servoConfiguration.setInitialValue(0);
@@ -194,7 +168,7 @@ public class LoadConfiguration {
 		save("akibot.servo.back.head", servoConfiguration);
 	}
 
-	private void saveAkibotTankTrack() throws FailedToSendMessageException {
+	private void saveAkibotTankTrack() throws Exception {
 		TankTrackConfiguration tankTrackConfiguration = new TankTrackConfiguration();
 
 		tankTrackConfiguration.setRightIApin(Constants.TANK_TRACK_RIGHT_IA);
@@ -208,7 +182,7 @@ public class LoadConfiguration {
 		save("akibot.tanktrack", tankTrackConfiguration);
 	}
 
-	private void saveAkibotWorld() throws FailedToSendMessageException {
+	private void saveAkibotWorld() throws Exception {
 		String name = "akibot.world";
 
 		Node worldNode = new Node(name);

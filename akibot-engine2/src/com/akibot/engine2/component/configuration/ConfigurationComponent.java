@@ -53,8 +53,12 @@ public class ConfigurationComponent extends DefaultComponent {
 	private void onPutConfigurationRequest(PutConfigurationRequest putConfigurationRequest) throws FailedToSendMessageException, IOException {
 		log.debug(this.getAkibotClient() + ": " + putConfigurationRequest);
 		PutConfigurationResponse putConfigurationResponse = new PutConfigurationResponse();
-		saveToFile(nameToFileName(putConfigurationRequest.getName()), putConfigurationRequest.getComponentConfiguration());
+		saveToFile(putConfigurationRequest);
 		broadcastResponse(putConfigurationResponse, putConfigurationRequest);
+	}
+	
+	public void saveToFile(PutConfigurationRequest putConfigurationRequest) throws IOException {
+		saveToFile(nameToFileName(putConfigurationRequest.getName()), putConfigurationRequest.getComponentConfiguration());
 	}
 
 	private void saveToFile(String fileName, ComponentConfiguration value) throws IOException {
