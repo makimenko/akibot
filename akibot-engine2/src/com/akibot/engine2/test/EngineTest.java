@@ -28,6 +28,13 @@ import com.akibot.engine2.component.test.TestRequest;
 import com.akibot.engine2.component.test.TestResponse;
 import com.akibot.engine2.component.test.TestResponse2;
 import com.akibot.engine2.component.test.TestSleepRequest;
+import com.akibot.engine2.component.workflow.WorflowRequest;
+import com.akibot.engine2.component.workflow.WorkflowDefinition;
+import com.akibot.engine2.component.workflow.WorkflowElement;
+import com.akibot.engine2.component.workflow.WorkflowForkElement;
+import com.akibot.engine2.component.workflow.WorkflowJoinElement;
+import com.akibot.engine2.component.workflow.WorkflowSleepElement;
+import com.akibot.engine2.component.workflow.WorkflowSyncRequestElement;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.NooneInterestedException;
 import com.akibot.engine2.network.AkibotClient;
@@ -413,4 +420,34 @@ public class EngineTest {
 				.isReady());
 	}
 
+	@Test
+	public void testSimpleWorkflow() throws Exception {
+		WorflowRequest worflowRequest = new WorflowRequest();
+		WorkflowDefinition workflowDefinition = new WorkflowDefinition();
+
+		WorkflowElement syncRequest = new WorkflowSyncRequestElement();
+		WorkflowElement forkElement = new WorkflowForkElement();
+		WorkflowElement sleepElement1 = new WorkflowSleepElement(100);
+		WorkflowElement sleepElement2 = new WorkflowSleepElement(200);
+		WorkflowElement joinElement = new WorkflowJoinElement();
+		WorkflowElement sleepElement3 = new WorkflowSleepElement(50);
+
+		// Transitions:
+		syncRequest.setNext(forkElement);
+
+		forkElement.setNext(sleepElement1);
+		forkElement.setNext(sleepElement1);
+
+		sleepElement1.setNext(joinElement);
+		sleepElement2.setNext(joinElement);
+
+		joinElement.setNext(sleepElement3);
+
+		// Finalizing
+		workflowDefinition.setStart(syncRequest);
+		worflowRequest.setWorflowDefinition(workflowDefinition);
+
+		workflowDefinition.executeWorkflow();
+
+	}
 }

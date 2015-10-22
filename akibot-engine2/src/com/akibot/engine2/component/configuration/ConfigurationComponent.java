@@ -56,7 +56,7 @@ public class ConfigurationComponent extends DefaultComponent {
 		saveToFile(putConfigurationRequest);
 		broadcastResponse(putConfigurationResponse, putConfigurationRequest);
 	}
-	
+
 	public void saveToFile(PutConfigurationRequest putConfigurationRequest) throws IOException {
 		saveToFile(nameToFileName(putConfigurationRequest.getName()), putConfigurationRequest.getComponentConfiguration());
 	}
