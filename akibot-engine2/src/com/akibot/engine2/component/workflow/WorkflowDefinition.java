@@ -5,14 +5,26 @@ import java.io.Serializable;
 public class WorkflowDefinition implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private WorkflowElement startWorkflowElement;
+	private long timeoutMilliseconds;
 
-	public void setStart(WorkflowElement startWorkflowElement) {
+	public WorkflowDefinition(long timeoutMilliseconds) {
+		this.timeoutMilliseconds = timeoutMilliseconds;
+	}
+
+	public WorkflowElement getStartWorkflowElement() {
+		return startWorkflowElement;
+	}
+
+	public void setStartWorkflowElement(WorkflowElement startWorkflowElement) {
 		this.startWorkflowElement = startWorkflowElement;
 	}
 
-	public void executeWorkflow() throws Exception {
-		startWorkflowElement.executeElement();
-		startWorkflowElement.executeNext();
+	public long getTimeoutMilliseconds() {
+		return timeoutMilliseconds;
+	}
+
+	public void setTimeoutMilliseconds(long timeoutMilliseconds) {
+		this.timeoutMilliseconds = timeoutMilliseconds;
 	}
 
 }

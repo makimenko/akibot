@@ -17,9 +17,9 @@ public class WorkflowSleepElement extends WorkflowDefaultElement {
 	}
 
 	@Override
-	public void executeElement() throws Exception {
-		System.out.println("WorkflowSleepElement.executeElement: " + getSleepMilliseconds());
-		Thread.sleep(this.getSleepMilliseconds());
+	public WorkflowWait executeElement(WorkflowComponent workflowComponent) throws Exception {
+		Thread.sleep(getSleepMilliseconds());
+		return null;
 	}
 
 }

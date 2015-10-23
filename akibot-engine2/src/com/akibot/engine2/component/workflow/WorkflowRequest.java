@@ -2,7 +2,7 @@ package com.akibot.engine2.component.workflow;
 
 import com.akibot.engine2.message.Request;
 
-public class WorflowRequest extends Request {
+public class WorkflowRequest extends Request {
 	private static final long serialVersionUID = 1L;
 	private WorkflowDefinition worflowDefinition;
 

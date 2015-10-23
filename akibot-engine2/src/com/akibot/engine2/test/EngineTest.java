@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,15 +29,15 @@ import com.akibot.engine2.component.test.TestRequest;
 import com.akibot.engine2.component.test.TestResponse;
 import com.akibot.engine2.component.test.TestResponse2;
 import com.akibot.engine2.component.test.TestSleepRequest;
-import com.akibot.engine2.component.workflow.WorflowRequest;
+import com.akibot.engine2.component.workflow.WorkflowComponent;
 import com.akibot.engine2.component.workflow.WorkflowDefinition;
 import com.akibot.engine2.component.workflow.WorkflowElement;
-import com.akibot.engine2.component.workflow.WorkflowForkElement;
-import com.akibot.engine2.component.workflow.WorkflowJoinElement;
-import com.akibot.engine2.component.workflow.WorkflowSleepElement;
+import com.akibot.engine2.component.workflow.WorkflowRequest;
+import com.akibot.engine2.component.workflow.WorkflowResponse;
 import com.akibot.engine2.component.workflow.WorkflowSyncRequestElement;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.NooneInterestedException;
+import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.engine2.network.ClientDescription;
 import com.akibot.engine2.network.ClientDescriptionUtils;
@@ -422,32 +423,47 @@ public class EngineTest {
 
 	@Test
 	public void testSimpleWorkflow() throws Exception {
-		WorflowRequest worflowRequest = new WorflowRequest();
-		WorkflowDefinition workflowDefinition = new WorkflowDefinition();
+		// Prepare Clients:
+		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
+		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), dnsAddress);
+		clientC.getComponent().addTopic(new WorkflowResponse());
 
-		WorkflowElement syncRequest = new WorkflowSyncRequestElement();
-		WorkflowElement forkElement = new WorkflowForkElement();
-		WorkflowElement sleepElement1 = new WorkflowSleepElement(100);
-		WorkflowElement sleepElement2 = new WorkflowSleepElement(200);
-		WorkflowElement joinElement = new WorkflowJoinElement();
-		WorkflowElement sleepElement3 = new WorkflowSleepElement(50);
+		AkibotClient clientD = new AkibotClient("akibot.clientD", new TestComponent(), dnsAddress);
+		clientD.getComponent().addTopic(new TestSleepRequest());
 
-		// Transitions:
-		syncRequest.setNext(forkElement);
+		workflowClient.start();
+		clientC.start();
+		clientD.start();
+		Thread.sleep(100);
 
-		forkElement.setNext(sleepElement1);
-		forkElement.setNext(sleepElement1);
+		// Define Workflow:
+		WorkflowRequest worflowRequest = new WorkflowRequest();
+		WorkflowDefinition workflowDefinition = new WorkflowDefinition(1000);
 
-		sleepElement1.setNext(joinElement);
-		sleepElement2.setNext(joinElement);
+		TestRequest testRequest = new TestRequest();
+		testRequest.setX(1);
+		testRequest.setTo("akibot.clientB");
 
-		joinElement.setNext(sleepElement3);
+		TestSleepRequest testSleepRequest = new TestSleepRequest();
+		testSleepRequest.setSleepMills(100);
+		testSleepRequest.setTo("akibot.clientD");
 
-		// Finalizing
-		workflowDefinition.setStart(syncRequest);
+		WorkflowElement syncRequest1 = new WorkflowSyncRequestElement(testRequest);
+		WorkflowElement syncRequest2 = new WorkflowSyncRequestElement(testSleepRequest);
+
+		syncRequest1.setNextWorkflowElement(syncRequest2);
+
+		workflowDefinition.setStartWorkflowElement(syncRequest1);
 		worflowRequest.setWorflowDefinition(workflowDefinition);
 
-		workflowDefinition.executeWorkflow();
+		// Execute and Validate Workflow
+		WorkflowResponse workflowResponse = (WorkflowResponse) clientC.getComponent().sendSyncRequest(worflowRequest, 1000);
+
+		for (Entry<String, Response> entry : workflowResponse.getResponseList().entrySet()) {
+			String correlationId = entry.getKey();
+			Response response = entry.getValue();
+			System.out.println("correlationId = " + correlationId + " / response = " + response);
+		}
 
 	}
 }
