@@ -425,6 +425,9 @@ public class EngineTest {
 	public void testSimpleWorkflow() throws Exception {
 		// Prepare Clients:
 		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
+		workflowClient.getComponent().addTopic(new TestResponse());
+		workflowClient.getComponent().addTopic(new TestResponse2());
+
 		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), dnsAddress);
 		clientC.getComponent().addTopic(new WorkflowResponse());
 
@@ -474,6 +477,9 @@ public class EngineTest {
 	public void testForkJoinWorkflow() throws Exception {
 		// Prepare Clients:
 		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
+		workflowClient.getComponent().addTopic(new TestResponse());
+		workflowClient.getComponent().addTopic(new TestResponse2());
+
 		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), dnsAddress);
 		clientC.getComponent().addTopic(new WorkflowResponse());
 
@@ -483,7 +489,6 @@ public class EngineTest {
 		workflowClient.start();
 		clientC.start();
 		clientD.start();
-		Thread.sleep(100);
 
 		// Define Workflow:
 		WorkflowRequest worflowRequest = new WorkflowRequest();
@@ -504,8 +509,6 @@ public class EngineTest {
 		WorkflowElement request2 = new WorkflowRequestElement(correlationD, testSleepRequestD);
 		WorkflowElement join = new WorkflowJoinElement();
 
-		// TODO: request1.setNextWorkflowElement(request2);
-
 		fork.setNextWorkflowElement(request1);
 		fork.setNextWorkflowElement(request2);
 		request1.setNextWorkflowElement(join);
@@ -515,6 +518,9 @@ public class EngineTest {
 		worflowRequest.setWorflowDefinition(workflowDefinition);
 
 		// Execute and Validate Workflow
+		Thread.sleep(200);
+		System.out.println("=======================================");
+
 		long startTime = System.currentTimeMillis();
 		WorkflowResponse workflowResponse = (WorkflowResponse) clientC.getComponent().sendSyncRequest(worflowRequest, 1000);
 

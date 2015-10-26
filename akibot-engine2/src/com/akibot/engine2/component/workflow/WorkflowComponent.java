@@ -19,7 +19,6 @@ public class WorkflowComponent extends DefaultComponent {
 	@Override
 	public void loadDefaults() {
 		addTopic(new WorkflowRequest());
-		addTopic(new Response());
 		super.getComponentStatus().setReady(true);
 	}
 
