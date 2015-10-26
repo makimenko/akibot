@@ -75,11 +75,25 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private void executeNext(WorkflowElement workflowElement) throws Exception {
-		WorkflowElement nextWorkflowElement = workflowElement.getNextWorkflowElement();
-		if (nextWorkflowElement == null) {
-			endWorkflow();
+		if (workflowElement instanceof WorkflowForkElement) {
+			WorkflowForkElement fork = (WorkflowForkElement) workflowElement;
+			for (WorkflowElement nextWorkflowElement : fork.getForkList()) {
+				execute(nextWorkflowElement);
+			}
 		} else {
-			execute(nextWorkflowElement);
+			WorkflowElement nextWorkflowElement = workflowElement.getNextWorkflowElement();
+			if (nextWorkflowElement instanceof WorkflowJoinElement) {
+				WorkflowJoinElement join = (WorkflowJoinElement) nextWorkflowElement;
+				if (join.elementsLeft() <= 0) {
+					execute(nextWorkflowElement);
+				}
+			} else {
+				if (nextWorkflowElement == null) {
+					endWorkflow();
+				} else {
+					execute(nextWorkflowElement);
+				}
+			}
 		}
 	}
 
@@ -113,7 +127,7 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private WorkflowElement whoIsWaitingThisResponse(Response response) {
-		String responseCorrelationId = WorkflowWaitResponse.responseToCorrelationId(response);
+		String responseCorrelationId = WorkflowWaitResponse.messageCorrelationId(response);
 		log.trace(this.getAkibotClient() + ": whoIsWaitingThisResponse = " + responseCorrelationId);
 		WorkflowElement workflowElement = worfklowWaitList.get(responseCorrelationId);
 		if (workflowElement != null) {

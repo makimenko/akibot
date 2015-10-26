@@ -2,6 +2,7 @@ package com.akibot.engine2.component.workflow;
 
 import java.io.Serializable;
 
+import com.akibot.engine2.message.Message;
 import com.akibot.engine2.message.Request;
 import com.akibot.engine2.message.Response;
 
@@ -15,18 +16,15 @@ public class WorkflowWaitResponse implements WorkflowWait, Serializable {
 
 	@Override
 	public String getCorrelationId() {
-		return requestToCorrelationId(this.request);
+		return messageCorrelationId(this.request);
 	}
 
 	public boolean equalsCorrelationId(Response response) {
-		return getCorrelationId().equals(responseToCorrelationId(response));
+		return getCorrelationId().equals(messageCorrelationId(response));
 	}
 
-	public static String requestToCorrelationId(Request request) {
-		return request.getTo(); // TODO: Improve uniqueness
+	public static String messageCorrelationId(Message message) {
+		return message.getSyncId();
 	}
 
-	public static String responseToCorrelationId(Response response) {
-		return response.getFrom(); // TODO: Improve uniqueness
-	}
 }
