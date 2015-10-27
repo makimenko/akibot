@@ -12,6 +12,7 @@ import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationResponse;
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
+import com.akibot.tanktrack.component.scout.ScoutDistanceAroundResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisResponse;
 import com.akibot.tanktrack.component.tanktrack.MotionResponse;
 import com.akibot.tanktrack.component.world.message.WorldResponse;
@@ -26,14 +27,15 @@ public class AkibotWebComponent extends DefaultComponent {
 	}
 
 	@Override
-	public void onMessageReceived(Message message) throws Exception {
-		log.warn("Response is: " + message);
-		JSONObject objectMessage = new JSONObject(message);
-		// JSONObject objectMessage = new JSONObject();
-		// objectMessage.put("value", message.toString());
-
-		// If at least one client exists, then inform him:
-		AkiBotWebMaster.sendToAllWebSocketSessions(objectMessage);
+	public void onMessageReceived(Message message) {
+		log.debug("onMessageReceived:  " + message);
+		try {
+			JSONObject objectMessage = new JSONObject(message);
+			// If at least one client exists, then inform him:
+			AkiBotWebMaster.sendToAllWebSocketSessions(objectMessage);
+		} catch (StackOverflowError e) {
+			log.catching(e);
+		}
 	}
 
 	@Override
@@ -48,6 +50,8 @@ public class AkibotWebComponent extends DefaultComponent {
 		addTopic(new SpeechSynthesisResponse());
 		addTopic(new GyroscopeCalibrationResponse());
 		addTopic(new WorldResponse());
+		addTopic(new ScoutDistanceAroundResponse());
+		
 
 		getComponentStatus().setReady(true);
 	}

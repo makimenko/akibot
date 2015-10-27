@@ -10,13 +10,19 @@ import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceDetails;
+import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.world.element.Angle;
 import com.akibot.tanktrack.component.world.element.Point;
+import com.akibot.tanktrack.component.world.element.VectorUtils;
 
 public class EchoLocatorComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(EchoLocatorComponent.class);
 	private AkibotJniLibrary lib;
 	private EchoLocatorConfiguration componentConfiguration;
+	private double gradTotal = 180;
+	private int positionCount = 21;
+	private int startPosition = 4;
+	private RoundRobinUtils robinUtils = new RoundRobinUtils(360);
 
 	@Override
 	public void loadDefaults() {
@@ -88,9 +94,11 @@ public class EchoLocatorComponent extends DefaultComponent {
 	}
 
 	private Angle getAngleFromServoBasePosition(int servoBasePosition) {
-		// TODO: Implement
-
-		return new Angle();
+		double stepGrad = gradTotal / (positionCount - 1); // 9grad
+		double offsetSteps = servoBasePosition - startPosition;
+		double resultGrad = offsetSteps * stepGrad;
+		resultGrad = robinUtils.add(resultGrad, -90);
+		return new Angle(VectorUtils.gradToRad(resultGrad));
 	}
 
 	@Override

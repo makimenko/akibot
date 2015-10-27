@@ -32,6 +32,7 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private void onWorflowRequest(WorkflowRequest workflowRequest) throws Exception {
+		log.debug(this.getAkibotClient() + ": onWorflowRequest: " + workflowRequest);
 		if (isWorkflowRunning()) {
 			log.error(this.getAkibotClient() + ": Workflow is running!");
 		} else {
@@ -46,6 +47,7 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private void startWorkflow() throws Exception {
+		log.debug(this.getAkibotClient() + ": startWorkflow");
 		clear();
 		currentWorkflowStart = System.currentTimeMillis();
 		WorkflowDefinition workflowDefinition = currentWorkflowRequest.getWorflowDefinition();
@@ -63,6 +65,7 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private void execute(WorkflowElement workflowElement) throws Exception {
+		log.debug(this.getAkibotClient() + ": execute: " + workflowElement);
 		WorkflowWait workflowWait = workflowElement.executeElement(this);
 		if (workflowWait == null) {
 			executeNext(workflowElement);
@@ -74,6 +77,7 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private void executeNext(WorkflowElement workflowElement) throws Exception {
+		log.debug(this.getAkibotClient() + ": executeNext: " + workflowElement);
 		if (workflowElement instanceof WorkflowForkElement) {
 			WorkflowForkElement fork = (WorkflowForkElement) workflowElement;
 			for (WorkflowElement nextWorkflowElement : fork.getForkList()) {
@@ -111,6 +115,7 @@ public class WorkflowComponent extends DefaultComponent {
 	}
 
 	private void endWorkflow() throws FailedToSendMessageException {
+		log.debug(this.getAkibotClient() + ": endWorkflow");
 		broadcastResponse(getWorkflowResponse(), currentWorkflowRequest);
 		clear();
 		this.currentWorkflowRequest = null;

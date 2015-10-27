@@ -31,7 +31,7 @@ public class Angle implements Serializable {
 		this.radians = Math.toRadians(degrees);
 	}
 
-	public Angle getNegativeAngle() {
+	public Angle calculateNegativeAngle() {
 		return new Angle(-radians);
 	}
 

@@ -141,8 +141,8 @@ public class TankTrackTest {
 
 	@Test
 	public void testEchoLocator() throws FailedToSendMessageException, InterruptedException {
-		callEchoLocator("akibot.echolocator.front");
-		callEchoLocator("akibot.echolocator.back");
+		callEchoLocator(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
+		callEchoLocator(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
 	}
 
 	private void callEchoLocator(String to) throws FailedToSendMessageException {

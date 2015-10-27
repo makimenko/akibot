@@ -163,7 +163,7 @@ public class GridGeometry extends NamedClass implements Geometry {
 
 	public void addLineWithAngle(Line line, Angle errorAngle, boolean endIsObstacle) throws OutsideWorldException {
 		Line lineLeft = VectorUtils.rotateLine(line, errorAngle);
-		Line lineRight = VectorUtils.rotateLine(line, errorAngle.getNegativeAngle());
+		Line lineRight = VectorUtils.rotateLine(line, errorAngle.calculateNegativeAngle());
 
 		addLine(line, endIsObstacle);
 		addLine(lineLeft, endIsObstacle);

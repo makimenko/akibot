@@ -7,14 +7,19 @@ import com.akibot.engine2.component.configuration.ConfigurationComponent;
 import com.akibot.engine2.component.status.StatusWatchdogComponent;
 import com.akibot.engine2.component.test.TestComponent;
 import com.akibot.engine2.component.test.TestRequest;
+import com.akibot.engine2.component.workflow.WorkflowComponent;
+import com.akibot.engine2.component.workflow.WorkflowResponse;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.audio.AudioComponent;
 import com.akibot.tanktrack.component.distance.DistanceMeterComponent;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorComponent;
+import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeComponent;
+import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationComponent;
 import com.akibot.tanktrack.component.orientation.OrientationComponent;
+import com.akibot.tanktrack.component.scout.ScoutComponent;
 import com.akibot.tanktrack.component.servo.ServoComponent;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisComponent;
 import com.akibot.tanktrack.component.tanktrack.TankTrackComponent;
@@ -72,7 +77,14 @@ public class AkiBotLauncher {
 
 		AkibotClient worldClient = new AkibotClient("akibot.world", new WorldComponent(), dnsAddress);
 
-		AkibotClient statusWatchdogClient = new AkibotClient("akibot.status.watchdog", new StatusWatchdogComponent(1 * 1000, 5 * 1000), dnsAddress);
+		//AkibotClient statusWatchdogClient = new AkibotClient("akibot.status.watchdog", new StatusWatchdogComponent(1 * 1000, 5 * 1000), dnsAddress);
+		
+		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
+		workflowClient.getComponent().addTopic(new EchoLocatorResponse());
+		workflowClient.getComponent().addTopic(new GyroscopeResponse());
+		
+		AkibotClient scoutClient = new AkibotClient("akibot.scout", new ScoutComponent(), dnsAddress);
+
 
 		// Start all
 		configClient.start();
@@ -93,9 +105,11 @@ public class AkiBotLauncher {
 		audioComponent.start();
 		orientation.start();
 		gyroscopeCalibration.start();
+		scoutClient.start();
+		workflowClient.start();
 		worldClient.start();
 
-		statusWatchdogClient.start();
+		//TODO: temporary disabled: statusWatchdogClient.start();
 
 		System.out.println("AkiBotLauncher: Started");
 		// LOOP forever:

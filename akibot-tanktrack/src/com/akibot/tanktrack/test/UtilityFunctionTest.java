@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.akibot.tanktrack.component.distance.DistanceDetails;
+import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.world.element.Angle;
 import com.akibot.tanktrack.component.world.element.ArrayUtils;
@@ -288,7 +289,7 @@ public class UtilityFunctionTest {
 		assertEquals(true, result.getY() < 0);
 
 		// same, 90 degrees to the right (but via negative angle)
-		result = VectorUtils.rotateEndOfLine(line, angleLeft90.getNegativeAngle());
+		result = VectorUtils.rotateEndOfLine(line, angleLeft90.calculateNegativeAngle());
 		assertEquals(ix1, result.getX(), ANGLE_PRECISSION);
 		assertEquals(true, result.getY() < 0);
 
@@ -487,5 +488,6 @@ public class UtilityFunctionTest {
 		} catch (OutsideWorldException e) {
 		}
 	}
+	
 
 }

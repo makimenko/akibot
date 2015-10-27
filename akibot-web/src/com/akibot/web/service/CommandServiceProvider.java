@@ -20,6 +20,7 @@ import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.gyroscope.calibration.GyroscopeCalibrationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
+import com.akibot.tanktrack.component.scout.ScoutDistanceAroundRequest;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
@@ -40,7 +41,7 @@ public class CommandServiceProvider {
 	}
 
 	private Response broadcastMessage(Message requestMessage) {
-		log.debug("broadcastRequestMessage: " + requestMessage);
+		log.debug("broadcastMessage: " + requestMessage);
 		try {
 			AkiBotWebMaster.getAkibotWebComponent().broadcastMessage(requestMessage);
 		} catch (FailedToSendMessageException e) {
@@ -90,6 +91,13 @@ public class CommandServiceProvider {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response distanceRequest() {
 		return broadcastMessage(new DistanceRequest());
+	}
+
+	@PUT
+	@Path("/scoutDistanceAroundRequest")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response scoutDistanceAroundRequest() {
+		return broadcastMessage(new ScoutDistanceAroundRequest());
 	}
 
 	@PUT

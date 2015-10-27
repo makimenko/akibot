@@ -35,7 +35,8 @@ public class DistanceMeterComponent extends DefaultComponent {
 		double mm = lib.getDistance(componentConfiguration.getTriggerPin(), componentConfiguration.getEchoPin(),
 				(int) componentConfiguration.getTimeoutMicroseconds());
 
-		DistanceResponse response = new DistanceResponse(new DistanceDetails(mm, mm <= getComponentConfiguration().getMaxDistanceMm()));
+		DistanceResponse response = new DistanceResponse();
+		response.setDistanceDetails(new DistanceDetails(mm, mm <= getComponentConfiguration().getMaxDistanceMm()));
 
 		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 		broadcastResponse(response, distanceRequest);

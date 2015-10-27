@@ -10,9 +10,6 @@ public class DistanceResponse extends Response {
 	public DistanceResponse() {
 	}
 
-	public DistanceResponse(DistanceDetails distanceDetails) {
-		this.distanceDetails = distanceDetails;
-	}
 
 	public DistanceDetails getDistanceDetails() {
 		return distanceDetails;

@@ -38,6 +38,11 @@ function init() {
 		doSimpleRequest("distanceRequest");
 	});
 
+	$('#scoutDistanceAroundButton').click(function() {
+		doSimpleRequest("scoutDistanceAroundRequest");
+	});
+	
+	
 	$('#gyroscopeValueButton').click(function() {
 		doSimpleRequest("gyroscopeValueRequest");
 	});

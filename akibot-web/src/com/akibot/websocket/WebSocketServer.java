@@ -48,7 +48,7 @@ public class WebSocketServer {
 
 	@OnMessage
 	public void handleMessage(String message, Session session) {
-		log.debug("onMessage: " + message);
+		log.debug("handleMessage: " + message);
 		// TODO: JSON to Bean? How?
 		// Not working: BeanA bean = (BeanA) JSONObject.toBean( jsonObject, BeanA.class );
 

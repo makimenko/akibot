@@ -36,7 +36,7 @@ function callService(subUrl, jsonDataStr) {
 }
 
 function callService2(subUrl) {
-	console.log('callService: ' + subUrl);
+	console.log('callService2: ' + subUrl);
 	$.ajax({
 		type : "PUT",
 		url : CONTROL_URL + "/" + subUrl,
