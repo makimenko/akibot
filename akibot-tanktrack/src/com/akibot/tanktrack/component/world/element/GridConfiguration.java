@@ -6,9 +6,9 @@ public class GridConfiguration implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int cellCountX;
 	private int cellCountY;
-	private double cellSize;
+	private double cellSizeMm;
 	private int maxObstacleCount;
-	private Point offset;
+	private Point offsetMm;
 
 	public GridConfiguration() {
 
@@ -18,12 +18,12 @@ public class GridConfiguration implements Serializable {
 		this(cellCountX, cellCountY, cellSize, maxObstacleCount, new Point(0, 0, 0));
 	}
 
-	public GridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount, Point offset) {
+	public GridConfiguration(int cellCountX, int cellCountY, float cellSizeMm, int maxObstacleCount, Point offsetMm) {
 		this.cellCountX = cellCountX;
 		this.cellCountY = cellCountY;
-		this.cellSize = cellSize;
+		this.cellSizeMm = cellSizeMm;
 		this.maxObstacleCount = maxObstacleCount;
-		this.offset = offset;
+		this.offsetMm = offsetMm;
 	}
 
 	public int getCellCountX() {
@@ -42,12 +42,12 @@ public class GridConfiguration implements Serializable {
 		this.cellCountY = cellCountY;
 	}
 
-	public double getCellSize() {
-		return cellSize;
+	public double getCellSizeMm() {
+		return cellSizeMm;
 	}
 
-	public void setCellSize(double cellSize) {
-		this.cellSize = cellSize;
+	public void setCellSizeMm(double cellSizeMm) {
+		this.cellSizeMm = cellSizeMm;
 	}
 
 	public int getMaxObstacleCount() {
@@ -58,12 +58,12 @@ public class GridConfiguration implements Serializable {
 		this.maxObstacleCount = maxObstacleCount;
 	}
 
-	public Point getOffset() {
-		return offset;
+	public Point getOffsetMm() {
+		return offsetMm;
 	}
 
-	public void setOffset(Point offset) {
-		this.offset = offset;
+	public void setOffsetMm(Point offsetMm) {
+		this.offsetMm = offsetMm;
 	}
 
 }

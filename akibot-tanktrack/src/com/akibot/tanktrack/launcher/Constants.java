@@ -20,6 +20,7 @@ public class Constants {
 	public static final int FRONT_DISTANCE_TRIGGER_PIN = 13;
 	public static final int FRONT_DISTANCE_ECHO_PIN = 12;
 	public static final int FRONT_DISTANCE_TIMEOUT = 50000;
+	public static final long DISTANCE_MAX_DISTANCE_MM = 3000;
 
 	public static final int BACK_DISTANCE_TRIGGER_PIN = 21;
 	public static final int BACK_DISTANCE_ECHO_PIN = 14;

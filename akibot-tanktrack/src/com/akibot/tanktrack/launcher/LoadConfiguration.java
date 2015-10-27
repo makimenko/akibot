@@ -77,6 +77,8 @@ public class LoadConfiguration {
 		distanceMeterConfiguration.setTriggerPin(Constants.FRONT_DISTANCE_TRIGGER_PIN);
 		distanceMeterConfiguration.setEchoPin(Constants.FRONT_DISTANCE_ECHO_PIN);
 		distanceMeterConfiguration.setTimeoutMicroseconds(Constants.FRONT_DISTANCE_TIMEOUT);
+		distanceMeterConfiguration.setMaxDistanceMm(Constants.DISTANCE_MAX_DISTANCE_MM);
+		distanceMeterConfiguration.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
 		save("akibot.front.distance", distanceMeterConfiguration);
 	}
 
@@ -93,6 +95,8 @@ public class LoadConfiguration {
 		echoLocatorFrontConfig.setServoLongTime(Constants.ECHOLOCATOR_FRONT_SERVO_LONG_TIME);
 		echoLocatorFrontConfig.setServoStepTime(Constants.ECHOLOCATOR_FRONT_SERVO_STEP_TIME);
 		echoLocatorFrontConfig.setDistanceCount(Constants.ECHOLOCATOR_FRONT_DISTANCE_COUNT);
+		echoLocatorFrontConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
+		echoLocatorFrontConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
 		save("akibot.echolocator.front", echoLocatorFrontConfig);
 	}
 
@@ -109,6 +113,8 @@ public class LoadConfiguration {
 		echoLocatorBackConfig.setServoLongTime(Constants.ECHOLOCATOR_BACK_SERVO_LONG_TIME);
 		echoLocatorBackConfig.setServoStepTime(Constants.ECHOLOCATOR_BACK_SERVO_STEP_TIME);
 		echoLocatorBackConfig.setDistanceCount(Constants.ECHOLOCATOR_BACK_DISTANCE_COUNT);
+		echoLocatorBackConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
+		echoLocatorBackConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
 		save("akibot.echolocator.back", echoLocatorBackConfig);
 	}
 
@@ -189,9 +195,9 @@ public class LoadConfiguration {
 
 		// ======================== Grid Node:
 		int cellCount = 50;
-		int cellSizeCm = 10;
-		int positionOffset = cellCount * cellSizeCm / 2;
-		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeCm, 2, new Point(-positionOffset, -positionOffset, 0));
+		int cellSizeMm = 100;
+		int positionOffset = cellCount * cellSizeMm / 2;
+		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeMm, 2, new Point(-positionOffset, -positionOffset, 0));
 		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
 		Node gridNode = new Node(Constants.NODE_NAME_GRID);
 		gridNode.setGeometry(gridGeometry);

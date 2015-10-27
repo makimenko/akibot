@@ -1,21 +1,13 @@
 package com.akibot.tanktrack.component.world.message;
 
-import com.akibot.tanktrack.component.distance.DistanceDetails;
+import com.akibot.tanktrack.component.echolocator.MultipleDistanceDetails;
 
-public class WorldDistanceUpdateRequest extends WorldUpdateRequest {
+public class WorldMultipleDistanceUpdateRequest extends WorldUpdateRequest {
 	private static final long serialVersionUID = 1L;
 
 	private String distanceNodeName;
 	private String gridNodeName;
-	private DistanceDetails distanceDetails;
-
-	public DistanceDetails getDistanceDetails() {
-		return distanceDetails;
-	}
-
-	public void setDistanceDetails(DistanceDetails distanceDetails) {
-		this.distanceDetails = distanceDetails;
-	}
+	private MultipleDistanceDetails multipleDistanceDetails;
 
 	public String getGridNodeName() {
 		return gridNodeName;
@@ -31,6 +23,14 @@ public class WorldDistanceUpdateRequest extends WorldUpdateRequest {
 
 	public void setDistanceNodeName(String distanceNodeName) {
 		this.distanceNodeName = distanceNodeName;
+	}
+
+	public MultipleDistanceDetails getMultipleDistanceDetails() {
+		return multipleDistanceDetails;
+	}
+
+	public void setMultipleDistanceDetails(MultipleDistanceDetails multipleDistanceDetails) {
+		this.multipleDistanceDetails = multipleDistanceDetails;
 	}
 
 }

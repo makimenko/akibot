@@ -28,6 +28,14 @@ import com.akibot.engine2.component.test.TestRequest;
 import com.akibot.engine2.component.test.TestResponse;
 import com.akibot.engine2.component.test.TestResponse2;
 import com.akibot.engine2.component.test.TestSleepRequest;
+import com.akibot.engine2.component.workflow.WorkflowComponent;
+import com.akibot.engine2.component.workflow.WorkflowDefinition;
+import com.akibot.engine2.component.workflow.WorkflowElement;
+import com.akibot.engine2.component.workflow.WorkflowForkElement;
+import com.akibot.engine2.component.workflow.WorkflowJoinElement;
+import com.akibot.engine2.component.workflow.WorkflowRequest;
+import com.akibot.engine2.component.workflow.WorkflowRequestElement;
+import com.akibot.engine2.component.workflow.WorkflowResponse;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.exception.NooneInterestedException;
 import com.akibot.engine2.network.AkibotClient;
@@ -413,4 +421,117 @@ public class EngineTest {
 				.isReady());
 	}
 
+	@Test
+	public void testSimpleWorkflow() throws Exception {
+		// Prepare Clients:
+		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
+		workflowClient.getComponent().addTopic(new TestResponse());
+		workflowClient.getComponent().addTopic(new TestResponse2());
+
+		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), dnsAddress);
+		clientC.getComponent().addTopic(new WorkflowResponse());
+
+		AkibotClient clientD = new AkibotClient("akibot.clientD", new TestComponent(), dnsAddress);
+		clientD.getComponent().addTopic(new TestSleepRequest());
+
+		workflowClient.start();
+		clientC.start();
+		clientD.start();
+		Thread.sleep(200);
+
+		// Define Workflow:
+		WorkflowRequest worflowRequest = new WorkflowRequest();
+		WorkflowDefinition workflowDefinition = new WorkflowDefinition(1000);
+
+		TestRequest testRequest = new TestRequest();
+		testRequest.setX(1);
+		testRequest.setTo("akibot.clientB");
+
+		TestSleepRequest testSleepRequest = new TestSleepRequest();
+		testSleepRequest.setSleepMills(100);
+		testSleepRequest.setTo("akibot.clientD");
+
+		String correlationA = "A";
+		String correlationB = "B";
+
+		WorkflowElement request1 = new WorkflowRequestElement(correlationA, testRequest);
+		WorkflowElement request2 = new WorkflowRequestElement(correlationB, testSleepRequest);
+
+		request1.setNextWorkflowElement(request2);
+
+		workflowDefinition.setStartWorkflowElement(request1);
+		worflowRequest.setWorflowDefinition(workflowDefinition);
+
+		// Execute and Validate Workflow
+		WorkflowResponse workflowResponse = (WorkflowResponse) clientC.getComponent().sendSyncRequest(worflowRequest, 1000);
+
+		TestResponse response1 = (TestResponse) workflowResponse.getResponseList().get(correlationA);
+		TestResponse response2 = (TestResponse) workflowResponse.getResponseList().get(correlationB);
+
+		assertEquals("Check response1", (Integer) 2, (Integer) response1.getResult());
+		assertEquals("Check response2", (Integer) 100, (Integer) response2.getResult());
+
+	}
+
+	@Test
+	public void testForkJoinWorkflow() throws Exception {
+		// Prepare Clients:
+		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
+		workflowClient.getComponent().addTopic(new TestResponse());
+		workflowClient.getComponent().addTopic(new TestResponse2());
+
+		AkibotClient clientC = new AkibotClient("akibot.clientC", new TestComponent(), dnsAddress);
+		clientC.getComponent().addTopic(new WorkflowResponse());
+
+		AkibotClient clientD = new AkibotClient("akibot.clientD", new TestComponent(), dnsAddress);
+		clientD.getComponent().addTopic(new TestSleepRequest());
+
+		workflowClient.start();
+		clientC.start();
+		clientD.start();
+
+		// Define Workflow:
+		WorkflowRequest worflowRequest = new WorkflowRequest();
+		WorkflowDefinition workflowDefinition = new WorkflowDefinition(1000);
+
+		TestSleepRequest testSleepRequestB = new TestSleepRequest();
+		testSleepRequestB.setSleepMills(500);
+		testSleepRequestB.setTo("akibot.clientB");
+
+		TestSleepRequest testSleepRequestD = new TestSleepRequest();
+		testSleepRequestD.setSleepMills(700);
+		testSleepRequestD.setTo("akibot.clientD");
+
+		String correlationB = "B";
+		String correlationD = "D";
+		WorkflowElement fork = new WorkflowForkElement();
+		WorkflowElement request1 = new WorkflowRequestElement(correlationB, testSleepRequestB);
+		WorkflowElement request2 = new WorkflowRequestElement(correlationD, testSleepRequestD);
+		WorkflowElement join = new WorkflowJoinElement();
+
+		fork.setNextWorkflowElement(request1);
+		fork.setNextWorkflowElement(request2);
+		request1.setNextWorkflowElement(join);
+		request2.setNextWorkflowElement(join);
+
+		workflowDefinition.setStartWorkflowElement(fork);
+		worflowRequest.setWorflowDefinition(workflowDefinition);
+
+		// Execute and Validate Workflow
+		Thread.sleep(200);
+		System.out.println("=======================================");
+
+		long startTime = System.currentTimeMillis();
+		WorkflowResponse workflowResponse = (WorkflowResponse) clientC.getComponent().sendSyncRequest(worflowRequest, 1000);
+
+		TestResponse response1 = (TestResponse) workflowResponse.getResponseList().get(correlationB);
+		TestResponse2 response2 = (TestResponse2) workflowResponse.getResponseList().get(correlationD);
+
+		assertEquals("Check response1", (Integer) 500, (Integer) response1.getResult());
+		assertEquals("Check response2", (Integer) 700, (Integer) response2.getResult());
+
+		long delta = System.currentTimeMillis() - startTime;
+		assertEquals("Check time", true, delta < 800);
+
+	}
 }

@@ -31,9 +31,12 @@ public class DistanceMeterComponent extends DefaultComponent {
 
 	private void onDistanceRequest(DistanceRequest distanceRequest) throws FailedToSendMessageException {
 		long startTime = System.currentTimeMillis();
-		DistanceResponse response = new DistanceResponse();
-		response.setMm(lib.getDistance(componentConfiguration.getTriggerPin(), componentConfiguration.getEchoPin(),
-				componentConfiguration.getTimeoutMicroseconds()));
+
+		double mm = lib.getDistance(componentConfiguration.getTriggerPin(), componentConfiguration.getEchoPin(),
+				(int) componentConfiguration.getTimeoutMicroseconds());
+
+		DistanceResponse response = new DistanceResponse(new DistanceDetails(mm, mm <= getComponentConfiguration().getMaxDistanceMm()));
+
 		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 		broadcastResponse(response, distanceRequest);
 	}

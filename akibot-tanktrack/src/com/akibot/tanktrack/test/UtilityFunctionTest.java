@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.akibot.tanktrack.component.distance.DistanceDetails;
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.world.element.Angle;
 import com.akibot.tanktrack.component.world.element.ArrayUtils;
-import com.akibot.tanktrack.component.world.element.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.GridConfiguration;
 import com.akibot.tanktrack.component.world.element.GridGeometry;
 import com.akibot.tanktrack.component.world.element.Line;
@@ -429,12 +429,7 @@ public class UtilityFunctionTest {
 		gridGeometry.addLine(new Line(new Point(0, 0, 0), new Point(0, 0, 0)), true);
 
 		// TODO: Test Distance!
-		DistanceDetails distanceDetails = new DistanceDetails();
-		distanceDetails.setDistanceCm(2);
-		distanceDetails.setEndObstacle(true);
-		distanceDetails.setErrorAngle(new Angle(VectorUtils.gradToRad(0)));
-		distanceDetails.setNorthAngle(new Angle(VectorUtils.gradToRad(0)));
-		distanceDetails.setPositionOffset(new Point(0, 0, 0));
+		DistanceDetails distanceDetails = new DistanceDetails(2, true);
 
 		VectorUtils.updateGridDistance(gridNode, distanceNode, distanceDetails);
 		// ArrayUtils.printArray(gridGeometry.getGrid());

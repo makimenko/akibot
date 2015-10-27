@@ -10,8 +10,8 @@ import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.distance.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.Angle;
-import com.akibot.tanktrack.component.world.element.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.Node;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
@@ -21,6 +21,7 @@ import com.akibot.tanktrack.component.world.message.WorldContent;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
+import com.akibot.tanktrack.component.world.message.WorldMultipleDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.component.world.message.WorldRequest;
 import com.akibot.tanktrack.component.world.message.WorldUpdateRequest;
@@ -90,13 +91,13 @@ public class WorldComponent extends DefaultComponent {
 
 		// front:
 		worldDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
-		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 100, true);
+		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 1000, true);
 		worldDistanceUpdateRequest.setDistanceDetails(distance);
 		onWorldUpdateRequest(worldDistanceUpdateRequest);
 
 		// back:
 		worldDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
-		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 50, true);
+		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 500, true);
 		worldDistanceUpdateRequest.setDistanceDetails(distance);
 		onWorldUpdateRequest(worldDistanceUpdateRequest);
 	}
@@ -140,6 +141,20 @@ public class WorldComponent extends DefaultComponent {
 			onWorldNodeTransformationRequest((WorldNodeTransformationRequest) worldUpdateRequest);
 		} else if (worldUpdateRequest instanceof WorldDistanceUpdateRequest) {
 			onWorldDistanceUpdateRequest((WorldDistanceUpdateRequest) worldUpdateRequest);
+		} else if (worldUpdateRequest instanceof WorldMultipleDistanceUpdateRequest) {
+			onWorldMultipleDistanceUpdateRequest((WorldMultipleDistanceUpdateRequest) worldUpdateRequest);
+		}
+	}
+
+	private void onWorldMultipleDistanceUpdateRequest(WorldMultipleDistanceUpdateRequest worldMultipleDistanceUpdateRequest) {
+		try {
+			Node distanceNode = findNode(worldMultipleDistanceUpdateRequest.getDistanceNodeName());
+			Node gridNode = findNode(worldMultipleDistanceUpdateRequest.getGridNodeName());
+			for (DistanceDetails distanceDetails : worldMultipleDistanceUpdateRequest.getMultipleDistanceDetails().getDistanceDetailsList()) {
+				VectorUtils.updateGridDistance(gridNode, distanceNode, distanceDetails);
+			}
+		} catch (Exception e) {
+			log.catching(this.getAkibotClient(), e);
 		}
 	}
 

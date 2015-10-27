@@ -1,12 +1,15 @@
 package com.akibot.tanktrack.component.distance;
 
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.tanktrack.component.world.element.Angle;
 
 public class DistanceMeterConfiguration extends ComponentConfiguration {
 	private static final long serialVersionUID = 1L;
 	private int triggerPin;
 	private int echoPin;
-	private int timeoutMicroseconds;
+	private long timeoutMicroseconds;
+	private long maxDistanceMm;
+	private Angle errorAngle;
 
 	public int getTriggerPin() {
 		return triggerPin;
@@ -24,12 +27,28 @@ public class DistanceMeterConfiguration extends ComponentConfiguration {
 		this.echoPin = echoPin;
 	}
 
-	public int getTimeoutMicroseconds() {
+	public long getTimeoutMicroseconds() {
 		return timeoutMicroseconds;
 	}
 
-	public void setTimeoutMicroseconds(int timeoutMicroseconds) {
+	public void setTimeoutMicroseconds(long timeoutMicroseconds) {
 		this.timeoutMicroseconds = timeoutMicroseconds;
+	}
+
+	public long getMaxDistanceMm() {
+		return maxDistanceMm;
+	}
+
+	public void setMaxDistanceMm(long maxDistanceMm) {
+		this.maxDistanceMm = maxDistanceMm;
+	}
+
+	public Angle getErrorAngle() {
+		return errorAngle;
+	}
+
+	public void setErrorAngle(Angle errorAngle) {
+		this.errorAngle = errorAngle;
 	}
 
 }

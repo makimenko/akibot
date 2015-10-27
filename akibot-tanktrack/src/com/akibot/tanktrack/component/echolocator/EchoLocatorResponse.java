@@ -5,14 +5,14 @@ import com.akibot.engine2.message.Response;
 public class EchoLocatorResponse extends Response {
 	private static final long serialVersionUID = 1L;
 
-	private float[] echoLocatorResult;
+	private MultipleDistanceDetails multipleDistanceDetails;
 
-	public float[] getEchoLocatorResult() {
-		return echoLocatorResult;
+	public MultipleDistanceDetails getMultipleDistanceDetails() {
+		return multipleDistanceDetails;
 	}
 
-	public void setEchoLocatorResult(float[] echoLocatorResult) {
-		this.echoLocatorResult = echoLocatorResult;
+	public void setMultipleDistanceDetails(MultipleDistanceDetails multipleDistanceDetails) {
+		this.multipleDistanceDetails = multipleDistanceDetails;
 	}
 
 }
