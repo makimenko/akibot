@@ -77,6 +77,7 @@ public class LoadConfiguration {
 		distanceMeterConfiguration.setTriggerPin(Constants.FRONT_DISTANCE_TRIGGER_PIN);
 		distanceMeterConfiguration.setEchoPin(Constants.FRONT_DISTANCE_ECHO_PIN);
 		distanceMeterConfiguration.setTimeoutMicroseconds(Constants.FRONT_DISTANCE_TIMEOUT);
+		distanceMeterConfiguration.setMaxDistanceMm(Constants.DISTANCE_MAX_DISTANCE_MM);
 		save("akibot.front.distance", distanceMeterConfiguration);
 	}
 
@@ -189,9 +190,9 @@ public class LoadConfiguration {
 
 		// ======================== Grid Node:
 		int cellCount = 50;
-		int cellSizeCm = 10;
-		int positionOffset = cellCount * cellSizeCm / 2;
-		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeCm, 2, new Point(-positionOffset, -positionOffset, 0));
+		int cellSizeMm = 100;
+		int positionOffset = cellCount * cellSizeMm / 2;
+		GridConfiguration gridConfiguration = new GridConfiguration(cellCount, cellCount, cellSizeMm, 2, new Point(-positionOffset, -positionOffset, 0));
 		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
 		Node gridNode = new Node(Constants.NODE_NAME_GRID);
 		gridNode.setGeometry(gridGeometry);

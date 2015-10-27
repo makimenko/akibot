@@ -437,7 +437,7 @@ public class EngineTest {
 		workflowClient.start();
 		clientC.start();
 		clientD.start();
-		Thread.sleep(100);
+		Thread.sleep(200);
 
 		// Define Workflow:
 		WorkflowRequest worflowRequest = new WorkflowRequest();

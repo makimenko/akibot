@@ -1,6 +1,6 @@
 package com.akibot.tanktrack.component.world.message;
 
-import com.akibot.tanktrack.component.world.element.DistanceDetails;
+import com.akibot.tanktrack.component.distance.DistanceDetails;
 
 public class WorldDistanceUpdateRequest extends WorldUpdateRequest {
 	private static final long serialVersionUID = 1L;

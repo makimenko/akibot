@@ -1,5 +1,6 @@
 package com.akibot.tanktrack.component.world.element;
 
+import com.akibot.tanktrack.component.distance.DistanceDetails;
 import com.akibot.tanktrack.component.world.exception.OutsideWorldException;
 
 public class GridGeometry extends NamedClass implements Geometry {
@@ -31,23 +32,23 @@ public class GridGeometry extends NamedClass implements Geometry {
 
 	public Point getPointWithOffset(Point point) throws OutsideWorldException {
 		Point offsetPoint = new Point(0, 0, 0);
-		offsetPoint.setX(point.getX() - gridConfiguration.getOffset().getX());
-		offsetPoint.setY(point.getY() - gridConfiguration.getOffset().getY());
-		offsetPoint.setZ(point.getZ() - gridConfiguration.getOffset().getZ());
+		offsetPoint.setX(point.getX() - gridConfiguration.getOffsetMm().getX());
+		offsetPoint.setY(point.getY() - gridConfiguration.getOffsetMm().getY());
+		offsetPoint.setZ(point.getZ() - gridConfiguration.getOffsetMm().getZ());
 
-		if (offsetPoint.getX() >= gridConfiguration.getCellCountX() * gridConfiguration.getCellSize() || offsetPoint.getX() < 0
-				|| offsetPoint.getY() >= gridConfiguration.getCellCountY() * gridConfiguration.getCellSize() || offsetPoint.getY() < 0) {
+		if (offsetPoint.getX() >= gridConfiguration.getCellCountX() * gridConfiguration.getCellSizeMm() || offsetPoint.getX() < 0
+				|| offsetPoint.getY() >= gridConfiguration.getCellCountY() * gridConfiguration.getCellSizeMm() || offsetPoint.getY() < 0) {
 			throw new OutsideWorldException("point=" + point + ", offsetPoint=" + offsetPoint);
 		}
 		return offsetPoint;
 	}
 
 	public int getAddressX(Point point) throws OutsideWorldException {
-		return (int) Math.floor(getPointWithOffset(point).getX() / gridConfiguration.getCellSize());
+		return (int) Math.floor(getPointWithOffset(point).getX() / gridConfiguration.getCellSizeMm());
 	}
 
 	public int getAddressY(Point point) throws OutsideWorldException {
-		return (int) Math.floor(getPointWithOffset(point).getY() / gridConfiguration.getCellSize());
+		return (int) Math.floor(getPointWithOffset(point).getY() / gridConfiguration.getCellSizeMm());
 	}
 
 	public void addPoint(Point point) throws OutsideWorldException {
@@ -177,14 +178,14 @@ public class GridGeometry extends NamedClass implements Geometry {
 		int[][] arrLeft = rasterize(new Line(line2.getTo(), line.getTo()), endIsObstacle);
 		if (arrLeft.length > 2) {
 			for (int i = 1; i < arrLeft.length - 1; i++) {
-				addLine(new Line(line.getFrom(), new Point(arrLeft[i][0] * gridConfiguration.getCellSize() + gridConfiguration.getOffset().getX(),
-						arrLeft[i][1] * gridConfiguration.getCellSize() + gridConfiguration.getOffset().getY(), 0)), endIsObstacle);
+				addLine(new Line(line.getFrom(), new Point(arrLeft[i][0] * gridConfiguration.getCellSizeMm() + gridConfiguration.getOffsetMm().getX(),
+						arrLeft[i][1] * gridConfiguration.getCellSizeMm() + gridConfiguration.getOffsetMm().getY(), 0)), endIsObstacle);
 			}
 		}
 	}
 
 	public void addDistance(DistanceDetails distanceDetails) throws OutsideWorldException {
-		Line line = calculateNorthLine(distanceDetails.getPositionOffset(), distanceDetails.getNorthAngle(), distanceDetails.getDistanceCm());
+		Line line = calculateNorthLine(distanceDetails.getPositionOffset(), distanceDetails.getNorthAngle(), distanceDetails.getDistanceMm());
 		addLineWithAngle(line, distanceDetails.getErrorAngle(), distanceDetails.isEndObstacle());
 	}
 

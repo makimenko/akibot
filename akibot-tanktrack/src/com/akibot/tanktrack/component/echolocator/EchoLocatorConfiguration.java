@@ -3,6 +3,7 @@ package com.akibot.tanktrack.component.echolocator;
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
 
 public class EchoLocatorConfiguration extends ComponentConfiguration {
+	private static final long serialVersionUID = 1L;
 	private int distanceTriggerPin;
 	private int distanceEchoPin;
 	private int distanceTimeout;

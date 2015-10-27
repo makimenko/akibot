@@ -13,7 +13,7 @@
 			pattern="%ex{full}" isClob="true" /> </JDBC> -->
 	</Appenders>
 	<Loggers>
-		<Root level="all">
+		<Root level="warn">
 			<AppenderRef ref="STDOUT" />
 		</Root>
 	</Loggers>

@@ -1,5 +1,7 @@
 package com.akibot.tanktrack.component.world.element;
 
+import com.akibot.tanktrack.component.distance.DistanceDetails;
+
 public class VectorUtils {
 
 	public static Point rotate2DVector(Point vector, Angle angle) {
@@ -41,7 +43,7 @@ public class VectorUtils {
 		Angle relativeAngle = new Angle(angle);
 
 		DistanceDetails relativeDistanceDetail = new DistanceDetails();
-		relativeDistanceDetail.setDistanceCm(distanceDetails.getDistanceCm());
+		relativeDistanceDetail.setDistanceMm(distanceDetails.getDistanceMm());
 		relativeDistanceDetail.setEndObstacle(distanceDetails.isEndObstacle());
 		relativeDistanceDetail.setErrorAngle(distanceDetails.getErrorAngle());
 		relativeDistanceDetail.setNorthAngle(relativeAngle);

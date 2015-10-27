@@ -10,8 +10,8 @@ import com.akibot.engine2.exception.FailedToConfigureException;
 import com.akibot.engine2.exception.FailedToSendMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
+import com.akibot.tanktrack.component.distance.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.Angle;
-import com.akibot.tanktrack.component.world.element.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.Node;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
@@ -90,13 +90,13 @@ public class WorldComponent extends DefaultComponent {
 
 		// front:
 		worldDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
-		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 100, true);
+		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 1000, true);
 		worldDistanceUpdateRequest.setDistanceDetails(distance);
 		onWorldUpdateRequest(worldDistanceUpdateRequest);
 
 		// back:
 		worldDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
-		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 50, true);
+		distance = new DistanceDetails(new Point(0, 0, 0), new Angle(0), Constants.DISTANCE_ERRROR_ANGLE, 500, true);
 		worldDistanceUpdateRequest.setDistanceDetails(distance);
 		onWorldUpdateRequest(worldDistanceUpdateRequest);
 	}

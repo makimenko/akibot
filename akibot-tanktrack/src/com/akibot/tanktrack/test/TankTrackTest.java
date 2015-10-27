@@ -99,7 +99,7 @@ public class TankTrackTest {
 		DistanceRequest distanceRequest = new DistanceRequest();
 		DistanceResponse distanceResponse = (DistanceResponse) testClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 2000);
 
-		double result = distanceResponse.getMm();
+		double result = distanceResponse.getDistanceDetails().getDistanceMm();
 		assertEquals("Check value " + result, true, result > 100 && result < 7000);
 	}
 
