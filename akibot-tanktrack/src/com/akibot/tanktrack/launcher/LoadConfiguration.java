@@ -78,6 +78,7 @@ public class LoadConfiguration {
 		distanceMeterConfiguration.setEchoPin(Constants.FRONT_DISTANCE_ECHO_PIN);
 		distanceMeterConfiguration.setTimeoutMicroseconds(Constants.FRONT_DISTANCE_TIMEOUT);
 		distanceMeterConfiguration.setMaxDistanceMm(Constants.DISTANCE_MAX_DISTANCE_MM);
+		distanceMeterConfiguration.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
 		save("akibot.front.distance", distanceMeterConfiguration);
 	}
 
@@ -94,6 +95,8 @@ public class LoadConfiguration {
 		echoLocatorFrontConfig.setServoLongTime(Constants.ECHOLOCATOR_FRONT_SERVO_LONG_TIME);
 		echoLocatorFrontConfig.setServoStepTime(Constants.ECHOLOCATOR_FRONT_SERVO_STEP_TIME);
 		echoLocatorFrontConfig.setDistanceCount(Constants.ECHOLOCATOR_FRONT_DISTANCE_COUNT);
+		echoLocatorFrontConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
+		echoLocatorFrontConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
 		save("akibot.echolocator.front", echoLocatorFrontConfig);
 	}
 
@@ -110,6 +113,8 @@ public class LoadConfiguration {
 		echoLocatorBackConfig.setServoLongTime(Constants.ECHOLOCATOR_BACK_SERVO_LONG_TIME);
 		echoLocatorBackConfig.setServoStepTime(Constants.ECHOLOCATOR_BACK_SERVO_STEP_TIME);
 		echoLocatorBackConfig.setDistanceCount(Constants.ECHOLOCATOR_BACK_DISTANCE_COUNT);
+		echoLocatorBackConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
+		echoLocatorBackConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
 		save("akibot.echolocator.back", echoLocatorBackConfig);
 	}
 

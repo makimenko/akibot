@@ -1,6 +1,7 @@
 package com.akibot.tanktrack.component.echolocator;
 
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
+import com.akibot.tanktrack.component.world.element.Angle;
 
 public class EchoLocatorConfiguration extends ComponentConfiguration {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +15,8 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 	private int servoLongTime;
 	private int servoStepTime;
 	private int distanceCount;
+	private double distanceMaxMm;
+	private Angle errorAngle;
 
 	//
 	public int getDistanceTriggerPin() {
@@ -86,6 +89,22 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 
 	public void setDistanceCount(int distanceCount) {
 		this.distanceCount = distanceCount;
+	}
+
+	public double getDistanceMaxMm() {
+		return distanceMaxMm;
+	}
+
+	public void setDistanceMaxMm(double distanceMaxMm) {
+		this.distanceMaxMm = distanceMaxMm;
+	}
+
+	public Angle getErrorAngle() {
+		return errorAngle;
+	}
+
+	public void setErrorAngle(Angle errorAngle) {
+		this.errorAngle = errorAngle;
 	}
 
 }

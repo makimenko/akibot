@@ -21,6 +21,7 @@ import com.akibot.tanktrack.component.world.message.WorldContent;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
+import com.akibot.tanktrack.component.world.message.WorldMultipleDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.component.world.message.WorldRequest;
 import com.akibot.tanktrack.component.world.message.WorldUpdateRequest;
@@ -140,6 +141,20 @@ public class WorldComponent extends DefaultComponent {
 			onWorldNodeTransformationRequest((WorldNodeTransformationRequest) worldUpdateRequest);
 		} else if (worldUpdateRequest instanceof WorldDistanceUpdateRequest) {
 			onWorldDistanceUpdateRequest((WorldDistanceUpdateRequest) worldUpdateRequest);
+		} else if (worldUpdateRequest instanceof WorldMultipleDistanceUpdateRequest) {
+			onWorldMultipleDistanceUpdateRequest((WorldMultipleDistanceUpdateRequest) worldUpdateRequest);
+		}
+	}
+
+	private void onWorldMultipleDistanceUpdateRequest(WorldMultipleDistanceUpdateRequest worldMultipleDistanceUpdateRequest) {
+		try {
+			Node distanceNode = findNode(worldMultipleDistanceUpdateRequest.getDistanceNodeName());
+			Node gridNode = findNode(worldMultipleDistanceUpdateRequest.getGridNodeName());
+			for (DistanceDetails distanceDetails : worldMultipleDistanceUpdateRequest.getMultipleDistanceDetails().getDistanceDetailsList()) {
+				VectorUtils.updateGridDistance(gridNode, distanceNode, distanceDetails);
+			}
+		} catch (Exception e) {
+			log.catching(this.getAkibotClient(), e);
 		}
 	}
 

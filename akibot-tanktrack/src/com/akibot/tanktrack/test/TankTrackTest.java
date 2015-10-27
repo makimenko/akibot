@@ -156,8 +156,9 @@ public class TankTrackTest {
 		echoLocatorRequest.setServoBaseStep(1);
 		echoLocatorRequest.setServoHeadNormal(14);
 		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
-		assertEquals("Validate 1 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 21,
-				echoLocatorResponse.getEchoLocatorResult().length);
+
+		assertEquals("Validate 1 Echo Locator Request" + echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size(), 21,
+				echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size());
 
 		// Step 2:
 		echoLocatorRequest.setServoBaseFrom(24);
@@ -165,8 +166,8 @@ public class TankTrackTest {
 		echoLocatorRequest.setServoBaseStep(1);
 		echoLocatorRequest.setServoHeadNormal(14);
 		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
-		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getEchoLocatorResult().length, 11,
-				echoLocatorResponse.getEchoLocatorResult().length);
+		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size(), 11,
+				echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size());
 	}
 
 	@Test

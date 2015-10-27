@@ -14,11 +14,13 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
+import com.akibot.tanktrack.component.echolocator.MultipleDistanceDetails;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
 import com.akibot.tanktrack.component.world.element.VectorUtils;
+import com.akibot.tanktrack.component.world.message.WorldMultipleDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.launcher.Constants;
 
@@ -77,6 +79,20 @@ public class ScoutComponent extends DefaultComponent {
 		gyroscopeNodeTransformationRequest.setTransformation(gyroTransformation);
 
 		broadcastMessage(gyroscopeNodeTransformationRequest);
+
+		MultipleDistanceDetails frontMultipleDistanceDetails = frontEchoLocatorResponse.getMultipleDistanceDetails();
+		WorldMultipleDistanceUpdateRequest frontWorldMultipleDistanceUpdateRequest = new WorldMultipleDistanceUpdateRequest();
+		frontWorldMultipleDistanceUpdateRequest.setMultipleDistanceDetails(frontMultipleDistanceDetails);
+		frontWorldMultipleDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
+		frontWorldMultipleDistanceUpdateRequest.setGridNodeName(Constants.NODE_NAME_GRID);
+		broadcastMessage(frontWorldMultipleDistanceUpdateRequest);
+
+		MultipleDistanceDetails backMultipleDistanceDetails = backEchoLocatorResponse.getMultipleDistanceDetails();
+		WorldMultipleDistanceUpdateRequest backWorldMultipleDistanceUpdateRequest = new WorldMultipleDistanceUpdateRequest();
+		backWorldMultipleDistanceUpdateRequest.setMultipleDistanceDetails(backMultipleDistanceDetails);
+		backWorldMultipleDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+		backWorldMultipleDistanceUpdateRequest.setGridNodeName(Constants.NODE_NAME_GRID);
+		broadcastMessage(backWorldMultipleDistanceUpdateRequest);
 
 		// SEND RESPONSE:
 		ScoutDistanceAroundResponse scoutDistanceAroundResponse = new ScoutDistanceAroundResponse();
