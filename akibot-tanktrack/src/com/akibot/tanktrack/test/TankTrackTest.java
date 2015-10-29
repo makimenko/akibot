@@ -8,7 +8,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akibot.engine2.component.test.TestComponent;
+import com.akibot.engine2.component.workflow.WorkflowDefinition;
+import com.akibot.engine2.component.workflow.WorkflowElement;
+import com.akibot.engine2.component.workflow.WorkflowForkElement;
+import com.akibot.engine2.component.workflow.WorkflowJoinElement;
+import com.akibot.engine2.component.workflow.WorkflowRequest;
+import com.akibot.engine2.component.workflow.WorkflowRequestElement;
+import com.akibot.engine2.component.workflow.WorkflowResponse;
 import com.akibot.engine2.exception.FailedToSendMessageException;
+import com.akibot.engine2.exception.WorkflowException;
 import com.akibot.engine2.message.Response;
 import com.akibot.engine2.network.AkibotClient;
 import com.akibot.tanktrack.component.audio.AudioRequest;
@@ -17,11 +25,13 @@ import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
+import com.akibot.tanktrack.component.echolocator.MultipleDistanceDetails;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
+import com.akibot.tanktrack.component.scout.ScoutDistanceAroundResponse;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
@@ -32,6 +42,11 @@ import com.akibot.tanktrack.component.tanktrack.MotionDistanceCounterResponse;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionResponse;
+import com.akibot.tanktrack.component.world.element.NodeTransformation;
+import com.akibot.tanktrack.component.world.element.Point;
+import com.akibot.tanktrack.component.world.element.VectorUtils;
+import com.akibot.tanktrack.component.world.message.WorldMultipleDistanceUpdateRequest;
+import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.launcher.Constants;
 
 public class TankTrackTest {
@@ -331,4 +346,52 @@ public class TankTrackTest {
 		timedMotionResponse = (TimedMotionResponse) testClient.getOutgoingMessageManager().sendSyncRequest(timedMotionRequest, 1000);
 		assertEquals("Check distance 2", true, timedMotionResponse.getDistanceCounter().getRightDistanceCounter() > 100);
 	}
+
+	@Test
+	public void testParallelEchoLocator() throws FailedToSendMessageException, InterruptedException, WorkflowException {
+
+		int timeout = 10000;
+		String correlationFront = "A";
+		String correlationBack = "B";
+		WorkflowRequest worflowRequest = new WorkflowRequest();
+		WorkflowDefinition workflowDefinition = new WorkflowDefinition(timeout);
+
+		EchoLocatorRequest frontEchoLocatorRequest = new EchoLocatorRequest();
+		frontEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
+		frontEchoLocatorRequest.setServoBaseFrom(4);
+		frontEchoLocatorRequest.setServoBaseTo(24);
+		frontEchoLocatorRequest.setServoBaseStep(1);
+		frontEchoLocatorRequest.setServoHeadNormal(14);
+
+		EchoLocatorRequest backEchoLocatorRequest = new EchoLocatorRequest();
+		backEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+
+		WorkflowElement fork = new WorkflowForkElement();
+		WorkflowElement request1 = new WorkflowRequestElement(correlationFront, frontEchoLocatorRequest);
+		WorkflowElement request2 = new WorkflowRequestElement(correlationBack, backEchoLocatorRequest);
+
+		WorkflowElement join = new WorkflowJoinElement();
+
+		fork.setNextWorkflowElement(request1);
+		fork.setNextWorkflowElement(request2);
+
+		request1.setNextWorkflowElement(join);
+		request2.setNextWorkflowElement(join);
+
+		workflowDefinition.setStartWorkflowElement(fork);
+		worflowRequest.setWorflowDefinition(workflowDefinition);
+
+		WorkflowResponse workflowResponse = (WorkflowResponse) testClient.getOutgoingMessageManager().sendSyncRequest(worflowRequest, timeout);
+
+		assertEquals("Number of Responses", 2, workflowResponse.getResponseList().size());
+
+		// UPDATE WORLD:
+		EchoLocatorResponse frontEchoLocatorResponse = (EchoLocatorResponse) workflowResponse.getResponseList().get(correlationFront);
+		EchoLocatorResponse backEchoLocatorResponse = (EchoLocatorResponse) workflowResponse.getResponseList().get(correlationBack);
+
+		assertEquals("Validate Front", 21, frontEchoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size());
+		assertEquals("Validate Back", 21, backEchoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size());
+
+	}
+
 }
