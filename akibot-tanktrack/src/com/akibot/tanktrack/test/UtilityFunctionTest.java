@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.akibot.tanktrack.component.distance.DistanceDetails;
-import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
 import com.akibot.tanktrack.component.world.element.Angle;
 import com.akibot.tanktrack.component.world.element.ArrayUtils;
@@ -488,6 +487,5 @@ public class UtilityFunctionTest {
 		} catch (OutsideWorldException e) {
 		}
 	}
-	
 
 }

@@ -12,6 +12,7 @@ import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
 import com.akibot.tanktrack.component.distance.DistanceDetails;
 import com.akibot.tanktrack.component.world.element.Angle;
+import com.akibot.tanktrack.component.world.element.GridGeometry;
 import com.akibot.tanktrack.component.world.element.Node;
 import com.akibot.tanktrack.component.world.element.NodeTransformation;
 import com.akibot.tanktrack.component.world.element.Point;
@@ -21,6 +22,7 @@ import com.akibot.tanktrack.component.world.message.WorldContent;
 import com.akibot.tanktrack.component.world.message.WorldContentRequest;
 import com.akibot.tanktrack.component.world.message.WorldContentResponse;
 import com.akibot.tanktrack.component.world.message.WorldDistanceUpdateRequest;
+import com.akibot.tanktrack.component.world.message.WorldGridResetRequest;
 import com.akibot.tanktrack.component.world.message.WorldMultipleDistanceUpdateRequest;
 import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.component.world.message.WorldRequest;
@@ -35,6 +37,11 @@ public class WorldComponent extends DefaultComponent {
 
 	public WorldComponent() {
 
+	}
+
+	@Override
+	public void loadDefaults() {
+		addTopic(new WorldRequest());
 	}
 
 	@Override
@@ -63,7 +70,7 @@ public class WorldComponent extends DefaultComponent {
 
 		getComponentStatus().setReady(true);
 		// TODO: Remove simulation:
-		simulateMessages();
+		// simulateMessages();
 	}
 
 	private void simulateMessages() {
@@ -121,6 +128,7 @@ public class WorldComponent extends DefaultComponent {
 
 	@Override
 	public void onMessageReceived(Message message) throws Exception {
+		log.debug(this.getAkibotClient() + ": " + message);
 		if (message instanceof WorldContentRequest) {
 			onWorldContentRequest((WorldContentRequest) message);
 		} else if (message instanceof WorldUpdateRequest) {
@@ -143,7 +151,15 @@ public class WorldComponent extends DefaultComponent {
 			onWorldDistanceUpdateRequest((WorldDistanceUpdateRequest) worldUpdateRequest);
 		} else if (worldUpdateRequest instanceof WorldMultipleDistanceUpdateRequest) {
 			onWorldMultipleDistanceUpdateRequest((WorldMultipleDistanceUpdateRequest) worldUpdateRequest);
+		} else if (worldUpdateRequest instanceof WorldGridResetRequest) {
+			onWorldGridResetRequest((WorldGridResetRequest) worldUpdateRequest);
 		}
+	}
+
+	private void onWorldGridResetRequest(WorldGridResetRequest worldGridResetRequest) {
+		Node gridNode = findNode(worldGridResetRequest.getGridNodeName());
+		GridGeometry gridGeometry = (GridGeometry) gridNode.getGeometry();
+		gridGeometry.reset();
 	}
 
 	private void onWorldMultipleDistanceUpdateRequest(WorldMultipleDistanceUpdateRequest worldMultipleDistanceUpdateRequest) {
@@ -200,11 +216,6 @@ public class WorldComponent extends DefaultComponent {
 		} catch (Exception e) {
 			log.catching(this.getAkibotClient(), e);
 		}
-	}
-
-	@Override
-	public void loadDefaults() {
-		addTopic(new WorldRequest());
 	}
 
 	public Node getWorldNode() {

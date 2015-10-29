@@ -25,6 +25,8 @@ import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
+import com.akibot.tanktrack.component.world.message.WorldGridResetRequest;
+import com.akibot.tanktrack.launcher.Constants;
 import com.akibot.web.listener.AkiBotWebMaster;
 
 @Path("services/control")
@@ -91,6 +93,15 @@ public class CommandServiceProvider {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response distanceRequest() {
 		return broadcastMessage(new DistanceRequest());
+	}
+
+	@PUT
+	@Path("/worldGridResetRequest")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response worldGridResetRequest() {
+		WorldGridResetRequest worldGridResetRequest = new WorldGridResetRequest();
+		worldGridResetRequest.setGridNodeName(Constants.NODE_NAME_GRID);
+		return broadcastMessage(worldGridResetRequest);
 	}
 
 	@PUT

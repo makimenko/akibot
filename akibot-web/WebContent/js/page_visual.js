@@ -6,6 +6,7 @@ $(document).ready(init);
 var container, stats;
 var camera, cameraTop, cameraFront;
 var controls, scene, renderer;
+var sceneContent;
 var cross;
 var ws;
 var gridHelper;
@@ -37,20 +38,38 @@ function onWsMessage(message) {
 	var messageObject = JSON.parse(message.data);
 
 	if (messageObject.className == "WorldContentResponse") {
-		addNodeRecursion(messageObject.worldContent.worldNode);
+		console.log("DO: WorldContentResponse");
+		if (sceneContent == null) {
+			sceneContent = new THREE.Object3D();
+			scene.add(sceneContent);
+		} else {
+			cleanupChildRecursion(sceneContent);
+		}
+		addNodeRecursion(messageObject.worldContent.worldNode, sceneContent);
 		render();
 	} else if (messageObject.className == "NodeTransformationMessage") {
+		console.log("DO: NodeTransformationMessage");
 		var object3d = scene.getObjectByName(messageObject.nodeName, true);
 		applyTransformation(object3d, messageObject.transformation);
 		render();
 	}
 }
 
-function addNodeRecursion(node) {
-	addNode(node);
+function cleanupChildRecursion(startNode) {
+	if (startNode != null && startNode.children != null) {
+		for (i = 0; i < startNode.children.length; i++) {
+			node = startNode.children[i];
+			cleanupChildRecursion(node);
+			startNode.remove(node);
+		}
+	}
+}
+
+function addNodeRecursion(node, parentSceneNode) {
+	addNode(node, parentSceneNode);
 	if (node.childs != null) {
 		for (i = 0; i < node.childs.length; i++) {
-			addNodeRecursion(node.childs[i]);
+			addNodeRecursion(node.childs[i], parentSceneNode);
 		}
 	}
 }
@@ -60,32 +79,29 @@ function getMaterial(material) {
 	return mat;
 }
 
-function addNode(node) {
+function addNode(node, parentSceneNode) {
 	if (node.geometry == null) {
 		emptyObject = new THREE.Object3D();
-		addNodeFinalisation(emptyObject, node);
+		addNodeFinalisation(emptyObject, node, parentSceneNode);
 	} else if (node.geometry.className == "BoxGeometry") {
 		var geometry = new THREE.BoxGeometry(node.geometry.dimension.x, node.geometry.dimension.y, node.geometry.dimension.z);
 		object3d = new THREE.Mesh(geometry, getMaterial(node.geometry.material));
-		addNodeFinalisation(object3d, node);
+		addNodeFinalisation(object3d, node, parentSceneNode);
 	} else if (node.geometry.className == "ColladaGeometry") {
 		var loader = new THREE.ColladaLoader();
 		loader.load(node.geometry.fileName, function(collada) {
 			object3d = collada.scene;
-			addNodeFinalisation(object3d, node);
+			addNodeFinalisation(object3d, node, parentSceneNode);
 		});
 	} else if (node.geometry.className == "GridGeometry") {
-		console.log("GridGeometry");
-		addLocationAreaGrid(node);
+		addLocationAreaGrid(node, parentSceneNode);
 	}
 }
 
-function addLocationAreaGrid(node) {
+function addLocationAreaGrid(node, parentSceneNode) {
 	gridGroup = new THREE.Object3D();
 	gridGroup.name = node.name;
-
 	offsetMm = node.geometry.gridConfiguration.offsetMm;
-	console.log("addLocationAreaGrid: offsetMm = " + offsetMm.x);
 
 	transformation = node.transformation;
 
@@ -131,7 +147,7 @@ function addLocationAreaGrid(node) {
 		}
 	}
 
-	scene.add(gridGroup);
+	parentSceneNode.add(gridGroup);
 	render();
 }
 
@@ -151,7 +167,7 @@ function addGridCell(node, x, y, value) {
 	gridGroup.add(cellObject);
 }
 
-function addNodeFinalisation(object3d, node) {
+function addNodeFinalisation(object3d, node, parentSceneNode) {
 	object3d.name = node.name;
 	object3d.castShadow = node.castShadow;
 	object3d.receiveShadow = node.receiveShadow;
@@ -159,7 +175,11 @@ function addNodeFinalisation(object3d, node) {
 	applyTransformation(object3d, node.transformation);
 	object3d.updateMatrix();
 	drawLabel(object3d, node.name);
-	scene.add(object3d);
+	if (parentSceneNode == null) {
+		scene.add(object3d);
+	} else {
+		parentSceneNode.add(object3d);
+	}
 	render();
 }
 
@@ -330,7 +350,7 @@ function initScene() {
 	drawLights();
 
 	renderer = new THREE.WebGLRenderer({
-		antialias: true
+		antialias : true
 	});
 
 	renderer.shadowMapEnabled = true;
@@ -389,6 +409,10 @@ function render() {
 }
 
 function onWsOpen() {
+	reloadWorldContent();
+}
+
+function reloadWorldContent() {
 	sendWsRequest(new WebSocketMessage("WorldContentRequest"));
 }
 
@@ -430,6 +454,8 @@ function onKeyPress(event) {
 		render();
 	} else if (char == "l") {
 		toggleLabels();
+	} else if (char == "r") {
+		reloadWorldContent();
 	}
 }
 

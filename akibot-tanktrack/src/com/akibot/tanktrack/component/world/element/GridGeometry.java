@@ -19,7 +19,7 @@ public class GridGeometry extends NamedClass implements Geometry {
 
 	private void init() {
 		this.grid = new int[gridConfiguration.getCellCountX()][gridConfiguration.getCellCountY()];
-		ArrayUtils.updateValue(grid, UNKNOWN_VALUE);
+		reset();
 	}
 
 	public GridConfiguration getGridConfiguration() {
@@ -64,6 +64,10 @@ public class GridGeometry extends NamedClass implements Geometry {
 			grid[addressX][addressY]++;
 			changeSequence++;
 		}
+	}
+
+	public void reset() {
+		ArrayUtils.updateValue(grid, UNKNOWN_VALUE);
 	}
 
 	public void remove(int addressX, int addressY) {

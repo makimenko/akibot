@@ -10,7 +10,6 @@ public class DistanceResponse extends Response {
 	public DistanceResponse() {
 	}
 
-
 	public DistanceDetails getDistanceDetails() {
 		return distanceDetails;
 	}

@@ -42,6 +42,9 @@ function init() {
 		doSimpleRequest("scoutDistanceAroundRequest");
 	});
 	
+	$('#worldGridResetRequest').click(function() {
+		doSimpleRequest("worldGridResetRequest");
+	});	
 	
 	$('#gyroscopeValueButton').click(function() {
 		doSimpleRequest("gyroscopeValueRequest");

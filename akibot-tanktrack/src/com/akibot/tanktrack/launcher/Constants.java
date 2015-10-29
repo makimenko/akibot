@@ -70,7 +70,7 @@ public class Constants {
 	public static final String COMPONENT_NAME_AKIBOT_GYROSCOPE = "akibot.gyroscope";
 	public static final String COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT = "akibot.echolocator.front";
 	public static final String COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK = "akibot.echolocator.back";
-	public static final Angle DISTANCE_ERRROR_ANGLE = new Angle(VectorUtils.gradToRad(15));
+	public static final Angle DISTANCE_ERRROR_ANGLE = new Angle(VectorUtils.gradToRad(10));
 
 	public static final String NODE_NAME_GRID = "gridNode";
 	public static final String NODE_NAME_ROBOT = "robotNode";
