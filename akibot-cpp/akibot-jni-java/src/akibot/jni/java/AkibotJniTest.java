@@ -13,7 +13,7 @@ public class AkibotJniTest {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("STARTING...");
-        AkibotJniLibrary lib = new AkibotJniLibrary();
+        AkibotJniLibraryInstance002 lib = new AkibotJniLibraryInstance002();
         lib.initialize();
         for (int i = 0; i <= 100; i++) {
             int cm = lib.getDistance(13, 12, 50000);

@@ -47,8 +47,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-lwiringPi
-CXXFLAGS=-lwiringPi
+CCFLAGS=-lwiringPi -std=c++0x
+CXXFLAGS=-lwiringPi -std=c++0x
 
 # Fortran Compiler Flags
 FFLAGS=

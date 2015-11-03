@@ -60,7 +60,7 @@
             <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include</pElem>
             <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux</pElem>
           </incDir>
-          <commandLine>-shared -lwiringPi</commandLine>
+          <commandLine>-shared -lwiringPi -std=c++0x</commandLine>
         </ccTool>
         <linkerTool>
           <output>/home/pi/share/netbeans/akibot-jni-cpp.${CND_DLIB_EXT}</output>
@@ -109,7 +109,7 @@
             <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include</pElem>
             <pElem>/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux</pElem>
           </incDir>
-          <commandLine>-lwiringPi</commandLine>
+          <commandLine>-lwiringPi -std=c++0x</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
