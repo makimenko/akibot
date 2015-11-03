@@ -348,7 +348,7 @@ public class TankTrackTest {
 	}
 
 	@Test
-	public void testParallelEchoLocator() throws FailedToSendMessageException, InterruptedException, WorkflowException {
+	public void testParallelEchoLocator() throws FailedToSendMessageException, InterruptedException, WorkflowException, CloneNotSupportedException {
 
 		int timeout = 10000;
 		String correlationFront = "A";
@@ -363,7 +363,7 @@ public class TankTrackTest {
 		frontEchoLocatorRequest.setServoBaseStep(1);
 		frontEchoLocatorRequest.setServoHeadNormal(14);
 
-		EchoLocatorRequest backEchoLocatorRequest = new EchoLocatorRequest();
+		EchoLocatorRequest backEchoLocatorRequest = (EchoLocatorRequest) frontEchoLocatorRequest.clone();
 		backEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
 
 		WorkflowElement fork = new WorkflowForkElement();

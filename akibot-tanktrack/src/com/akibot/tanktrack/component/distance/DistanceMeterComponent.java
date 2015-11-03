@@ -1,6 +1,7 @@
 package com.akibot.tanktrack.component.distance;
 
 import akibot.jni.java.AkibotJniLibrary;
+import akibot.jni.java.AkibotJniLibraryInstance003;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
@@ -47,7 +48,7 @@ public class DistanceMeterComponent extends DefaultComponent {
 		try {
 			getComponentStatus().setReady(false);
 			componentConfiguration = (DistanceMeterConfiguration) getConfigurationResponse.getComponentConfiguration();
-			this.lib = new AkibotJniLibrary();
+			this.lib = new AkibotJniLibraryInstance003();
 			this.lib.initialize();
 			getComponentStatus().setReady(true);
 		} catch (Exception e) {

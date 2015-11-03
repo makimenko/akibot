@@ -17,6 +17,7 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 	private int distanceCount;
 	private double distanceMaxMm;
 	private Angle errorAngle;
+	private String akibotJniLibraryInstance;
 
 	//
 	public int getDistanceTriggerPin() {
@@ -105,6 +106,14 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 
 	public void setErrorAngle(Angle errorAngle) {
 		this.errorAngle = errorAngle;
+	}
+
+	public String getAkibotJniLibraryInstance() {
+		return akibotJniLibraryInstance;
+	}
+
+	public void setAkibotJniLibraryInstance(String akibotJniLibraryInstance) {
+		this.akibotJniLibraryInstance = akibotJniLibraryInstance;
 	}
 
 }

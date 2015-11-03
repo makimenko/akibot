@@ -38,7 +38,28 @@ public class EchoLocatorComponent extends DefaultComponent {
 	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
 		getComponentStatus().setReady(false);
 		componentConfiguration = (EchoLocatorConfiguration) getConfigurationResponse.getComponentConfiguration();
+
+		try {
+			this.lib = instantiate("akibot.jni.java." + componentConfiguration.getAkibotJniLibraryInstance(), AkibotJniLibrary.class);
+			log.debug(this.getAkibotClient() + ": onGetConfigurationResponse-getAkibotJniLibraryInstance: "
+					+ componentConfiguration.getAkibotJniLibraryInstance());
+		} catch (Exception e) {
+			throw new FailedToConfigureException(e);
+		}
+
 		getComponentStatus().setReady(true);
+	}
+
+	public <T> T instantiate(final String className, final Class<T> type) {
+		try {
+			return type.cast(Class.forName(className).newInstance());
+		} catch (final InstantiationException e) {
+			throw new IllegalStateException(e);
+		} catch (final IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		} catch (final ClassNotFoundException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@Override
@@ -99,15 +120,6 @@ public class EchoLocatorComponent extends DefaultComponent {
 		double resultGrad = offsetSteps * stepGrad;
 		resultGrad = robinUtils.add(resultGrad, -90);
 		return new Angle(VectorUtils.gradToRad(resultGrad));
-	}
-
-	@Override
-	public void startComponent() throws FailedToStartException {
-		try {
-			this.lib = new AkibotJniLibrary();
-		} catch (Exception e) {
-			throw new FailedToStartException(e);
-		}
 	}
 
 }

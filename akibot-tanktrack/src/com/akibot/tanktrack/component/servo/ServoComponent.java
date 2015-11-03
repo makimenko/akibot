@@ -3,6 +3,7 @@ package com.akibot.tanktrack.component.servo;
 import java.io.Serializable;
 
 import akibot.jni.java.AkibotJniLibrary;
+import akibot.jni.java.AkibotJniLibraryInstance003;
 
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
@@ -44,7 +45,7 @@ public class ServoComponent extends DefaultComponent {
 		getComponentStatus().setReady(false);
 		if (componentConfiguration != null) {
 			try {
-				this.lib = new AkibotJniLibrary();
+				this.lib = new AkibotJniLibraryInstance003();
 				this.lib.initialize();
 				getComponentStatus().setReady(true);
 			} catch (Exception e) {

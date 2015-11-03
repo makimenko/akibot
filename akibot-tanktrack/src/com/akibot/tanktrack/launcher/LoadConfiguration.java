@@ -97,6 +97,7 @@ public class LoadConfiguration {
 		echoLocatorFrontConfig.setDistanceCount(Constants.ECHOLOCATOR_FRONT_DISTANCE_COUNT);
 		echoLocatorFrontConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
 		echoLocatorFrontConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
+		echoLocatorFrontConfig.setAkibotJniLibraryInstance("AkibotJniLibraryInstance001");
 		save("akibot.echolocator.front", echoLocatorFrontConfig);
 	}
 
@@ -115,6 +116,7 @@ public class LoadConfiguration {
 		echoLocatorBackConfig.setDistanceCount(Constants.ECHOLOCATOR_BACK_DISTANCE_COUNT);
 		echoLocatorBackConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
 		echoLocatorBackConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
+		echoLocatorBackConfig.setAkibotJniLibraryInstance("AkibotJniLibraryInstance002");
 		save("akibot.echolocator.back", echoLocatorBackConfig);
 	}
 

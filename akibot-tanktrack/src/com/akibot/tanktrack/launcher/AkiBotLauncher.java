@@ -35,57 +35,39 @@ public class AkiBotLauncher {
 		// DNS:
 		AkibotClient dns = new AkibotClient("akibot.dns", new DefaultDNSComponent(), dnsPort);
 		dns.start();
-
-		// ConfigurationComponent:
 		AkibotClient configClient = new AkibotClient("akibot.config", new ConfigurationComponent("."), dnsAddress);
+		configClient.start();
 
 		// TankTrack:
 		AkibotClient tankTrack = new AkibotClient("akibot.tanktrack", new TankTrackComponent(), dnsAddress);
-
 		// Gyroscope:
 		AkibotClient gyroscope = new AkibotClient(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE, new GyroscopeComponent(), dnsAddress);
-
 		// SpeechSynthesis:
 		AkibotClient speechSynthesisClient = new AkibotClient("akibot.speech", new SpeechSynthesisComponent(), dnsAddress);
-
 		// Distance Meter
 		AkibotClient distance = new AkibotClient("akibot.front.distance", new DistanceMeterComponent(), dnsAddress);
-
 		// Servo motors
 		AkibotClient servoFrontBase = new AkibotClient("akibot.servo.front.base", new ServoComponent(), dnsAddress);
-
 		AkibotClient servoFrontHead = new AkibotClient("akibot.servo.front.head", new ServoComponent(), dnsAddress);
-
 		AkibotClient servoBackBase = new AkibotClient("akibot.servo.back.base", new ServoComponent(), dnsAddress);
-
 		AkibotClient servoBackHead = new AkibotClient("akibot.servo.back.head", new ServoComponent(), dnsAddress);
-
+		//
 		AkibotClient testComponent = new AkibotClient("akibot.test", new TestComponent(), dnsAddress);
 		testComponent.getMyClientDescription().getTopicList().add(new TestRequest());
-
 		AkibotClient audioComponent = new AkibotClient("akibot.audio", new AudioComponent(), dnsAddress);
-
 		AkibotClient echoLocatorFront = new AkibotClient(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT, new EchoLocatorComponent(), dnsAddress);
-
-		AkibotClient echoLocatorBack = new AkibotClient("akibot.echolocator.back", new EchoLocatorComponent(), dnsAddress);
-
+		AkibotClient echoLocatorBack = new AkibotClient(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK, new EchoLocatorComponent(), dnsAddress);
 		AkibotClient orientation = new AkibotClient("akibot.orientation", new OrientationComponent(), dnsAddress);
-
 		AkibotClient gyroscopeCalibration = new AkibotClient("akibot.gyroscope.calibration", new GyroscopeCalibrationComponent(), dnsAddress);
-
 		AkibotClient worldClient = new AkibotClient("akibot.world", new WorldComponent(), dnsAddress);
-
 		// AkibotClient statusWatchdogClient = new AkibotClient("akibot.status.watchdog", new StatusWatchdogComponent(1 * 1000, 5 * 1000), dnsAddress);
-
 		AkibotClient workflowClient = new AkibotClient("akibot.workflow", new WorkflowComponent(), dnsAddress);
 		workflowClient.getComponent().addTopic(new EchoLocatorResponse());
 		workflowClient.getComponent().addTopic(new GyroscopeResponse());
-
 		AkibotClient scoutClient = new AkibotClient("akibot.scout", new ScoutComponent(), dnsAddress);
 
 		// Start all
-		configClient.start();
-		Thread.sleep(1000);
+		Thread.sleep(500);
 
 		tankTrack.start();
 		gyroscope.start();
