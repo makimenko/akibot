@@ -1,28 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package akibot.jni.java;
 
-import static akibot.jni.java.AkibotJniLibraryInstance001.INSTANCE_NAME;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.zip.ZipFile;
 
-/**
- *
- * @author dm
- */
 public class AkibotJniLibraryInstance002 extends AkibotJniLibrary {
     static String INSTANCE_NAME = "002";
     static {
         try {
             final String libraryname = "akibot-jni-cpp-"+INSTANCE_NAME+".so";
             System.out.println("AkibotJniLibrary Loading: "+libraryname);
-            
+                        
             final Class c = AkibotJniTest.class;
             final URL location = c.getProtectionDomain().getCodeSource().getLocation();
 

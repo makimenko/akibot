@@ -10,8 +10,8 @@ public class AkibotJniLibrary {
     
     public native int pulseIn(int pin, int level, int timeoutMicroseconds);
     
-    public native float[] echoLocator(int distanceTriggerPin, int distanceEchoPin, int distanceTimeout, int sleepBeforeDistance, int servoBasePin, int servoHeadPin, int servoBaseFrom, 
-        int servoBaseTo, int servoBaseStep, int servoHeadNormal, int servoLongTime, int servoStepTime, int distanceCount, boolean trustToLastPosition);
+    public native void echoLocatorInitialize(int distanceTriggerPin, int distanceEchoPin, int distanceTimeout, int sleepBeforeDistance, int servoBasePin, int servoHeadPin, int servoLongTime, int servoStepTime, int distanceCount);
     
+    public native float[] echoLocatorScanDistance(int servoBaseFrom, int servoBaseTo, int servoBaseStep, int servoHeadNormal, boolean trustToLastPosition);
 
-}
+ }

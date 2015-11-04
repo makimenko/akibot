@@ -43,6 +43,11 @@ public class EchoLocatorComponent extends DefaultComponent {
 			this.lib = instantiate("akibot.jni.java." + componentConfiguration.getAkibotJniLibraryInstance(), AkibotJniLibrary.class);
 			log.debug(this.getAkibotClient() + ": onGetConfigurationResponse-getAkibotJniLibraryInstance: "
 					+ componentConfiguration.getAkibotJniLibraryInstance());
+
+			this.lib.echoLocatorInitialize(componentConfiguration.getDistanceTriggerPin(), componentConfiguration.getDistanceEchoPin(),
+					componentConfiguration.getDistanceTimeout(), componentConfiguration.getSleepBeforeDistance(), componentConfiguration.getServoBasePin(),
+					componentConfiguration.getServoHeadPin(), componentConfiguration.getServoLongTime(), componentConfiguration.getServoStepTime(),
+					componentConfiguration.getDistanceCount());
 		} catch (Exception e) {
 			throw new FailedToConfigureException(e);
 		}
@@ -78,11 +83,8 @@ public class EchoLocatorComponent extends DefaultComponent {
 	}
 
 	private MultipleDistanceDetails getMultipleDistanceDetailsFromEcholocator(EchoLocatorRequest request) {
-		float result[] = lib.echoLocator(componentConfiguration.getDistanceTriggerPin(), componentConfiguration.getDistanceEchoPin(),
-				componentConfiguration.getDistanceTimeout(), componentConfiguration.getSleepBeforeDistance(), componentConfiguration.getServoBasePin(),
-				componentConfiguration.getServoHeadPin(), request.getServoBaseFrom(), request.getServoBaseTo(), request.getServoBaseStep(),
-				request.getServoHeadNormal(), componentConfiguration.getServoLongTime(), componentConfiguration.getServoStepTime(),
-				componentConfiguration.getDistanceCount(), request.isTrustToLastPosition());
+		float result[] = lib.echoLocatorScanDistance(request.getServoBaseFrom(), request.getServoBaseTo(), request.getServoBaseStep(),
+				request.getServoHeadNormal(), request.isTrustToLastPosition());
 
 		MultipleDistanceDetails multipleDistanceDetails = new MultipleDistanceDetails();
 

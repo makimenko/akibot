@@ -373,10 +373,10 @@ public class TankTrackTest {
 		WorkflowElement join = new WorkflowJoinElement();
 
 		fork.setNextWorkflowElement(request1);
-		fork.setNextWorkflowElement(request2);
+		//fork.setNextWorkflowElement(request2);
 
 		request1.setNextWorkflowElement(join);
-		request2.setNextWorkflowElement(join);
+		//request2.setNextWorkflowElement(join);
 
 		workflowDefinition.setStartWorkflowElement(fork);
 		worflowRequest.setWorflowDefinition(workflowDefinition);

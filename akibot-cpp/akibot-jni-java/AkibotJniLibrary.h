@@ -41,11 +41,19 @@ JNIEXPORT jint JNICALL Java_akibot_jni_java_AkibotJniLibrary_pulseIn
 
 /*
  * Class:     akibot_jni_java_AkibotJniLibrary
- * Method:    echoLocator
- * Signature: (IIIIIIIIIIIIIZ)[F
+ * Method:    echoLocatorInitialize
+ * Signature: (IIIIIIIII)V
  */
-JNIEXPORT jfloatArray JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocator
-  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jboolean);
+JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocatorInitialize
+  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint, jint, jint, jint);
+
+/*
+ * Class:     akibot_jni_java_AkibotJniLibrary
+ * Method:    echoLocatorScanDistance
+ * Signature: (IIIIZ)[F
+ */
+JNIEXPORT jfloatArray JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocatorScanDistance
+  (JNIEnv *, jobject, jint, jint, jint, jint, jboolean);
 
 #ifdef __cplusplus
 }

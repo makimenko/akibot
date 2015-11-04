@@ -49,23 +49,22 @@ JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_servo
     servo.softPwmWriteAndWait(value, microseconds);
 }
 
-JNIEXPORT jfloatArray JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocator
-(JNIEnv *env, jobject obj, jint distanceTriggerPin, jint distanceEchoPin, jint distanceTimeout, jint sleepBeforeDistance, jint servoBasePin, jint servoHeadPin, jint servoBaseFrom,
-        jint servoBaseTo, jint servoBaseStep, jint servoHeadNormal, jint servoLongTime, jint servoStepTime, jint distanceCount, jboolean trustToLastPosition) {
-
-    if (!echoLocator.isInitializedFor(distanceTriggerPin, distanceEchoPin, distanceTimeout, sleepBeforeDistance, servoBasePin, servoHeadPin, servoLongTime, servoStepTime, distanceCount)) {
+JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocatorInitialize
+(JNIEnv *env, jobject obj, jint distanceTriggerPin, jint distanceEchoPin, jint distanceTimeout, jint sleepBeforeDistance, jint servoBasePin, jint servoHeadPin, jint servoLongTime, jint servoStepTime, jint distanceCount) {
         echoLocator.initialize(distanceTriggerPin, distanceEchoPin, distanceTimeout, sleepBeforeDistance, servoBasePin, servoHeadPin, servoLongTime, servoStepTime, distanceCount);
-    }
-    float* scanResult = echoLocator.scanDistance(servoBaseFrom, servoBaseTo, servoBaseStep, servoHeadNormal, trustToLastPosition);
+}
+  
 
+JNIEXPORT jfloatArray JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocatorScanDistance
+(JNIEnv *env, jobject obj, jint servoBaseFrom, jint servoBaseTo, jint servoBaseStep, jint servoHeadNormal, jboolean trustToLastPosition) {
+
+    float* scanResult = echoLocator.scanDistance(servoBaseFrom, servoBaseTo, servoBaseStep, servoHeadNormal, trustToLastPosition);
     int size = echoLocator.size;
     jfloatArray result;
     result = env->NewFloatArray(size);
     if (result == NULL) {
         return NULL; /* out of memory error thrown */
     }
-
     env->SetFloatArrayRegion(result, 0, size, scanResult);
-
     return result;
 }

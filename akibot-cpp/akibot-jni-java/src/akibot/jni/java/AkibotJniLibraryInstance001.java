@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package akibot.jni.java;
 
 import java.io.File;
@@ -11,10 +6,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.zip.ZipFile;
 
-/**
- *
- * @author dm
- */
 public class AkibotJniLibraryInstance001 extends AkibotJniLibrary {
     static String INSTANCE_NAME = "001";
     static {

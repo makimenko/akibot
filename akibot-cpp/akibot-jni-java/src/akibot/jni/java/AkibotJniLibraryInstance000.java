@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.zip.ZipFile;
 
-public class AkibotJniLibraryInstance003 extends AkibotJniLibrary {
-    static String INSTANCE_NAME = "003";
+public class AkibotJniLibraryInstance000 extends AkibotJniLibrary {
+    static String INSTANCE_NAME = "000";
     static {
         try {
             final String libraryname = "akibot-jni-cpp-"+INSTANCE_NAME+".so";

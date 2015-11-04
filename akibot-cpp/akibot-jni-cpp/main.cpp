@@ -46,7 +46,7 @@ void init() {
 void testServo(int servoPin, int microseconds) {
     printf("testServo %f starting...\n", (float) servoPin);
     
-    for (int value = 4; value <= 14; value += 2) {
+    for (int value = 4; value <= 24; value += 2) {
         printf("value %f\n", (float) value);
         softPwmWrite(servoPin, value);
         usleep(microseconds);

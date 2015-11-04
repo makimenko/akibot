@@ -6,6 +6,12 @@
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/google/trunk/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniTest.java</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/google/trunk/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniLibrary.java</file>
         </group>
-        <group name="netbeans-github-akibot"/>
+        <group name="netbeans-github-akibot">
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniLibraryInstance001.java</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniLibrary.java</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniLibraryInstance000.java</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniLibraryInstance003.java</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-java/src/akibot/jni/java/AkibotJniLibraryInstance002.java</file>
+        </group>
     </open-files>
 </project-private>
