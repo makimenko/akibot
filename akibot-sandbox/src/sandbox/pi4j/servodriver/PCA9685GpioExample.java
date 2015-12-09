@@ -32,7 +32,7 @@ public class PCA9685GpioExample {
 		// --> To measure actual frequency set frequency without correction factor(or set to 1)
 		BigDecimal frequencyCorrectionFactor = new BigDecimal("1.0578");
 		// Create custom PCA9685 GPIO provider
-		I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_1);
+		I2CBus bus = I2CFactory.getInstance(I2CBus.BUS_0);
 
 		final PCA9685GpioProvider gpioProvider = new PCA9685GpioProvider(bus, 0x40, frequency, frequencyCorrectionFactor);
 		// Define outputs in use for this example
@@ -42,7 +42,7 @@ public class PCA9685GpioExample {
 		System.out.println("Reset...");
 		gpioProvider.reset();
 
-		Pin pin = PCA9685Pin.PWM_15;
+		Pin pin = PCA9685Pin.PWM_01;
 		
 		Pin pinHead = PCA9685Pin.PWM_00;
 		
