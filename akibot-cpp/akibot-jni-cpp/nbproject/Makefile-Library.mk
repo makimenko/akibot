@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/AkibotUtils.o \
 	${OBJECTDIR}/DistanceMeterSRF05.o \
 	${OBJECTDIR}/EchoLocator.o \
+	${OBJECTDIR}/PCA9685.o \
 	${OBJECTDIR}/Servo.o \
 	${OBJECTDIR}/main.o
 
@@ -86,6 +87,11 @@ ${OBJECTDIR}/EchoLocator.o: EchoLocator.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/EchoLocator.o EchoLocator.cpp
+
+${OBJECTDIR}/PCA9685.o: PCA9685.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include -I/usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/include/linux -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/PCA9685.o PCA9685.cpp
 
 ${OBJECTDIR}/Servo.o: Servo.cpp 
 	${MKDIR} -p ${OBJECTDIR}

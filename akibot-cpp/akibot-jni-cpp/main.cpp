@@ -3,89 +3,44 @@
 #include <iostream>
 #include <thread>
 
+#include "PCA9685.h"
+PCA9685 pwm;
+
 using namespace std;
 
+
+// result = echoLocatorBack.scanDistance(4, 24, 1, 14, true);
 int printResult(float* resultPrint) {
     printf("===============\n");
     for (int i = 0; i < 21; i++) {
         printf("Distance %f\n", resultPrint[i]);
     }
 }
-
-void front() {
-    float* result;
-    EchoLocator echoLocatorFront;
-    echoLocatorFront.initialize(13, 12, 500000, 50000, 0, 7, 400000, 35000, 1);
-    result = echoLocatorFront.scanDistance(4, 24, 1, 14, true);
-    printResult(result);
+int init(int i2c_bus, int i2c_address, int freq) {
+    printf("init...\n");
+    pwm.init(i2c_bus, i2c_address);
+    pwm.setPWMFreq(freq);
+    printf("initialized.\n");
+    return 0;
 }
 
-void back() {
-    float* result;
-    EchoLocator echoLocatorBack;
-    echoLocatorBack.initialize(21, 14, 500000, 50000, 3, 2, 400000, 35000, 1);
-    result = echoLocatorBack.scanDistance(4, 24, 1, 14, true);
-    printResult(result);
-}
-
-void testThreads() {
-    thread t1(front);
-    thread t2(back);
-
-    t1.join();
-    t2.join();
-}
-
-void init() {
-    printf("Initializing...\n");
-    if (wiringPiSetup() == -1) {
-        throw (AkibotException("Can't initialize wiringPi: %s\n"));
-    }
-}
-
-void testServo(int servoPin, int microseconds) {
-    printf("testServo %f starting...\n", (float) servoPin);
+int test(void) {
+    printf("Testing testing\n");
+    init(0, 0x40, 61);
     
-    for (int value = 4; value <= 24; value += 2) {
-        printf("value %f\n", (float) value);
-        softPwmWrite(servoPin, value);
-        usleep(microseconds);
-        softPwmWrite(servoPin, 0);
-    }
-
-    printf("testServo %f finished.\n", (float) servoPin);
-}
-
-void testServoThreads() {
-    int divisor = 200;
-    int initialValue = 0;
-    int pwmRange = 200;
-
-    pwmSetClock(divisor);
-        
-    pinMode(0, OUTPUT);
-    digitalWrite(0, LOW);
-    softPwmCreate(0, initialValue, pwmRange);
+    int pin = 5;
+    pwm.setPWM(pin, 380);
+    usleep(1000 * 1000);
     
-    pinMode(3, OUTPUT);
-    digitalWrite(3, LOW);
-    softPwmCreate(3, initialValue, pwmRange);
-    
-    
-    thread t2(testServo, 3, 400000);
-    thread t1(testServo, 0, 200000);
+    //pwm.setPWM(0, 0, 600);
+    //usleep(1000 * 1000); 
 
-
-    t1.join();
-    t2.join();
+    return 0;
 }
 
 int main(int argc, char** argv) {
-
-    init();
-    //front();.
-
-    testServoThreads();
-
+    printf("Start\n");
+    test();
+    printf("End\n");
     return 0;
 }
