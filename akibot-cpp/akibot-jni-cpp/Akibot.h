@@ -19,4 +19,5 @@
 #include "Servo.h"
 #include "AkibotUtils.h"
 #include "AkibotException.h"
+#include "PCA9685.h"
 #include "EchoLocator.h"

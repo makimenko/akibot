@@ -14,6 +14,13 @@
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/google/trunk/akibot-cpp/akibot-jni-cpp/DistanceMeterSRF05.h</file>
             <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/google/trunk/akibot-cpp/akibot-jni-cpp/DistanceMeterSRF05.cpp</file>
         </group>
-        <group name="netbeans-github-akibot"/>
+        <group name="netbeans-github-akibot">
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/main.cpp</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/DistanceMeterSRF05.cpp</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotJniLibrary.cpp</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/EchoLocator.cpp</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/Akibot.h</file>
+            <file>file:/D:/_ROOT/02_Work/00_Hobby/AkiBot/github/repo/akibot-cpp/akibot-jni-cpp/AkibotJniLibrary.h</file>
+        </group>
     </open-files>
 </project-private>

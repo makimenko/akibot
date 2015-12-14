@@ -50,8 +50,8 @@ JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_servo
 }
 
 JNIEXPORT void JNICALL Java_akibot_jni_java_AkibotJniLibrary_echoLocatorInitialize
-(JNIEnv *env, jobject obj, jint distanceTriggerPin, jint distanceEchoPin, jint distanceTimeout, jint sleepBeforeDistance, jint servoBasePin, jint servoHeadPin, jint servoLongTime, jint servoStepTime, jint distanceCount) {
-        echoLocator.initialize(distanceTriggerPin, distanceEchoPin, distanceTimeout, sleepBeforeDistance, servoBasePin, servoHeadPin, servoLongTime, servoStepTime, distanceCount);
+(JNIEnv *env, jobject obj, jint distanceTriggerPin, jint distanceEchoPin, jint distanceTimeout, jint sleepBeforeDistance, jint servoI2CBus, jint servoI2CAddress, jint servoI2CFrequency, jint servoBasePin, jint servoHeadPin, jint servoLongTime, jint servoStepTime, jint distanceCount) {
+        echoLocator.initialize(distanceTriggerPin, distanceEchoPin, distanceTimeout, sleepBeforeDistance, servoI2CBus, servoBasePin, servoI2CAddress, servoI2CFrequency, servoHeadPin, servoLongTime, servoStepTime, distanceCount);
 }
   
 
