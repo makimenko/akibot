@@ -9,7 +9,7 @@ void DistanceMeterSRF05::initialize(int trigger, int echo, int timeout) {
     triggerPin = trigger;
     echoPin = echo;
     timeoutMicroseconds = timeout;
-    
+    wiringPiSetup();
 
     //TODO: Initialize once!
     printf("Init DistanceMeter: trigger=%d, echo=%d, timeout=%d \n", triggerPin, echoPin, timeoutMicroseconds);

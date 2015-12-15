@@ -9,6 +9,8 @@ EchoLocator::~EchoLocator() {
 void EchoLocator::initialize(int _distanceTriggerPin, int _distanceEchoPin, int _distanceTimeout, int _sleepBeforeDistance, int _servoI2CBus, int _servoI2CAddress, int _servoI2CFrequency, int _servoBasePin, int _servoHeadPin, int _servoLongTime, int _servoStepTime, int _distanceCount) {
     initialized = false;
 
+    wiringPiSetup();
+    
     distanceTriggerPin = _distanceTriggerPin;
     distanceEchoPin = _distanceEchoPin;
     distanceTimeout = _distanceTimeout;
@@ -63,12 +65,10 @@ float* EchoLocator::scanDistance(int servoBaseFrom, int servoBaseTo, int servoBa
     }
 
     int index = 0;
-    for (int i = 1; i <= size; i++) {
-        currentPosition += step;
+    for (int i = 1; i <= size; i++) {        
         pwm.setPWM(servoBasePin, currentPosition);
         usleep(servoStepTime * servoBaseStep);
-
-        lastServoBasePosition = currentPosition;
+        
         if (sleepBeforeDistance > 0) {
             usleep(sleepBeforeDistance);
         }
@@ -81,6 +81,9 @@ float* EchoLocator::scanDistance(int servoBaseFrom, int servoBaseTo, int servoBa
         avgDistance = totalDistance / distanceCount;
         result[index] = avgDistance;
         index++;
+        
+        currentPosition += step;
+        lastServoBasePosition = currentPosition;        
     }
 
     return result;

@@ -20,11 +20,13 @@
  */
 
 void PCA9685::init(int bus, int address) {
+    initialized = false;
     _i2cbus = bus;
     _i2caddr = address;
     snprintf(busfile, sizeof (busfile), "/dev/i2c-%d", bus);
     reset();
     //usleep(10*1000);
+    initialized = true;
 }
 
 PCA9685::PCA9685() {
@@ -37,11 +39,13 @@ PCA9685::~PCA9685() {
 //! Sets PCA9685 mode to 00
 
 void PCA9685::reset() {
-    int fd = openfd();
-    if (fd != -1) {
-        write_byte(fd, MODE1, 0x00); //Normal mode
-        write_byte(fd, MODE2, 0x04); //Normal mode
-        close(fd);
+    if (initialized) {
+        int fd = openfd();
+        if (fd != -1) {
+            write_byte(fd, MODE1, 0x00); //Normal mode
+            write_byte(fd, MODE2, 0x04); //Normal mode
+            close(fd);
+        }
     }
 }
 //! Set the frequency of PWM

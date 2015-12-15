@@ -20,6 +20,8 @@ void Servo::initialize(int servoPinIn, int initialValueIn, int pwmRangeIn, int d
     pwmRange = pwmRangeIn;
     divisor = divisorIn;
     
+    wiringPiSetup();
+    
     pinMode(servoPin, OUTPUT);
     digitalWrite(servoPin, LOW);
     pwmSetClock(divisor);

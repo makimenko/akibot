@@ -38,6 +38,7 @@ private:
 	int _i2caddr;
 	int _i2cbus;
 	char busfile[64];
+        bool initialized;
 	uint8_t dataBuffer[BUFFER_SIZE];
 	uint8_t read_byte(int, uint8_t);
 	void write_byte(int, uint8_t, uint8_t);
