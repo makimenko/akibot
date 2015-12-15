@@ -113,8 +113,9 @@ public class TankTrackTest {
 	public void testDistance() throws FailedToSendMessageException, InterruptedException {
 		DistanceRequest distanceRequest = new DistanceRequest();
 		DistanceResponse distanceResponse = (DistanceResponse) testClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 2000);
-
+		
 		double result = distanceResponse.getDistanceDetails().getDistanceMm();
+		System.out.println("result="+result);
 		assertEquals("Check value " + result, true, result > 100 && result < 7000);
 	}
 
@@ -347,9 +348,8 @@ public class TankTrackTest {
 		assertEquals("Check distance 2", true, timedMotionResponse.getDistanceCounter().getRightDistanceCounter() > 100);
 	}
 
-	@Test
-	public void testParallelEchoLocator() throws FailedToSendMessageException, InterruptedException, WorkflowException, CloneNotSupportedException {
-
+	// EXCLUDED:
+	public void SKIP_testParallelEchoLocator() throws FailedToSendMessageException, InterruptedException, WorkflowException, CloneNotSupportedException {
 		int timeout = 10000;
 		String correlationFront = "A";
 		String correlationBack = "B";
@@ -373,10 +373,10 @@ public class TankTrackTest {
 		WorkflowElement join = new WorkflowJoinElement();
 
 		fork.setNextWorkflowElement(request1);
-		//fork.setNextWorkflowElement(request2);
+		// fork.setNextWorkflowElement(request2);
 
 		request1.setNextWorkflowElement(join);
-		//request2.setNextWorkflowElement(join);
+		// request2.setNextWorkflowElement(join);
 
 		workflowDefinition.setStartWorkflowElement(fork);
 		worflowRequest.setWorflowDefinition(workflowDefinition);
