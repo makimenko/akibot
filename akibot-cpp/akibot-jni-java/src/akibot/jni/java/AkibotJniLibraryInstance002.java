@@ -30,6 +30,7 @@ public class AkibotJniLibraryInstance002 extends AkibotJniLibrary {
             in.close();
             out.close();
 
+            System.out.println("AkibotJniLibrary Loading: "+f.getAbsolutePath());
             System.load(f.getAbsolutePath());
             f.delete();
 
