@@ -1,10 +1,3 @@
-/* 
- * File:   Servo.cpp
- * Author: dm
- * 
- * Created on March 16, 2015, 8:56 PM
- */
-
 #include "Akibot.h"
 
 Servo::Servo() {

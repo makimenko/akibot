@@ -1,7 +1,4 @@
 #include "Akibot.h"
-#include <string>
-#include <iostream>
-#include <thread>
 
 using namespace std;
 
@@ -44,12 +41,12 @@ int testDistanceMeter(void) {
     DistanceMeterSRF05 distanceMeter;
     int triggerPin = 13;
     int echoPin = 12;
-    distanceMeter.initialize(triggerPin, echoPin, 500000);
+    distanceMeter.initialize(triggerPin, echoPin, 10000);
     //distanceMeter.initialize(21, 14, 1000*1000);
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 200; i++) {
         float distance = distanceMeter.getDistance();
         printf("Distance = %f \n", distance);
-        usleep(500 * 1000);
+        usleep(50 * 1000);
     }
 }
 

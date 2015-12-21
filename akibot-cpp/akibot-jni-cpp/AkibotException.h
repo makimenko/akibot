@@ -1,10 +1,3 @@
-/* 
- * File:   AkibotException.h
- * Author: dm
- *
- * Created on January 7, 2015, 11:27 PM
- */
-
 #ifndef AKIBOTEXCEPTION_H
 #define	AKIBOTEXCEPTION_H
 

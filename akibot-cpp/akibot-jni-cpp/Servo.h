@@ -1,10 +1,3 @@
-/* 
- * File:   Servo.h
- * Author: dm
- *
- * Created on March 16, 2015, 8:56 PM
- */
-
 #ifndef SERVO_H
 #define	SERVO_H
 

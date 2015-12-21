@@ -1,16 +1,5 @@
-#include <sys/stat.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <linux/i2c-dev.h>
-#include <stdio.h>      /* Standard I/O functions */
-#include <fcntl.h>
-#include <syslog.h>		/* Syslog functionallity */
-#include <inttypes.h>
-#include <errno.h>
-#include <math.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "PCA9685.h"
+#include "Akibot.h"
+
 
 //! Constructor takes bus and address arguments
 

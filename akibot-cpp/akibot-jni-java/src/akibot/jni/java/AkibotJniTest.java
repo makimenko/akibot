@@ -5,10 +5,10 @@ public class AkibotJniTest {
     public static void testDistance() throws InterruptedException {
         AkibotJniLibraryInstance000 lib = new AkibotJniLibraryInstance000();
         lib.initialize();
-        for (int i = 0; i <= 100; i++) {
-            int cm = lib.getDistance(13, 12, 50000);
+        for (int i = 0; i <= 500; i++) {
+            int cm = lib.getDistance(13, 12, 10000);
             System.out.println("Distance is: " + cm + " cm");
-            Thread.sleep(50);
+            //Thread.sleep(50);
         }
     }
 

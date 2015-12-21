@@ -49,7 +49,6 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
-
 # build
 build: .build-post
 
