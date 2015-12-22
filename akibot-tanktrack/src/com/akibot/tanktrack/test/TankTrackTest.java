@@ -25,13 +25,11 @@ import com.akibot.tanktrack.component.distance.DistanceRequest;
 import com.akibot.tanktrack.component.distance.DistanceResponse;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorRequest;
 import com.akibot.tanktrack.component.echolocator.EchoLocatorResponse;
-import com.akibot.tanktrack.component.echolocator.MultipleDistanceDetails;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeResponse;
 import com.akibot.tanktrack.component.gyroscope.GyroscopeValueRequest;
 import com.akibot.tanktrack.component.orientation.OrientationRequest;
 import com.akibot.tanktrack.component.orientation.OrientationResponse;
 import com.akibot.tanktrack.component.orientation.RoundRobinUtils;
-import com.akibot.tanktrack.component.scout.ScoutDistanceAroundResponse;
 import com.akibot.tanktrack.component.servo.ServoRequest;
 import com.akibot.tanktrack.component.servo.ServoResponse;
 import com.akibot.tanktrack.component.speech.synthesis.SpeechSynthesisRequest;
@@ -42,11 +40,6 @@ import com.akibot.tanktrack.component.tanktrack.MotionDistanceCounterResponse;
 import com.akibot.tanktrack.component.tanktrack.StickMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionRequest;
 import com.akibot.tanktrack.component.tanktrack.TimedMotionResponse;
-import com.akibot.tanktrack.component.world.element.NodeTransformation;
-import com.akibot.tanktrack.component.world.element.Point;
-import com.akibot.tanktrack.component.world.element.VectorUtils;
-import com.akibot.tanktrack.component.world.message.WorldMultipleDistanceUpdateRequest;
-import com.akibot.tanktrack.component.world.message.WorldNodeTransformationRequest;
 import com.akibot.tanktrack.launcher.Constants;
 
 public class TankTrackTest {
@@ -113,9 +106,9 @@ public class TankTrackTest {
 	public void testDistance() throws FailedToSendMessageException, InterruptedException {
 		DistanceRequest distanceRequest = new DistanceRequest();
 		DistanceResponse distanceResponse = (DistanceResponse) testClient.getOutgoingMessageManager().sendSyncRequest(distanceRequest, 2000);
-		
+
 		double result = distanceResponse.getDistanceDetails().getDistanceMm();
-		System.out.println("result="+result);
+		System.out.println("result=" + result);
 		assertEquals("Check value " + result, true, result > 100 && result < 7000);
 	}
 
@@ -167,22 +160,22 @@ public class TankTrackTest {
 		EchoLocatorResponse echoLocatorResponse;
 
 		// Step 1:
-		echoLocatorRequest.setServoBaseFrom(4);
-		echoLocatorRequest.setServoBaseTo(24);
-		echoLocatorRequest.setServoBaseStep(1);
-		echoLocatorRequest.setServoHeadNormal(14);
+		echoLocatorRequest.setServoBaseFrom(600);
+		echoLocatorRequest.setServoBaseTo(2500);
+		echoLocatorRequest.setServoBaseStep(190);
+		echoLocatorRequest.setServoHeadNormal(1300);
 		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
 
-		assertEquals("Validate 1 Echo Locator Request" + echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size(), 21,
+		assertEquals("Validate 1 Echo Locator Request" + echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size(), 11,
 				echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size());
 
 		// Step 2:
-		echoLocatorRequest.setServoBaseFrom(24);
-		echoLocatorRequest.setServoBaseTo(14);
-		echoLocatorRequest.setServoBaseStep(1);
-		echoLocatorRequest.setServoHeadNormal(14);
+		echoLocatorRequest.setServoBaseFrom(2500);
+		echoLocatorRequest.setServoBaseTo(((2500 - 600) / 2) + 600);
+		echoLocatorRequest.setServoBaseStep(190);
+		echoLocatorRequest.setServoHeadNormal(1300);
 		echoLocatorResponse = (EchoLocatorResponse) testClient.getOutgoingMessageManager().sendSyncRequest(echoLocatorRequest, 4000);
-		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size(), 11,
+		assertEquals("Validate 2 Echo Locator Request" + echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size(), 6,
 				echoLocatorResponse.getMultipleDistanceDetails().getDistanceDetailsList().size());
 	}
 
@@ -195,10 +188,10 @@ public class TankTrackTest {
 		StickMotionRequest stopRequest = new StickMotionRequest(DirectionType.STOP);
 
 		// Step 2:
-		echoLocatorRequest.setServoBaseFrom(24);
-		echoLocatorRequest.setServoBaseTo(14);
-		echoLocatorRequest.setServoBaseStep(1);
-		echoLocatorRequest.setServoHeadNormal(14);
+		echoLocatorRequest.setServoBaseFrom(2500);
+		echoLocatorRequest.setServoBaseTo(950);
+		echoLocatorRequest.setServoBaseStep(190);
+		echoLocatorRequest.setServoHeadNormal(950);
 		testClient.getOutgoingMessageManager().broadcastMessage(forwardRequest);
 		testClient.getOutgoingMessageManager().broadcastMessage(echoLocatorRequest);
 		Thread.sleep(1500);
@@ -358,10 +351,10 @@ public class TankTrackTest {
 
 		EchoLocatorRequest frontEchoLocatorRequest = new EchoLocatorRequest();
 		frontEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
-		frontEchoLocatorRequest.setServoBaseFrom(4);
-		frontEchoLocatorRequest.setServoBaseTo(24);
-		frontEchoLocatorRequest.setServoBaseStep(1);
-		frontEchoLocatorRequest.setServoHeadNormal(14);
+		frontEchoLocatorRequest.setServoBaseFrom(600);
+		frontEchoLocatorRequest.setServoBaseTo(2500);
+		frontEchoLocatorRequest.setServoBaseStep(190);
+		frontEchoLocatorRequest.setServoHeadNormal(950);
 
 		EchoLocatorRequest backEchoLocatorRequest = (EchoLocatorRequest) frontEchoLocatorRequest.clone();
 		backEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);

@@ -1,5 +1,7 @@
 package com.akibot.tanktrack.launcher;
 
+import java.math.BigDecimal;
+
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
 import com.akibot.engine2.component.configuration.ConfigurationComponent;
 import com.akibot.engine2.component.configuration.PutConfigurationRequest;
@@ -97,7 +99,15 @@ public class LoadConfiguration {
 		echoLocatorFrontConfig.setDistanceCount(Constants.ECHOLOCATOR_FRONT_DISTANCE_COUNT);
 		echoLocatorFrontConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
 		echoLocatorFrontConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
-		echoLocatorFrontConfig.setAkibotJniLibraryInstance("AkibotJniLibraryInstance001");
+		// new:
+		echoLocatorFrontConfig.setBusNumber(0);
+		echoLocatorFrontConfig.setAddress(0x40);
+		echoLocatorFrontConfig.setFrequency(new BigDecimal("48.828"));
+		echoLocatorFrontConfig.setFrequencyCorrectionFactor(new BigDecimal("1.0578"));
+		echoLocatorFrontConfig.setServoMin(600);
+		echoLocatorFrontConfig.setServoMax(2500);
+		echoLocatorFrontConfig.setGradTotal(180);
+
 		save("akibot.echolocator.front", echoLocatorFrontConfig);
 	}
 
@@ -116,7 +126,15 @@ public class LoadConfiguration {
 		echoLocatorBackConfig.setDistanceCount(Constants.ECHOLOCATOR_BACK_DISTANCE_COUNT);
 		echoLocatorBackConfig.setDistanceMaxMm(Constants.DISTANCE_MAX_DISTANCE_MM);
 		echoLocatorBackConfig.setErrorAngle(Constants.DISTANCE_ERRROR_ANGLE);
-		echoLocatorBackConfig.setAkibotJniLibraryInstance("AkibotJniLibraryInstance002");
+		// new:
+		echoLocatorBackConfig.setBusNumber(0);
+		echoLocatorBackConfig.setAddress(0x40);
+		echoLocatorBackConfig.setFrequency(new BigDecimal("48.828"));
+		echoLocatorBackConfig.setFrequencyCorrectionFactor(new BigDecimal("1.0578"));
+		echoLocatorBackConfig.setServoMin(600);
+		echoLocatorBackConfig.setServoMax(2500);
+		echoLocatorBackConfig.setGradTotal(180);
+
 		save("akibot.echolocator.back", echoLocatorBackConfig);
 	}
 

@@ -1,11 +1,8 @@
 package com.akibot.tanktrack.component.echolocator;
 
-import akibot.jni.java.AkibotJniLibrary;
-
 import com.akibot.engine2.component.DefaultComponent;
 import com.akibot.engine2.component.configuration.GetConfigurationResponse;
 import com.akibot.engine2.exception.FailedToConfigureException;
-import com.akibot.engine2.exception.FailedToStartException;
 import com.akibot.engine2.exception.UnsupportedMessageException;
 import com.akibot.engine2.logger.AkiLogger;
 import com.akibot.engine2.message.Message;
@@ -17,11 +14,8 @@ import com.akibot.tanktrack.component.world.element.VectorUtils;
 
 public class EchoLocatorComponent extends DefaultComponent {
 	static final AkiLogger log = AkiLogger.create(EchoLocatorComponent.class);
-	private AkibotJniLibrary lib;
 	private EchoLocatorConfiguration componentConfiguration;
-	private double gradTotal = 180;
-	private int positionCount = 21;
-	private int startPosition = 4;
+	private EchoLocatorDevice echoLocatorDevice;
 	private RoundRobinUtils robinUtils = new RoundRobinUtils(360);
 
 	@Override
@@ -38,33 +32,13 @@ public class EchoLocatorComponent extends DefaultComponent {
 	public void onGetConfigurationResponse(GetConfigurationResponse getConfigurationResponse) throws FailedToConfigureException {
 		getComponentStatus().setReady(false);
 		componentConfiguration = (EchoLocatorConfiguration) getConfigurationResponse.getComponentConfiguration();
-
 		try {
-			this.lib = instantiate("akibot.jni.java." + componentConfiguration.getAkibotJniLibraryInstance(), AkibotJniLibrary.class);
-			log.debug(this.getAkibotClient() + ": onGetConfigurationResponse-getAkibotJniLibraryInstance: "
-					+ componentConfiguration.getAkibotJniLibraryInstance());
-
-			this.lib.echoLocatorInitialize(componentConfiguration.getDistanceTriggerPin(), componentConfiguration.getDistanceEchoPin(),
-					componentConfiguration.getDistanceTimeout(), componentConfiguration.getSleepBeforeDistance(), componentConfiguration.getServoBasePin(),
-					componentConfiguration.getServoHeadPin(), componentConfiguration.getServoLongTime(), componentConfiguration.getServoStepTime(),
-					componentConfiguration.getDistanceCount());
+			echoLocatorDevice = new EchoLocatorDevice(componentConfiguration);
 		} catch (Exception e) {
+			log.catching(e);
 			throw new FailedToConfigureException(e);
 		}
-
 		getComponentStatus().setReady(true);
-	}
-
-	public <T> T instantiate(final String className, final Class<T> type) {
-		try {
-			return type.cast(Class.forName(className).newInstance());
-		} catch (final InstantiationException e) {
-			throw new IllegalStateException(e);
-		} catch (final IllegalAccessException e) {
-			throw new IllegalStateException(e);
-		} catch (final ClassNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
 	}
 
 	@Override
@@ -82,8 +56,8 @@ public class EchoLocatorComponent extends DefaultComponent {
 		}
 	}
 
-	private MultipleDistanceDetails getMultipleDistanceDetailsFromEcholocator(EchoLocatorRequest request) {
-		float result[] = lib.echoLocatorScanDistance(request.getServoBaseFrom(), request.getServoBaseTo(), request.getServoBaseStep(),
+	private MultipleDistanceDetails getMultipleDistanceDetailsFromEcholocator(EchoLocatorRequest request) throws Exception {
+		float result[] = echoLocatorDevice.scanDistance(request.getServoBaseFrom(), request.getServoBaseTo(), request.getServoBaseStep(),
 				request.getServoHeadNormal(), request.isTrustToLastPosition());
 
 		MultipleDistanceDetails multipleDistanceDetails = new MultipleDistanceDetails();
@@ -117,8 +91,8 @@ public class EchoLocatorComponent extends DefaultComponent {
 	}
 
 	private Angle getAngleFromServoBasePosition(int servoBasePosition) {
-		double stepGrad = gradTotal / (positionCount - 1); // 9grad
-		double offsetSteps = servoBasePosition - startPosition;
+		double stepGrad = componentConfiguration.getGradTotal() / (componentConfiguration.getServoMax() - componentConfiguration.getServoMin() - 1); // 9grad
+		double offsetSteps = servoBasePosition - componentConfiguration.getServoMin();
 		double resultGrad = offsetSteps * stepGrad;
 		resultGrad = robinUtils.add(resultGrad, -90);
 		return new Angle(VectorUtils.gradToRad(resultGrad));

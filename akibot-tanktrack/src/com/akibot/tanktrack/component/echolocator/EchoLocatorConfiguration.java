@@ -1,25 +1,81 @@
 package com.akibot.tanktrack.component.echolocator;
 
+import java.math.BigDecimal;
+
 import com.akibot.engine2.component.configuration.ComponentConfiguration;
 import com.akibot.tanktrack.component.world.element.Angle;
 
 public class EchoLocatorConfiguration extends ComponentConfiguration {
-	private static final long serialVersionUID = 1L;
+	private BigDecimal frequency;
+	private BigDecimal frequencyCorrectionFactor;
+	private int busNumber;
+	private int address;
+	private int servoMin;
+	private int servoMax;
+
 	private int distanceTriggerPin;
 	private int distanceEchoPin;
 	private int distanceTimeout;
 	private int sleepBeforeDistance;
 	private int servoBasePin;
 	private int servoHeadPin;
-	//
 	private int servoLongTime;
 	private int servoStepTime;
 	private int distanceCount;
-	private double distanceMaxMm;
-	private Angle errorAngle;
-	private String akibotJniLibraryInstance;
 
-	//
+	private long distanceMaxMm;
+	private Angle errorAngle;
+
+	private double gradTotal;
+
+	public BigDecimal getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(BigDecimal frequency) {
+		this.frequency = frequency;
+	}
+
+	public BigDecimal getFrequencyCorrectionFactor() {
+		return frequencyCorrectionFactor;
+	}
+
+	public void setFrequencyCorrectionFactor(BigDecimal frequencyCorrectionFactor) {
+		this.frequencyCorrectionFactor = frequencyCorrectionFactor;
+	}
+
+	public int getBusNumber() {
+		return busNumber;
+	}
+
+	public void setBusNumber(int busNumber) {
+		this.busNumber = busNumber;
+	}
+
+	public int getAddress() {
+		return address;
+	}
+
+	public void setAddress(int address) {
+		this.address = address;
+	}
+
+	public int getServoMin() {
+		return servoMin;
+	}
+
+	public void setServoMin(int servoMin) {
+		this.servoMin = servoMin;
+	}
+
+	public int getServoMax() {
+		return servoMax;
+	}
+
+	public void setServoMax(int servoMax) {
+		this.servoMax = servoMax;
+	}
+
 	public int getDistanceTriggerPin() {
 		return distanceTriggerPin;
 	}
@@ -52,22 +108,6 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 		this.sleepBeforeDistance = sleepBeforeDistance;
 	}
 
-	public int getServoBasePin() {
-		return servoBasePin;
-	}
-
-	public void setServoBasePin(int servoBasePin) {
-		this.servoBasePin = servoBasePin;
-	}
-
-	public int getServoHeadPin() {
-		return servoHeadPin;
-	}
-
-	public void setServoHeadPin(int servoHeadPin) {
-		this.servoHeadPin = servoHeadPin;
-	}
-
 	public int getServoLongTime() {
 		return servoLongTime;
 	}
@@ -92,11 +132,11 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 		this.distanceCount = distanceCount;
 	}
 
-	public double getDistanceMaxMm() {
+	public long getDistanceMaxMm() {
 		return distanceMaxMm;
 	}
 
-	public void setDistanceMaxMm(double distanceMaxMm) {
+	public void setDistanceMaxMm(long distanceMaxMm) {
 		this.distanceMaxMm = distanceMaxMm;
 	}
 
@@ -108,12 +148,28 @@ public class EchoLocatorConfiguration extends ComponentConfiguration {
 		this.errorAngle = errorAngle;
 	}
 
-	public String getAkibotJniLibraryInstance() {
-		return akibotJniLibraryInstance;
+	public double getGradTotal() {
+		return gradTotal;
 	}
 
-	public void setAkibotJniLibraryInstance(String akibotJniLibraryInstance) {
-		this.akibotJniLibraryInstance = akibotJniLibraryInstance;
+	public void setGradTotal(double gradTotal) {
+		this.gradTotal = gradTotal;
+	}
+
+	public int getServoBasePin() {
+		return servoBasePin;
+	}
+
+	public void setServoBasePin(int servoBasePin) {
+		this.servoBasePin = servoBasePin;
+	}
+
+	public int getServoHeadPin() {
+		return servoHeadPin;
+	}
+
+	public void setServoHeadPin(int servoHeadPin) {
+		this.servoHeadPin = servoHeadPin;
 	}
 
 }
