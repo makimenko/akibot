@@ -1,7 +1,6 @@
 package sandbox.pi4j.servodriver;
 
 import java.math.BigDecimal;
-import java.util.Scanner;
 
 import com.pi4j.gpio.extension.pca.PCA9685GpioProvider;
 import com.pi4j.gpio.extension.pca.PCA9685Pin;
@@ -43,15 +42,14 @@ public class PCA9685GpioExample {
 		gpioProvider.reset();
 
 		Pin pin = PCA9685Pin.PWM_01;
-		
+
 		Pin pinHead = PCA9685Pin.PWM_00;
-		
+
 		System.out.println("Set PWM...");
 		gpioProvider.setPwm(pin, SERVO_DURATION_MIN);
 		gpioProvider.setPwm(pinHead, SERVO_DURATION_MIN);
 		System.out.println("Sleeping...");
 		Thread.sleep(1000);
-
 
 		System.out.println("Set PWM...");
 		gpioProvider.setPwm(pin, SERVO_DURATION_MAX);
@@ -65,7 +63,6 @@ public class PCA9685GpioExample {
 		System.out.println("Sleeping...");
 		Thread.sleep(1000);
 
-		
 		// Show PWM values for outputs 0..14
 		for (GpioPinPwmOutput output : myOutputs) {
 			int[] onOffValues = gpioProvider.getPwmOnOffValues(output.getPin());
@@ -74,7 +71,7 @@ public class PCA9685GpioExample {
 		}
 
 		Thread.sleep(5000);
-		
+
 		System.out.println("DONE");
 	}
 

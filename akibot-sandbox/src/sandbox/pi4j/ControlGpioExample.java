@@ -7,8 +7,7 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 /**
- * This example code demonstrates how to perform simple state control of a GPIO
- * pin on the Raspberry Pi.
+ * This example code demonstrates how to perform simple state control of a GPIO pin on the Raspberry Pi.
  * 
  * @author Robert Savage
  */
