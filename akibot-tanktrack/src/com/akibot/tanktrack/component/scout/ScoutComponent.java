@@ -71,7 +71,7 @@ public class ScoutComponent extends DefaultComponent {
 
 		// UPDATE WORLD:
 		EchoLocatorResponse frontEchoLocatorResponse = (EchoLocatorResponse) workflowResponse.getResponseList().get(CORRELATION_A);
-		// EchoLocatorResponse backEchoLocatorResponse = (EchoLocatorResponse) workflowResponse.getResponseList().get(CORRELATION_B);
+		EchoLocatorResponse backEchoLocatorResponse = (EchoLocatorResponse) workflowResponse.getResponseList().get(CORRELATION_B);
 		GyroscopeResponse gyroscopeResponse = (GyroscopeResponse) workflowResponse.getResponseList().get(CORRELATION_C);
 
 		WorldNodeTransformationRequest gyroscopeNodeTransformationRequest = new WorldNodeTransformationRequest();
@@ -89,12 +89,12 @@ public class ScoutComponent extends DefaultComponent {
 		frontWorldMultipleDistanceUpdateRequest.setGridNodeName(Constants.NODE_NAME_GRID);
 		broadcastMessage(frontWorldMultipleDistanceUpdateRequest);
 
-		// MultipleDistanceDetails backMultipleDistanceDetails = backEchoLocatorResponse.getMultipleDistanceDetails();
-		// WorldMultipleDistanceUpdateRequest backWorldMultipleDistanceUpdateRequest = new WorldMultipleDistanceUpdateRequest();
-		// backWorldMultipleDistanceUpdateRequest.setMultipleDistanceDetails(backMultipleDistanceDetails);
-		// backWorldMultipleDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
-		// backWorldMultipleDistanceUpdateRequest.setGridNodeName(Constants.NODE_NAME_GRID);
-		// broadcastMessage(backWorldMultipleDistanceUpdateRequest);
+		MultipleDistanceDetails backMultipleDistanceDetails = backEchoLocatorResponse.getMultipleDistanceDetails();
+		WorldMultipleDistanceUpdateRequest backWorldMultipleDistanceUpdateRequest = new WorldMultipleDistanceUpdateRequest();
+		backWorldMultipleDistanceUpdateRequest.setMultipleDistanceDetails(backMultipleDistanceDetails);
+		backWorldMultipleDistanceUpdateRequest.setDistanceNodeName(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+		backWorldMultipleDistanceUpdateRequest.setGridNodeName(Constants.NODE_NAME_GRID);
+		broadcastMessage(backWorldMultipleDistanceUpdateRequest);
 
 		// SEND RESPONSE:
 		ScoutDistanceAroundResponse scoutDistanceAroundResponse = new ScoutDistanceAroundResponse();
@@ -107,28 +107,32 @@ public class ScoutComponent extends DefaultComponent {
 
 		EchoLocatorRequest frontEchoLocatorRequest = new EchoLocatorRequest();
 		frontEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_FRONT);
-		frontEchoLocatorRequest.setServoBaseFrom(4);
-		frontEchoLocatorRequest.setServoBaseTo(24);
-		frontEchoLocatorRequest.setServoBaseStep(1);
-		frontEchoLocatorRequest.setServoHeadNormal(14);
+		frontEchoLocatorRequest.setServoBaseFrom(600);
+		frontEchoLocatorRequest.setServoBaseTo(2500);
+		frontEchoLocatorRequest.setServoBaseStep(190);
+		frontEchoLocatorRequest.setServoHeadNormal(1300);
 
-		// EchoLocatorRequest backEchoLocatorRequest = new EchoLocatorRequest();
-		// backEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+		EchoLocatorRequest backEchoLocatorRequest = new EchoLocatorRequest();
+		backEchoLocatorRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_ECHOLOCATOR_BACK);
+		backEchoLocatorRequest.setServoBaseFrom(600);
+		backEchoLocatorRequest.setServoBaseTo(2500);
+		backEchoLocatorRequest.setServoBaseStep(190);
+		backEchoLocatorRequest.setServoHeadNormal(1300);
 
 		GyroscopeValueRequest gyroscopeValueRequest = new GyroscopeValueRequest();
 		gyroscopeValueRequest.setTo(Constants.COMPONENT_NAME_AKIBOT_GYROSCOPE);
 
 		WorkflowElement fork = new WorkflowForkElement();
 		WorkflowElement request1 = new WorkflowRequestElement(CORRELATION_A, frontEchoLocatorRequest);
-		// WorkflowElement request2 = new WorkflowRequestElement(CORRELATION_B, backEchoLocatorRequest);
+		WorkflowElement request2 = new WorkflowRequestElement(CORRELATION_B, backEchoLocatorRequest);
 		WorkflowElement request3 = new WorkflowRequestElement(CORRELATION_C, gyroscopeValueRequest);
 		WorkflowElement join = new WorkflowJoinElement();
 
 		fork.setNextWorkflowElement(request1);
-		// fork.setNextWorkflowElement(request2);
+		fork.setNextWorkflowElement(request2);
 		fork.setNextWorkflowElement(request3);
 		request1.setNextWorkflowElement(join);
-		// request2.setNextWorkflowElement(join);
+		request2.setNextWorkflowElement(join);
 		request3.setNextWorkflowElement(join);
 
 		workflowDefinition.setStartWorkflowElement(fork);

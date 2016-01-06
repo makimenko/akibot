@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.InetSocketAddress;
 
+import opennlp.tools.parser.Cons;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -112,8 +114,8 @@ public class TankTrackTest {
 		assertEquals("Check value " + result, true, result > 100 && result < 7000);
 	}
 
-	@Test
-	public void testServo() throws FailedToSendMessageException, InterruptedException {
+	
+	public void SKIP_testServo() throws FailedToSendMessageException, InterruptedException {
 		callServo("akibot.servo.front");
 		callServo("akibot.servo.back");
 	}
@@ -189,9 +191,10 @@ public class TankTrackTest {
 
 		// Step 2:
 		echoLocatorRequest.setServoBaseFrom(2500);
-		echoLocatorRequest.setServoBaseTo(950);
+		echoLocatorRequest.setServoBaseTo(((2500 - 600) / 2) + 600);
 		echoLocatorRequest.setServoBaseStep(190);
-		echoLocatorRequest.setServoHeadNormal(950);
+		echoLocatorRequest.setServoHeadNormal(1300);
+		
 		testClient.getOutgoingMessageManager().broadcastMessage(forwardRequest);
 		testClient.getOutgoingMessageManager().broadcastMessage(echoLocatorRequest);
 		Thread.sleep(1500);

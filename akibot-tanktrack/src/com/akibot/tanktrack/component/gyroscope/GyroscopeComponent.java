@@ -108,8 +108,9 @@ public class GyroscopeComponent extends DefaultComponent {
 			I2CBus bus = I2CFactory.getInstance(componentConfiguration.getBusNumber());
 			i2cDevice = bus.getDevice(componentConfiguration.getDeviceAddress());
 
+
 			modeIdle();
-			// selfTest(gain_0_88, cra_8samples_15Hz_normal);
+			//selfTest(GyroscopeConstantsHMC5883L.GAIN_8_1, GyroscopeConstantsHMC5883L.CRA_8SAMPLE_15MHZ_NORMAL);
 			// selfTest(gain_8_1, cra_8samples_15Hz_normal);
 
 			i2cDevice.write(GyroscopeConstantsHMC5883L.CONFIGURATION_REGISTER_A, GyroscopeConstantsHMC5883L.CRA_8SAMPLE_15MHZ_NORMAL);
