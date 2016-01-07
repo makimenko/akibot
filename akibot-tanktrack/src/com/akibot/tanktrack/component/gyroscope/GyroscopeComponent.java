@@ -126,7 +126,7 @@ public class GyroscopeComponent extends DefaultComponent {
 	}
 
 	private void onGyroscopeValueRequest(GyroscopeValueRequest gyroscopeValueRequest) throws IOException, FailedToSendMessageException {
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 		GyroscopeResponse response = new GyroscopeResponse();
 
 		// Reading magnetometer data:
@@ -150,7 +150,7 @@ public class GyroscopeComponent extends DefaultComponent {
 		response.setZ(z);
 		response.setNorthDegreesXY(northDegreesXY);
 
-		log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
+		//log.trace(this.getAkibotClient() + ": Duration: " + (System.currentTimeMillis() - startTime));
 		broadcastResponse(response, gyroscopeValueRequest);
 	}
 

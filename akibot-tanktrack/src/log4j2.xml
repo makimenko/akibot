@@ -12,10 +12,15 @@
 			/> <Column name="MESSAGE" pattern="%message" /> <Column name="THROWABLE" 
 			pattern="%ex{full}" isClob="true" /> </JDBC> -->
 	</Appenders>
+
 	<Loggers>
-		<Root level="debug">
+		<Root level="error">
 			<AppenderRef ref="STDOUT" />
 		</Root>
+		<Logger name="com.akibot.tanktrack.component" level="all"
+			additivity="false">
+			<AppenderRef ref="STDOUT" />
+		</Logger>
 	</Loggers>
 
 </Configuration>
