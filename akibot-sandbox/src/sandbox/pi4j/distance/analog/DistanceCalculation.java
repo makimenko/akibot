@@ -1,4 +1,4 @@
-package sandbox.pi4j.distance;
+package sandbox.pi4j.distance.analog;
 
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;

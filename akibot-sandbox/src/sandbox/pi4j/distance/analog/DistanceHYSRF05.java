@@ -1,4 +1,4 @@
-package sandbox.pi4j.distance;
+package sandbox.pi4j.distance.analog;
 
 import java.io.IOException;
 
