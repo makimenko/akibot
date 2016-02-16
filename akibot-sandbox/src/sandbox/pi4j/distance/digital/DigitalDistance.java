@@ -1,19 +1,9 @@
 package sandbox.pi4j.distance.digital;
 
-import java.util.Date;
-
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalInput;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.serial.Serial;
 import com.pi4j.io.serial.SerialDataEvent;
 import com.pi4j.io.serial.SerialDataListener;
 import com.pi4j.io.serial.SerialFactory;
-import com.pi4j.io.serial.SerialPortException;
 
 // DataSheet: http://www.datasheetspdf.com/PDF/DYP-ME007TX/907788/1
 
@@ -82,7 +72,7 @@ public class DigitalDistance {
 
 	private void processByte(byte data) {
 		count++;
-		//System.out.printf("0x%02X ", data);
+		// System.out.printf("0x%02X ", data);
 
 		if (data == (byte) 0xFF) {
 			// 1. 0XFF: for a frame to start data for judgment.
