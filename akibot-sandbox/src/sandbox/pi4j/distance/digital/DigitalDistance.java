@@ -14,8 +14,10 @@ public class DigitalDistance {
 	private byte valueLData;
 	private byte valueSum;
 	private int count = 0;
-	private long runningMillis = 5000;
+	private long runningMillis = 50000;
 	private final int BAUD_RATE = 9600;
+	// /CH340G => dev/ttyUSB0
+	private String device = "/dev/ttyUSB0"; // Serial.DEFAULT_COM_PORT;
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("STARTING...");
@@ -28,7 +30,7 @@ public class DigitalDistance {
 	public void serialReadTest() throws InterruptedException {
 		final Serial serial = SerialFactory.createInstance();
 		System.out.println("Opening serial...");
-		serial.open(Serial.DEFAULT_COM_PORT, BAUD_RATE);
+		serial.open(device, BAUD_RATE);
 		serial.flush();
 
 		System.out.println("Reading...");
@@ -71,7 +73,7 @@ public class DigitalDistance {
 	}
 
 	private void processByte(byte data) {
-		count++;
+
 		// System.out.printf("0x%02X ", data);
 
 		if (data == (byte) 0xFF) {
@@ -94,6 +96,7 @@ public class DigitalDistance {
 			index++;
 			int mili = ((valueHData & 0xff) << 8) | (valueLData & 0xff);
 			System.out.println("Distance = " + mili);
+			count++;
 		} else if (index == 4) {
 			System.out.println(" Incorrect ");
 		}
