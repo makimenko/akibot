@@ -9,7 +9,7 @@ import com.pi4j.io.gpio.RaspiPin;
 
 public class RelayTest {
 
-	private final Pin channelPin = RaspiPin.GPIO_01;
+	private final Pin channelPin = RaspiPin.GPIO_29;
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("STARTING...");
@@ -24,18 +24,18 @@ public class RelayTest {
 
 		System.out.println("waiting");
 		Thread.sleep(2000);
-		System.out.println("set to low (ON)...");
+		System.out.println("set to low...");
 		pin.low();
 		Thread.sleep(2000);
-		System.out.println("set to high (OFF)...");
+		System.out.println("set to high...");
 		pin.high();
 		Thread.sleep(2000);
-		System.out.println("set to low (ON)...");
+		System.out.println("set to low...");
 		pin.low();
-		Thread.sleep(2000);
-		System.out.println("set to high (OFF)...");
-		pin.high();
-		Thread.sleep(2000);
+		//Thread.sleep(2000);
+		//System.out.println("set to high ...");
+		//pin.high();
+		//Thread.sleep(2000);
 	}
 
 }
