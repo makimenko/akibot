@@ -33,7 +33,7 @@ $(function () {
 		.prop('href', 'img/images/20150327.png')
 		.prop('title', '2015.03.27: Printed Circuit Board (PCB) design in Zenit')
 		.attr('data-gallery', '')
-		.appendTo(linksContainer);		
+		.appendTo(linksContainer);
 	$('<a/>')
 		.append($('<img>').prop('src', 'img/images/T-20150602-1.jpg').prop('class','img-thumbnail'))
 		.prop('href', 'img/images/20150602-1.jpg')
@@ -75,9 +75,58 @@ $(function () {
 		.prop('href', 'img/images/20150908_LocationAreaGrid-2.png')
 		.prop('title', '2015.09.08: Location Area Grid Visualization in HTML5/WebGL/Three.js')
 		.attr('data-gallery', '')
-		.appendTo(linksContainer);		
-		
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20160426.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20160426.jpg')
+		.prop('title', '2016.04.25: 3D Printing office in Riga')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20160425.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20160425.jpg')
+		.prop('title', '2016.04.25: AkiVaku 3D printed body, designed in Blender')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20160427.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20160427.jpg')
+		.prop('title', '2016.04.27: AkiVaku complete body design in Blender')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20160428.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20160428.jpg')
+		.prop('title', '2016.04.28: AkiVaku design in Blender')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20160505.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20160505.jpg')
+		.prop('title', '2016.05.05: AkiVaku PCB modelling')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20160702.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20160702.jpg')
+		.prop('title', '2016.07.02: Self-made PCB')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20161030.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20161030.jpg')
+		.prop('title', '2016.10.30: Review of PCB Layers before sending to PCBWay.com (China)')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
+	$('<a/>')
+		.append($('<img>').prop('src', 'img/images/T-20161112.jpg').prop('class','img-thumbnail'))	
+		.prop('href', 'img/images/20161112.jpg')
+		.prop('title', '2016.11.12: Received PCB from PCBWay.com (China)')
+		.attr('data-gallery', '')
+		.appendTo(linksContainer);
 
+		
+		
 		blueimp.Gallery([
         {
             title: 'AkiBot Demo 1 (eng)',
