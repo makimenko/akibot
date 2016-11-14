@@ -1,7 +1,5 @@
-.settings
-/
-.classpath
-/
+.settings/
 target/
 bin/
+.classpath
 .project
