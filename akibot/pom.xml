@@ -12,6 +12,7 @@
 		<module>akibot-common</module>
 		<module>akibot-device-fake</module>
 		<module>akibot-device-rpi</module>
+		<module>akibot-app</module>
 	</modules>
 
 	<properties>

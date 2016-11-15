@@ -19,5 +19,4 @@ public class ProcessorImpl implements Processor {
 		return future;
 	}
 
-	
 }
