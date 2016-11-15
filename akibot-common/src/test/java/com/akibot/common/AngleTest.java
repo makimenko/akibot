@@ -115,7 +115,6 @@ public class AngleTest {
 	public void left90() {
 		vector = new Vector3D(-1, 0, 0);
 		angle = vectorUtils.getNorthAngle(vector);
-		System.out.println(angle);
 		assertTrue(angle.fuzzyEqual(angle90, toleranceDeg));
 	}
 

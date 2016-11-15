@@ -40,7 +40,6 @@ public class JsonTest {
 		testMessage.setPoint(new Point3D(-1.01, -2.02, -3.03));
 
 		String jsonString = gson.toJson(testMessage);
-		System.out.println(jsonString);
 		assertEquals(
 				"{\"stringField\":\"aaa\",\"doubleField\":0.03,\"booleanField\":true,\"point\":{\"z\":-3.03,\"x\":-1.01,\"y\":-2.02}}",
 				jsonString);
