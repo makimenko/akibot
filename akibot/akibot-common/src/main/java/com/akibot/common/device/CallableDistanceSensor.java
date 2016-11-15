@@ -1,4 +1,4 @@
-package com.akibot.common.interfaces;
+package com.akibot.common.device;
 
 import com.akibot.common.element.Distance;
 

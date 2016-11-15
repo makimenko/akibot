@@ -5,9 +5,13 @@
 	<artifactId>akibot</artifactId>
 	<version>0.2.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
+	<name>AkiBot</name>
+	<description>Parent AkiBot Module</description>
+	
 	<modules>
 		<module>akibot-common</module>
+		<module>akibot-device-fake</module>
+		<module>akibot-device-rpi</module>
 	</modules>
 
 	<properties>
