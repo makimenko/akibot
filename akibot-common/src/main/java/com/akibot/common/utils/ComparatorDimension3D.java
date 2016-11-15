@@ -16,7 +16,8 @@ public class ComparatorDimension3D implements Comparator<Dimension3D> {
 	}
 
 	public int compare(Dimension3D a, Dimension3D b) {
-		if (Math.abs(a.getX() - b.getX()) <= tolerance && Math.abs(a.getY() - b.getY()) <= tolerance && Math.abs(a.getZ() - b.getZ()) <= tolerance) {
+		if (Math.abs(a.getX() - b.getX()) <= tolerance && Math.abs(a.getY() - b.getY()) <= tolerance
+				&& Math.abs(a.getZ() - b.getZ()) <= tolerance) {
 			return 0;
 		} else {
 			return 1;

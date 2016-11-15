@@ -6,7 +6,7 @@ public class Vector3D extends Dimension3D {
 	public Vector3D() {
 		super();
 	}
-	
+
 	public Vector3D(final double x, final double y, final double z) {
 		super(x, y, z);
 	}

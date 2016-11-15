@@ -46,8 +46,9 @@ public class Dimension3D extends Dimension2D {
 	}
 
 	public boolean equals(Dimension3D dimension3d, double tolerance) {
-		return (dimension3d != null && Math.abs(dimension3d.getX() - getX()) < tolerance && Math.abs(dimension3d.getY() - getY()) < tolerance && Math
-				.abs(dimension3d.getZ() - getZ()) < tolerance);
+		return (dimension3d != null && Math.abs(dimension3d.getX() - getX()) < tolerance
+				&& Math.abs(dimension3d.getY() - getY()) < tolerance
+				&& Math.abs(dimension3d.getZ() - getZ()) < tolerance);
 	}
 
 }

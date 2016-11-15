@@ -1,7 +1,6 @@
 package com.akibot.common.element;
 
 import com.akibot.common.utils.RoundRobinUtils;
-import com.akibot.common.utils.VectorUtils;
 
 public class Angle implements SimpleGeometryElement {
 	private static final long serialVersionUID = -4825882674847250810L;
@@ -52,7 +51,7 @@ public class Angle implements SimpleGeometryElement {
 
 	public boolean fuzzyEqual(Angle b, double toleranceDegrees) {
 		RoundRobinUtils utils = new RoundRobinUtils(360);
-		double res = utils.modularDistance(this.getDegrees(), b.getDegrees());		
+		double res = utils.modularDistance(this.getDegrees(), b.getDegrees());
 		return res < toleranceDegrees;
 	}
 
