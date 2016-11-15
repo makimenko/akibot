@@ -4,7 +4,7 @@
 	<groupId>com.akibot</groupId>
 	<artifactId>akibot-common</artifactId>
 	<version>0.2.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<name>AkiBot Common</name>
 
 	<properties>
