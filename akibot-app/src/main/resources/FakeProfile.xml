@@ -18,5 +18,9 @@
 			<bean class="com.akibot.common.element.Vector3D" />
 		</constructor-arg>
 	</bean>
+	
+	<bean id="workflow" class="com.akibot.app.logic.WorkflowImpl">
+	</bean>
+	
 
 </beans>
