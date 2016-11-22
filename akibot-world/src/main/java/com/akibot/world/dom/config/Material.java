@@ -1,6 +1,6 @@
 package com.akibot.world.dom.config;
 
-public class Material implements WorldConfiguration {
+public class Material implements Configuration {
 	private static final long serialVersionUID = 1L;
 	private int color;
 	private int shading;

@@ -2,7 +2,7 @@ package com.akibot.world.dom.config;
 
 import com.akibot.common.element.Vector3D;
 
-public class GridConfiguration implements WorldConfiguration {
+public class GridConfiguration implements Configuration {
 	private static final long serialVersionUID = 1L;
 	private int cellCountX;
 	private int cellCountY;

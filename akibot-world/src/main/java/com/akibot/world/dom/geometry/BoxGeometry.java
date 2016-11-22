@@ -3,7 +3,7 @@ package com.akibot.world.dom.geometry;
 import com.akibot.common.element.Vector3D;
 import com.akibot.world.dom.config.Material;
 
-public class BoxGeometry extends BaseNodeGeometry {
+public class BoxGeometry extends BaseGeometry {
 	private static final long serialVersionUID = 1L;
 	private Vector3D dimension;
 	private Material material;

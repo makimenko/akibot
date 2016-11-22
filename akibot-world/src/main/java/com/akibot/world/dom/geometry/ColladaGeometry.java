@@ -1,6 +1,6 @@
 package com.akibot.world.dom.geometry;
 
-public class ColladaGeometry extends BaseNodeGeometry {
+public class ColladaGeometry extends BaseGeometry {
 	private static final long serialVersionUID = 1L;
 	private String fileName;
 

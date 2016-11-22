@@ -8,26 +8,19 @@ import com.akibot.world.dom.transformation.NodeTransformation3D;
 
 public class WorldContentManagerDaoImpl implements WorldContentDao {
 	private Node worldNode;
-
 	private Map<String, Node> nodeList;
 
 	public WorldContentManagerDaoImpl() {
 		this.nodeList = new HashMap<String, Node>();
 	}
 
-	public Node getWorldNode() {
-		return worldNode;
-	}
-
-	public void setWorldNode(Node worldNode) {
-		this.worldNode = worldNode;
-	}
-
-	public void index(Node node) {
+	// TODO: is it needed?
+	private void index(Node node) {
 		nodeList.put(node.getName(), node);
 	}
 
-	public void indexAllChilds(Node node) {
+	// TODO: is it needed?
+	private void indexAllChilds(Node node) {
 		index(node);
 		if (node.getChilds() != null) {
 			for (Node i : node.getChilds()) {
@@ -36,8 +29,9 @@ public class WorldContentManagerDaoImpl implements WorldContentDao {
 		}
 	}
 
-	public void indexRecalculation() {
-		indexAllChilds(getWorldNode());
+	// TODO: is it needed?
+	private void indexRecalculation() {
+		indexAllChilds(worldNode);
 	}
 
 	@Override

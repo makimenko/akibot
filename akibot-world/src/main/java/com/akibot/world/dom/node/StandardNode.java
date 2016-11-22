@@ -2,7 +2,7 @@ package com.akibot.world.dom.node;
 
 import java.util.List;
 
-import com.akibot.world.dom.geometry.NodeGeometry;
+import com.akibot.world.dom.geometry.Geometry;
 import com.akibot.world.dom.transformation.NodeTransformation3D;
 
 public class StandardNode implements Node {
@@ -10,7 +10,7 @@ public class StandardNode implements Node {
 	private String name;
 	private Node parentNode;
 	private List<Node> childs;
-	private NodeGeometry geometry;
+	private Geometry geometry;
 	private NodeTransformation3D transformation;
 	private boolean stickToParent;
 
@@ -45,11 +45,11 @@ public class StandardNode implements Node {
 		this.childs = childs;
 	}
 
-	public NodeGeometry getGeometry() {
+	public Geometry getGeometry() {
 		return geometry;
 	}
 
-	public void setGeometry(NodeGeometry geometry) {
+	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 	}
 

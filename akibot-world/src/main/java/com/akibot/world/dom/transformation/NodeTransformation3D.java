@@ -2,7 +2,7 @@ package com.akibot.world.dom.transformation;
 
 import com.akibot.common.element.Vector3D;
 
-public class NodeTransformation3D implements TransformationElement {
+public class NodeTransformation3D implements Transformation {
 	private static final long serialVersionUID = 1L;
 	private Vector3D position;
 	private Vector3D scale;

@@ -19,7 +19,7 @@ import com.akibot.world.dom.transformation.NodeTransformation3D;
 import com.akibot.world.message.GridGeometryPartialTransformationEvent;
 
 //TODO: Create new GridGeometry using this DAO?
-public class GridGeometryDaoImpl implements GridGeometryDao {
+public class GridGeometryHandler {
 	private static final int RASTER_OBSTACLE = 1;
 	private static final int RASTER_EMPTY = -1;
 
@@ -30,13 +30,12 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 
 	private GridGeometryPartialTransformationEvent changeEvent;
 
-	public GridGeometryDaoImpl(final GridGeometry gridGeometry) {
+	public GridGeometryHandler(final GridGeometry gridGeometry) {
 		this.gridGeometry = gridGeometry;
 		this.gridConfiguration = gridGeometry.getGridConfiguration();
 		this.vectorUtils = new VectorUtils();
 	}
 
-	@Override
 	public void reset(int value) {
 		final ArrayUtils arrayUtils = new ArrayUtils();
 		arrayUtils.updateValue(gridGeometry.getGrid(), value);
@@ -60,17 +59,14 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 		return offsetPoint;
 	}
 
-	@Override
 	public int getAddressX(final Point2D point2D) throws CommonUtilsException {
 		return (int) Math.floor(getPoint2DWithOffset(point2D).getX() / gridConfiguration.getCellSizeMm());
 	}
 
-	@Override
 	public int getAddressY(final Point2D point) throws CommonUtilsException {
 		return (int) Math.floor(getPoint2DWithOffset(point).getY() / gridConfiguration.getCellSizeMm());
 	}
 
-	@Override
 	public void addPoint2D(final Point2D point2D) throws CommonUtilsException {
 		add(getAddressX(point2D), getAddressY(point2D));
 	}
@@ -98,12 +94,10 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 		gridUpdates.put(gridCell.getAddress(), gridCell);
 	}
 
-	@Override
 	public void startGridUpdate() {
 		this.gridUpdates = new HashMap<String, GridGeometryCellValue>();
 	}
 
-	@Override
 	public void endGridUpdate() {
 		int[][] grid = gridGeometry.getGrid();
 		for (GridGeometryCellValue cell : gridUpdates.values()) {
@@ -114,7 +108,6 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 		}
 	}
 
-	@Override
 	public void addLine2D(final Line2D line2D, final boolean endIsObstacle) throws CommonUtilsException {
 		final int[][] raster = rasterize2D(line2D, endIsObstacle);
 		for (int i = 0; i < raster.length; i++) {
@@ -144,7 +137,6 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 	 * @throws CommonUtilsException
 	 *             any logical exception (eg out of range)
 	 */
-	@Override
 	public int[][] rasterize2D(final Line2D line, final boolean endIsObstacle) throws CommonUtilsException {
 
 		int x = getAddressX(line.getFrom());
@@ -221,7 +213,6 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 		return res;
 	}
 
-	@Override
 	public Line2D createLine2D(final Point2D startPoint2D, final Angle northAngle, final double distanceCm) {
 		final Line2D line2D = new Line2D();
 		line2D.setFrom(startPoint2D);
@@ -231,7 +222,6 @@ public class GridGeometryDaoImpl implements GridGeometryDao {
 		return line2D;
 	}
 
-	@Override
 	public void addLine2DWithAngle(final Line2D line2D, final Angle errorAngle, final boolean endIsObstacle)
 			throws CommonUtilsException {
 		startGridUpdate();

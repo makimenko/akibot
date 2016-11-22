@@ -1,6 +1,6 @@
 package com.akibot.world.dom.geometry;
 
-public class GridGeometryCellValue extends BaseNodeGeometry {
+public class GridGeometryCellValue extends BaseGeometry {
 	private static final long serialVersionUID = 1L;
 
 	private int x;
@@ -42,5 +42,4 @@ public class GridGeometryCellValue extends BaseNodeGeometry {
 		buf.append(x).append(';').append(y);
 		return buf.toString();
 	}
-
 }
