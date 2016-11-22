@@ -47,9 +47,9 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>
-					<!-- If you run/debug remotely, dlease define here path to RaspberryPi, 
+					<!-- If you run/debug remotely, please define path to RaspberryPi share, 
 						else remove outputDirectory parameter -->
-					<outputDirectory>\\raspberrypi\share\remote_java\</outputDirectory>
+					<!-- outputDirectory>\\raspberrypi\share\remote_java\</outputDirectory -->
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>

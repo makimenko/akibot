@@ -12,6 +12,7 @@ public class FakeGyroscope implements Gyroscope {
 		this.offset = offset;
 	}
 
+	@Override
 	public Vector3D getGyroscopeValue() {
 		final Random random = new Random();
 		double x = random.nextDouble();

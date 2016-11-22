@@ -21,6 +21,7 @@ public class FakeCallableDistanceSensor implements CallableDistanceSensor {
 		this.errorAngle = errorAngle;
 	}
 
+	@Override
 	public Distance getDistance() {
 		double distanceMm = random.nextDouble();
 		distanceMm *= multiplier;

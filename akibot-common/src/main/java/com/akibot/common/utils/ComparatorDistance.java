@@ -15,6 +15,7 @@ public class ComparatorDistance implements Comparator<Distance> {
 		this.tolerance = tolerance;
 	}
 
+	@Override
 	public int compare(Distance a, Distance b) {
 		if (Math.abs(a.getDistanceMm() - b.getDistanceMm()) <= tolerance) {
 			return 0;
