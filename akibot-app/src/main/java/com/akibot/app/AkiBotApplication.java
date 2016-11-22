@@ -1,20 +1,34 @@
 package com.akibot.app;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 
+import com.akibot.app.logic.Workflow;
 import com.akibot.common.device.Gyroscope;
 
-public class AkiBotApplication {
+@EnableAutoConfiguration
+@ImportResource("classpath:ApplicationContext.xml")
+@ComponentScan("com.akibot.app.logic")
+public class AkiBotApplication implements CommandLineRunner {
 
-	public static void main(String[] args) throws InterruptedException {
-		ApplicationContext context = new ClassPathXmlApplicationContext(args[0]);
+	@Autowired
+	private Gyroscope mainGyroscope;
 
-		for (int i = 0; i <= 1; i++) {
-			Gyroscope mainGyroscope = (Gyroscope) context.getBean("mainGyroscope");
-			System.out.println(mainGyroscope.getGyroscopeValue());
-			Thread.sleep(500);
-		}
+	@Autowired
+	private Workflow workflow;
 
+	public static void main(String[] args) throws Exception {
+		SpringApplication.run(AkiBotApplication.class, args);
 	}
+
+	@Override
+	public void run(String... args) {
+		System.out.println("Value: " + mainGyroscope.getGyroscopeValue());
+		System.out.println(workflow);
+	}
+
 }

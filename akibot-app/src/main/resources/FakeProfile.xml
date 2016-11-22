@@ -7,9 +7,11 @@
         http://www.springframework.org/schema/mvc 
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/context 
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd"
+	profile="fake">
 
 	<!-- <context:component-scan base-package="com.crunchify.controller" /> -->
+
 
 	<bean id="mainGyroscope" class="com.akibot.device.fake.gyroscope.FakeGyroscope">
 		<constructor-arg name="offset">

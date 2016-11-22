@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<name>AkiBot</name>
 	<description>Parent AkiBot Module</description>
-	
+
 	<modules>
 		<module>akibot-common</module>
 		<module>akibot-device-fake</module>
@@ -19,7 +19,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -38,7 +38,7 @@
 			<version>2.5</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -52,6 +52,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
+
 </project>
