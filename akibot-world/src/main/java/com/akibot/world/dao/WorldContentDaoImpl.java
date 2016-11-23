@@ -11,8 +11,10 @@ public class WorldContentDaoImpl implements WorldContentDao {
 	// TODO: is it needed?
 	private final Map<String, Node> nodeList;
 
-	public WorldContentDaoImpl() {
+	public WorldContentDaoImpl(Node worldNode) {
 		this.nodeList = new HashMap<String, Node>();
+		this.worldNode = worldNode;
+		indexAllChilds(worldNode);
 	}
 
 	private void index(Node node) {
@@ -29,13 +31,13 @@ public class WorldContentDaoImpl implements WorldContentDao {
 	}
 
 	@Override
-	public void setWorldNode(Node worldNode) {
-		this.worldNode = worldNode;
-		indexAllChilds(worldNode);
-	}
-
-	@Override
 	public Node findNode(String name) {
+		Node result = nodeList.get(name);
+		if (result == null) {
+			// Try to re-index in case not found
+			indexAllChilds(this.worldNode);
+			result = nodeList.get(name);
+		}
 		return nodeList.get(name);
 	}
 

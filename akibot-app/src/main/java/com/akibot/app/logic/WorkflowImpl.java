@@ -12,12 +12,7 @@ import org.springframework.stereotype.Component;
 import com.akibot.common.device.Gyroscope;
 import com.akibot.common.element.Vector3D;
 import com.akibot.world.dao.WorldContentDao;
-import com.akibot.world.dom.config.GridConfiguration;
-import com.akibot.world.dom.geometry.ColladaGeometry;
-import com.akibot.world.dom.geometry.GridGeometry;
 import com.akibot.world.dom.node.Node;
-import com.akibot.world.dom.node.StandardNode;
-import com.akibot.world.dom.transformation.NodeTransformation3D;
 
 @Component
 public class WorkflowImpl implements Workflow {
@@ -35,6 +30,9 @@ public class WorkflowImpl implements Workflow {
 	@Autowired
 	WorldContentDao worldContentDao;
 
+	@Autowired
+	Node worldNode;
+
 	public WorkflowImpl() {
 		logger.info("Starting Workflow");
 	}
@@ -42,45 +40,7 @@ public class WorkflowImpl implements Workflow {
 	@Override
 	public void startSample() {
 		logger.info("Starting Simple");
-		initWorldContent();
 		intiScheduler();
-	}
-
-	private void initWorldContent() {
-		logger.info("initWorldContent");
-		// TODO: Move to application context
-
-		Node worldNode = new StandardNode(Constants.NODE_NAME_WORLD);
-
-		// ======================== Grid:
-		int positionOffset = Constants.GRID_CELL_COUNT * Constants.GRID_CELL_SIZE / 2;
-		GridConfiguration gridConfiguration = new GridConfiguration(Constants.GRID_CELL_COUNT,
-				Constants.GRID_CELL_COUNT, Constants.GRID_CELL_SIZE, Constants.GRID_MAX_OBSTACLE_COUNT,
-				new Vector3D(-positionOffset, -positionOffset, 0));
-		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
-		Node gridNode = new StandardNode(Constants.NODE_NAME_GRID);
-		gridNode.setGeometry(gridGeometry);
-		worldNode.attachChild(gridNode);
-
-		// ======================== Robot:
-		ColladaGeometry robotGeometry = new ColladaGeometry();
-		robotGeometry.setFileName("model/AkiBot.dae");
-		Node robotNode = new StandardNode(Constants.NODE_NAME_ROBOT);
-		robotNode.setGeometry(robotGeometry);
-		worldNode.attachChild(robotNode);
-
-		// ======================== Gyroscope:
-		Node gyroscopeNode = new StandardNode(Constants.NODE_NAME_GYROSCOPE);
-		NodeTransformation3D gyroTransform = new NodeTransformation3D();
-		gyroTransform.setRotation(new Vector3D(0, 0, Math.toRadians(45)));
-		gyroscopeNode.setStickToParent(true);
-		worldNode.attachChild(gyroscopeNode);
-
-		// ======================== Distance:
-		Node distanceCenterNode = new StandardNode(Constants.NODE_NAME_DISTANCE_CENTER);
-		worldNode.attachChild(distanceCenterNode);
-
-		worldContentDao.setWorldNode(worldNode);
 	}
 
 	private void intiScheduler() {
@@ -92,7 +52,7 @@ public class WorkflowImpl implements Workflow {
 			public void run() {
 				try {
 					logger.trace("gyroRequestTask");
-					String nodeName = "gyroscope";
+					String nodeName = "gyroscopeNode";
 					Vector3D gyroscopeValue = mainGyroscope.getGyroscopeValue();
 					worldSynchronizer.syncGyroscope(nodeName, gyroscopeValue);
 				} catch (Exception e) {

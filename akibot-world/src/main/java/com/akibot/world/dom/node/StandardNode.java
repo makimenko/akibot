@@ -19,6 +19,11 @@ public class StandardNode implements Node {
 		this.name = name;
 	}
 
+	public StandardNode(final String name, final Node parentNode) {
+		this(name);
+		parentNode.attachChild(this);
+	}
+
 	@Override
 	public String getName() {
 		return name;

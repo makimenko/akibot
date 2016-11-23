@@ -12,8 +12,8 @@ public class GridConfiguration implements Configuration {
 	private int unknownValue;
 	private int emptyValue;
 
-	public GridConfiguration(int cellCountX, int cellCountY, float cellSize, int maxObstacleCount) {
-		this(cellCountX, cellCountY, cellSize, maxObstacleCount, new Vector3D(0, 0, 0));
+	public GridConfiguration(int cellCountX, int cellCountY, float cellSizeMm, int maxObstacleCount) {
+		this(cellCountX, cellCountY, cellSizeMm, maxObstacleCount, new Vector3D(0, 0, 0));
 	}
 
 	public GridConfiguration(int cellCountX, int cellCountY, float cellSizeMm, int maxObstacleCount,

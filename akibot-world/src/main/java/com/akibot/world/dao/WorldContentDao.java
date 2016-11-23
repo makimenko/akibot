@@ -5,8 +5,6 @@ import com.akibot.world.dom.transformation.NodeTransformation3D;
 
 public interface WorldContentDao {
 
-	void setWorldNode(Node worldNode);
-
 	Node findNode(String name);
 
 	Node findMasterNode(Node node);
