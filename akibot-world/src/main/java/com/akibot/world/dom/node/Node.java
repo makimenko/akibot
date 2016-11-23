@@ -28,4 +28,6 @@ public interface Node extends WorldElement {
 
 	void setGeometry(Geometry geometry);
 
+	void attachChild(final Node childNode);
+
 }

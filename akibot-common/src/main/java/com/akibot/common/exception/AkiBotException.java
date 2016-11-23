@@ -1,6 +1,5 @@
 package com.akibot.common.exception;
 
-
 public class AkiBotException extends Exception {
 	private static final long serialVersionUID = 1L;
 
@@ -21,4 +20,3 @@ public class AkiBotException extends Exception {
 	}
 
 }
-

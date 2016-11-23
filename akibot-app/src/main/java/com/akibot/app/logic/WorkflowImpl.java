@@ -47,6 +47,7 @@ public class WorkflowImpl implements Workflow {
 	}
 
 	private void initWorldContent() {
+		logger.info("initWorldContent");
 		// TODO: Move to application context
 
 		Node worldNode = new StandardNode(Constants.NODE_NAME_WORLD);
@@ -57,27 +58,27 @@ public class WorkflowImpl implements Workflow {
 				Constants.GRID_CELL_COUNT, Constants.GRID_CELL_SIZE, Constants.GRID_MAX_OBSTACLE_COUNT,
 				new Vector3D(-positionOffset, -positionOffset, 0));
 		GridGeometry gridGeometry = new GridGeometry(gridConfiguration);
-		Node gridNode = new Node(Constants.NODE_NAME_GRID);
+		Node gridNode = new StandardNode(Constants.NODE_NAME_GRID);
 		gridNode.setGeometry(gridGeometry);
-		worldContentDao.attachChild(worldNode, gridNode);
+		worldNode.attachChild(gridNode);
 
 		// ======================== Robot:
 		ColladaGeometry robotGeometry = new ColladaGeometry();
 		robotGeometry.setFileName("model/AkiBot.dae");
-		Node robotNode = new Node(Constants.NODE_NAME_ROBOT);
+		Node robotNode = new StandardNode(Constants.NODE_NAME_ROBOT);
 		robotNode.setGeometry(robotGeometry);
-		worldContentDao.attachChild(gridNode, robotNode);
+		worldNode.attachChild(robotNode);
 
 		// ======================== Gyroscope:
-		Node gyroscopeNode = new Node(Constants.NODE_NAME_GYROSCOPE);
+		Node gyroscopeNode = new StandardNode(Constants.NODE_NAME_GYROSCOPE);
 		NodeTransformation3D gyroTransform = new NodeTransformation3D();
 		gyroTransform.setRotation(new Vector3D(0, 0, Math.toRadians(45)));
 		gyroscopeNode.setStickToParent(true);
-		worldContentDao.attachChild(robotNode, gyroscopeNode);
+		worldNode.attachChild(gyroscopeNode);
 
 		// ======================== Distance:
-		Node distanceCenterNode = new Node(Constants.NODE_NAME_DISTANCE_CENTER);
-		worldContentDao.attachChild(robotNode, distanceCenterNode);
+		Node distanceCenterNode = new StandardNode(Constants.NODE_NAME_DISTANCE_CENTER);
+		worldNode.attachChild(distanceCenterNode);
 
 		worldContentDao.setWorldNode(worldNode);
 	}

@@ -1,5 +1,6 @@
 package com.akibot.world.dom.node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.akibot.world.dom.geometry.Geometry;
@@ -32,6 +33,7 @@ public class StandardNode implements Node {
 		return parentNode;
 	}
 
+	@Override
 	public void setParentNode(Node parentNode) {
 		this.parentNode = parentNode;
 	}
@@ -45,10 +47,12 @@ public class StandardNode implements Node {
 		this.childs = childs;
 	}
 
+	@Override
 	public Geometry getGeometry() {
 		return geometry;
 	}
 
+	@Override
 	public void setGeometry(Geometry geometry) {
 		this.geometry = geometry;
 	}
@@ -68,6 +72,7 @@ public class StandardNode implements Node {
 		return stickToParent;
 	}
 
+	@Override
 	public void setStickToParent(boolean stickToParent) {
 		this.stickToParent = stickToParent;
 	}
@@ -77,5 +82,14 @@ public class StandardNode implements Node {
 		final StringBuffer buf = new StringBuffer(50);
 		buf.append("Node(").append(getName()).append(')');
 		return buf.toString();
+	}
+
+	@Override
+	public void attachChild(final Node childNode) {
+		if (childs == null) {
+			childs = new ArrayList<Node>();
+		}
+		childs.add(childNode);
+		childNode.setParentNode(parentNode);
 	}
 }

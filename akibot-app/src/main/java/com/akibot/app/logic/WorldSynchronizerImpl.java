@@ -86,7 +86,7 @@ public class WorldSynchronizerImpl implements WorldSynchronizer {
 					logger.trace("Skip notification ({}), will do later", masterNodeName);
 				}
 			}
-		} 
+		}
 	}
 
 	private long getLastNotification(String key) {
