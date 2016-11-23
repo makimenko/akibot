@@ -18,9 +18,18 @@
 			<bean class="com.akibot.common.element.Vector3D" />
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="workflow" class="com.akibot.app.logic.WorkflowImpl">
 	</bean>
+
+
+	<bean id="worldContentDao" class="com.akibot.world.dao.WorldContentDaoImpl">
+	</bean>
 	
+	<bean id="worldSynchronizer" class="com.akibot.app.logic.WorldSynchronizerImpl">
+		<constructor-arg name="realtimeNotificationDelay"
+			value="1000" />
+	</bean>
+
 
 </beans>

@@ -1,16 +1,18 @@
 package com.akibot.world.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.akibot.world.dom.node.Node;
 import com.akibot.world.dom.transformation.NodeTransformation3D;
 
-public class WorldContentManagerDaoImpl implements WorldContentDao {
+public class WorldContentDaoImpl implements WorldContentDao {
 	private Node worldNode;
 	private Map<String, Node> nodeList;
 
-	public WorldContentManagerDaoImpl() {
+	public WorldContentDaoImpl() {
 		this.nodeList = new HashMap<String, Node>();
 	}
 
@@ -29,8 +31,9 @@ public class WorldContentManagerDaoImpl implements WorldContentDao {
 		}
 	}
 
-	// TODO: is it needed?
-	private void indexRecalculation() {
+	@Override
+	public void setWorldNode(Node worldNode) {
+		this.worldNode = worldNode;
 		indexAllChilds(worldNode);
 	}
 
@@ -71,4 +74,14 @@ public class WorldContentManagerDaoImpl implements WorldContentDao {
 		}
 	}
 
+
+	public void attachChild(final Node parentNode, final Node childNode) {
+		List<Node> childs = parentNode.getChilds();
+		if (childs == null) {
+			childs = new ArrayList<Node>();
+		}
+		childs.add(childNode);
+		childNode.setParentNode(parentNode);
+	}
+	
 }
