@@ -14,6 +14,7 @@
 		<module>akibot-device-rpi</module>
 		<module>akibot-world</module>
 		<module>akibot-app</module>
+		<module>akibot-web</module>
 	</modules>
 
 	<properties>

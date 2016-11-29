@@ -10,6 +10,12 @@
         http://www.springframework.org/schema/context/spring-context.xsd"
 	profile="fake">
 
+
+
+	<bean class="com.akibot.app.MessageConsumer">
+	</bean>
+
+
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">

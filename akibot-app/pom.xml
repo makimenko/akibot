@@ -55,6 +55,14 @@
 			<version>1.4.2.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-activemq</artifactId>
+			<version>1.4.2.RELEASE</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
