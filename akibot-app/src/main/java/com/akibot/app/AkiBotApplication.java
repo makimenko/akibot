@@ -1,5 +1,6 @@
 package com.akibot.app;
 
+import org.apache.activemq.broker.BrokerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +25,7 @@ public class AkiBotApplication implements CommandLineRunner {
 	private Workflow workflow;
 
 	public static void main(String[] args) throws Exception {
+		
 		SpringApplication.run(AkiBotApplication.class, args);
 	}
 
