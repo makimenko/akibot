@@ -1,7 +1,7 @@
 package com.akibot.common.element;
 
 public class Vector3D extends Dimension3D {
-	private static final long serialVersionUID = -1779094708754719993L;
+	private static final long serialVersionUID = 1L;
 
 	public Vector3D() {
 		super();

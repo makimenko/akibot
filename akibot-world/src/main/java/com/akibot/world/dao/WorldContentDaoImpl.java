@@ -73,4 +73,8 @@ public class WorldContentDaoImpl implements WorldContentDao {
 		}
 	}
 
+	@Override
+	public Node getWorldNode() {
+		return worldNode;
+	}
 }

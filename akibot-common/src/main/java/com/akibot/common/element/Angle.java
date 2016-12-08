@@ -3,7 +3,7 @@ package com.akibot.common.element;
 import com.akibot.common.utils.RoundRobinUtils;
 
 public class Angle implements SimpleGeometryElement {
-	private static final long serialVersionUID = -4825882674847250810L;
+	private static final long serialVersionUID = 1L;
 	private double radians;
 
 	public Angle() {

@@ -8,8 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>akibot-web</name>
-	<description>Demo project for Spring Boot</description>
+	<name>AkiBot Web Client</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -26,6 +25,28 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.akibot</groupId>
+			<artifactId>akibot-common</artifactId>
+			<version>0.2.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.akibot</groupId>
+			<artifactId>akibot-world</artifactId>
+			<version>0.2.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>three.js</artifactId>
+			<version>r77</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-activemq</artifactId>
 		</dependency>
@@ -41,9 +62,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
 		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -64,5 +87,11 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>webjars</id>
+			<url>http://webjars.github.com/m2</url>
+		</repository>
+	</repositories>
 
 </project>

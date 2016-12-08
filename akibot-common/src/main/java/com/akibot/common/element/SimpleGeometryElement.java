@@ -1,5 +1,7 @@
 package com.akibot.common.element;
 
-public interface SimpleGeometryElement {
+import java.io.Serializable;
+
+public interface SimpleGeometryElement extends Serializable {
 
 }

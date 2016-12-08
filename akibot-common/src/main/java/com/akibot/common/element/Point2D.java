@@ -1,7 +1,7 @@
 package com.akibot.common.element;
 
 public class Point2D extends Dimension2D {
-	private static final long serialVersionUID = -6188509139275238540L;
+	private static final long serialVersionUID = 1L;
 
 	public Point2D() {
 		super();

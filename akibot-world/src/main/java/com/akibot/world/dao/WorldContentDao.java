@@ -11,4 +11,5 @@ public interface WorldContentDao {
 
 	void applyTransformation(Node node, NodeTransformation3D transformation);
 
+	Node getWorldNode();
 }

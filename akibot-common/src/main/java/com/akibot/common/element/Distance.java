@@ -1,7 +1,7 @@
 package com.akibot.common.element;
 
 public class Distance implements SimpleGeometryElement {
-	private static final long serialVersionUID = -297960825250634298L;
+	private static final long serialVersionUID = 1L;
 
 	private double distanceMm;
 	private Angle errorAngle;
