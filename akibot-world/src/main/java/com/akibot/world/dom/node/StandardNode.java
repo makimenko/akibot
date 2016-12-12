@@ -9,7 +9,7 @@ import com.akibot.world.dom.transformation.NodeTransformation3D;
 public class StandardNode implements Node {
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private Node parentNode;
+	private transient Node parentNode;
 	private List<Node> childs;
 	private Geometry geometry;
 	private NodeTransformation3D transformation;
@@ -21,7 +21,8 @@ public class StandardNode implements Node {
 
 	public StandardNode(final String name, final Node parentNode) {
 		this(name);
-		parentNode.attachChild(this);
+		this.parentNode = parentNode;
+		this.parentNode.attachChild(this);
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class StandardNode implements Node {
 
 	@Override
 	public Node getParentNode() {
-		return parentNode;
+		return this.parentNode;
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class StandardNode implements Node {
 	@Override
 	public String toString() {
 		final StringBuffer buf = new StringBuffer(50);
-		buf.append("Node(").append(getName()).append(')');
+		buf.append("Node(").append(getName()).append(", stickToParent=").append(stickToParent).append(')');
 		return buf.toString();
 	}
 
@@ -95,6 +96,6 @@ public class StandardNode implements Node {
 			childs = new ArrayList<Node>();
 		}
 		childs.add(childNode);
-		childNode.setParentNode(parentNode);
+		childNode.setParentNode(this);
 	}
 }

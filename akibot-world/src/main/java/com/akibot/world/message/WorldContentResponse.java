@@ -15,5 +15,4 @@ public class WorldContentResponse extends WorldResponse {
 		this.worldNode = worldNode;
 	}
 
-
 }

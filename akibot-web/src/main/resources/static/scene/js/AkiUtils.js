@@ -150,7 +150,7 @@ var AkiUtils = {
 
 		var spriteMaterial = new THREE.SpriteMaterial({
 			map : texture
-			//,useScreenCoordinates : false
+			// ,useScreenCoordinates : false
 		// ,alignment : spriteAlignment
 		});
 		var sprite = new THREE.Sprite(spriteMaterial);

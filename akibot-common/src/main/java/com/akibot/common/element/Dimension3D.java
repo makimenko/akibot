@@ -1,7 +1,7 @@
 package com.akibot.common.element;
 
 public class Dimension3D extends Dimension2D {
-	private static final long serialVersionUID =1L;
+	private static final long serialVersionUID = 1L;
 	private double z;
 
 	public double getZ() {

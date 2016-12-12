@@ -38,7 +38,7 @@ public class WorldContentDaoImpl implements WorldContentDao {
 			indexAllChilds(this.worldNode);
 			result = nodeList.get(name);
 		}
-		return nodeList.get(name);
+		return result;
 	}
 
 	@Override

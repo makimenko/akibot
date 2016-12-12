@@ -172,11 +172,9 @@ var AkiEvents = {
 		AkiScene.sendWorldContentRequest();
 	},
 
-	onWsMessage : function(message) {
-		var jsonDataStr = JSON.stringify(message);
-		// console.log("onWsMessage: jsonDataStr: " + message.data);
-		var messageObject = JSON.parse(message.data);
-
+	onWorldResponse : function(message) {
+		console.log("onWorldResponse");
+		var messageObject = JSON.parse(message.body);
 		if (messageObject.className == "WorldContentResponse") {
 			AkiEvents.onWorldContentResponse(messageObject);
 		} else if (messageObject.className == "WorldNodeTransformationEvent") {
@@ -196,14 +194,11 @@ var AkiEvents = {
 	},
 
 	onWorldNodeTransformationEvent : function(worldNodeTransformationEvent) {
-		// console.log("onWorldNodeTransformationEvent (for " +
-		// worldNodeTransformationEvent.nodeName + ")");
+		console.log("onWorldNodeTransformationEvent (for " + worldNodeTransformationEvent.nodeName + ")");
 		var object3d = AkiScene.scene.getObjectByName(worldNodeTransformationEvent.nodeName, true);
 
 		if (object3d == null) {
-			// console.log("WorldNodeTransformationEvent can't find object
-			// to be
-			// transformed, reloading WorldContent")
+			console.log("WorldNodeTransformationEvent can't find object to be transformed, reloading WorldContent")
 			AkiScene.sendWorldContentRequest();
 		} else {
 			// console.log("onWorldNodeTransformationEvent: object found");

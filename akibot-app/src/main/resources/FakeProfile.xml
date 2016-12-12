@@ -18,7 +18,19 @@
 	</bean>
 
 
-	<bean id="mainGyroscope" class="com.akibot.device.fake.gyroscope.FakeGyroscope">
+
+	<bean id="queueWorldResponse" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg name="name" value="WorldResponse" />
+	</bean>
+
+	<bean id="queueWorldRealtimeEvent" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg name="name" value="WorldRealtimeEvent" />
+	</bean>
+
+
+
+	<bean id="mainGyroscope" class="com.akibot.device.fake.gyroscope.FakeGyroscope"
+		depends-on="gyroscopeNode">
 		<constructor-arg name="offset">
 			<bean class="com.akibot.common.element.Vector3D" />
 		</constructor-arg>
@@ -27,7 +39,8 @@
 	<bean id="workflow" class="com.akibot.app.logic.WorkflowImpl">
 	</bean>
 
-	<bean id="worldContentDao" class="com.akibot.world.dao.WorldContentDaoImpl">
+	<bean id="worldContentDao" class="com.akibot.world.dao.WorldContentDaoImpl"
+		depends-on="worldNode">
 		<constructor-arg name="name" ref="worldNode" />
 	</bean>
 
@@ -83,7 +96,6 @@
 		<constructor-arg name="name" value="gyroscopeNode" />
 		<constructor-arg name="parentNode" ref="robotNode" />
 		<property name="stickToParent" value="true" />
-
 	</bean>
 
 	<bean id="distanceCenterNode" class="com.akibot.world.dom.node.StandardNode">

@@ -3,7 +3,7 @@ if (!Detector.webgl)
 
 $(document).ready(AkiEvents.onDocumentReady);
 window.onerror = AkiEvents.onDocumentError;
-document.addEventListener( 'touchstart', AkiEvents.onTouchStart, false ); 
+document.addEventListener('touchstart', AkiEvents.onTouchStart, false);
 
 function animate() {
 

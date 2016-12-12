@@ -82,7 +82,7 @@ var AkiScene = {
 		this.controls.rotateSpeed = 1.0;
 		this.controls.zoomSpeed = 1.2;
 		this.controls.panSpeed = 0.8;
-		//this.controls.enableZoom = false;
+		// this.controls.enableZoom = false;
 		// this.controls.enablePan = true;
 		// this.controls.noRoll = true; // ?
 		// this.controls.noRotate = true; // ?
@@ -350,6 +350,7 @@ var AkiScene = {
 		} else {
 			// Translation (move):
 			if (transformation.position != null) {
+				// console.log("Transform: position");
 				object3d.position.set(transformation.position.x
 						* this.gridDetail.cellScale, transformation.position.y
 						* this.gridDetail.cellScale, transformation.position.z
@@ -357,12 +358,14 @@ var AkiScene = {
 			}
 			// Rotation:
 			if (transformation.rotation != null) {
+				// console.log("Transform: rotation");
 				object3d.rotation.x = transformation.rotation.x;
 				object3d.rotation.y = transformation.rotation.y;
 				object3d.rotation.z = transformation.rotation.z;
 			}
 			// Scale:
 			if (transformation.scale != null) {
+				// console.log("Transform: scale");
 				object3d.scale.set(transformation.scale.x,
 						transformation.scale.y, transformation.scale.z);
 			}
@@ -440,7 +443,7 @@ var AkiScene = {
 		}
 		this.sceneContent = new THREE.Object3D();
 		this.scene.add(this.sceneContent);
-		this.addNodeRecursion(messageObject.worldContent.worldNode,
+		this.addNodeRecursion(messageObject.worldNode,
 				this.sceneContent);
 		this.render();
 		AkiScene.isWorldContentRequest = false;

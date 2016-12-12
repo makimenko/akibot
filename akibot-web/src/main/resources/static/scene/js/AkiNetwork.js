@@ -1,29 +1,22 @@
 var AkiNetwork = {
 	webSocket : null,
-
-	getWsUrl : function(s) {
-		var l = window.location;
-		return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + l.pathname
-				+ s;
-	},
+	stompClient : null,
 
 	initWs : function() {
-		this.webSocket = new WebSocket(this.getWsUrl("/../../actions"));
-		this.webSocket.onopen = AkiEvents.onWsOpen;
-		this.webSocket.onmessage = AkiEvents.onWsMessage;
-		this.webSocket.onerror = AkiEvents.onWsError;
-		this.webSocket.onclose = AkiEvents.onWsClose;
+		this.webSocket = new SockJS('/ws');
+		this.stompClient = Stomp.over(this.webSocket);
+		this.stompClient.connect({}, function(frame) {
+			console.log('Connected: ' + frame);
+			AkiNetwork.stompClient.subscribe('/topic/worldResponse', AkiEvents.onWorldResponse);
+			AkiNetwork.stompClient.subscribe('/topic/worldResponse', AkiEvents.onWorldResponse);
+			AkiNetwork.sendWorldRequest(new AkiNetwork.enrichWebSocketMessage("WorldContentRequest"));
+		});
 	},
 
-	sendWsRequest : function(requestObject) {
-		if (this.webSocket.readyState == this.webSocket.OPEN) {
-			text = JSON.stringify(requestObject);
-			console.log("sendWsRequest: " + text);
-			this.webSocket.send(text);
-
-		} else {
-			alert("The Socket is Closed! Can not send request!");
-		}
+	sendWorldRequest : function(worldRequest) {
+		text = JSON.stringify(worldRequest);
+		console.log("sendWorldRequest: " + text);
+		AkiNetwork.stompClient.send("/app/worldRequest", {}, text);
 	},
 
 	enrichWebSocketMessage : function(className) {

@@ -1,8 +1,8 @@
 /**
  * @author Eberhard Graether / http://egraether.com/
- * @author Mark Lundin 	/ http://mark-lundin.com
+ * @author Mark Lundin / http://mark-lundin.com
  * @author Simone Manini / http://daron1337.github.io
- * @author Luca Antiga 	/ http://lantiga.github.io
+ * @author Luca Antiga / http://lantiga.github.io
  */
 
 THREE.TrackballControls = function ( object, domElement ) {
@@ -33,7 +33,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.minDistance = 0;
 	this.maxDistance = Infinity;
 
-	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+	this.keys = [ 65 /* A */, 83 /* S */, 68 /* D */ ];
 
 	// internals
 
@@ -90,7 +90,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 		} else {
 
 			var box = this.domElement.getBoundingClientRect();
-			// adjustments come from similar code in the jquery offset() function
+			// adjustments come from similar code in the jquery offset()
+			// function
 			var d = this.domElement.ownerDocument.documentElement;
 			this.screen.left = box.left + window.pageXOffset - d.clientLeft;
 			this.screen.top = box.top + window.pageYOffset - d.clientTop;
@@ -136,7 +137,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 			vector.set(
 				( ( pageX - _this.screen.width * 0.5 - _this.screen.left ) / ( _this.screen.width * 0.5 ) ),
-				( ( _this.screen.height + 2 * ( _this.screen.top - pageY ) ) / _this.screen.width ) // screen.width intentional
+				( ( _this.screen.height + 2 * ( _this.screen.top - pageY ) ) / _this.screen.width ) // screen.width
+																									// intentional
 			);
 
 			return vector;

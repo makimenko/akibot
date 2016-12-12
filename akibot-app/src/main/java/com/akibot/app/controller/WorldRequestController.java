@@ -1,4 +1,4 @@
-package com.akibot.app.consumer;
+package com.akibot.app.controller;
 
 import javax.jms.Queue;
 
@@ -15,9 +15,9 @@ import com.akibot.world.message.WorldContentResponse;
 import com.akibot.world.message.WorldRequest;
 
 @Controller
-public class WorldRequestConsumer {
+public class WorldRequestController {
 
-	private Logger logger = LoggerFactory.getLogger(WorldRequestConsumer.class);
+	private Logger logger = LoggerFactory.getLogger(WorldRequestController.class);
 
 	@Autowired
 	private WorldContentDao worldContentDao;
@@ -28,7 +28,7 @@ public class WorldRequestConsumer {
 	@Autowired
 	private Queue queueWorldResponse;
 
-	public WorldRequestConsumer() {
+	public WorldRequestController() {
 		logger.info("Starting WorldRequestConsumer...");
 	}
 
@@ -40,7 +40,6 @@ public class WorldRequestConsumer {
 		worldContentResponse.setWorldNode(worldContentDao.getWorldNode());
 
 		this.jmsMessagingTemplate.convertAndSend(this.queueWorldResponse, worldContentResponse);
-
 	}
 
 }

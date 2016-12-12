@@ -4,6 +4,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import com.akibot.world.dom.node.Node;
 public class WorkflowImpl implements Workflow {
 	private Logger logger = LoggerFactory.getLogger(WorkflowImpl.class);
 
-	private static final int GYRO_REQUEST_INTERVAL_MS = 500;
+	private static final int GYRO_REQUEST_INTERVAL_MS = 5000;
 	private ScheduledExecutorService scheduler;
 
 	@Autowired
@@ -35,6 +37,11 @@ public class WorkflowImpl implements Workflow {
 
 	public WorkflowImpl() {
 		logger.info("Starting Workflow");
+	}
+
+	@PostConstruct
+	public void init() {
+		startSample();
 	}
 
 	@Override

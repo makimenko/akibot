@@ -3,9 +3,12 @@ package com.akibot.app.logic;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jms.Queue;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.akibot.app.exception.WorkflowException;
@@ -26,6 +29,12 @@ public class WorldSynchronizerImpl implements WorldSynchronizer {
 	@Autowired
 	private WorldContentDao worldContentDao;
 
+	@Autowired
+	private JmsMessagingTemplate jmsMessagingTemplate;
+
+	@Autowired
+	private Queue queueWorldRealtimeEvent;
+
 	private VectorUtils vectorUtils;
 	private Map<String, Long> lastNotification;
 
@@ -37,6 +46,7 @@ public class WorldSynchronizerImpl implements WorldSynchronizer {
 
 	@Override
 	public void syncGyroscope(String nodeName, Vector3D gyroscopeValue) throws WorkflowException {
+		logger.debug("syncGyroscope / world: {}", worldContentDao.getWorldNode());
 		if (logger.isTraceEnabled()) {
 			logger.trace("syncGyroscope({}): {}", nodeName, gyroscopeValue);
 		}
@@ -75,11 +85,12 @@ public class WorldSynchronizerImpl implements WorldSynchronizer {
 			// Notify others:
 			String masterNodeName = masterNode.getName();
 			if (System.currentTimeMillis() - getLastNotification(masterNodeName) > realtimeNotificationDelay) {
-				logger.trace("Notifying others");
 				WorldNodeTransformationEvent event = new WorldNodeTransformationEvent();
 				event.setNodeName(masterNodeName);
 				event.setTransformation(masterNode.getTransformation());
-				// TODO: processor.getClient().broadcastMessage(event);
+				logger.trace("Notifying others. masterNode={}, event={}", masterNodeName, event);
+				this.jmsMessagingTemplate.convertAndSend(this.queueWorldRealtimeEvent, event);
+
 				lastNotification.put(masterNodeName, System.currentTimeMillis());
 			} else {
 				if (logger.isTraceEnabled()) {
