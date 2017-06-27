@@ -15,7 +15,6 @@
 		<dependency>
 			<groupId>com.akibot</groupId>
 			<artifactId>akibot-common</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

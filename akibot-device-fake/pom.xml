@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>akibot-device-fake</artifactId>
-	<name>AkiBot Device Fake Implementation (for Tests)</name>
+	<name>AkiBot Device Fake Implementation</name>
 
 	<parent>
 		<groupId>com.akibot</groupId>
@@ -15,7 +15,6 @@
 		<dependency>
 			<groupId>com.akibot</groupId>
 			<artifactId>akibot-common</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
