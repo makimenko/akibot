@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({ MessagingQueueConfiguration.class, WorldConfiguration.class, FakeDeviceConfiguration.class })
+@Import({ MessagingQueueConfiguration.class, WorldConfiguration.class, FakeDeviceConfiguration.class, JmsClientConfig.class})
 @ComponentScan("com.akibot.app.controller")
 public class AkiBotConfiguration {
 

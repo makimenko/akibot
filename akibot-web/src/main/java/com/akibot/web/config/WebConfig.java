@@ -7,17 +7,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jms.annotation.EnableJms;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.akibot.app.logic.config.JmsClientConfig;
 import com.akibot.common.constant.AkiBotQueue;
 
 @Configuration
-@EnableJms
 @EnableWebMvc
-@Import({ WebSocketConfig.class })
+@Import({ WebSocketConfig.class, JmsStandaloneBrokerConfig.class, JmsClientConfig.class })
 @ComponentScan("com.akibot.web.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
