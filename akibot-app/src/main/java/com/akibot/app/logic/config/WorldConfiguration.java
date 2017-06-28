@@ -24,7 +24,7 @@ import com.akibot.world.dom.node.Node;
 import com.akibot.world.dom.node.StandardNode;
 
 @Configuration
-@PropertySource(value = { "classpath:application.properties" })
+@PropertySource(value = { "classpath:/akibot.properties" })
 public class WorldConfiguration {
 
 	@Autowired

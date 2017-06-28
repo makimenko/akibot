@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,7 +20,6 @@ import com.akibot.common.element.Vector3D;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("fake")
 @Import(AkiBotConfiguration.class)
-@ComponentScan("com.akibot.app.controller")
 @EnableJms
 @EnableAutoConfiguration
 public class AkiBotFakeTest {
@@ -42,7 +40,7 @@ public class AkiBotFakeTest {
 	}
 
 	@Test
-	public void test2() {
+	public void testWorkflow() {
 		workflow.startSample();
 		assertTrue(true);
 
