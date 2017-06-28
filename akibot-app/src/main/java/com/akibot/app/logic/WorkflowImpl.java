@@ -59,7 +59,7 @@ public class WorkflowImpl implements Workflow {
 			public void run() {
 				try {
 					logger.trace("gyroRequestTask");
-					String nodeName = "gyroscopeNode";
+					String nodeName = Constants.NODE_NAME_GYROSCOPE;
 					Vector3D gyroscopeValue = mainGyroscope.getGyroscopeValue();
 					worldSynchronizer.syncGyroscope(nodeName, gyroscopeValue);
 				} catch (Exception e) {

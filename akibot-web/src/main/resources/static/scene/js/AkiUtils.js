@@ -23,19 +23,19 @@ var AkiUtils = {
 		}
 	},
 
-	appendGridHelper : function(parentNode, size, step, visible) {
+	appendGridHelper : function(parentNode, size, divisions, visible) {
 		gridHelper = new THREE.Object3D();// create an empty container
 		gridHelper.name = AkiUtils.GRID_HELPER_NAME;
 		gridHelper.visible = visible;
 
-		var gridHelper1 = new THREE.GridHelper(size, step);
+		var gridHelper1 = new THREE.GridHelper(size, divisions);
 		gridHelper.add(gridHelper1);
 
-		var gridHelper2 = new THREE.GridHelper(size, step);
+		var gridHelper2 = new THREE.GridHelper(size, divisions);
 		gridHelper2.rotation.x = Math.PI / 2;
 		gridHelper.add(gridHelper2);
 
-		var gridHelper3 = new THREE.GridHelper(size, step);
+		var gridHelper3 = new THREE.GridHelper(size, divisions);
 		gridHelper3.rotation.x = Math.PI / 2;
 		gridHelper3.rotation.z = Math.PI / 2;
 		gridHelper.add(gridHelper3);

@@ -130,7 +130,7 @@ var AkiScene = {
 	},
 
 	drawScene : function() {
-		AkiUtils.appendGridHelper(this.scene, 300, 100, false);
+		AkiUtils.appendGridHelper(this.scene, 300, 10, false);
 		AkiUtils.appendAxisHelper(this.scene, 800, false);
 		this.appendLights(this.scene);
 	},

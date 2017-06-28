@@ -5,13 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Import;
 import org.springframework.jms.annotation.EnableJms;
 
+import com.akibot.app.logic.config.AkiBotConfiguration;
+
 @EnableAutoConfiguration
-@ImportResource("classpath:ApplicationContext.xml")
-@ComponentScan("com.akibot.app.controller")
+@Import(AkiBotConfiguration.class)
 @EnableJms
 public class AkiBotApplication implements CommandLineRunner {
 	private Logger logger = LoggerFactory.getLogger(AkiBotApplication.class);

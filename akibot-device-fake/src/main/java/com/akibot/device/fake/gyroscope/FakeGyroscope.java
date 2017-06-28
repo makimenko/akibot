@@ -8,6 +8,10 @@ import com.akibot.common.element.Vector3D;
 public class FakeGyroscope implements Gyroscope {
 	final private Vector3D offset;
 
+	public FakeGyroscope() {
+		this.offset = new Vector3D();
+	}
+	
 	public FakeGyroscope(Vector3D offset) {
 		this.offset = offset;
 	}

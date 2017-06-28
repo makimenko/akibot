@@ -83,4 +83,11 @@ public class GridConfiguration implements Configuration {
 		this.emptyValue = emptyValue;
 	}
 
+	@Override
+	public String toString() {
+		return "GridConfiguration [cellCountX=" + cellCountX + ", cellCountY=" + cellCountY + ", cellSizeMm="
+				+ cellSizeMm + ", maxObstacleCount=" + maxObstacleCount + ", offsetVector=" + offsetVector
+				+ ", unknownValue=" + unknownValue + ", emptyValue=" + emptyValue + "]";
+	}
+
 }

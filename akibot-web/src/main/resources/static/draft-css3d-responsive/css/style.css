@@ -1,37 +1,35 @@
 .element {
-  width: 100px;
-  height: 100px;
-  font-weight: bold;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: rgba(48, 103, 145, 0.5);
-  border: 2px solid rgba(127, 255, 255, 0.25);
-  border-radius: 8px;
-  text-align: center;
-  cursor: default;
-  color: rgba(48, 103, 145, 1);
-    
+	width: 100px;
+	height: 100px;
+	font-weight: bold;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: rgba(48, 103, 145, 0.5);
+	border: 2px solid rgba(127, 255, 255, 0.25);
+	border-radius: 8px;
+	text-align: center;
+	cursor: default;
+	color: rgba(48, 103, 145, 1);
 }
 
 .element:hover {
-  box-shadow: 0px 0px 50px rgba(0, 255, 255, 0.75);
-  border: 1px solid rgba(127, 255, 255, 0.75);
-  color: rgba(127, 255, 255, 1);
+	box-shadow: 0px 0px 50px rgba(0, 255, 255, 0.75);
+	border: 1px solid rgba(127, 255, 255, 0.75);
+	color: rgba(127, 255, 255, 1);
 }
 
-
 .txt {
-  width: 80px;
-  background-color: rgba(48, 103, 145, 0.5);
-  border: 2px solid rgba(127, 255, 255, 0.25);
-  color: rgba(127, 255, 255, 0.25);
+	width: 80px;
+	background-color: rgba(48, 103, 145, 0.5);
+	border: 2px solid rgba(127, 255, 255, 0.25);
+	color: rgba(127, 255, 255, 0.25);
 }
 
 .txt:hover {
-  color: rgba(127, 255, 255, 0.5);
+	color: rgba(127, 255, 255, 0.5);
 }
 
 h4 {
-  font-weight: bold;
-  color: rgba(48, 103, 145, 1);
+	font-weight: bold;
+	color: rgba(48, 103, 145, 1);
 }
