@@ -1,5 +1,6 @@
 package com.akibot.app.logic.config;
 
+import java.net.URI;
 import java.util.Arrays;
 
 import javax.jms.ConnectionFactory;
@@ -16,6 +17,8 @@ public class JmsClientConfig {
 
 	@Bean
 	ActiveMQConnectionFactory connectionFactory() {
+		
+		
 		ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("vm://localhost");
 		factory.setTrustedPackages(Arrays.asList("com.akibot", "java.util"));
 		return factory;
