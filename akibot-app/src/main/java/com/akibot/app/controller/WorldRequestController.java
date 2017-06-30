@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.akibot.common.constant.AkiBotQueue;
 import com.akibot.world.dao.WorldContentDao;
+import com.akibot.world.message.WorldContentRequest;
 import com.akibot.world.message.WorldContentResponse;
 import com.akibot.world.message.WorldRequest;
 

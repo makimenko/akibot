@@ -9,6 +9,7 @@ import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
+import com.akibot.web.config.WebConstants;
 import com.akibot.world.message.WorldRequest;
 
 @Controller
@@ -21,7 +22,7 @@ public class WorldRequestController {
 	@Autowired
 	private Queue queueWorldRequest;
 
-	@MessageMapping(value = "/worldRequest")
+	@MessageMapping(value = WebConstants.MESSAGE_MAPPING_WORLD_REQUEST)
 	public void worldRequest(WorldRequest worldRequest) {
 		logger.trace("worldRequest: " + worldRequest.getClassName());
 		this.jmsMessagingTemplate.convertAndSend(this.queueWorldRequest, worldRequest);

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.akibot.common.constant.AkiBotQueue;
 
+
 @Configuration
 public class MessagingQueueConfiguration {
 
