@@ -1,10 +1,5 @@
 package com.akibot.web.config;
 
-import javax.jms.Queue;
-
-import org.apache.activemq.command.ActiveMQQueue;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -13,11 +8,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.akibot.app.logic.config.JmsClientConfig;
-import com.akibot.common.constant.AkiBotQueue;
 
 @Configuration
 @EnableWebMvc
-@Import({ WebSocketConfig.class, JmsStandaloneBrokerConfig.class, JmsClientConfig.class })
+@Import({ WebSocketConfig.class, JmsStandaloneBrokerConfig.class, JmsClientConfig.class,
+		WebMessagingQueueConfiguration.class })
 @ComponentScan("com.akibot.web.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -32,11 +27,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		if (!registry.hasMappingForPattern("/**")) {
 			registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
 		}
-	}
-
-	@Bean
-	public Queue queueWorldRequest() {
-		return new ActiveMQQueue(AkiBotQueue.QUEUE_WORLD_REQUEST);
 	}
 
 }

@@ -15,6 +15,8 @@ public class JmsStandaloneBrokerConfig {
 		System.out.println("*** brokerService");
 		BrokerService brokerService = BrokerFactory.createBroker(new URI("broker:(tcp://localhost:61616)"));
 		brokerService.setPersistent(false);
+		// brokerService.setUseShutdownHook(false);
+		brokerService.start();
 		return brokerService;
 	}
 
