@@ -1,4 +1,4 @@
-package com.akibot.app.logic;
+package com.akibot.app.workflow;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import javax.jms.Queue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ import com.akibot.world.message.WorldNodeTransformationEvent;
 public class WorldSynchronizerImpl implements WorldSynchronizer {
 	private Logger logger = LoggerFactory.getLogger(WorldSynchronizerImpl.class);
 
+	@Value("${realtimeNotificationDelay}")
 	private long realtimeNotificationDelay;
 
 	@Autowired
@@ -38,10 +40,9 @@ public class WorldSynchronizerImpl implements WorldSynchronizer {
 	private VectorUtils vectorUtils;
 	private Map<String, Long> lastNotification;
 
-	public WorldSynchronizerImpl(long realtimeNotificationDelay) {
+	public WorldSynchronizerImpl() {
 		this.vectorUtils = new VectorUtils();
 		this.lastNotification = new HashMap<String, Long>();
-		this.realtimeNotificationDelay = realtimeNotificationDelay;
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
-import com.akibot.app.logic.config.AkiBotConfiguration;
+import com.akibot.app.config.AkiBotConfiguration;
 
 @EnableAutoConfiguration
 @Import(AkiBotConfiguration.class)

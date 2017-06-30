@@ -4,6 +4,6 @@ import com.akibot.common.element.Vector3D;
 
 public interface Gyroscope extends DeviceInterface {
 
-	public Vector3D getGyroscopeValue();
+	Vector3D getGyroscopeValue();
 
 }

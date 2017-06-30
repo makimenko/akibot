@@ -1,4 +1,4 @@
-package com.akibot.app.logic;
+package com.akibot.app.workflow;
 
 import com.akibot.app.exception.WorkflowException;
 import com.akibot.common.element.Vector3D;

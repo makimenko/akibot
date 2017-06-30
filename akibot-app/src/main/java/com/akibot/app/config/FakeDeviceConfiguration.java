@@ -1,4 +1,4 @@
-package com.akibot.app.logic.config;
+package com.akibot.app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

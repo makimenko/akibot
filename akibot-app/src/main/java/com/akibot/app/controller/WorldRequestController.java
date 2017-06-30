@@ -34,7 +34,7 @@ public class WorldRequestController {
 
 	@JmsListener(destination = AkiBotQueue.QUEUE_WORLD_REQUEST)
 	public void receiveWorldRequest(WorldRequest worldRequest) {
-		logger.trace("receiveWorldRequest: " + worldRequest);
+		logger.debug("receiveWorldRequest: " + worldRequest);
 
 		WorldContentResponse worldContentResponse = new WorldContentResponse();
 		worldContentResponse.setWorldNode(worldContentDao.getWorldNode());

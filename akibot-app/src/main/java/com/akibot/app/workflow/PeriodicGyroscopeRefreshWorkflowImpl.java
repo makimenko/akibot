@@ -1,4 +1,4 @@
-package com.akibot.app.logic;
+package com.akibot.app.workflow;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -11,14 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.akibot.app.config.Constants;
 import com.akibot.common.device.Gyroscope;
 import com.akibot.common.element.Vector3D;
 import com.akibot.world.dao.WorldContentDao;
 import com.akibot.world.dom.node.Node;
 
 @Component
-public class WorkflowImpl implements Workflow {
-	private Logger logger = LoggerFactory.getLogger(WorkflowImpl.class);
+public class PeriodicGyroscopeRefreshWorkflowImpl implements Workflow {
+	private Logger logger = LoggerFactory.getLogger(PeriodicGyroscopeRefreshWorkflowImpl.class);
 
 	private static final int GYRO_REQUEST_INTERVAL_MS = 5000;
 	private ScheduledExecutorService scheduler;
@@ -35,17 +36,17 @@ public class WorkflowImpl implements Workflow {
 	@Autowired
 	Node worldNode;
 
-	public WorkflowImpl() {
+	public PeriodicGyroscopeRefreshWorkflowImpl() {
 		logger.info("Starting Workflow");
 	}
 
 	@PostConstruct
 	public void init() {
-		startSample();
+		run();
 	}
 
 	@Override
-	public void startSample() {
+	public void run() {
 		logger.info("Starting Simple");
 		intiScheduler();
 	}

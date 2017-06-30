@@ -8,14 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class JmsStandaloneBrokerConfig {
+public class MessagingBrokerConfig {
 
 	@Bean
 	BrokerService brokerService() throws Exception {
-		System.out.println("*** brokerService");
 		BrokerService brokerService = BrokerFactory.createBroker(new URI("broker:(tcp://localhost:61616)"));
 		brokerService.setPersistent(false);
-		// brokerService.setUseShutdownHook(false);
 		brokerService.start();
 		return brokerService;
 	}

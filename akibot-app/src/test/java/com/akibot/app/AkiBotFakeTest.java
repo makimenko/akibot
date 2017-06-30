@@ -12,8 +12,8 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.akibot.app.logic.Workflow;
-import com.akibot.app.logic.config.AkiBotConfiguration;
+import com.akibot.app.config.AkiBotConfiguration;
+import com.akibot.app.workflow.Workflow;
 import com.akibot.common.device.Gyroscope;
 import com.akibot.common.element.Vector3D;
 
@@ -41,7 +41,7 @@ public class AkiBotFakeTest {
 
 	@Test
 	public void testWorkflow() {
-		workflow.startSample();
+		workflow.run();
 		assertTrue(true);
 
 		try {

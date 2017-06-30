@@ -7,12 +7,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.akibot.app.logic.config.JmsClientConfig;
-
 @Configuration
 @EnableWebMvc
-@Import({ WebSocketConfig.class, JmsStandaloneBrokerConfig.class, JmsClientConfig.class,
-		WebMessagingQueueConfiguration.class })
+@Import({ WebSocketConfig.class, MessagingBrokerConfig.class, WebMessagingQueueConfiguration.class })
 @ComponentScan("com.akibot.web.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
 

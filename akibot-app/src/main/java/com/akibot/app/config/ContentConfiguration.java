@@ -1,4 +1,4 @@
-package com.akibot.app.logic.config;
+package com.akibot.app.config;
 
 import javax.annotation.PostConstruct;
 
@@ -6,13 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
-import com.akibot.app.logic.Constants;
-import com.akibot.app.logic.Workflow;
-import com.akibot.app.logic.WorkflowImpl;
-import com.akibot.app.logic.WorldSynchronizer;
-import com.akibot.app.logic.WorldSynchronizerImpl;
 import com.akibot.common.element.Vector3D;
 import com.akibot.world.dao.WorldContentDao;
 import com.akibot.world.dao.WorldContentDaoImpl;
@@ -24,8 +18,7 @@ import com.akibot.world.dom.node.Node;
 import com.akibot.world.dom.node.StandardNode;
 
 @Configuration
-@PropertySource(value = { "classpath:/akibot.properties" })
-public class WorldConfiguration {
+public class ContentConfiguration {
 
 	@Autowired
 	Node worldNode;
@@ -35,9 +28,6 @@ public class WorldConfiguration {
 
 	@Autowired
 	Node robotNode;
-
-	@Value("${realtimeSyncDelay}")
-	private int realtimeSyncDelay;
 
 	@Value("${gridCellCountX}")
 	private int gridCellCountX;
@@ -54,24 +44,10 @@ public class WorldConfiguration {
 	@Value("${robotModel}")
 	private String robotModel;
 
-	// ======================================================
-
-	@Bean
-	public Workflow workflow() {
-		return new WorkflowImpl();
-	}
-
 	@Bean
 	public WorldContentDao worldContentDao() {
 		return new WorldContentDaoImpl(worldNode);
 	}
-
-	@Bean
-	public WorldSynchronizer worldSynchronizer() {
-		return new WorldSynchronizerImpl(realtimeSyncDelay);
-	}
-
-	// ======================================================
 
 	@Bean
 	public Node worldNode() {

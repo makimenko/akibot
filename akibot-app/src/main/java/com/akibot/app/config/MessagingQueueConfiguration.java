@@ -1,4 +1,4 @@
-package com.akibot.app.logic.config;
+package com.akibot.app.config;
 
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.context.annotation.Bean;

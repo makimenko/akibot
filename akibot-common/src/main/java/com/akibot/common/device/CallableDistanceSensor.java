@@ -4,6 +4,6 @@ import com.akibot.common.element.Distance;
 
 public interface CallableDistanceSensor extends DistanceSensor {
 
-	public Distance getDistance();
+	Distance getDistance();
 
 }
